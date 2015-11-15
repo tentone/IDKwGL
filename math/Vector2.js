@@ -71,5 +71,5 @@ function mul(val)
 
 function toString()
 {
-	return "Vector2 ("+this.x+", "+this.y+")";
+	return "("+this.x+", "+this.y+")";
 }

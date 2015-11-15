@@ -219,7 +219,7 @@ function sub(val)
 //toString Matrix info
 function toString()
 {
-	string = "Matrix\n["
+	string = "["
 	var i=0, j;
 
 	while(i < this.size.x)

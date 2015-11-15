@@ -104,5 +104,5 @@ function mul(val)
 //toString Vector Values
 function toString()
 {
-	return "Vector4 ("+this.x+", "+this.y+", "+this.z+", "+this.w+")";
+	return "("+this.x+", "+this.y+", "+this.z+", "+this.w+")";
 }

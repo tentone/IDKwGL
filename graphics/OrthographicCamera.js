@@ -1,12 +1,8 @@
 include("math/Matrix.js");
 include("math/Conversion.js");
 
-//Camera Projection Mode
-Camera.ORTHOGONAL = 0;
-Camera.PRESPECTIVE = 1;
-
 //Constructor
-function Camera(canvas, size_y, projection_type)
+function OrthographicCamera(canvas, size_y)
 {
     //Camera Screen Interface
     this.aspect_ratio = canvas.width/canvas.height; //x/y
@@ -20,27 +16,20 @@ function Camera(canvas, size_y, projection_type)
     this.zoom = 1.0; //Camera Zoom
 
     //Camera Projetion Matrix
-    this.projectionType = projection_type;
-    this.projectionMatrix = new Matrix(4,4);
-    this.setProjection(projection_type);
+    this.projectionMatrix = OrthographicCamera.orthogonalProjectionMatrix(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0, this.aspect_ratio);
 
     //Camera Transformation Matrix
     this.transformationMatrix = new Matrix(4,4);
 }
 
 //Function Prototypes
-Camera.prototype.setProjection = setProjection;
-Camera.prototype.startFrame = startFrame;
-Camera.prototype.resize = resize;
-Camera.prototype.toString = toString;
+OrthographicCamera.prototype.startFrame = startFrame;
+OrthographicCamera.prototype.resize = resize;
+OrthographicCamera.prototype.toString = toString;
 
 //Call before start a frame on this camera
 function startFrame()
 {
-    // Clearing the frame-buffer and the depth-buffer
-    gl.clearColor(0, 0, 0, 1);
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    
     // Passing the Projection Matrix to apply the current projection
     gl.uniformMatrix4fv(gl.getUniformLocation(shaderProgram, "uPMatrix"), false, this.projectionMatrix.flatten());
 
@@ -51,6 +40,7 @@ function startFrame()
     this.transformationMatrix.mul(MatrixGenerator.scalingMatrix(zoom, zoom, zoom));
 }
 
+//Call every time the canvas is resized
 function resize(x, y)
 {
     //Set new Values
@@ -60,39 +50,17 @@ function resize(x, y)
     this.size_ratio = 1/this.virtual_size.y;
 
     //Calculate Projection Matrix
-    this.setProjection(this.projectionType);
+    this.projectionMatrix = Camera.orthogonalProjectionMatrix(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0, this.aspect_ratio);
 }
 
-//Set Projection Mode for camera
-function setProjection(value)
-{
-    if(value == 0) //Orthogonal
-    {
-        this.projectionType = 0;
-    }
-    else if(value == 1) //Prespective
-    {
-        this.projectionType = 1;
-    }
-    
-    //Calculate Projection Matrix
-    if(this.projectionType == 0)
-    {
-        this.projectionMatrix = Camera.orthogonalProjectionMatrix(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0, this.aspect_ratio);
-    }
-    else if(this.projectionType == 1)
-    {
-        this.projectionMatrix = Camera.perspectiveProjectionMatrix(60, this.aspect_ratio, 1, 1000);
-    }
-}  
-
+//Create string with camera info
 function toString()
 {
-    return "Camera (ScreenSize:"+this.screen_size.toString()+" VirtualSize:"+this.virtual_size.toString()+" AspectRatio:"+this.aspect_ratio+")";
+    return "OrthographicCamera (ScreenSize:"+this.screen_size.toString()+" VirtualSize:"+this.virtual_size.toString()+" AspectRatio:"+this.aspect_ratio+")";
 }
 
 //Orthogonal Projection Matrix Generator (Angel / Shreiner) (arguments are the view box boundries)
-Camera.orthogonalProjectionMatrix = function(left, right, bottom, top, near, far, aspect_ratio)
+OrthographicCamera.orthogonalProjectionMatrix = function(left, right, bottom, top, near, far, aspect_ratio)
 {
     if (left == right) { throw "ortho(): left and right are equal"; }
     if (bottom == top) { throw "ortho(): bottom and top are equal"; }
@@ -109,24 +77,6 @@ Camera.orthogonalProjectionMatrix = function(left, right, bottom, top, near, far
     result.matrix[0][3] = -(left + right) / w;
     result.matrix[1][3] = -(top + bottom) / h;
     result.matrix[2][3] = -(near + far) / d;
-
-    return result;
-}
-
-//Perpective Projection Matrix Generator (Angel / Shreiner)
-//A standard view volume Viewer is at (0,0,0), ensure that the model is "inside" the view volume
-Camera.perspectiveProjectionMatrix = function(fovy, aspect, near, far)
-{
-    var f = 1.0 / Math.tan(Conversion.degreesToRadians(fovy)/2);
-    var d = far - near;
-    var result = new Matrix(4,4);
-
-    result.matrix[0][0] = f / aspect;
-    result.matrix[1][1] = f;
-    result.matrix[2][2] = -(near + far) / d;
-    result.matrix[2][3] = -2 * near * far / d;
-    result.matrix[3][2] = -1;
-    result.matrix[3][3] = 0.0;
 
     return result;
 }

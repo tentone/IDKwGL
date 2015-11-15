@@ -14,7 +14,8 @@ include("input/Mouse.js");
 
 include("graphics/elements/Model.js");
 include("graphics/elements/LightSource.js");
-include("graphics/Camera.js");
+include("graphics/OrthographicCamera.js");
+include("graphics/PrespectiveCamera.js");
 include("graphics/MatrixGenerator.js");
 include("graphics/Color.js");
 include("graphics/Shaders.js");
@@ -41,18 +42,37 @@ App.initialize = function()
 	App.keyboard = new Keyboard();
 	App.mouse = new Mouse();
 
-	//OnKeyDown Event
+	//Keyboard OnKeyDown Event
 	document.onkeydown = function(event)
 	{
-		console.log("Keyboard KeyDown: "+String.fromCharCode(event.keyCode)+" ("+event.keyCode+")");
 		App.keyboard.update(event.keyCode, Key.KEY_DOWN);
+		//console.log("Keyboard KeyDown: "+String.fromCharCode(event.keyCode)+" ("+event.keyCode+")");
 	}
 
-	//OnKeyUp Event
+	//Keyboard OnKeyUp Event
 	document.onkeyup = function(event)
 	{
-		//console.log("Keyboard KeyUp: "+String.fromCharCode(event.keyCode)+" ("+event.keyCode+")");
 	    App.keyboard.update(event.keyCode, Key.KEY_UP);
+	    //console.log("Keyboard KeyUp: "+String.fromCharCode(event.keyCode)+" ("+event.keyCode+")");
+	}
+
+	//Mouse Move Position
+	canvas.onmousemove = function(event)
+	{
+		App.mouse.updatePosition(event.x, canvas.height - event.y);
+		console.log("Mouse Position:"+App.mouse.toString());
+	}
+
+	//Mouse Button Down
+	canvas.onmousedown = function(event)
+	{
+		App.mouse.updateKey(event.which-1, Key.KEY_DOWN);
+	}
+
+	//Mouse Button Up
+	canvas.onmouseup = function(event)
+	{
+		App.mouse.updateKey(event.which-1, Key.KEY_UP);
 	}
 
 	Main.init(canvas);
@@ -62,6 +82,9 @@ App.initialize = function()
 // Timer to update game logic and render stuff (switch to independent timers?)
 App.loop = function()
 {
+	//Mouse Update
+	App.mouse.update();
+
 	Main.update();
 	Main.draw();
 	setTimeout(App.loop, delta);
