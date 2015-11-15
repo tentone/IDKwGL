@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Projeto CV</title>
+
+		<!-- CSS to Keep Canvas on Corner-->
+		<style>
+			#canvas
+			{
+				position: absolute; 
+				top: 0px;
+				left: 0px;
+			}
+		</style>
+
+		<!-- Shaders -->
+		<script id="shader-vs" type="x-shader/x-vertex">
+		    attribute vec3 aVertexPosition;
+		    attribute vec3 aVertexColor;
+
+		    uniform mat4 uMVMatrix;
+		    uniform mat4 uPMatrix;
+		    varying vec4 vertexColor;
+		    
+		    void main(void)
+		    {
+				// Just converting the (x,y,z) vertices to Homogeneous Coord and multiplying by the Projection and the Model-View matrix
+		        gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+		        
+		        // Converting the RGB color value to RGBa
+		        vertexColor = vec4(aVertexColor, 1.0);
+		    }
+		</script>
+
+		<script id="shader-fs" type="x-shader/x-fragment">
+			precision mediump float;
+			varying vec4 vertexColor;
+			
+			void main(void)
+			{
+				gl_FragColor = vertexColor;
+			}
+		</script>
+
+		<script type="text/javascript" src="App.js"></script>
+	</head>
+
+	<body onload="App.initialize();" onresize="App.resize();">
+		<div>
+			<canvas id="canvas"></canvas>
+		</div>
+	</body>
+</html>
