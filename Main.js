@@ -54,40 +54,48 @@ Main.init = function(canvas)
 	model[5].loadOBJ(cube_model);
 	model[5].position.set(0,0,-5);
 
-	camera = new PrespectiveCamera(canvas, 2, 60, 1);
+	model[6] = new Model();
+	model[6].loadOBJ(cube_model);
+	model[6].position.set(0,-1,0);
+	model[6].scale.set(20,1,20);
+
+	camera = new PrespectiveCamera(canvas, 90, 1);
 }
 
 //Logic Update
 Main.update = function()
 {
+	var angle = -Conversion.degreesToRadians(camera.rotation.y);
+
 	//Camera Rotate Test
-	if(App.keyboard.isKeyPressed(Keyboard.S))
-	{
-		camera.position.z -= 0.1*Math.cos(Conversion.degreesToRadians(-camera.rotation.y));
-		camera.position.x -= 0.1*Math.sin(Conversion.degreesToRadians(-camera.rotation.y));
-	}
 	if(App.keyboard.isKeyPressed(Keyboard.W))
 	{
-		camera.position.z += 0.1*Math.cos(Conversion.degreesToRadians(-camera.rotation.y));
-		camera.position.x += 0.1*Math.sin(Conversion.degreesToRadians(-camera.rotation.y));
+		camera.position.z += 0.1 * Math.cos(angle);
+		camera.position.x += 0.1 * Math.sin(angle);
 	}
+	if(App.keyboard.isKeyPressed(Keyboard.S))
+	{
+		camera.position.z -= 0.1 * Math.cos(angle);
+		camera.position.x -= 0.1 * Math.sin(angle);
+	}
+
 	if(App.keyboard.isKeyPressed(Keyboard.A))
 	{
-		camera.position.z -= 0.1*Math.cos(Conversion.degreesToRadians(-camera.rotation.y+90));
-		camera.position.x -= 0.1*Math.sin(Conversion.degreesToRadians(-camera.rotation.y+90));
+		camera.position.z -= 0.1 * Math.cos(angle+MathUtils.PID2);
+		camera.position.x -= 0.1 * Math.sin(angle+MathUtils.PID2);
 	}
 	if(App.keyboard.isKeyPressed(Keyboard.D))
 	{
-		camera.position.z += 0.1*Math.cos(Conversion.degreesToRadians(-camera.rotation.y+90));
-		camera.position.x += 0.1*Math.sin(Conversion.degreesToRadians(-camera.rotation.y+90));
+		camera.position.z += 0.1 * Math.cos(angle+MathUtils.PID2);
+		camera.position.x += 0.1 * Math.sin(angle+MathUtils.PID2);
 	}
 
 	//Camera Keyboard Movement
-	if(App.keyboard.isKeyPressed(Keyboard.E))
+	if(App.keyboard.isKeyPressed(Keyboard.Q))
 	{
 		camera.rotation.y += 3;
 	}
-	if(App.keyboard.isKeyPressed(Keyboard.Q))
+	if(App.keyboard.isKeyPressed(Keyboard.E))
 	{
 		camera.rotation.y -= 3;
 	}
@@ -95,12 +103,9 @@ Main.update = function()
 	//Camera Mouse Movement
 	if(App.mouse.buttonPressed(Mouse.LEFT))
 	{
-		//TODO <CHECK THIS>
-		//angle = Conversion.degreesToRadians(-camera.rotation.y);
-		//camera.rotation.z += 0.5 * App.mouse.pos_diff.y * Math.cos(angle);
-		//camera.rotation.x += 0.5 * App.mouse.pos_diff.y * Math.sin(angle);
-
-		camera.rotation.y -= 0.5 * App.mouse.pos_diff.x;
+		/*camera.rotation.z -= App.mouse.pos_diff.y * Math.sin(angle);
+		camera.rotation.x -= App.mouse.pos_diff.y * Math.cos(angle);*/
+		camera.rotation.y -= 0.1 * App.mouse.pos_diff.x;
 	}
 
 	//Camera Move UP/DOWN
@@ -166,6 +171,5 @@ Main.resize = function(canvas)
 	}
 
 	shaderProgram = initShaders(gl);
-
 	camera.resize(canvas.width, canvas.height);
 }

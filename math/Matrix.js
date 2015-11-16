@@ -1,5 +1,3 @@
-include("math/Vector2.js");
-
 //Constructor creates indentity matrix if size_x equals size_y
 function Matrix(size_x, size_y)
 {

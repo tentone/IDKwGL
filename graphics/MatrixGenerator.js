@@ -1,5 +1,3 @@
-include("math/Conversion.js");
-
 function MatrixGenerator(){}
 
 MatrixGenerator.translation = function(translate_x, translate_y, translate_z)

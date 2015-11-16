@@ -1,5 +1,3 @@
-include("math/Vector3.js");
-
 function Conversion(){}
 
 //Converts from radians to degrees

@@ -1,6 +1,3 @@
-include("math/Matrix.js");
-include("math/Conversion.js");
-
 //Constructor
 function OrthographicCamera(canvas, size_y)
 {

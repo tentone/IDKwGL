@@ -60,7 +60,7 @@ App.initialize = function()
 	canvas.onmousemove = function(event)
 	{
 		App.mouse.updatePosition(event.x, canvas.height - event.y);
-		console.log("Mouse Position:"+App.mouse.toString());
+		//console.log("Mouse Position:"+App.mouse.toString());
 	}
 
 	//Mouse Button Down
@@ -104,11 +104,4 @@ App.resize = function()
 function include(jsFile)
 {
    document.write('<script type="text/javascript" src="'+ jsFile+ '"></script>');
-}
-
-//Read external file (possible?)
-function readFile(file)
-{
-	//TODO <ADD CODE HERE>
-	return "";
 }

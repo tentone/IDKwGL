@@ -59,7 +59,8 @@ function update()
 	}
 	else
 	{
-		this.pos_diff.set(0, 0);
+		this.pos_diff.x = 0;
+		this.pos_diff.y = 0;
 	}
 }
 

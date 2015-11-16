@@ -1,5 +1,9 @@
 function MathUtils(){}
 
+MathUtils.PI2 = Math.PI*2;
+MathUtils.PID2 = Math.PI*0.5;
+MathUtils.PID4 = Math.PI*0.25;
+
 //Mid Point (Vector3)
 MathUtils.computeMidPoint = function(p1, p2)
 {
