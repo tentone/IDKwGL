@@ -8,12 +8,12 @@ function OrthographicCamera(canvas, size_y)
     this.size_ratio = 1/this.virtual_size.y;
 
     //Camera Movement
-	this.position = new Vector3(0,0,-1); //Position
+	this.position = new Vector3(0,0,0); //Position
     this.rotation = new Vector3(0,0,0); //View Angle
     this.zoom = 1.0; //Camera Zoom
 
     //Camera Projetion Matrix
-    this.projectionMatrix = OrthographicCamera.orthogonalProjectionMatrix(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0, this.aspect_ratio);
+    this.updateProjectionMatrix();
 
     //Camera Transformation Matrix
     this.transformationMatrix = new Matrix(4,4);
@@ -23,15 +23,16 @@ function OrthographicCamera(canvas, size_y)
 OrthographicCamera.prototype.startFrame = startFrame;
 OrthographicCamera.prototype.resize = resize;
 OrthographicCamera.prototype.toString = toString;
+OrthographicCamera.prototype.updateProjectionMatrix = updateProjectionMatrix;
 
 //Call before start a frame on this camera
 function startFrame()
 {
-    // Passing the Projection Matrix to apply the current projection
+    //Passing the Projection Matrix to shader
     gl.uniformMatrix4fv(gl.getUniformLocation(shaderProgram, "uPMatrix"), false, this.projectionMatrix.flatten());
 
-    // Create Camera Transformation Matrix
-    this.transformationMatrix = MatrixGenerator.translation(-this.position.x, -this.position.y, this.position.z);
+    //Calculate Camera Transformation Matrix
+    this.transformationMatrix = MatrixGenerator.translation(this.position.x, this.position.y, this.position.z);
     this.transformationMatrix.mul(MatrixGenerator.rotationMatrix(this.rotation.x, this.rotation.y, this.rotation.z));
     var zoom = this.zoom * this.size_ratio;
     this.transformationMatrix.mul(MatrixGenerator.scalingMatrix(zoom, zoom, zoom));
@@ -47,6 +48,12 @@ function resize(x, y)
     this.size_ratio = 1/this.virtual_size.y;
 
     //Calculate Projection Matrix
+    this.updateProjectionMatrix();
+}
+
+//Calculate Camera projection Matrix
+function updateProjectionMatrix()
+{
     this.projectionMatrix = Camera.orthogonalProjectionMatrix(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0, this.aspect_ratio);
 }
 

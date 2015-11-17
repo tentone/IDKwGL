@@ -40,7 +40,7 @@ MathUtils.computeNormalVector = function(p0, p1, p2)
 	var v1 = new Vector3(p1.x - p0.x, p1.y - p0.y, p1.z - p0.z);
 	var v2 = new Vector3(p2.x - p0.x, p2.y - p0.y, p2.z - p0.z);
 
-    result = vectorProduct(v1, v2);
+    result = MathUtils.vectorProduct(v1, v2);
     result.normalize();
 
     return result;

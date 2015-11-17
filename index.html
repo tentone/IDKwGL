@@ -31,10 +31,10 @@
 		    
 		    void main(void)
 		    {
-				// Just converting the (x,y,z) vertices to Homogeneous Coord and multiplying by the Projection and the Model-View matrix
+				//Homogeneous Coord and multiplying by the Projection and the Model-View matrix
 		        gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
 		        
-		        // Converting the RGB color value to RGBa
+		        //Converting the RGB color value to RGBa
 		        vertexColor = vec4(aVertexColor, 1.0);
 		    }
 		</script>

@@ -6,7 +6,9 @@ include("math/Matrix.js");
 include("math/Conversion.js");
 include("math/MathsUtils.js");
 
-include("data/models/models.js");
+include("data/models/cube.js");
+include("data/models/prismaTriangular.js");
+include("data/models/cessna.js");
 
 include("input/Key.js");
 include("input/Keyboard.js");
@@ -14,12 +16,13 @@ include("input/Mouse.js");
 
 include("graphics/elements/Model.js");
 include("graphics/elements/LightSource.js");
-include("graphics/OrthographicCamera.js");
-include("graphics/PrespectiveCamera.js");
+include("graphics/camera/OrthographicCamera.js");
+include("graphics/camera/PrespectiveCamera.js");
 include("graphics/MatrixGenerator.js");
 include("graphics/Color.js");
 include("graphics/Shaders.js");
 
+include("object/Player.js");
 
 include("Main.js");
 
@@ -59,7 +62,7 @@ App.initialize = function()
 	//Mouse Move Position
 	canvas.onmousemove = function(event)
 	{
-		App.mouse.updatePosition(event.x, canvas.height - event.y);
+		App.mouse.updatePosition(event.x, event.y);
 		//console.log("Mouse Position:"+App.mouse.toString());
 	}
 

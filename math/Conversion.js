@@ -1,15 +1,18 @@
 function Conversion(){}
 
+Conversion.radToDegRat = 180.0 / Math.PI;
+Conversion.degToRadRat = Math.PI / 180.0;
+
 //Converts from radians to degrees
 Conversion.radiansToDegree = function(radians)
 {
-    return radians * 180.0 / Math.PI;
+    return radians * Conversion.radToDegRat;
 }
 
 //Converts from degrees to radians
 Conversion.degreesToRadians = function(degrees)
 {
-    return degrees * Math.PI / 180.0;
+    return degrees * Conversion.degToRadRat;
 }
 
 //Convert from cartesian to spherical (Vector3)

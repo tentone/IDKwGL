@@ -14,6 +14,7 @@ Vector3.prototype.equals = equals;
 Vector3.prototype.set = set;
 Vector3.prototype.clone = clone;
 Vector3.prototype.normalize = normalize;
+Vector3.prototype.mulConst = mulConst;
 
 //Change all values at once
 function set(x, y, z)
@@ -66,7 +67,6 @@ function add(val)
 
 function sub(val)
 {
-	//Check type of val
 	if(typeof val != typeof this)
 	{
 		throw "Incompatible types";
@@ -81,7 +81,6 @@ function sub(val)
 
 function mul(val)
 {
-	//Check type of val
 	if(typeof val != typeof this)
 	{
 		throw "Incompatible types";
@@ -92,6 +91,13 @@ function mul(val)
 		this.y *= val.y;
 		this.z *= val.z;
 	}
+}
+
+function mulConst(val)
+{
+	this.x *= val;
+	this.y *= val;
+	this.z *= val;
 }
 
 function toString()

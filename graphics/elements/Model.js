@@ -20,6 +20,7 @@ function Model()
 Model.prototype.loadOBJ = loadOBJ;
 Model.prototype.draw = draw;
 Model.prototype.toString = toString;
+Model.prototype.computeVertexNormals = computeVertexNormals;
 
 //Draw Model to camera
 function draw(camera)
@@ -102,7 +103,7 @@ function loadOBJ(data_string)
 	// Checking to see if the normals are defined on the file
 	if(this.normals.length == 0)
 	{
-		computeVertexNormals(this.vertex, this.normals);
+		this.computeVertexNormals();
 	}
 	
 	// Reset Tranformations Control
@@ -111,55 +112,32 @@ function loadOBJ(data_string)
 	this.scale = new Vector3(1,1,1);
 }
 
+//Computing the triangle unit normal vector to vertex 
+function computeVertexNormals()
+{
+	//Clearing the new normals array
+	this.normals = [];
+	
+    //Taking 3 vertices from the coordinates array 
+    for(i = 0; i < this.vertex.length; i += 9)
+    {
+		//Compute unit normal vector for each triangle
+        var normalVector = MathUtils.computeNormalVector(new Vector3(this.vertex[i], this.vertex[i+1], this.vertex[i+2]), new Vector3(this.vertex[i+3], this.vertex[i+4], this.vertex[i+5]), new Vector3(this.vertex[i+6], this.vertex[i+7], this.vertex[i+8]));
+
+        //Store normal 3 times
+        this.normals.push(normalVector.x);
+        this.normals.push(normalVector.y);
+        this.normals.push(normalVector.z);
+		this.normals.push(normalVector.x);
+		this.normals.push(normalVector.y);
+		this.normals.push(normalVector.z);
+		this.normals.push(normalVector.x);
+		this.normals.push(normalVector.y);
+		this.normals.push(normalVector.z);
+	}
+}
+
 function toString()
 {
 	return "Model (Size:"+this.size+" VertexCount:"+this.vertex.length+" NormalCount:"+this.normals.length+" ColorsCount:"+this.colors.length+")"; 
 }
-
-//-----------------------------TODO <CLASS CODE / CHECK THIS>---------------------------------
-// Loading 3D Model from Text file (As used in classes)
-// Adapted from: http://stackoverflow.com/questions/23331546/how-to-use-javascript-to-read-local-text-file-and-read-line-by-line
-/*document.getElementById("text-file").onchange = function()
-{
-	var file = this.files[0];
-	var reader = new FileReader();
-	
-	reader.onload = function( progressEvent )
-	{ 
-		// Entire file read as a string, the tokens/values in the file separation between values is 1 or more whitespaces
-		var tokens = this.result.split(/\s\s* /);
-
-		// Array of values; each value is a string
-		var numVertices = parseInt( tokens[0] );
-		
-		// For every vertex we have 3 floating point values
-		var i, j;
-		var aux = 1;
-		var newVertices = [];
-		
-		for( i = 0; i < numVertices; i++ )
-		{
-			for( j = 0; j < 3; j++ )
-			{
-				newVertices[ 3 * i + j ] = parseFloat( tokens[ aux++ ] );
-			}
-		}
-				
-		// Assigning to the current model
-		vertex = newVertices.slice();
-		
-		// Computing the triangle normal vector for every vertex
-		computeVertexNormals( vertex, normals );
-		
-		// To render the model just read
-		initBuffers();
-
-		// RESET the transformations - NEED AUXILIARY FUNCTION !!
-		t.x = t.y = t.z = 0.0;			
-		angle.x = angle.y = angle.z = 0.0;
-		s.x = s.y = s.z = 0.5;
-	};
-	
-	// Entire file read as a string
-	reader.readAsText( file );		
-}*/
