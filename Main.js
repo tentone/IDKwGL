@@ -33,36 +33,45 @@ Main.init = function(canvas)
 	model[0] = new Model();
 	model[0].loadOBJ(cube);
 	model[0].position.set(0,0,0);
+	model[0].update();
 
 	model[1] = new Model();
 	model[1].loadOBJ(cube);
 	model[1].position.set(0,1,0);
+	model[1].update();
 
 	model[2] = new Model();
 	model[2].loadOBJ(cube);
 	model[2].position.set(0,2,0);
+	model[2].update();
 
 	model[3] = new Model();
 	model[3].loadOBJ(cube);
 	model[3].position.set(2,0,2);
+	model[3].update();
 
 	model[4] = new Model();
 	model[4].loadOBJ(cube);
 	model[4].position.set(-3,0,5);
+	model[4].update();
 
 	model[5] = new Model();
-	model[5].loadOBJ(prismaTriangular);
+	model[5].loadOBJ(cube);
 	model[5].position.set(0,0,-5);
+	model[5].update();
 
 	model[6] = new Model();
 	model[6].loadOBJ(cube);
 	model[6].position.set(0,-1,0);
 	model[6].scale.set(20,1,20);
+	model[6].update();
 
 	model[7] = new Model();
 	model[7].loadOBJ(cessna);
 	model[7].position.set(0,5,0);
 	model[7].scale.set(0.3,0.3,0.3);
+	model[7].update();
+	
 	player = new Player(canvas);
 }
 
@@ -125,21 +134,31 @@ Main.update = function()
 	player.updatePosition();
 
 	//Model Move Test
+	var update = false;
 	if(App.keyboard.isKeyPressed(Keyboard.DOWN))
 	{
 		model[0].position.y -= 0.1;
+		update = true;
 	}
 	if(App.keyboard.isKeyPressed(Keyboard.UP))
 	{
 		model[0].position.y += 0.1;
+		update = true;
 	}
 	if(App.keyboard.isKeyPressed(Keyboard.LEFT))
 	{
 		model[0].position.x -= 0.1;
+		update = true;
 	}
 	if(App.keyboard.isKeyPressed(Keyboard.RIGHT))
 	{
 		model[0].position.x += 0.1;
+		update = true;
+	}
+
+	if(update)
+	{
+		model[0].update();
 	}
 }
 

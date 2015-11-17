@@ -7,7 +7,7 @@ include("math/Conversion.js");
 include("math/MathsUtils.js");
 
 include("data/models/cube.js");
-include("data/models/prismaTriangular.js");
+include("data/models/raptor.js");
 include("data/models/cessna.js");
 
 include("input/Key.js");
@@ -21,6 +21,7 @@ include("graphics/camera/PrespectiveCamera.js");
 include("graphics/MatrixGenerator.js");
 include("graphics/Color.js");
 include("graphics/Shaders.js");
+include("graphics/ModelUtils.js");
 
 include("object/Player.js");
 

@@ -17,19 +17,15 @@ function Model()
 }
 
 //Function Prototypes
-Model.prototype.loadOBJ = loadOBJ;
 Model.prototype.draw = draw;
+Model.prototype.update = update;
+Model.prototype.loadOBJ = loadOBJ;
 Model.prototype.toString = toString;
 Model.prototype.computeVertexNormals = computeVertexNormals;
 
 //Draw Model to camera
 function draw(camera)
 {	
-	//Recalculate Tranformation Matrix (Can be done inside of set events of control variables)
-	this.transformationMatrix = MatrixGenerator.translation(this.position.x, this.position.y, this.position.z);
-    this.transformationMatrix.mul(MatrixGenerator.rotationMatrix(this.rotation.x, this.rotation.y, this.rotation.z));
-    this.transformationMatrix.mul(MatrixGenerator.scalingMatrix(this.scale.x, this.scale.y, this.scale.z));
-	
     //Clone Camera Global transformation Matrix and multiply
     camTransformationMatrix = this.transformationMatrix.clone();
 	camTransformationMatrix.mul(camera.transformationMatrix);
@@ -46,7 +42,7 @@ function draw(camera)
 	triangleVertexPositionBuffer.numItems = this.vertex.length / 3;			
 
 	// Associating to the vertex shader
-	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, triangleVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
 	
 	// Colors
 	var triangleVertexColorBuffer = gl.createBuffer();
@@ -57,16 +53,24 @@ function draw(camera)
 	triangleVertexColorBuffer.numItems = this.colors.length / 3;			
 
 	// Associating to the vertex shader
-	gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, triangleVertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
 
 	//Draw Model into screen
 	gl.drawArrays(gl.TRIANGLES, 0, triangleVertexPositionBuffer.numItems); 	
 }
 
-// OBJ file read (from data_string), file load has to be handled somewhere else (From classes)
-function loadOBJ(data_string)
+//Recalculate Tranformation Matrix
+function update()
 {
-	var lines = data_string.split("\n");
+	this.transformationMatrix = MatrixGenerator.translation(this.position.x, this.position.y, this.position.z);
+    this.transformationMatrix.mul(MatrixGenerator.rotationMatrix(this.rotation.x, this.rotation.y, this.rotation.z));
+    this.transformationMatrix.mul(MatrixGenerator.scalingMatrix(this.scale.x, this.scale.y, this.scale.z));
+}
+
+//OBJ file read from string
+function loadOBJ(data)
+{
+	var lines = data.split("\n");
 
 	//Clear Data
 	this.vertex = [];
@@ -137,6 +141,7 @@ function computeVertexNormals()
 	}
 }
 
+//Create string with model info
 function toString()
 {
 	return "Model (Size:"+this.size+" VertexCount:"+this.vertex.length+" NormalCount:"+this.normals.length+" ColorsCount:"+this.colors.length+")"; 
