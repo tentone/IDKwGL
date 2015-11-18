@@ -64,19 +64,19 @@ Conversion.cylindricalToCartesian = function(vec)
 
 Conversion.test = function(vec)
 {
-	console.log("Cartesian to spherical test:")
+	console.log("Cartesian to spherical test:");
 	v = new Vector3(1,1,2);
-	v.print();
+	console.log(v.toString());
 	a = Conversion.cartesianToSpherical(v);
-	a.print();
+	console.log(a.toString());
 	v = Conversion.sphericalToCartesian(a);
-	v.print();
+	console.log(v.toString());
 
-	console.log("\nCylindrical to cartesian test:")
+	console.log("\nCylindrical to cartesian test:");
 	v = new Vector3(1,1,2);
-	v.print();
+	console.log(v.toString());
 	a = Conversion.cartesianToCylindrical(v);
-	a.print();
+	console.log(a.toString());
 	v = Conversion.cylindricalToCartesian(a);
-	v.print();
+	console.log(v.toString());
 }

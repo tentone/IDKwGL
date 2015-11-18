@@ -2,11 +2,12 @@
 function Mouse()
 {
 	//Mouse Position Relative to camera
-	this.raw_mouse_pos = new Vector2(0, 0);
+	this.raw_mouse_pos = new Vector2(0,0);
+	this.raw_mouse_movement = new Vector2(0,0);
 	this.raw_mouse_pos_updated = false;
 
-	this.pos = new Vector2(0, 0);
-	this.pos_diff = new Vector2(0, 0);
+	this.pos = new Vector2(0,0);
+	this.pos_diff = new Vector2(0,0);
 
 	//Mouse Buttons
 	this.keys = [];
@@ -34,9 +35,11 @@ function buttonPressed(button)
 }
 
 //Update Mouse Position
-function updatePosition(x, y)
+function updatePosition(x, y, x_diff, y_diff)
 {
 	this.raw_mouse_pos.set(x, y);
+	this.raw_mouse_movement.x += x_diff;
+	this.raw_mouse_movement.y += y_diff;
 	this.raw_mouse_pos_updated = true;
 }
 
@@ -51,11 +54,14 @@ function update()
 {
 	if(this.raw_mouse_pos_updated)
 	{
-		this.pos_diff.x = this.raw_mouse_pos.x - this.pos.x;
-		this.pos_diff.y = this.raw_mouse_pos.y - this.pos.y;
+		this.pos_diff.x = this.raw_mouse_movement.x;
+		this.pos_diff.y = this.raw_mouse_movement.y;
+		this.raw_mouse_movement.set(0,0);
+
 		this.pos.x = this.raw_mouse_pos.x;
 		this.pos.y = this.raw_mouse_pos.y;
 		this.raw_mouse_pos_updated = false;
+
 	}
 	else
 	{

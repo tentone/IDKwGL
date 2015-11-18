@@ -1,4 +1,3 @@
-//Include Main Program
 include("math/Vector2.js");
 include("math/Vector3.js");
 include("math/Vector4.js");
@@ -6,8 +5,11 @@ include("math/Matrix.js");
 include("math/Conversion.js");
 include("math/MathsUtils.js");
 
+include("math/geometry/Geometry.js");
+include("math/geometry/Box.js");
+include("math/geometry/Sphere.js");
+
 include("data/models/cube.js");
-include("data/models/raptor.js");
 include("data/models/cessna.js");
 
 include("input/Key.js");
@@ -61,22 +63,33 @@ App.initialize = function()
 	}
 
 	//Mouse Move Position
-	canvas.onmousemove = function(event)
+	document.onmousemove = function(event)
 	{
-		App.mouse.updatePosition(event.x, event.y);
+		App.mouse.updatePosition(event.clientX, event.clientY, event.movementX, event.movementY);
 		//console.log("Mouse Position:"+App.mouse.toString());
 	}
 
 	//Mouse Button Down
-	canvas.onmousedown = function(event)
+	document.onmousedown = function(event)
 	{
 		App.mouse.updateKey(event.which-1, Key.KEY_DOWN);
 	}
 
 	//Mouse Button Up
-	canvas.onmouseup = function(event)
+	document.onmouseup = function(event)
 	{
 		App.mouse.updateKey(event.which-1, Key.KEY_UP);
+	}
+
+	//Request to lock mouse if canvas is clicked
+	canvas.onclick = function()
+	{
+		try
+		{
+			canvas.requestPointerLock();
+			canvas.webkitRequestPointerLock();
+		}
+		catch(e){}
 	}
 
 	Main.init(canvas);
@@ -86,7 +99,7 @@ App.initialize = function()
 // Timer to update game logic and render stuff (switch to independent timers?)
 App.loop = function()
 {
-	//Mouse Update
+	//Update Mouse Values (to keep in sync with game actions)
 	App.mouse.update();
 
 	Main.update();
@@ -102,6 +115,23 @@ App.resize = function()
 	canvas.height = window.innerHeight;
 
 	Main.resize(canvas);
+}
+
+//Should be called by canvas onclicked
+App.setFullscreen = function(event)
+{
+	//Key P Pressed
+	if(event.keyCode == 112)
+	{
+		var canvas = document.getElementById("canvas");
+		canvas.webkitRequestFullScreen();
+	}
+}
+
+//Check if mouse is locked
+App.isMouseLocked = function()
+{
+	return document.pointerLockElement === canvas;
 }
 
 // Auxuiliary function to include JS files in app

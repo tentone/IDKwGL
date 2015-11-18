@@ -30,6 +30,12 @@ function equals(val)
 	}
 }
 
+function add(x, y)
+{
+	this.x += x;
+	this.y += y;
+}
+
 function add(val)
 {
 	if(typeof val != typeof this)

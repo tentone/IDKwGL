@@ -54,7 +54,7 @@ function resize(x, y)
 //Calculate Camera projection Matrix
 function updateProjectionMatrix()
 {
-    this.projectionMatrix = Camera.orthogonalProjectionMatrix(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0, this.aspect_ratio);
+    this.projectionMatrix = Camera.orthogonalProjectionMatrix(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
 }
 
 //Create string with camera info
@@ -63,8 +63,8 @@ function toString()
     return "OrthographicCamera (ScreenSize:"+this.screen_size.toString()+" VirtualSize:"+this.virtual_size.toString()+" AspectRatio:"+this.aspect_ratio+")";
 }
 
-//Orthogonal Projection Matrix Generator (Angel / Shreiner) (arguments are the view box boundries)
-OrthographicCamera.orthogonalProjectionMatrix = function(left, right, bottom, top, near, far, aspect_ratio)
+//Orthogonal Projection Matrix Generator (Angel / Shreiner)
+OrthographicCamera.orthogonalProjectionMatrix = function(left, right, bottom, top, near, far)
 {
     if (left == right) { throw "ortho(): left and right are equal"; }
     if (bottom == top) { throw "ortho(): bottom and top are equal"; }

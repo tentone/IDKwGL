@@ -17,7 +17,6 @@
 			{
 				display: none;
 			}
-
 		</style>
 
 		<!-- Shaders -->
@@ -52,7 +51,7 @@
 		<script type="text/javascript" src="App.js"></script>
 	</head>
 
-	<body onload="App.initialize();" onresize="App.resize();">
+	<body onload="App.initialize();" onresize="App.resize();" onkeypress="App.setFullscreen(event);">
 		<div>
 			<canvas id="canvas"/>
 		</div>

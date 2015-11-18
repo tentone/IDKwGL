@@ -114,7 +114,12 @@ Main.update = function()
 	}
 
 	//Camera Mouse Movement
-	if(App.mouse.buttonPressed(Mouse.LEFT))
+	if(App.isMouseLocked())
+	{
+		player.rotation.x += 0.2 * App.mouse.pos_diff.x;
+		player.rotation.y += 0.2 * App.mouse.pos_diff.y;
+	}
+	else if(App.mouse.buttonPressed(Mouse.LEFT))
 	{
 		player.rotation.x += 0.2 * App.mouse.pos_diff.x;
 		player.rotation.y += 0.2 * App.mouse.pos_diff.y;
