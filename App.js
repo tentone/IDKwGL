@@ -25,6 +25,7 @@ include("graphics/Color.js");
 include("graphics/Shaders.js");
 include("graphics/ModelUtils.js");
 
+include("object/Spectator.js");
 include("object/Player.js");
 
 include("Main.js");
@@ -81,13 +82,13 @@ App.initialize = function()
 		App.mouse.updateKey(event.which-1, Key.KEY_UP);
 	}
 
-	//Request to lock mouse if canvas is clicked
+	//Request to lock mouse if canvas is clicked (cross-browser)
 	canvas.onclick = function()
 	{
 		try
 		{
+			canvas.requestPointerLock = canvas.mozRequestPointerLock || canvas.requestPointerLock || canvas.webkitRequestPointerLock;
 			canvas.requestPointerLock();
-			canvas.webkitRequestPointerLock();
 		}
 		catch(e){}
 	}
@@ -128,10 +129,10 @@ App.setFullscreen = function(event)
 	}
 }
 
-//Check if mouse is locked
+//Check if mouse is locked (cross-browser)
 App.isMouseLocked = function()
 {
-	return document.pointerLockElement === canvas;
+	return document.pointerLockElement === canvas || document.mozPointerLockElement === canvas || document.webkitPointerLockElement === canvas;
 }
 
 // Auxuiliary function to include JS files in app

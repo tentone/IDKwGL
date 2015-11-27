@@ -19,7 +19,7 @@
 			}
 		</style>
 
-		<!-- Shaders -->
+		<!--..........................................Shaders..........................................-->
 		<script id="shader-vs" type="x-shader/x-vertex">
 		    attribute vec3 aVertexPosition;
 		    attribute vec3 aVertexColor;
@@ -41,9 +41,10 @@
 		<script id="shader-fs" type="x-shader/x-fragment">
 			precision mediump float;
 			varying vec4 vertexColor;
-			
+			//uniform sampler2D uSampler;
 			void main(void)
 			{
+        		//gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
 				gl_FragColor = vertexColor;
 			}
 		</script>

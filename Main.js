@@ -4,7 +4,8 @@ var shaderProgram = null;
 
 //Test Stuff
 var model = [];
-var player;
+var lights = [];
+var spectator;
 
 function Main(){}
 
@@ -15,7 +16,6 @@ Main.init = function(canvas)
 	try
 	{
 		gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-		gl.enable(gl.CULL_FACE);
 		gl.enable(gl.DEPTH_TEST);
 		gl.viewport(0, 0, canvas.width, canvas.height);
 	}
@@ -72,71 +72,71 @@ Main.init = function(canvas)
 	model[7].scale.set(0.3,0.3,0.3);
 	model[7].update();
 	
-	player = new Player(canvas);
+	spectator = new Spectator(canvas);
 }
 
 //Logic Update
 Main.update = function()
 {
-	var angle = Conversion.degreesToRadians(player.rotation.x);
+	var angle = Conversion.degreesToRadians(spectator.rotation.x);
 
 	//Camera Rotate Test
 	if(App.keyboard.isKeyPressed(Keyboard.W))
 	{
-		player.camera.position.z += 0.1 * Math.cos(angle);
-		player.camera.position.x += 0.1 * Math.sin(angle);
+		spectator.camera.position.z += 0.1 * Math.cos(angle);
+		spectator.camera.position.x += 0.1 * Math.sin(angle);
 	}
 	if(App.keyboard.isKeyPressed(Keyboard.S))
 	{
-		player.camera.position.z -= 0.1 * Math.cos(angle);
-		player.camera.position.x -= 0.1 * Math.sin(angle);
+		spectator.camera.position.z -= 0.1 * Math.cos(angle);
+		spectator.camera.position.x -= 0.1 * Math.sin(angle);
 	}
 
 	if(App.keyboard.isKeyPressed(Keyboard.A))
 	{
-		player.camera.position.z -= 0.1 * Math.cos(angle+MathUtils.PID2);
-		player.camera.position.x -= 0.1 * Math.sin(angle+MathUtils.PID2);
+		spectator.camera.position.z -= 0.1 * Math.cos(angle+MathUtils.PID2);
+		spectator.camera.position.x -= 0.1 * Math.sin(angle+MathUtils.PID2);
 	}
 	if(App.keyboard.isKeyPressed(Keyboard.D))
 	{
-		player.camera.position.z += 0.1 * Math.cos(angle+MathUtils.PID2);
-		player.camera.position.x += 0.1 * Math.sin(angle+MathUtils.PID2);
+		spectator.camera.position.z += 0.1 * Math.cos(angle+MathUtils.PID2);
+		spectator.camera.position.x += 0.1 * Math.sin(angle+MathUtils.PID2);
 	}
 
 	//Camera Keyboard Movement
 	if(App.keyboard.isKeyPressed(Keyboard.Q))
 	{
-		player.rotation.x -= 3;
+		spectator.rotation.x -= 3;
 	}
 	if(App.keyboard.isKeyPressed(Keyboard.E))
 	{
-		player.rotation.x += 3;
+		spectator.rotation.x += 3;
 	}
 
 	//Camera Mouse Movement
 	if(App.isMouseLocked())
 	{
-		player.rotation.x += 0.2 * App.mouse.pos_diff.x;
-		player.rotation.y += 0.2 * App.mouse.pos_diff.y;
+		spectator.rotation.x += 0.2 * App.mouse.pos_diff.x;
+		spectator.rotation.y += 0.2 * App.mouse.pos_diff.y;
 	}
 	else if(App.mouse.buttonPressed(Mouse.LEFT))
 	{
-		player.rotation.x += 0.2 * App.mouse.pos_diff.x;
-		player.rotation.y += 0.2 * App.mouse.pos_diff.y;
+		spectator.rotation.x += 0.2 * App.mouse.pos_diff.x;
+		spectator.rotation.y += 0.2 * App.mouse.pos_diff.y;
 	}
 
 	//Camera Move UP/DOWN
 	if(App.keyboard.isKeyPressed(Keyboard.SPACEBAR))
 	{
-		player.camera.position.y += 0.1;
+		spectator.camera.position.y += 0.1;
 	}
 	if(App.keyboard.isKeyPressed(Keyboard.CTRL))
 	{
-		player.camera.position.y -= 0.1;
+		spectator.camera.position.y -= 0.1;
 	}
 
 	//Update Player Camera Position
-	player.updatePosition();
+	spectator.updatePosition();
 
 	//Model Move Test
 	var update = false;
@@ -176,10 +176,10 @@ Main.draw = function()
     gl.clear(gl.DEPTH_BUFFER_BIT);
 
     //Draw Stuff to Player Camera
-	player.camera.startFrame();
+	spectator.camera.startFrame();
 	for(i = 0; i < model.length; i++)
 	{
-		model[i].draw(player.camera);
+		model[i].draw(spectator.camera);
 	}
 }
 
@@ -201,5 +201,5 @@ Main.resize = function(canvas)
 	}
 
 	shaderProgram = initShaders(gl);
-	player.camera.resize(canvas.width, canvas.height);
+	spectator.camera.resize(canvas.width, canvas.height);
 }

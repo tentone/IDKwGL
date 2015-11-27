@@ -6,7 +6,9 @@ function Box()
 	this.type = Geometry.BOX;
 }
 
+//Function Prototypes
 Box.prototype.isColliding = isColliding;
+Box.prototype.toString = toString;
 
 function isColliding(obj)
 {
@@ -26,4 +28,27 @@ function isColliding(obj)
 	{
 		return false;
 	}
+}
+
+function toString()
+{
+	return "Pos"+this.pos.toString()+" Size"+this.size.toString();
+}
+
+Box.test = function()
+{
+	a = new Box();
+	a.pos.set(0,0,0);
+	a.size.set(1,1,1);
+
+	b = new Box();
+	b.pos.set(0.5, 0.5, 0.5);
+	b.size.set(1,1,1);
+
+	console.log("Box A and B");
+	console.log(a.toString());
+	console.log(b.toString());
+
+	console.log("Col A->B" + a.isColliding(b));
+	console.log("Col B->A" + b.isColliding(a));
 }
