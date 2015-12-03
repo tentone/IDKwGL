@@ -1,12 +1,15 @@
 //Empty model constructor
-function Model()
+function ModelObj()
 {
 	//Model Data
 	this.size = 0; //Size amount of triangles
 	this.vertex = []; //Vertex
 	this.normals = []; //Vertex Normals
-	this.texture = []; //Vertex Terure
-	this.faces = []; //Face
+	this.texture = []; //Vertex Texture
+	this.faces = []; //Face <vertex>/[texture]/<normal>
+
+	//Texture Pointer
+	this.texture = null;
 
 	//Tranformations Control
 	this.position = new Vector3(0,0,0);
@@ -20,6 +23,7 @@ function Model()
 //Function Prototypes
 Model.prototype.draw = draw;
 Model.prototype.update = update;
+Model.prototype.attachTexture = attachTexture;
 Model.prototype.loadOBJ = loadOBJ;
 Model.prototype.toString = toString;
 Model.prototype.computeVertexNormals = computeVertexNormals;
@@ -57,7 +61,31 @@ function draw(camera)
 	gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
 
 	//Draw Model into screen
-	gl.drawArrays(gl.TRIANGLES, 0, triangleVertexPositionBuffer.numItems); 	
+	gl.drawArrays(gl.TRIANGLES, 0, triangleVertexPositionBuffer.numItems); 
+
+	/*
+	//From last WebGL class
+	//Passing the Model View Matrix to apply the current transformation
+	var mvUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+	gl.uniformMatrix4fv(mvUniform, false, new Float32Array(flatten(mvMatrix)));
+
+    //Passing the buffers
+	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
+    gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, cubeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+	//Textures
+	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexTextureCoordBuffer);
+    gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, cubeVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
+   
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, webGLTexture);
+    gl.uniform1i(shaderProgram.samplerUniform, 0);
+    
+    //The vertex indices
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
+
+	//Drawing the triangles
+	gl.drawElements(gl.TRIANGLES, cubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);*/
 }
 
 //Recalculate Tranformation Matrix
@@ -66,6 +94,12 @@ function update()
 	this.transformationMatrix = MatrixGenerator.translation(this.position.x, this.position.y, this.position.z);
     this.transformationMatrix.mul(MatrixGenerator.rotationMatrix(this.rotation.x, this.rotation.y, this.rotation.z));
     this.transformationMatrix.mul(MatrixGenerator.scalingMatrix(this.scale.x, this.scale.y, this.scale.z));
+}
+
+//Attach texture image to this model
+function attachTexture(texture)
+{
+	this.texture = texture;
 }
 
 //OBJ file read from string
@@ -104,39 +138,62 @@ function loadOBJ(data)
 			this.texture.push(parseFloat(tokens[1]));
 	    	this.texture.push(parseFloat(tokens[2]));
 		}
-		else if(tokens[0] == "f") //Faces
+		else if(tokens[0] == "f") //Faces <vertex>/[texture]/<normal>
 		{
-			for(var j = 0; j < tokens.length; j++)
+			//3 vertex face
+ 			//f 16/92/11 14/101/22 1/69/1
+			if(tokens.length == 4)
 			{
-				var val = tokens[j].split("/");
+				var val = tokens[1].split("/");
+				this.faces.push(val[0]); //Vertex
+				this.faces.push(val[1]); //Texture
+				this.faces.push(val[2]); //Normal
 
-				//3 Vertex
-				if(tokens.length == 4)
-				{
-					//TODO <ADD CODE HERE>
-				}
-				//Quad (Divide)
-				else if(tokens.length == 5)
-				{
-					//TODO <ADD CODE HERE>
-				}
+				val = tokens[2].split("/");
+				this.faces.push(val[0]); //Vertex
+				this.faces.push(val[1]); //Texture
+				this.faces.push(val[2]); //Normal
+
+				val = tokens[3].split("/");
+				this.faces.push(val[0]); //Vertex
+				this.faces.push(val[1]); //Texture
+				this.faces.push(val[2]); //Normal
+			}
+			//4 vertex face
+	        //f 16/92/11 40/109/40 38/114/38 14/101/22
+			else if(tokens.length == 5)
+			{
+				var val = tokens[1].split("/");
+				this.faces.push(val[0]); //Vertex
+				this.faces.push(val[1]); //Texture
+				this.faces.push(val[2]); //Normal
+
+				val = tokens[2].split("/");
+				this.faces.push(val[0]); //Vertex
+				this.faces.push(val[1]); //Texture
+				this.faces.push(val[2]); //Normal
+
+				val = tokens[3].split("/");
+				this.faces.push(val[0]); //Vertex
+				this.faces.push(val[1]); //Texture
+				this.faces.push(val[2]); //Normal
+
+				val = tokens[1].split("/");
+				this.faces.push(val[0]); //Vertex
+				this.faces.push(val[1]); //Texture
+				this.faces.push(val[2]); //Normal
+
+				val = tokens[3].split("/");
+				this.faces.push(val[0]); //Vertex
+				this.faces.push(val[1]); //Texture
+				this.faces.push(val[2]); //Normal
+
+				val = tokens[4].split("/");
+				this.faces.push(val[0]); //Vertex
+				this.faces.push(val[1]); //Texture
+				this.faces.push(val[2]); //Normal
 			}
 		}
-
-		/*
-	Each line of the faces section contains a list of (vertex, [texture], normal) groups
-    Some examples:
-         // the texture index is optional, both formats are possible for models
-         // without a texture applied
-         f 1/25 18/46 12/31
-         f 1//25 18//46 12//31
-
-         // A 3 vertex face with texture indices
-         f 16/92/11 14/101/22 1/69/1
-
-         // A 4 vertex face
-         f 16/92/11 40/109/40 38/114/38 14/101/22
-    */
 	}
 	
 	// Checking to see if the normals are defined on the file
@@ -179,5 +236,5 @@ function computeVertexNormals()
 //Create string with model info
 function toString()
 {
-	return "Model (Size:"+this.size+" VertexCount:"+this.vertex.length+" NormalCount:"+this.normals.length+" ColorsCount:"+this.colors.length+")"; 
+	return "ModelObj(Size:"+this.size+" VertexCount:"+this.vertex.length+" NormalCount:"+this.normals.length+" ColorsCount:"+this.colors.length+")"; 
 }

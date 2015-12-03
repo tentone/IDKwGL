@@ -1,3 +1,37 @@
+function Shaders(gl, fragment_shader, vertex_shader)
+{
+	//TODO <ADD CODE HERE>
+}
+
+// Initializing the shader program
+function initShaders(gl)
+{
+	var fragmentShader = getShader(gl, "shader-fs");
+	var vertexShader = getShader(gl, "shader-vs");
+	var shaderProgram = gl.createProgram();
+	
+	gl.attachShader(shaderProgram, vertexShader);
+	gl.attachShader(shaderProgram, fragmentShader);
+	gl.linkProgram(shaderProgram);
+
+	if(!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS))
+	{
+		throw "Could not initialise shaders";
+	}
+
+	gl.useProgram(shaderProgram);
+
+	// Coordinates 
+	shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
+	gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+
+	// Colors 
+	shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, "aVertexColor");
+	gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
+	
+	return shaderProgram;
+}
+
 //Read shader and compile
 function getShader(gl, id)
 {
@@ -46,33 +80,4 @@ function getShader(gl, id)
 	}
 
 	return shader;
-}
-
-// Initializing the shader program
-function initShaders(gl)
-{
-	var fragmentShader = getShader(gl, "shader-fs");
-	var vertexShader = getShader(gl, "shader-vs");
-	var shaderProgram = gl.createProgram();
-	
-	gl.attachShader(shaderProgram, vertexShader);
-	gl.attachShader(shaderProgram, fragmentShader);
-	gl.linkProgram(shaderProgram);
-
-	if(!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS))
-	{
-		throw "Could not initialise shaders";
-	}
-
-	gl.useProgram(shaderProgram);
-
-	// Coordinates 
-	shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
-	gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
-
-	// Colors 
-	shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, "aVertexColor");
-	gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
-	
-	return shaderProgram;
 }
