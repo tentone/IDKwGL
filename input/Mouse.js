@@ -21,6 +21,9 @@ Mouse.LEFT = 0;
 Mouse.MIDDLE = 1;
 Mouse.RIGHT = 2;
 
+//Mouse Configuration Values
+Mouse.SENSITIVITY = 0.2;
+
 //Functions Prototype
 Mouse.prototype.buttonPressed = buttonPressed;
 Mouse.prototype.updatePosition = updatePosition;
@@ -61,7 +64,6 @@ function update()
 		this.pos.x = this.raw_mouse_pos.x;
 		this.pos.y = this.raw_mouse_pos.y;
 		this.raw_mouse_pos_updated = false;
-
 	}
 	else
 	{

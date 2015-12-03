@@ -22,7 +22,7 @@ function isColliding(obj)
 	}
 	else if(obj.type == Geometry.SPHERE)
 	{
-		//TODO
+		//TODO <ADD CODE HERE>
 	}
 	else
 	{

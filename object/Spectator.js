@@ -4,12 +4,63 @@ function Spectator(canvas)
 	this.rotation = new Vector2(0.0, 0.0); //Horizontal / Vertical
 }
 
-Spectator.prototype.updatePosition = updatePosition;
+//Class function prototypes
+Spectator.prototype.update = update;
 Spectator.prototype.toString = toString;
 
-//Update camera with player movement
-function updatePosition()
+//Update Spectator
+function update()
 {
+	var angle = Conversion.degreesToRadians(this.rotation.x);
+
+	//Camera Rotate Test
+	if(App.keyboard.isKeyPressed(Keyboard.W))
+	{
+		this.camera.position.z += 0.1 * Math.cos(angle);
+		this.camera.position.x += 0.1 * Math.sin(angle);
+	}
+	if(App.keyboard.isKeyPressed(Keyboard.S))
+	{
+		this.camera.position.z -= 0.1 * Math.cos(angle);
+		this.camera.position.x -= 0.1 * Math.sin(angle);
+	}
+ 
+	angle += MathUtils.PID2;
+	if(App.keyboard.isKeyPressed(Keyboard.A))
+	{
+		this.camera.position.z -= 0.1 * Math.cos(angle);
+		this.camera.position.x -= 0.1 * Math.sin(angle);
+	}
+	if(App.keyboard.isKeyPressed(Keyboard.D))
+	{
+		this.camera.position.z += 0.1 * Math.cos(angle);
+		this.camera.position.x += 0.1 * Math.sin(angle);
+	}
+
+	//Camera Keyboard Movement
+	if(App.keyboard.isKeyPressed(Keyboard.Q))
+	{
+		this.rotation.x -= 3;
+	}
+	if(App.keyboard.isKeyPressed(Keyboard.E))
+	{
+		this.rotation.x += 3;
+	}
+
+	//Camera Mouse Movement
+	this.rotation.x += Mouse.SENSITIVITY * App.mouse.pos_diff.x;
+	this.rotation.y += Mouse.SENSITIVITY * App.mouse.pos_diff.y;
+
+	//Camera Move UP/DOWN
+	if(App.keyboard.isKeyPressed(Keyboard.SPACEBAR))
+	{
+		this.camera.position.y += 0.1;
+	}
+	if(App.keyboard.isKeyPressed(Keyboard.CTRL))
+	{
+		this.camera.position.y -= 0.1;
+	}
+
 	//Limit Vertical Rotation
 	if(this.rotation.y < -90)
 	{

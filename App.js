@@ -25,10 +25,10 @@ include("graphics/camera/OrthographicCamera.js");
 include("graphics/camera/PrespectiveCamera.js");
 include("graphics/MatrixGenerator.js");
 include("graphics/Color.js");
-include("graphics/Shaders.js");
+include("graphics/Shader.js");
 include("graphics/ModelUtils.js");
 
-//include("graphics/elements/Texture.js");
+include("graphics/elements/Texture.js");
 //include("graphics/elements/ModelObj.js");
 
 include("object/Spectator.js");
@@ -36,8 +36,11 @@ include("object/Player.js");
 
 include("Main.js");
 
+//Global App Variables
 var delta = 1000/60;
+var gl;
 
+//App class
 function App(){}
 
 //Input Input
@@ -99,8 +102,27 @@ App.initialize = function()
 		catch(e){}
 	}
 
+	App.initGL(canvas);
 	Main.init(canvas);
 	App.loop();
+}
+
+//Initialize WebGL
+App.initGL = function()
+{
+	try
+	{
+		gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+		gl.enable(gl.DEPTH_TEST);
+		//gl.enable(gl.CULL_FACE);
+		gl.viewport(0, 0, canvas.width, canvas.height);
+	}
+	catch(e){}
+
+	if(!gl)
+	{
+		throw "Failed to initialize WebGL";
+	}
 }
 
 // Timer to update game logic and render stuff (switch to independent timers?)
@@ -121,6 +143,7 @@ App.resize = function()
 	canvas.width  = window.innerWidth;
 	canvas.height = window.innerHeight;
 
+	App.initGL(canvas);
 	Main.resize(canvas);
 }
 

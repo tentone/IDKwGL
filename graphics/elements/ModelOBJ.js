@@ -7,6 +7,7 @@ function ModelObj()
 	this.vertex = []; //Vertex
 	this.normals = []; //Vertex Normals
 	this.texture_coords = []; //Vertex Texture
+	this.colors = []; //Color Arrays
 	this.faces = []; //Face <vertex>/[texture]/<normal>
 
 	//Buffers
@@ -44,46 +45,19 @@ function draw(camera)
 	camTransformationMatrix.mul(camera.transformationMatrix);
 
 	// Passing the Model View Matrix to apply the current transformation
-	gl.uniformMatrix4fv(gl.getUniformLocation(shaderProgram, "uMVMatrix"), false, camTransformationMatrix.flatten());
+	gl.uniformMatrix4fv(gl.getUniformLocation(shaderProgram.get(), "uMVMatrix"), false, camTransformationMatrix.flatten());
 
-	// Vertex
-	/*var triangleVertexPositionBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexPositionBuffer);
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertex), gl.STATIC_DRAW);
-	
-	triangleVertexPositionBuffer.itemSize = 3;
-	triangleVertexPositionBuffer.numItems = this.vertex.length / 3;			
-
-	// Associating to the vertex shader
-	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
-	
-	// Colors
-	var triangleVertexColorBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexColorBuffer);
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.colors), gl.STATIC_DRAW);
-
-	triangleVertexColorBuffer.itemSize = 3;
-	triangleVertexColorBuffer.numItems = this.colors.length / 3;			
-
-	// Associating to the vertex shader
-	gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
-
-	//Draw Model into screen
-	gl.drawArrays(gl.TRIANGLES, 0, triangleVertexPositionBuffer.numItems);*/
-
-	
-	//From last WebGL class
     //Passing the buffers
 	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
-    gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, cubeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(shaderProgram.get().vertexPositionAttribute, cubeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
 	//Textures
 	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexTextureCoordBuffer);
-    gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, cubeVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(shaderProgram.get().textureCoordAttribute, cubeVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
    
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, webGLTexture);
-    gl.uniform1i(shaderProgram.samplerUniform, 0);
+    gl.uniform1i(shaderProgram.get().samplerUniform, 0);
     
     //The vertex indices
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);

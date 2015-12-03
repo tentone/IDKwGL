@@ -32,7 +32,7 @@ function draw(camera)
 	camTransformationMatrix.mul(camera.transformationMatrix);
 
 	// Passing the Model View Matrix to apply the current transformation
-	gl.uniformMatrix4fv(gl.getUniformLocation(shaderProgram, "uMVMatrix"), false, camTransformationMatrix.flatten());
+	gl.uniformMatrix4fv(gl.getUniformLocation(shaderProgram.get(), "uMVMatrix"), false, camTransformationMatrix.flatten());
 
 	// Vertex
 	var triangleVertexPositionBuffer = gl.createBuffer();
@@ -43,7 +43,7 @@ function draw(camera)
 	triangleVertexPositionBuffer.numItems = this.vertex.length / 3;			
 
 	// Associating to the vertex shader
-	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+	gl.vertexAttribPointer(shaderProgram.get().vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
 	
 	// Colors
 	var triangleVertexColorBuffer = gl.createBuffer();
@@ -54,7 +54,7 @@ function draw(camera)
 	triangleVertexColorBuffer.numItems = this.colors.length / 3;			
 
 	// Associating to the vertex shader
-	gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
+	gl.vertexAttribPointer(shaderProgram.get().vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
 
 	//Draw Model into screen
 	gl.drawArrays(gl.TRIANGLES, 0, triangleVertexPositionBuffer.numItems); 	

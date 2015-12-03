@@ -1,9 +1,11 @@
+//Constructor creates empty scene
 function Scene()
 {
 	this.models = [];
 	this.lights = [];
 }
 
+//Functions Prototypes
 Scene.prototype.draw = draw;
 Scene.prototype.addModel = addModel;
 Scene.prototype.addLight = addLight;

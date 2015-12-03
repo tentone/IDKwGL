@@ -12,11 +12,11 @@ function isColliding(obj)
 {
 	if(obj.type == Geometry.BOX)
 	{
-		//TODO
+		//TODO <ADD CODE HERE>
 	}
 	else if(obj.type == Geometry.SPHERE)
 	{
-		//TODO
+		return MathUtils.pointDistance(this.pos, obj.pos) > this.radius + obj.radius;
 	}
 	else
 	{
