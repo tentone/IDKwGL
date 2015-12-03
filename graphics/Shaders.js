@@ -1,17 +1,7 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  initShaders.js 
-//
-//	Getting, compiling and linking the vertex and the fragment shaders
-//
-//  J. Madeira - October 2015
-//
-//////////////////////////////////////////////////////////////////////////////
-
-
-// Getting and compiling a shader
+//Read shader and compile
 function getShader(gl, id)
 {
+	//Read shader text
 	var shaderScript = document.getElementById(id);
 	if (!shaderScript)
 	{
@@ -29,6 +19,7 @@ function getShader(gl, id)
 		k = k.nextSibling;
 	}
 
+	//Create Shader object
 	var shader;
 	if(shaderScript.type == "x-shader/x-fragment")
 	{
@@ -40,15 +31,17 @@ function getShader(gl, id)
 	}
 	else
 	{
+		throw "Invalid shader";
 		return null;
 	}
 
+	//Compile Shader
 	gl.shaderSource(shader, str);
 	gl.compileShader(shader);
 
 	if(!gl.getShaderParameter(shader, gl.COMPILE_STATUS))
 	{
-		alert(gl.getShaderInfoLog(shader));
+		throw "Error in shader compilation";
 		return null;
 	}
 
@@ -66,9 +59,9 @@ function initShaders(gl)
 	gl.attachShader(shaderProgram, fragmentShader);
 	gl.linkProgram(shaderProgram);
 
-	if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS))
+	if(!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS))
 	{
-		alert("Could not initialise shaders");
+		throw "Could not initialise shaders";
 	}
 
 	gl.useProgram(shaderProgram);

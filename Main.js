@@ -1,11 +1,11 @@
-// Global Variables
-var gl = null;
-var shaderProgram = null;
-
 //Test Stuff
 var model = [];
-var lights = [];
+var scene = new Scene();
 var spectator;
+
+//Shader an GL Pointers
+var gl = null;
+var shaderProgram = null;
 
 function Main(){}
 
@@ -17,6 +17,7 @@ Main.init = function(canvas)
 	{
 		gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
 		gl.enable(gl.DEPTH_TEST);
+		gl.enable(gl.CULL_FACE);
 		gl.viewport(0, 0, canvas.width, canvas.height);
 	}
 	catch(e){}
@@ -72,6 +73,8 @@ Main.init = function(canvas)
 	model[7].scale.set(0.3,0.3,0.3);
 	model[7].update();
 	
+
+
 	spectator = new Spectator(canvas);
 }
 

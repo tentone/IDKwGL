@@ -16,8 +16,11 @@ include("input/Key.js");
 include("input/Keyboard.js");
 include("input/Mouse.js");
 
+include("graphics/elements/Scene.js");
 include("graphics/elements/Model.js");
 include("graphics/elements/LightSource.js");
+include("graphics/particle/Particle.js");
+include("graphics/particle/ParticleEmitter.js");
 include("graphics/camera/OrthographicCamera.js");
 include("graphics/camera/PrespectiveCamera.js");
 include("graphics/MatrixGenerator.js");

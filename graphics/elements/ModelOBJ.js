@@ -3,9 +3,10 @@ function Model()
 {
 	//Model Data
 	this.size = 0; //Size amount of triangles
-	this.vertex = [];
-	this.normals = [];
-	this.colors = [];
+	this.vertex = []; //Vertex
+	this.normals = []; //Vertex Normals
+	this.texture = []; //Vertex Terure
+	this.faces = []; //Face
 
 	//Tranformations Control
 	this.position = new Vector3(0,0,0);
@@ -19,7 +20,6 @@ function Model()
 //Function Prototypes
 Model.prototype.draw = draw;
 Model.prototype.update = update;
-Model.prototype.clone = clone;
 Model.prototype.loadOBJ = loadOBJ;
 Model.prototype.toString = toString;
 Model.prototype.computeVertexNormals = computeVertexNormals;
@@ -68,31 +68,17 @@ function update()
     this.transformationMatrix.mul(MatrixGenerator.scalingMatrix(this.scale.x, this.scale.y, this.scale.z));
 }
 
-//Clone this model (Keep same vertex list for all copys)
-function clone()
-{
-	var m = new Model();
-	m.vertex = this.vertex;
-	m.normals = this.normals;
-	m.colors = this.colors;
-
-	m.position.set(this.position.x, this.position.y, this.position.z);
-	m.rotation.set(this.rotation.x, this.rotation.y, this.rotation.z);
-	m.scale.set(this.scale.x, this.scale.y, this.scale.z);
-	
-	return m;
-}
-
 //OBJ file read from string
 function loadOBJ(data)
 {
 	var lines = data.split("\n");
 
 	//Clear Data
-	this.vertex = [];
-	this.normals = [];
-	this.colors = [];
-	this.size = 0;
+	this.size = 0; //Size amount of triangles
+	this.vertex = []; //Vertex
+	this.normals = []; //Vertex Normals
+	this.texture = []; //Vertex Terure
+	this.faces = []; //Face
 
 	// Check every line and store 
 	for(var i = 0; i < lines.length; i++)
@@ -105,11 +91,6 @@ function loadOBJ(data)
 	    	this.vertex.push(parseFloat(tokens[1]));
 	    	this.vertex.push(parseFloat(tokens[2]));
 	    	this.vertex.push(parseFloat(tokens[3]));
-
-	    	//TODO <READ COLOR FROM OBJ FILE>
-	    	this.colors.push(Math.random());
-	    	this.colors.push(Math.random());
-	    	this.colors.push(Math.random());
 	    	this.size += 3;
 		}
 	    else if(tokens[0] == "vn") //Normals
@@ -118,6 +99,44 @@ function loadOBJ(data)
 	    	this.normals.push(parseFloat(tokens[2]));
 	    	this.normals.push(parseFloat(tokens[3]));
 		}
+		else if(tokens[0] == "vt") //Texture
+		{
+			this.texture.push(parseFloat(tokens[1]));
+	    	this.texture.push(parseFloat(tokens[2]));
+		}
+		else if(tokens[0] == "f") //Faces
+		{
+			for(var j = 0; j < tokens.length; j++)
+			{
+				var val = tokens[j].split("/");
+
+				//3 Vertex
+				if(tokens.length == 4)
+				{
+					//TODO <ADD CODE HERE>
+				}
+				//Quad (Divide)
+				else if(tokens.length == 5)
+				{
+					//TODO <ADD CODE HERE>
+				}
+			}
+		}
+
+		/*
+	Each line of the faces section contains a list of (vertex, [texture], normal) groups
+    Some examples:
+         // the texture index is optional, both formats are possible for models
+         // without a texture applied
+         f 1/25 18/46 12/31
+         f 1//25 18//46 12//31
+
+         // A 3 vertex face with texture indices
+         f 16/92/11 14/101/22 1/69/1
+
+         // A 4 vertex face
+         f 16/92/11 40/109/40 38/114/38 14/101/22
+    */
 	}
 	
 	// Checking to see if the normals are defined on the file
