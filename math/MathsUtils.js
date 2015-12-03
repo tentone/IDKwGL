@@ -10,6 +10,12 @@ MathUtils.randomMod = function()
     return 2*Math.random() - 1;
 }
 
+//Calculate distance between p1 and p2 (Vector3)
+MathUtils.pointDistance = function(p1, p2)
+{
+    return Math.sqrt((p1.x*p1.x - p2.x*p2.x) + (p1.y*p1.y - p2.y*p2.y) + (p1.z*p1.z - p2.z*p2.z));
+}
+
 //Mid Point (Vector3)
 MathUtils.computeMidPoint = function(p1, p2)
 {

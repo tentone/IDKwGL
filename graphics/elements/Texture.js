@@ -1,7 +1,9 @@
+//Texture Constructor from file name
 function Texture(src)
 {
 	this.texture = gl.createTexture();
 	this.texture.image = new Image();
+
 	this.texture.image.onload = function ()
 	{
 		gl.bindTexture(gl.TEXTURE_2D, this.texture);

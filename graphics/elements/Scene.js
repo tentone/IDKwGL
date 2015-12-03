@@ -26,8 +26,8 @@ function draw(camera)
 	//TODO <ADD ILUMINATION>
 
 	//Draw Models to Camera
-	for(i = 0; i < models.length; i++)
+	for(i = 0; i < this.models.length; i++)
 	{
-		models.draw(camera);
+		this.models[i].draw(camera);
 	}
 }

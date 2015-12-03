@@ -28,6 +28,9 @@ include("graphics/Color.js");
 include("graphics/Shaders.js");
 include("graphics/ModelUtils.js");
 
+//include("graphics/elements/Texture.js");
+//include("graphics/elements/ModelObj.js");
+
 include("object/Spectator.js");
 include("object/Player.js");
 

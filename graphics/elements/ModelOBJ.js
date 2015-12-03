@@ -3,13 +3,20 @@ function ModelObj()
 {
 	//Model Data
 	this.size = 0; //Size amount of triangles
+
 	this.vertex = []; //Vertex
 	this.normals = []; //Vertex Normals
-	this.texture = []; //Vertex Texture
+	this.texture_coords = []; //Vertex Texture
 	this.faces = []; //Face <vertex>/[texture]/<normal>
 
-	//Texture Pointer
+	//Buffers
+	this.vertexPosBuffer = null;
+	this.vertexIndexBuffer = null;
+	this.vertexTextureBuffer = null;
+
+	//Texture
 	this.texture = null;
+	this.hasTexture = false;
 
 	//Tranformations Control
 	this.position = new Vector3(0,0,0);
@@ -23,6 +30,7 @@ function ModelObj()
 //Function Prototypes
 Model.prototype.draw = draw;
 Model.prototype.update = update;
+Model.prototype.startBuffers = startBuffers;
 Model.prototype.attachTexture = attachTexture;
 Model.prototype.loadOBJ = loadOBJ;
 Model.prototype.toString = toString;
@@ -39,7 +47,7 @@ function draw(camera)
 	gl.uniformMatrix4fv(gl.getUniformLocation(shaderProgram, "uMVMatrix"), false, camTransformationMatrix.flatten());
 
 	// Vertex
-	var triangleVertexPositionBuffer = gl.createBuffer();
+	/*var triangleVertexPositionBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexPositionBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertex), gl.STATIC_DRAW);
 	
@@ -61,14 +69,10 @@ function draw(camera)
 	gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
 
 	//Draw Model into screen
-	gl.drawArrays(gl.TRIANGLES, 0, triangleVertexPositionBuffer.numItems); 
+	gl.drawArrays(gl.TRIANGLES, 0, triangleVertexPositionBuffer.numItems);*/
 
-	/*
+	
 	//From last WebGL class
-	//Passing the Model View Matrix to apply the current transformation
-	var mvUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
-	gl.uniformMatrix4fv(mvUniform, false, new Float32Array(flatten(mvMatrix)));
-
     //Passing the buffers
 	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
     gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, cubeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
@@ -85,7 +89,7 @@ function draw(camera)
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
 
 	//Drawing the triangles
-	gl.drawElements(gl.TRIANGLES, cubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);*/
+	gl.drawElements(gl.TRIANGLES, cubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
 
 //Recalculate Tranformation Matrix
@@ -100,6 +104,30 @@ function update()
 function attachTexture(texture)
 {
 	this.texture = texture;
+}
+
+function startBuffers()
+{
+	//Vertex
+	cubeVertexPositionBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+	cubeVertexPositionBuffer.itemSize = 3;
+	cubeVertexPositionBuffer.numItems = vertices.length / 3;			
+
+	//Texture
+    cubeVertexTextureCoordBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexTextureCoordBuffer);
+ 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW);
+    cubeVertexTextureCoordBuffer.itemSize = 2;
+    cubeVertexTextureCoordBuffer.numItems = 24;			
+
+	//Vertex indices
+    cubeVertexIndexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
+    cubeVertexIndexBuffer.itemSize = 1;
+    cubeVertexIndexBuffer.numItems = 36;
 }
 
 //OBJ file read from string
@@ -135,8 +163,8 @@ function loadOBJ(data)
 		}
 		else if(tokens[0] == "vt") //Texture
 		{
-			this.texture.push(parseFloat(tokens[1]));
-	    	this.texture.push(parseFloat(tokens[2]));
+			this.texture_coords.push(parseFloat(tokens[1]));
+	    	this.texture_coords.push(parseFloat(tokens[2]));
 		}
 		else if(tokens[0] == "f") //Faces <vertex>/[texture]/<normal>
 		{
@@ -145,21 +173,21 @@ function loadOBJ(data)
 			if(tokens.length == 4)
 			{
 				var val = tokens[1].split("/");
-				this.faces.push(val[0]); //Vertex
-				this.faces.push(val[1]); //Texture
-				this.faces.push(val[2]); //Normal
+				this.faces.push(parseInt(val[0])); //Vertex
+				this.faces.push(parseInt(val[1])); //Texture
+				this.faces.push(parseInt(val[2]));; //Normal
 
 				val = tokens[2].split("/");
-				this.faces.push(val[0]); //Vertex
-				this.faces.push(val[1]); //Texture
-				this.faces.push(val[2]); //Normal
+				this.faces.push(parseInt(val[0])); //Vertex
+				this.faces.push(parseInt(val[1])); //Texture
+				this.faces.push(parseInt(val[2]));; //Normal
 
 				val = tokens[3].split("/");
-				this.faces.push(val[0]); //Vertex
-				this.faces.push(val[1]); //Texture
-				this.faces.push(val[2]); //Normal
+				this.faces.push(parseInt(val[0])); //Vertex
+				this.faces.push(parseInt(val[1])); //Texture
+				this.faces.push(parseInt(val[2]));; //Normal
 			}
-			//4 vertex face
+			//4 vertex face Quad)
 	        //f 16/92/11 40/109/40 38/114/38 14/101/22
 			else if(tokens.length == 5)
 			{
@@ -236,5 +264,95 @@ function computeVertexNormals()
 //Create string with model info
 function toString()
 {
-	return "ModelObj(Size:"+this.size+" VertexCount:"+this.vertex.length+" NormalCount:"+this.normals.length+" ColorsCount:"+this.colors.length+")"; 
+	return "ModelObj(Size:"+this.size+" VertexCount:"+this.vertex.length+" NormalCount:"+this.normals.length+" TextureCount:"+this.textures.length+" Faces Count:"+this.faces.length+")"; 
 }
+
+//Test Function that creates a cube with texture and retuns it
+ModelObj.test() = function()
+{
+	var model = new ModelObj();
+
+	model.vertex =
+	[
+		// Front face
+		-1.0, -1.0,  1.0,
+		1.0, -1.0,  1.0,
+		1.0,  1.0,  1.0,
+		-1.0,  1.0,  1.0,
+		// Back face
+		-1.0, -1.0, -1.0,
+		-1.0,  1.0, -1.0,
+		1.0,  1.0, -1.0,
+		1.0, -1.0, -1.0,
+		// Top face
+		-1.0,  1.0, -1.0,
+		-1.0,  1.0,  1.0,
+		1.0,  1.0,  1.0,
+		1.0,  1.0, -1.0,
+		// Bottom face
+		-1.0, -1.0, -1.0,
+		1.0, -1.0, -1.0,
+		1.0, -1.0,  1.0,
+		-1.0, -1.0,  1.0,
+		// Right face
+		1.0, -1.0, -1.0,
+		1.0,  1.0, -1.0,
+		1.0,  1.0,  1.0,
+		1.0, -1.0,  1.0,
+		// Left face
+		-1.0, -1.0, -1.0,
+		-1.0, -1.0,  1.0,
+		-1.0,  1.0,  1.0,
+		-1.0,  1.0, -1.0
+	];
+
+	model.texture_coords =
+	[
+		// Front face
+		0.0, 0.0,
+		1.0, 0.0,
+		1.0, 1.0,
+		0.0, 1.0,
+		// Back face
+		1.0, 0.0,
+		1.0, 1.0,
+		0.0, 1.0,
+		0.0, 0.0,
+		// Top face
+		0.0, 1.0,
+		0.0, 0.0,
+		1.0, 0.0,
+		1.0, 1.0,
+		// Bottom face
+		1.0, 1.0,
+		0.0, 1.0,
+		0.0, 0.0,
+		1.0, 0.0,
+		// Right face
+		1.0, 0.0,
+		1.0, 1.0,
+		0.0, 1.0,
+		0.0, 0.0,
+		// Left face
+		0.0, 0.0,
+		1.0, 0.0,
+		1.0, 1.0,
+		0.0, 1.0,
+	];
+
+	model.faces=
+	[
+		0, 1, 2,      0, 2, 3,    // Front face
+
+		4, 5, 6,      4, 6, 7,    // Back face
+
+		8, 9, 10,     8, 10, 11,  // Top face
+
+		12, 13, 14,   12, 14, 15, // Bottom face
+
+		16, 17, 18,   16, 18, 19, // Right face
+
+		20, 21, 22,   20, 22, 23  // Left face
+	];
+}
+
