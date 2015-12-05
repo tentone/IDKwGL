@@ -19,6 +19,8 @@ include("input/Mouse.js");
 include("graphics/elements/Scene.js");
 include("graphics/elements/Model.js");
 include("graphics/elements/LightSource.js");
+include("graphics/elements/Texture.js");
+include("graphics/elements/ModelTextured.js");
 include("graphics/particle/Particle.js");
 include("graphics/particle/ParticleEmitter.js");
 include("graphics/camera/OrthographicCamera.js");
@@ -27,9 +29,6 @@ include("graphics/MatrixGenerator.js");
 include("graphics/Color.js");
 include("graphics/Shader.js");
 include("graphics/ModelUtils.js");
-
-include("graphics/elements/Texture.js");
-include("graphics/elements/ModelObj.js");
 
 include("object/Spectator.js");
 include("object/Player.js");

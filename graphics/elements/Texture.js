@@ -16,7 +16,7 @@ Texture.createTexture = function(file)
 		Texture.handleTextureLoaded(texture);
 	}
 
-	texture.image.src = "file";
+	texture.image.src = file;
     return texture;
 }
 
@@ -26,7 +26,10 @@ Texture.generateSolidColorTexture = function(color)
 	var texture = gl.createTexture();
 	gl.bindTexture(gl.TEXTURE_2D, texture);
 	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([(color.r*255), (color.g*255), (color.b*255), 255]));
-
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+	gl.generateMipmap(gl.TEXTURE_2D);
+	
 	return texture;
 }
 
@@ -45,12 +48,14 @@ Texture.crateFromDataArray = function(size, color_list)
 	var texture = gl.createTexture();
 	gl.bindTexture(gl.TEXTURE_2D, texture);
 	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, size, size, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(color_array));
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 	gl.generateMipmap(gl.TEXTURE_2D);
 
 	return texture;
 }
 
-//Handle Texture after being loaded
+//Handle Texture initialization after image loaded
 Texture.handleTextureLoaded = function(texture)
 {
 	gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -58,5 +63,5 @@ Texture.handleTextureLoaded = function(texture)
 	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.image);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-	gl.bindTexture(gl.TEXTURE_2D, null);
+    gl.generateMipmap(gl.TEXTURE_2D);
 }

@@ -1,14 +1,12 @@
 //Empty model constructor
-function ModelObj()
+function ModelTextured()
 {
 	//Model Data
-	this.size = 0; //Size amount of triangles
+	this.size = 0; //Amount of triangles
 
 	this.vertex = []; //Vertex
 	this.texture_coords = []; //Vertex Texture
 	this.faces = []; //Face <vertex>/[texture]/<normal>
-
-	//Old Not Used
 	this.normals = []; //Vertex Normals
 	this.colors = []; //Color Arrays
 
@@ -31,13 +29,13 @@ function ModelObj()
 }
 
 //Function Prototypes
-ModelObj.prototype.draw = draw;
-ModelObj.prototype.update = update;
-ModelObj.prototype.updateBuffers = updateBuffers;
-ModelObj.prototype.setTexture = setTexture;
-ModelObj.prototype.loadOBJ = loadOBJ;
-ModelObj.prototype.toString = toString;
-ModelObj.prototype.computeVertexNormals = computeVertexNormals;
+ModelTextured.prototype.draw = draw;
+ModelTextured.prototype.update = update;
+ModelTextured.prototype.updateBuffers = updateBuffers;
+ModelTextured.prototype.setTexture = setTexture;
+ModelTextured.prototype.loadOBJ = loadOBJ;
+ModelTextured.prototype.toString = toString;
+ModelTextured.prototype.computeVertexNormals = computeVertexNormals;
 
 //Draw Model to camera
 function draw(camera)
@@ -58,7 +56,7 @@ function draw(camera)
     gl.vertexAttribPointer(shaderProgram.get().textureCoordAttribute, this.vertexTextureBuffer.itemSize, gl.FLOAT, false, 0, 0);
    
    	//Set texture to model if there is one
-   	if(texture != null)
+   	if(this.texture != null)
     {
     	gl.activeTexture(gl.TEXTURE0);
 	    gl.bindTexture(gl.TEXTURE_2D, this.texture);
@@ -116,7 +114,7 @@ function loadOBJ(data)
 	var lines = data.split("\n");
 
 	//Clear Data
-	this.size = 0; //Size amount of triangles
+	this.size = 0; //Amount of triangles
 	this.vertex = []; //Vertex
 	this.normals = []; //Vertex Normals
 	this.texture_coords = []; //Vertex Terure
@@ -133,7 +131,7 @@ function loadOBJ(data)
 	    	this.vertex.push(parseFloat(tokens[1]));
 	    	this.vertex.push(parseFloat(tokens[2]));
 	    	this.vertex.push(parseFloat(tokens[3]));
-	    	this.size += 3;
+	    	this.size += 1;
 		}
 	    else if(tokens[0] == "vn") //Normals
 	    {
@@ -205,10 +203,10 @@ function loadOBJ(data)
 	}
 	
 	// Checking to see if the normals are defined on the file
-	/*if(this.normals.length == 0)
+	if(this.normals.length == 0)
 	{
 		this.computeVertexNormals();
-	}*/
+	}
 	
 	// Reset Tranformations Control
 	this.position = new Vector3(0,0,0);
@@ -244,19 +242,15 @@ function computeVertexNormals()
 //Create string with model info
 function toString()
 {
-	return "ModelObj(Size:"+this.size+" VertexCount:"+this.vertex.length+" NormalCount:"+this.normals.length+" TextureCount:"+this.textures.length+" Faces Count:"+this.faces.length+")"; 
+	return "ModelTextured(Size:"+this.size+" VertexCount:"+this.vertex.length+" NormalCount:"+this.normals.length+" TextureCount:"+this.textures.length+" Faces Count:"+this.faces.length+")"; 
 }
 
 //Test Function that creates a cube with texture and retuns it
-ModelObj.test = function()
+ModelTextured.test = function()
 {
-	var model = new ModelObj();
+	var model = new ModelTextured();
 
-	//model.texture = Texture.generateSolidColorTexture(Color.GREEN);
-	model.texture = Texture.crateFromDataArray(2, [Color.GREEN , Color.WHITE, Color.RED, Color.BLUE]);
-	//model.texture = Texture.createTexture("data/texture/crate.bmp");
-	//model.texture = Texture.createTexture("http://orig12.deviantart.net/a3b5/f/2010/124/c/8/wood_box_texture_by_jackzeenho.jpg");
-	
+	model.texture = Texture.generateSolidColorTexture(Color.GREEN);
 
 	model.vertex =
 	[

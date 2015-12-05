@@ -3,9 +3,7 @@ var model;
 var scene;
 var spectator;
 
-var model_texture;
-var texture;
-var image;
+var model_test;
 
 //Global Variables
 var shaderProgram;
@@ -16,11 +14,18 @@ function Main(){}
 Main.init = function(canvas)
 {
 	//Initialize Shaders
-	shaderProgram = Shader.colorRenderShader();
-	//shaderProgram = Shader.textureRenderShader();
+	//shaderProgram = Shader.colorRenderShader();
+	shaderProgram = Shader.textureRenderShader();
 
 	//Test Model to load texture
-	//model_texture = ModelObj.test();
+	model_test = [];
+	model_test[0] = ModelTextured.test();
+	model_test[0].setTexture(Texture.crateFromDataArray(2, [Color.GREEN , Color.WHITE, Color.RED, Color.BLUE]));
+
+	model_test[1] = ModelTextured.test();
+	model_test[1].setTexture(Texture.createTexture("data/texture/crate.bmp"));
+	model_test[1].position.set(2,0,2);
+	model_test[1].update();
 
 	//Create Scene
 	scene = new Scene();
@@ -124,8 +129,12 @@ Main.draw = function()
     //Draw Stuff to Spectator Camera
 	spectator.camera.startFrame();
 	
-	scene.draw(spectator.camera);
-	//model_texture.draw(spectator.camera);
+	//scene.draw(spectator.camera);
+
+	for(var i = 0; i < model_test.length; i++)
+	{
+		model_test[i].draw(spectator.camera);
+	}
 }
 
 //Resize Stuff
