@@ -16,11 +16,11 @@ function Main(){}
 Main.init = function(canvas)
 {
 	//Initialize Shaders
-	//shaderProgram = Shader.colorRenderShader();
-	shaderProgram = Shader.textureRenderShader();
+	shaderProgram = Shader.colorRenderShader();
+	//shaderProgram = Shader.textureRenderShader();
 
-	//Debug Stuff TODO <REMOVE THIS>
-	model_texture = ModelObj.test();
+	//Test Model to load texture
+	//model_texture = ModelObj.test();
 
 	//Create Scene
 	scene = new Scene();
@@ -118,14 +118,14 @@ Main.update = function()
 Main.draw = function()
 {
     //Clearing the frame-buffer and the depth-buffer
-    gl.clearColor(1, 1, 1, 1);
+    gl.clearColor(0, 0, 0, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     //Draw Stuff to Spectator Camera
 	spectator.camera.startFrame();
 	
-	//scene.draw(spectator.camera);
-	model_texture.draw(spectator.camera);
+	scene.draw(spectator.camera);
+	//model_texture.draw(spectator.camera);
 }
 
 //Resize Stuff

@@ -1,0 +1,2 @@
+//Sprite constructor
+function Sprite(){}

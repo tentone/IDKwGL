@@ -18,7 +18,7 @@ function ModelObj()
 	this.vertexTextureBuffer = [];
 
 	//Texture
-	this.texture = new Texture("data/texture/crate.jpg").texture;
+	this.texture = null;
 
 	//Tranformations Control
 	this.position = new Vector3(0,0,0);
@@ -34,7 +34,7 @@ function ModelObj()
 ModelObj.prototype.draw = draw;
 ModelObj.prototype.update = update;
 ModelObj.prototype.updateBuffers = updateBuffers;
-ModelObj.prototype.attachTexture = attachTexture;
+ModelObj.prototype.setTexture = setTexture;
 ModelObj.prototype.loadOBJ = loadOBJ;
 ModelObj.prototype.toString = toString;
 ModelObj.prototype.computeVertexNormals = computeVertexNormals;
@@ -57,9 +57,13 @@ function draw(camera)
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexTextureBuffer);
     gl.vertexAttribPointer(shaderProgram.get().textureCoordAttribute, this.vertexTextureBuffer.itemSize, gl.FLOAT, false, 0, 0);
    
-    gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, this.texture);
-    gl.uniform1i(shaderProgram.get().samplerUniform, 0);
+   	//Set texture to model if there is one
+   	if(texture != null)
+    {
+    	gl.activeTexture(gl.TEXTURE0);
+	    gl.bindTexture(gl.TEXTURE_2D, this.texture);
+	    gl.uniform1i(shaderProgram.get().samplerUniform, 0);
+	}
     
     //The vertex indices
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.vertexIndexBuffer);
@@ -77,9 +81,9 @@ function update()
 }
 
 //Attach texture image to this model
-function attachTexture(texture)
+function setTexture(texture)
 {
-	this.texture = texture.texture;
+	this.texture = texture;
 }
 
 function updateBuffers()
@@ -247,7 +251,13 @@ function toString()
 ModelObj.test = function()
 {
 	var model = new ModelObj();
-	model.texture = new Texture("data/texture/crate.jpg").texture;
+
+	//model.texture = Texture.generateSolidColorTexture(Color.GREEN);
+	model.texture = Texture.crateFromDataArray(2, [Color.GREEN , Color.WHITE, Color.RED, Color.BLUE]);
+	//model.texture = Texture.createTexture("data/texture/crate.bmp");
+	//model.texture = Texture.createTexture("http://orig12.deviantart.net/a3b5/f/2010/124/c/8/wood_box_texture_by_jackzeenho.jpg");
+	
+
 	model.vertex =
 	[
 		// Front face
@@ -313,7 +323,7 @@ ModelObj.test = function()
 		0.0, 0.0,
 		1.0, 0.0,
 		1.0, 1.0,
-		0.0, 1.0,
+		0.0, 1.0
 	];
 
 	model.faces =
@@ -325,6 +335,7 @@ ModelObj.test = function()
 		16, 17, 18,   16, 18, 19, // Right face
 		20, 21, 22,   20, 22, 23  // Left face
 	];
+
 	model.updateBuffers();
 	return model;
 }
