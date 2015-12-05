@@ -16,14 +16,6 @@ function Shader(gl, fragment, vertex)
 
 	//Set Shader to GL
 	gl.useProgram(this.shaderProgram);
-
-	// Coordinates 
-	this.shaderProgram.vertexPositionAttribute = gl.getAttribLocation(this.shaderProgram, "aVertexPosition");
-	gl.enableVertexAttribArray(this.shaderProgram.vertexPositionAttribute);
-
-	// Colors 
-	this.shaderProgram.vertexColorAttribute = gl.getAttribLocation(this.shaderProgram, "aVertexColor");
-	gl.enableVertexAttribArray(this.shaderProgram.vertexColorAttribute);
 }
 
 //Function Prototypes
@@ -76,8 +68,46 @@ Shader.getShader = function(gl, id)
 
 	if(!gl.getShaderParameter(shader, gl.COMPILE_STATUS))
 	{
-		throw "Error in shader compilation";
+		throw "Error in shader compilation ("+gl.getShaderInfoLog(shader)+")";
 	}
 
 	return shader;
+}
+
+
+Shader.colorRenderShader = function()
+{
+	var sp = new Shader(gl, "shader-vertex-color", "shader-fragment-color");
+
+	// Coordinates 
+	sp.shaderProgram.vertexPositionAttribute = gl.getAttribLocation(sp.shaderProgram, "aVertexPosition");
+	gl.enableVertexAttribArray(sp.shaderProgram.vertexPositionAttribute);
+
+	// Colors 
+	sp.shaderProgram.vertexColorAttribute = gl.getAttribLocation(sp.shaderProgram, "aVertexColor");
+	gl.enableVertexAttribArray(sp.shaderProgram.vertexColorAttribute);
+
+	return sp;
+}
+
+Shader.textureRenderShader = function()
+{
+	var sp = new Shader(gl, "shader-vertex-texture", "shader-fragment-texture");
+
+	// Coordinates 
+	sp.shaderProgram.vertexPositionAttribute = gl.getAttribLocation(sp.shaderProgram, "aVertexPosition");
+	gl.enableVertexAttribArray(sp.shaderProgram.vertexPositionAttribute);
+
+	//Texture coordinates
+    sp.shaderProgram.textureCoordAttribute = gl.getAttribLocation(sp.shaderProgram, "aTextureCoord");
+    gl.enableVertexAttribArray(sp.shaderProgram.textureCoordAttribute);
+
+	//The matrices
+    sp.shaderProgram.pMatrixUniform = gl.getUniformLocation(sp.shaderProgram, "uPMatrix");
+    sp.shaderProgram.mvMatrixUniform = gl.getUniformLocation(sp.shaderProgram, "uMVMatrix");
+    
+    //The sampler
+    sp.shaderProgram.samplerUniform = gl.getUniformLocation(sp.shaderProgram, "uSampler");
+
+	return sp;
 }

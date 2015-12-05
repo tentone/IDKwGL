@@ -58,7 +58,7 @@ MathUtils.computeNormalVector = function(p0, p1, p2)
     return result;
 }
 
-//Multiplying using homogeneous coordinates
+//Multiplying using homogeneous coordinates (Matrix4 x Vector4)
 MathUtils.multiplyPointByMatrix = function(m, p)
 {
 	return new Vector4(
@@ -68,10 +68,17 @@ MathUtils.multiplyPointByMatrix = function(m, p)
         m.matrix[3][0] * p[0] + m.matrix[3][1] * p[1] + m.matrix[3][2] * p[2]+ m.matrix[3][3] * p[3]);
 }
 
+//Multiplies vector by matrix (Matrix3 x Vector4)
 MathUtils.multiplyVectorByMatrix = function(m, p)
 {
     return new Vector4(
         m.matrix[0][0] * p[0] + m.matrix[0][1] * p[1] + m.matrix[0][2] * p[2]+ m.matrix[0][3] * p[3],
         m.matrix[1][0] * p[0] + m.matrix[1][1] * p[1] + m.matrix[1][2] * p[2]+ m.matrix[1][3] * p[3],
         m.matrix[2][0] * p[0] + m.matrix[2][1] * p[1] + m.matrix[2][2] * p[2]+ m.matrix[2][3] * p[3], 0);
+}
+
+//Checks is a number is a power of 2
+MathUtils.isPower2 = function(v)
+{
+    return (v & (v-1)) == 0;
 }

@@ -5,19 +5,20 @@ function ModelObj()
 	this.size = 0; //Size amount of triangles
 
 	this.vertex = []; //Vertex
-	this.normals = []; //Vertex Normals
 	this.texture_coords = []; //Vertex Texture
-	this.colors = []; //Color Arrays
 	this.faces = []; //Face <vertex>/[texture]/<normal>
 
+	//Old Not Used
+	this.normals = []; //Vertex Normals
+	this.colors = []; //Color Arrays
+
 	//Buffers
-	this.vertexPosBuffer = null;
-	this.vertexIndexBuffer = null;
-	this.vertexTextureBuffer = null;
+	this.vertexPosBuffer = [];
+	this.vertexIndexBuffer = [];
+	this.vertexTextureBuffer = [];
 
 	//Texture
-	this.texture = null;
-	this.hasTexture = false;
+	this.texture = new Texture("data/texture/crate.jpg").texture;
 
 	//Tranformations Control
 	this.position = new Vector3(0,0,0);
@@ -26,16 +27,17 @@ function ModelObj()
 
 	//Tranformation Matrix
 	this.transformationMatrix = new Matrix(4,4);
+	this.updateBuffers();
 }
 
 //Function Prototypes
-Model.prototype.draw = draw;
-Model.prototype.update = update;
-Model.prototype.startBuffers = startBuffers;
-Model.prototype.attachTexture = attachTexture;
-Model.prototype.loadOBJ = loadOBJ;
-Model.prototype.toString = toString;
-Model.prototype.computeVertexNormals = computeVertexNormals;
+ModelObj.prototype.draw = draw;
+ModelObj.prototype.update = update;
+ModelObj.prototype.updateBuffers = updateBuffers;
+ModelObj.prototype.attachTexture = attachTexture;
+ModelObj.prototype.loadOBJ = loadOBJ;
+ModelObj.prototype.toString = toString;
+ModelObj.prototype.computeVertexNormals = computeVertexNormals;
 
 //Draw Model to camera
 function draw(camera)
@@ -48,22 +50,22 @@ function draw(camera)
 	gl.uniformMatrix4fv(gl.getUniformLocation(shaderProgram.get(), "uMVMatrix"), false, camTransformationMatrix.flatten());
 
     //Passing the buffers
-	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
-    gl.vertexAttribPointer(shaderProgram.get().vertexPositionAttribute, cubeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexPosBuffer);
+    gl.vertexAttribPointer(shaderProgram.get().vertexPositionAttribute, this.vertexPosBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
 	//Textures
-	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexTextureCoordBuffer);
-    gl.vertexAttribPointer(shaderProgram.get().textureCoordAttribute, cubeVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexTextureBuffer);
+    gl.vertexAttribPointer(shaderProgram.get().textureCoordAttribute, this.vertexTextureBuffer.itemSize, gl.FLOAT, false, 0, 0);
    
     gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, webGLTexture);
+    gl.bindTexture(gl.TEXTURE_2D, this.texture);
     gl.uniform1i(shaderProgram.get().samplerUniform, 0);
     
     //The vertex indices
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.vertexIndexBuffer);
 
 	//Drawing the triangles
-	gl.drawElements(gl.TRIANGLES, cubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+	gl.drawElements(gl.TRIANGLES, this.vertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
 
 //Recalculate Tranformation Matrix
@@ -77,31 +79,31 @@ function update()
 //Attach texture image to this model
 function attachTexture(texture)
 {
-	this.texture = texture;
+	this.texture = texture.texture;
 }
 
-function startBuffers()
+function updateBuffers()
 {
 	//Vertex
-	cubeVertexPositionBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-	cubeVertexPositionBuffer.itemSize = 3;
-	cubeVertexPositionBuffer.numItems = vertices.length / 3;			
+	this.vertexPosBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexPosBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertex), gl.STATIC_DRAW);
+	this.vertexPosBuffer.itemSize = 3;
+	this.vertexPosBuffer.numItems = this.vertex.length/3;			
 
 	//Texture
-    cubeVertexTextureCoordBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexTextureCoordBuffer);
- 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW);
-    cubeVertexTextureCoordBuffer.itemSize = 2;
-    cubeVertexTextureCoordBuffer.numItems = 24;			
+    this.vertexTextureBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexTextureBuffer);
+ 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.texture_coords), gl.STATIC_DRAW);
+    this.vertexTextureBuffer.itemSize = 2;
+    this.vertexTextureBuffer.numItems = this.texture_coords.length/2;			
 
 	//Vertex indices
-    cubeVertexIndexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
-    cubeVertexIndexBuffer.itemSize = 1;
-    cubeVertexIndexBuffer.numItems = 36;
+    this.vertexIndexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.vertexIndexBuffer);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.faces), gl.STATIC_DRAW);
+    this.vertexIndexBuffer.itemSize = 1;
+    this.vertexIndexBuffer.numItems = this.faces.length;
 }
 
 //OBJ file read from string
@@ -113,7 +115,7 @@ function loadOBJ(data)
 	this.size = 0; //Size amount of triangles
 	this.vertex = []; //Vertex
 	this.normals = []; //Vertex Normals
-	this.texture = []; //Vertex Terure
+	this.texture_coords = []; //Vertex Terure
 	this.faces = []; //Face
 
 	// Check every line and store 
@@ -199,10 +201,10 @@ function loadOBJ(data)
 	}
 	
 	// Checking to see if the normals are defined on the file
-	if(this.normals.length == 0)
+	/*if(this.normals.length == 0)
 	{
 		this.computeVertexNormals();
-	}
+	}*/
 	
 	// Reset Tranformations Control
 	this.position = new Vector3(0,0,0);
@@ -242,10 +244,10 @@ function toString()
 }
 
 //Test Function that creates a cube with texture and retuns it
-ModelObj.test() = function()
+ModelObj.test = function()
 {
 	var model = new ModelObj();
-
+	model.texture = new Texture("data/texture/crate.jpg").texture;
 	model.vertex =
 	[
 		// Front face
@@ -314,19 +316,16 @@ ModelObj.test() = function()
 		0.0, 1.0,
 	];
 
-	model.faces=
+	model.faces =
 	[
 		0, 1, 2,      0, 2, 3,    // Front face
-
 		4, 5, 6,      4, 6, 7,    // Back face
-
 		8, 9, 10,     8, 10, 11,  // Top face
-
 		12, 13, 14,   12, 14, 15, // Bottom face
-
 		16, 17, 18,   16, 18, 19, // Right face
-
 		20, 21, 22,   20, 22, 23  // Left face
 	];
+	model.updateBuffers();
+	return model;
 }
 

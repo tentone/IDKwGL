@@ -2,7 +2,10 @@
 var model;
 var scene;
 var spectator;
-var obj;
+
+var model_texture;
+var texture;
+var image;
 
 //Global Variables
 var shaderProgram;
@@ -13,7 +16,11 @@ function Main(){}
 Main.init = function(canvas)
 {
 	//Initialize Shaders
-	shaderProgram = new Shader(gl, "shader-vertex", "shader-fragment-color");
+	//shaderProgram = Shader.colorRenderShader();
+	shaderProgram = Shader.textureRenderShader();
+
+	//Debug Stuff TODO <REMOVE THIS>
+	model_texture = ModelObj.test();
 
 	//Create Scene
 	scene = new Scene();
@@ -111,13 +118,14 @@ Main.update = function()
 Main.draw = function()
 {
     //Clearing the frame-buffer and the depth-buffer
-    gl.clearColor(0, 0, 0, 1);
+    gl.clearColor(1, 1, 1, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
-    //gl.clear(gl.DEPTH_BUFFER_BIT);
 
     //Draw Stuff to Spectator Camera
 	spectator.camera.startFrame();
-	scene.draw(spectator.camera);
+	
+	//scene.draw(spectator.camera);
+	model_texture.draw(spectator.camera);
 }
 
 //Resize Stuff
