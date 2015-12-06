@@ -18,6 +18,7 @@ include("graphics/elements/Model.js");
 include("graphics/elements/ModelColor.js");
 include("graphics/elements/LightSource.js");
 include("graphics/elements/Texture.js");
+include("graphics/elements/Material.js");
 
 include("graphics/particle/Particle.js");
 include("graphics/particle/ParticleEmitter.js");
@@ -29,6 +30,9 @@ include("graphics/MatrixGenerator.js");
 include("graphics/Color.js");
 include("graphics/Shader.js");
 include("graphics/ModelUtils.js");
+
+include("physics/Body.js");
+include("physics/World.js");
 
 include("object/Spectator.js");
 include("object/Player.js");

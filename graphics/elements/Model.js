@@ -15,6 +15,7 @@ function Model()
 
 	//Texture
 	this.texture = Texture.generateSolidColorTexture(Color.RED);
+	this.texture_alt = Texture.generateSolidColorTexture(Color.RED);
 
 	//Tranformations Control
 	this.position = new Vector3(0,0,0);
@@ -53,12 +54,12 @@ function draw(camera)
 	//Texture Coords
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
     gl.vertexAttribPointer(camera.shader.textureCoordAttribute, this.textureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
-   
-   	//Set texture to model if there is one
+
+	//Set texture to model if there is one
 	gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, this.texture);
     gl.uniform1i(camera.shader.samplerUniform, 0);
-    
+
     //The vertex indices
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.facesBuffer);
 	
