@@ -11,6 +11,7 @@ include("math/geometry/Sphere.js");
 
 include("data/models/cube.js");
 include("data/models/cessna.js");
+include("data/models/tedy.js");
 
 include("input/Key.js");
 include("input/Keyboard.js");

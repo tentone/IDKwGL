@@ -11,7 +11,7 @@ function Shader(gl, fragment, vertex)
 
 	if(!gl.getProgramParameter(this.shaderProgram, gl.LINK_STATUS))
 	{
-		throw "Could not initialise shaders";
+		throw "Could not initialise shader";
 	}
 }
 
@@ -23,7 +23,7 @@ function get()
 	return this.shaderProgram;
 }
 
-//Read shader and compile
+//Read shader and compile it
 Shader.getShader = function(gl, id)
 {
 	//Read shader text
@@ -71,7 +71,7 @@ Shader.getShader = function(gl, id)
 	return shader;
 }
 
-
+//Shader to render models using color (as used in classes)
 Shader.colorRenderShader = function()
 {
 	var sp = new Shader(gl, "shader-vertex-color", "shader-fragment-color");
@@ -87,6 +87,7 @@ Shader.colorRenderShader = function()
 	return sp;
 }
 
+//Shader to render textured models
 Shader.textureRenderShader = function()
 {
 	var sp = new Shader(gl, "shader-vertex-texture", "shader-fragment-texture");

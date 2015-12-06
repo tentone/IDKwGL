@@ -16,7 +16,7 @@ function ModelTextured()
 	this.vertexTextureBuffer = [];
 
 	//Texture
-	this.texture = null;
+	this.texture = Texture.generateSolidColorTexture(Color.RED);
 
 	//Tranformations Control
 	this.position = new Vector3(0,0,0);
@@ -243,7 +243,7 @@ function computeVertexNormals()
 //Create string with model info
 function toString()
 {
-	return "ModelTextured(Size:"+this.size+" VertexCount:"+this.vertex.length+" NormalCount:"+this.normals.length+" TextureCount:"+this.textures.length+" Faces Count:"+this.faces.length+")"; 
+	return "ModelTextured(Size:"+this.size+"t VertexCount:"+this.vertex.length+" NormalCount:"+this.normals.length+" TextureCount:"+this.texture_coords.length+" Faces Count:"+this.faces.length+")"; 
 }
 
 //Test Function that creates a cube with texture and retuns it

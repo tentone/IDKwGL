@@ -27,11 +27,8 @@ OrthographicCamera.prototype.toString = toString;
 OrthographicCamera.prototype.updateProjectionMatrix = updateProjectionMatrix;
 
 //Call before start a frame on this camera
-function startFrame(shader)
-{    
-    //Passing the Projection Matrix to shader
-    //gl.uniformMatrix4fv(gl.getUniformLocation(this.shader, "uPMatrix"), false, this.projectionMatrix.flatten());
-
+function startFrame()
+{
     //Calculate Camera Transformation Matrix
     this.transformationMatrix = MatrixGenerator.translation(this.position.x, this.position.y, this.position.z);
     this.transformationMatrix.mul(MatrixGenerator.rotationMatrix(this.rotation.x, this.rotation.y, this.rotation.z));

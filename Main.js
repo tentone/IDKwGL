@@ -1,8 +1,7 @@
 //Test Stuff
 var model;
-var scene;
+var scene, scene2;
 var spectator;
-var model_test;
 
 //Global Variables
 var shaderColor;
@@ -18,14 +17,21 @@ Main.init = function(canvas)
 	shaderTexture = Shader.textureRenderShader();
 
 	//Test Model to load texture
-	model_test = [];
-	model_test[0] = ModelTextured.test();
-	model_test[0].setTexture(Texture.crateFromDataArray(2, [Color.GREEN , Color.WHITE, Color.RED, Color.BLUE]));
+	scene2 = new Scene();
 
-	model_test[1] = ModelTextured.test();
-	model_test[1].setTexture(Texture.createTexture("data/texture/crate.bmp"));
-	model_test[1].position.set(2,0,2);
-	model_test[1].update();
+	model = ModelTextured.test();
+	model.setTexture(Texture.crateFromDataArray(2, [Color.GREEN , Color.WHITE, Color.RED, Color.BLUE]));
+	model.position.set(-3,0.5,8);
+	model.update();
+	scene2.addModel(model);
+
+	model = ModelTextured.test();
+	model.setTexture(Texture.createTexture("data/texture/crate.bmp"));
+	model.position.set(2,0.5,-6);
+	model.update();
+	scene2.addModel(model);
+
+	console.log(model.toString());
 
 	//Create Scene
 	scene = new Scene();
@@ -126,17 +132,18 @@ Main.draw = function()
     gl.clearColor(0, 0, 0, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    //Draw Stuff to Spectator Camera
-    spectator.camera.useShader(shaderColor);
-	spectator.camera.startFrame();
+    //gl.enable(gl.BLEND);
+	//gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+	//gl.disable(gl.BLEND);
 
+    //Draw Stuff to Spectator Camera
+	spectator.camera.startFrame();
+	
+	spectator.camera.useShader(shaderColor);
 	scene.draw(spectator.camera);
 
 	spectator.camera.useShader(shaderTexture);
-	for(var i = 0; i < model_test.length; i++)
-	{
-		model_test[i].draw(spectator.camera);
-	}
+	scene2.draw(spectator.camera);
 }
 
 //Resize Stuff
