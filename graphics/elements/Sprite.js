@@ -1,2 +1,5 @@
 //Sprite constructor
-function Sprite(){}
+function Sprite()
+{
+	
+}

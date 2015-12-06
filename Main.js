@@ -19,21 +19,21 @@ Main.init = function(canvas)
 	//Test Model to load texture
 	scene2 = new Scene();
 
-	model = ModelTextured.test();
-	model.setTexture(Texture.crateFromDataArray(2, [Color.GREEN , Color.WHITE, Color.RED, Color.BLUE]));
+	model = Model.test();
+	model.setTexture(Texture.createTexture("data/texture/crate.bmp"));
 	model.position.set(-3,0.5,8);
 	model.update();
 	scene2.addModel(model);
 
-	model = ModelTextured.test();
-	model.loadOBJ(cube_faces);
+	model = new Model();
+	model.loadOBJ(orc);
 	model.transformOBJData()
-	model.setTexture(Texture.createTexture("data/texture/crate.bmp"));
-	model.position.set(3,0.5,-9);
+	model.setTexture(Texture.createTexture("data/texture/orc.bmp"));
+	model.position.set(2,1.5,-6);
 	model.update();
 	scene2.addModel(model);
 
-	model = ModelTextured.test();
+	model = Model.test();
 	model.setTexture(Texture.createTexture("data/texture/crate_metal.jpg"));
 	model.position.set(2,0.5,-6);
 	model.update();
@@ -43,50 +43,50 @@ Main.init = function(canvas)
 	scene = new Scene();
 
 	//Create Test Elements
-	model = new Model();
+	model = new ModelColor();
 	model.loadOBJ(cube);
 	model.position.set(0,0,0);
 	model.update();
 	scene.addModel(model);
 
-	model = new Model();
+	model = new ModelColor();
 	model.loadOBJ(cube);
 	model.position.set(0,1,0);
 	model.update();
 	scene.addModel(model);
 
-	model = new Model();
+	model = new ModelColor();
 	model.loadOBJ(cube);
 	model.position.set(0,2,0);
 	model.update();
 	scene.addModel(model);
 
-	model = new Model();
+	model = new ModelColor();
 	model.loadOBJ(cube);
 	model.position.set(2,0,2);
 	model.update();
 	scene.addModel(model);
 
-	model = new Model();
+	model = new ModelColor();
 	model.loadOBJ(cube);
 	model.position.set(-3,0,5);
 	model.update();
 	scene.addModel(model);
 
-	model = new Model();
+	model = new ModelColor();
 	model.loadOBJ(cube);
 	model.position.set(0,0,-5);
 	model.update();
 	scene.addModel(model);
 
-	model = new Model();
+	model = new ModelColor();
 	model.loadOBJ(cube);
 	model.position.set(0,-1,0);
 	model.scale.set(20,1,20);
 	model.update();
 	scene.addModel(model);
 
-	model = new Model();
+	model = new ModelColor();
 	model.loadOBJ(cessna);
 	model.position.set(0,5,0);
 	model.scale.set(0.3,0.3,0.3);

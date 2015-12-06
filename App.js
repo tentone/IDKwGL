@@ -15,13 +15,16 @@ include("input/Mouse.js");
 
 include("graphics/elements/Scene.js");
 include("graphics/elements/Model.js");
+include("graphics/elements/ModelColor.js");
 include("graphics/elements/LightSource.js");
 include("graphics/elements/Texture.js");
-include("graphics/elements/ModelTextured.js");
+
 include("graphics/particle/Particle.js");
 include("graphics/particle/ParticleEmitter.js");
+
 include("graphics/camera/OrthographicCamera.js");
 include("graphics/camera/PrespectiveCamera.js");
+
 include("graphics/MatrixGenerator.js");
 include("graphics/Color.js");
 include("graphics/Shader.js");
@@ -32,7 +35,7 @@ include("object/Player.js");
 
 include("data/models/cube.js");
 include("data/models/cessna.js");
-include("data/models/cube_faces.js");
+include("data/models/orc.js");
 
 include("Main.js");
 
