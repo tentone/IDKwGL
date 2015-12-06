@@ -40,6 +40,8 @@ include("object/Player.js");
 include("data/models/cube.js");
 include("data/models/cessna.js");
 include("data/models/orc.js");
+include("data/models/sonic.js");
+include("data/models/baron_nashor.js");
 
 include("Main.js");
 

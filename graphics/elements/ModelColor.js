@@ -6,10 +6,16 @@ function ModelColor()
 	this.normals = [];
 	this.colors = [];
 
+	this.colorBuffer = null;
+	this.vertexBuffer = null;
+
 	//Tranformations Control
 	this.position = new Vector3(0,0,0);
 	this.rotation = new Vector3(0,0,0);
 	this.scale = new Vector3(1,1,1);
+
+	//Update Buffers
+	this.updateBuffers();
 
 	//Tranformation Matrix
 	this.transformationMatrix = new Matrix(4,4);
@@ -18,6 +24,7 @@ function ModelColor()
 //Function Prototypes
 ModelColor.prototype.draw = draw;
 ModelColor.prototype.update = update;
+ModelColor.prototype.updateBuffers = updateBuffers;
 ModelColor.prototype.clone = clone;
 ModelColor.prototype.loadOBJ = loadOBJ;
 ModelColor.prototype.toString = toString;
@@ -31,32 +38,18 @@ function draw(camera)
 	camTransformationMatrix.mul(camera.transformationMatrix);
 
 	// Passing the Model View Matrix to apply the current transformation
-	gl.uniformMatrix4fv(gl.getUniformLocation(camera.shader, "uMVMatrix"), false, camTransformationMatrix.flatten());
-
-	// Vertex
-	var triangleVertexPositionBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexPositionBuffer);
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertex), gl.STATIC_DRAW);
-	
-	triangleVertexPositionBuffer.itemSize = 3;
-	triangleVertexPositionBuffer.numItems = this.vertex.length / 3;			
+	gl.uniformMatrix4fv(gl.getUniformLocation(camera.shader, "uMVMatrix"), false, camTransformationMatrix.flatten());		
 
 	// Associating to the vertex shader
-	gl.vertexAttribPointer(camera.shader.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
-	
-	// Colors
-	var triangleVertexColorBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexColorBuffer);
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.colors), gl.STATIC_DRAW);
-
-	triangleVertexColorBuffer.itemSize = 3;
-	triangleVertexColorBuffer.numItems = this.colors.length / 3;			
+	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
+	gl.vertexAttribPointer(camera.shader.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);			
 
 	// Associating to the vertex shader
+	gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
 	gl.vertexAttribPointer(camera.shader.vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
 
 	//Draw Model into screen
-	gl.drawArrays(gl.TRIANGLES, 0, triangleVertexPositionBuffer.numItems); 	
+	gl.drawArrays(gl.TRIANGLES, 0, this.vertexBuffer.numItems); 	
 }
 
 //Recalculate Tranformation Matrix
@@ -67,19 +60,40 @@ function update()
     this.transformationMatrix.mul(MatrixGenerator.scalingMatrix(this.scale.x, this.scale.y, this.scale.z));
 }
 
+//Update Buffers
+function updateBuffers()
+{
+	// Vertex
+	this.vertexBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertex), gl.STATIC_DRAW);
+	this.vertexBuffer.itemSize = 3;
+	this.vertexBuffer.numItems = this.vertex.length / 3;	
+
+	// Colors
+	this.colorBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.colors), gl.STATIC_DRAW);
+	this.colorBuffer.itemSize = 3;
+	this.colorBuffer.numItems = this.colors.length / 3;
+}
+
 //Clone this model (Keep same vertex list for all copys)
 function clone()
 {
-	var m = new ModelColor();
-	m.vertex = this.vertex;
-	m.normals = this.normals;
-	m.colors = this.colors;
+	var model = new ModelColor();
+	model.vertex = this.vertex;
+	model.normals = this.normals;
+	model.colors = this.colors;
 
-	m.position.set(this.position.x, this.position.y, this.position.z);
-	m.rotation.set(this.rotation.x, this.rotation.y, this.rotation.z);
-	m.scale.set(this.scale.x, this.scale.y, this.scale.z);
+	model.colorBuffer = this.colorBuffer;
+	model.vertexBuffer = vertexBuffer;
+
+	model.position.set(this.position.x, this.position.y, this.position.z);
+	model.rotation.set(this.rotation.x, this.rotation.y, this.rotation.z);
+	model.scale.set(this.scale.x, this.scale.y, this.scale.z);
 	
-	return m;
+	return model;
 }
 
 //OBJ file read from string
@@ -122,10 +136,7 @@ function loadOBJ(data)
 		this.computeVertexNormals();
 	}
 	
-	// Reset Tranformations Control
-	this.position = new Vector3(0,0,0);
-	this.rotation = new Vector3(0,0,0);
-	this.scale = new Vector3(1,1,1);
+	this.updateBuffers();
 }
 
 //Computing the triangle unit normal vector to vertex 

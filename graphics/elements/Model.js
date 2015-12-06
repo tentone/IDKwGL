@@ -8,31 +8,34 @@ function Model()
 	this.faces = []; //Face <vertex>/<texture>/<normal> 3
 
 	//Buffers
-	this.normalBuffer = [];
-	this.vertexBuffer = [];
-	this.textureCoordBuffer = [];
-	this.facesBuffer = [];
+	this.normalBuffer = null;
+	this.vertexBuffer = null;
+	this.textureCoordBuffer = null;
+	this.facesBuffer = null;
 
 	//Texture
 	this.texture = Texture.generateSolidColorTexture(Color.RED);
-	this.texture_alt = Texture.generateSolidColorTexture(Color.RED);
 
 	//Tranformations Control
 	this.position = new Vector3(0,0,0);
 	this.rotation = new Vector3(0,0,0);
 	this.scale = new Vector3(1,1,1);
 
+	//Update model buffers
+	this.updateBuffers();
+
 	//Tranformation Matrix
 	this.transformationMatrix = new Matrix(4,4);
-	this.updateBuffers();
 }
 
 //Function Prototypes
 Model.prototype.draw = draw;
 Model.prototype.update = update;
+Model.prototype.clone = clone;
 Model.prototype.updateBuffers = updateBuffers;
 Model.prototype.setTexture = setTexture;
 Model.prototype.loadOBJ = loadOBJ;
+Model.prototype.loadMTL = loadMTL;
 Model.prototype.toString = toString;
 Model.prototype.computeVertexNormals = computeVertexNormals;
 Model.prototype.transformOBJData = transformOBJData;
@@ -67,7 +70,7 @@ function draw(camera)
 	gl.drawElements(gl.TRIANGLES, this.facesBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
 
-//Recalculate Tranformation Matrix
+//Recalculate Tranformation Matrix (Should be called after changing position)
 function update()
 {
 	this.transformationMatrix = MatrixGenerator.translation(this.position.x, this.position.y, this.position.z);
@@ -75,12 +78,7 @@ function update()
     this.transformationMatrix.mul(MatrixGenerator.scalingMatrix(this.scale.x, this.scale.y, this.scale.z));
 }
 
-//Attach texture image to this model
-function setTexture(texture)
-{
-	this.texture = texture;
-}
-
+//Recreate data buffers (Should be called after structural changes)
 function updateBuffers()
 {
 	//Vertex
@@ -103,6 +101,36 @@ function updateBuffers()
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.faces), gl.STATIC_DRAW);
     this.facesBuffer.itemSize = 1;
     this.facesBuffer.numItems = this.faces.length;
+}
+
+//Creates a copy of this model (keeps same vertex, buffer and texture data)
+function clone()
+{
+	var model = new Model();
+
+	model.vertex = this.vertex;
+	model.texture_coords = this.texture_coords;
+	model.normals = this.normals;
+	model.faces = this.faces;
+
+	model.textureCoordBuffer = this.textureCoordBuffer;
+	model.normalBuffer = this.normalBuffer;
+	model.vertexBuffer = this.vertexBuffer;
+	model.facesBuffer = this.facesBuffer;
+
+	model.texture = this.texture;
+
+	model.position.set(this.position.x, this.position.y, this.position.z);
+	model.rotation.set(this.rotation.x, this.rotation.y, this.rotation.z);
+	model.scale.set(this.scale.x, this.scale.y, this.scale.z);
+
+	return model;
+}
+
+//Attach texture image to this model
+function setTexture(texture)
+{
+	this.texture = texture;
 }
 
 //OBJ file read from string
@@ -262,6 +290,23 @@ function transformOBJData()
 	this.updateBuffers();
 }
 
+function loadMTL()
+{
+	//MTL File Spec
+	/*define a material named 'Colored'
+    newmtl Colored
+    The ambient color of the material is declared using Ka.
+    Ka 1.000 1.000 1.000     # white
+    Similarly, the diffuse color is declared using Kd.
+    Kd 1.000 1.000 1.000     # white
+    The specular color is declared using Ks, and weighted using the specular exponent Ns.
+    Ks 0.000 0.000 0.000     # black (off)
+   		Ns 10.000                # ranges between 0 and 1000
+   	Materials can be transparent.
+   	d 0.9                    # some implementations use 'd'
+    Tr 0.1                   # others use 'Tr' (inverted)*/
+}
+
 //Create string with model info
 function toString()
 {
@@ -307,7 +352,7 @@ function computeVertexNormals()
 	this.normals = [];
 	
     //Taking 3 vertices from the coordinates array 
-    for(i = 0; i < this.vertex.length; i += 9)
+    for(var i = 0; i < this.vertex.length; i += 9)
     {
 		//Compute unit normal vector for each triangle
         var normalVector = MathUtils.computeNormalVector(new Vector3(this.vertex[i], this.vertex[i+1], this.vertex[i+2]), new Vector3(this.vertex[i+3], this.vertex[i+4], this.vertex[i+5]), new Vector3(this.vertex[i+6], this.vertex[i+7], this.vertex[i+8]));
@@ -326,7 +371,7 @@ function computeVertexNormals()
 }
 
 //Test Function that creates a cube with texture and retuns it
-Model.test = function()
+Model.cube = function()
 {
 	var model = new Model();
 

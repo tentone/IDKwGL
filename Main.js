@@ -19,7 +19,7 @@ Main.init = function(canvas)
 	//Test Model to load texture
 	scene2 = new Scene();
 
-	model = Model.test();
+	model = Model.cube();
 	model.setTexture(Texture.createTexture("data/texture/crate.bmp"));
 	model.position.set(-3,0.5,8);
 	model.update();
@@ -33,11 +33,41 @@ Main.init = function(canvas)
 	model.update();
 	scene2.addModel(model);
 
-	model = Model.test();
+	model = model.clone();
+	model.position.set(-2,-0.5,6);
+	model.rotation.set(0,90,0);
+	model.update();
+	scene2.addModel(model);
+
+	model = new Model();
+	model.loadOBJ(sonic);
+	model.transformOBJData()
+	model.setTexture(Texture.createTexture("data/texture/sonic_body.bmp"));
+	model.position.set(4,0,6);
+	model.scale.set(0.02,0.02,0.02)
+	model.update();
+	scene2.addModel(model);
+
+	model = Model.cube();
 	model.setTexture(Texture.createTexture("data/texture/crate_metal.jpg"));
 	model.position.set(2,0.5,-6);
 	model.update();
 	scene2.addModel(model);
+
+	model = new Model();
+	model.loadOBJ(baron_nashor);
+	model.transformOBJData()
+	model.setTexture(Texture.createTexture("data/texture/baron_nashor.bmp"));
+	model.position.set(-8,0,0);
+	model.scale.set(0.03,0.03,0.03);
+	model.update();
+	scene2.addModel(model);
+
+	/*model = model.clone();
+	model.setTexture(Texture.createTexture("data/texture/baron_nashor_green.bmp"));
+	model.position.set(-13,0,0);
+	model.update();
+	scene2.addModel(model);*/
 
 	//Create Scene
 	scene = new Scene();
@@ -82,7 +112,7 @@ Main.init = function(canvas)
 	model = new ModelColor();
 	model.loadOBJ(cube);
 	model.position.set(0,-1,0);
-	model.scale.set(20,1,20);
+	model.scale.set(40,1,40);
 	model.update();
 	scene.addModel(model);
 

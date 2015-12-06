@@ -25,8 +25,6 @@ function addLight(light)
 //Draw Scene to Camera
 function draw(camera)
 {
-	//TODO <ADD ILUMINATION>
-
 	//Draw Models to Camera
 	for(i = 0; i < this.models.length; i++)
 	{
