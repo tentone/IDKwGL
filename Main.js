@@ -26,12 +26,18 @@ Main.init = function(canvas)
 	scene2.addModel(model);
 
 	model = ModelTextured.test();
+	model.loadOBJ(cube_faces);
+	model.transformOBJData()
 	model.setTexture(Texture.createTexture("data/texture/crate.bmp"));
-	model.position.set(2,0.5,-6);
+	model.position.set(3,0.5,-9);
 	model.update();
 	scene2.addModel(model);
 
-	console.log(model.toString());
+	model = ModelTextured.test();
+	model.setTexture(Texture.createTexture("data/texture/crate_metal.jpg"));
+	model.position.set(2,0.5,-6);
+	model.update();
+	scene2.addModel(model);
 
 	//Create Scene
 	scene = new Scene();

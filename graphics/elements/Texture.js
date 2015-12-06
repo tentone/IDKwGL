@@ -9,7 +9,7 @@ Texture.createTexture = function(file)
 		return Texture.generateSolidColorTexture(Color.RED);
 	}
 
-   	texture = gl.createTexture();
+   	var texture = gl.createTexture();
 	texture.image = new Image();
 	texture.image.onload = function ()
 	{

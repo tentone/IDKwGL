@@ -1,6 +1,6 @@
 function Sphere()
 {
-	this.pos = new Vector3(0,0,0);
+	this.position = new Vector3(0,0,0);
 	this.radius = 0;
 	this.ori = new Vector3(0,0,0);
 	this.type = Geometry.SPHERE;
@@ -16,10 +16,8 @@ function isColliding(obj)
 	}
 	else if(obj.type == Geometry.SPHERE)
 	{
-		return MathUtils.pointDistance(this.pos, obj.pos) > this.radius + obj.radius;
+		return MathUtils.pointDistance(this.position, obj.position) > this.radius + obj.radius;
 	}
-	else
-	{
-		return false;
-	}
+
+	return false;
 }

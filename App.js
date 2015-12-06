@@ -9,10 +9,6 @@ include("math/geometry/Geometry.js");
 include("math/geometry/Box.js");
 include("math/geometry/Sphere.js");
 
-include("data/models/cube.js");
-include("data/models/cessna.js");
-include("data/models/tedy.js");
-
 include("input/Key.js");
 include("input/Keyboard.js");
 include("input/Mouse.js");
@@ -33,6 +29,10 @@ include("graphics/ModelUtils.js");
 
 include("object/Spectator.js");
 include("object/Player.js");
+
+include("data/models/cube.js");
+include("data/models/cessna.js");
+include("data/models/cube_faces.js");
 
 include("Main.js");
 

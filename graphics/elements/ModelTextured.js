@@ -2,18 +2,16 @@
 function ModelTextured()
 {
 	//Model Data
-	this.size = 0; //Amount of triangles
-
 	this.vertex = []; //Vertex
 	this.texture_coords = []; //Vertex Texture
-	this.faces = []; //Face <vertex>/[texture]/<normal>
 	this.normals = []; //Vertex Normals
-	this.colors = []; //Color Arrays
+	this.faces = []; //Face <vertex>/<texture>/<normal> 3
 
 	//Buffers
-	this.vertexPosBuffer = [];
-	this.vertexIndexBuffer = [];
-	this.vertexTextureBuffer = [];
+	this.normalBuffer = [];
+	this.vertexBuffer = [];
+	this.textureCoordBuffer = [];
+	this.facesBuffer = [];
 
 	//Texture
 	this.texture = Texture.generateSolidColorTexture(Color.RED);
@@ -36,6 +34,7 @@ ModelTextured.prototype.setTexture = setTexture;
 ModelTextured.prototype.loadOBJ = loadOBJ;
 ModelTextured.prototype.toString = toString;
 ModelTextured.prototype.computeVertexNormals = computeVertexNormals;
+ModelTextured.prototype.transformOBJData = transformOBJData;
 
 //Draw Model to camera
 function draw(camera)
@@ -48,26 +47,23 @@ function draw(camera)
 	gl.uniformMatrix4fv(gl.getUniformLocation(camera.shader, "uMVMatrix"), false, camTransformationMatrix.flatten());
 
     //Passing the buffer
-	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexPosBuffer);
-    gl.vertexAttribPointer(camera.shader.vertexPositionAttribute, this.vertexPosBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
+    gl.vertexAttribPointer(camera.shader.vertexPositionAttribute, this.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
-	//Textures
-	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexTextureBuffer);
-    gl.vertexAttribPointer(camera.shader.textureCoordAttribute, this.vertexTextureBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	//Texture Coords
+	gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
+    gl.vertexAttribPointer(camera.shader.textureCoordAttribute, this.textureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
    
    	//Set texture to model if there is one
-   	if(this.texture != null)
-    {
-    	gl.activeTexture(gl.TEXTURE0);
-	    gl.bindTexture(gl.TEXTURE_2D, this.texture);
-	    gl.uniform1i(camera.shader.samplerUniform, 0);
-	}
+	gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, this.texture);
+    gl.uniform1i(camera.shader.samplerUniform, 0);
     
     //The vertex indices
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.vertexIndexBuffer);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.facesBuffer);
 	
 	//Drawing the triangles
-	gl.drawElements(gl.TRIANGLES, this.vertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+	gl.drawElements(gl.TRIANGLES, this.facesBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
 
 //Recalculate Tranformation Matrix
@@ -87,25 +83,25 @@ function setTexture(texture)
 function updateBuffers()
 {
 	//Vertex
-	this.vertexPosBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexPosBuffer);
+	this.vertexBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertex), gl.STATIC_DRAW);
-	this.vertexPosBuffer.itemSize = 3;
-	this.vertexPosBuffer.numItems = this.vertex.length/3;			
+	this.vertexBuffer.itemSize = 3;
+	this.vertexBuffer.numItems = this.vertex.length/3;			
 
 	//Texture
-    this.vertexTextureBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexTextureBuffer);
+    this.textureCoordBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
  	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.texture_coords), gl.STATIC_DRAW);
-    this.vertexTextureBuffer.itemSize = 2;
-    this.vertexTextureBuffer.numItems = this.texture_coords.length/2;			
+    this.textureCoordBuffer.itemSize = 2;
+    this.textureCoordBuffer.numItems = this.texture_coords.length/2;			
 
 	//Vertex indices
-    this.vertexIndexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.vertexIndexBuffer);
+    this.facesBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.facesBuffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.faces), gl.STATIC_DRAW);
-    this.vertexIndexBuffer.itemSize = 1;
-    this.vertexIndexBuffer.numItems = this.faces.length;
+    this.facesBuffer.itemSize = 1;
+    this.facesBuffer.numItems = this.faces.length;
 }
 
 //OBJ file read from string
@@ -114,7 +110,6 @@ function loadOBJ(data)
 	var lines = data.split("\n");
 
 	//Clear Data
-	this.size = 0; //Amount of triangles
 	this.vertex = []; //Vertex
 	this.normals = []; //Vertex Normals
 	this.texture_coords = []; //Vertex Terure
@@ -131,8 +126,6 @@ function loadOBJ(data)
 	    	this.vertex.push(parseFloat(tokens[1]));
 	    	this.vertex.push(parseFloat(tokens[2]));
 	    	this.vertex.push(parseFloat(tokens[3]));
-
-	    	this.size += 1;
 		}
 	    else if(tokens[0] == "vn") //Normals
 	    {
@@ -166,7 +159,7 @@ function loadOBJ(data)
 				this.faces.push(parseInt(val[1])); //Texture
 				this.faces.push(parseInt(val[2]));; //Normal
 			}
-			//4 vertex face Quad)
+			//4 vertex face (Quad)
 	        //f 16/92/11 40/109/40 38/114/38 14/101/22
 			else if(tokens.length == 5)
 			{
@@ -203,16 +196,107 @@ function loadOBJ(data)
 		}
 	}
 	
+	//If no coord found complete with "random" data
+	if(this.texture_coords.length == 0)
+	{
+		//Full texture to all triangles
+		this.texture_coords.push(0.0);
+		this.texture_coords.push(0.0);
+
+		this.texture_coords.push(1.0);
+		this.texture_coords.push(1.0);
+
+		//Add Texture Component to all faces
+		for(i = 1; i < this.faces.length; i+=3)
+		{
+			if(isNaN(this.faces[i]))
+			{
+				if(i%2 == 0)
+				{
+					this.faces[i] = 1;
+				}
+				else
+				{
+					this.faces[i] = 2;
+				}
+			}
+		}
+	}
+
 	// Checking to see if the normals are defined on the file
 	if(this.normals.length == 0)
 	{
 		this.computeVertexNormals();
 	}
+}
+
+//Tranform OBJ file to single hash level as used in classes
+function transformOBJData()
+{
+	vertex = [];
+	texture = [];
+	normals = [];
+	faces = [];
 	
-	// Reset Tranformations Control
-	this.position = new Vector3(0,0,0);
-	this.rotation = new Vector3(0,0,0);
-	this.scale = new Vector3(1,1,1);
+	for(var i = 0; i < this.faces.length; i += 3)
+	{
+		faces.push(i/3);
+
+		vertex.push(this.vertex[(this.faces[i]-1)*3]);
+		vertex.push(this.vertex[(this.faces[i]-1)*3+1]);
+		vertex.push(this.vertex[(this.faces[i]-1)*3+2]);
+
+		texture.push(this.texture_coords[(this.faces[i+1]-1)*2]);
+		texture.push(this.texture_coords[(this.faces[i+1]-1)*2+1]);
+
+		normals.push(this.normals[(this.faces[i+2]-1)*3]);
+		normals.push(this.normals[(this.faces[i+2]-1)*3+1]);
+		normals.push(this.normals[(this.faces[i+2]-1)*3+2]);
+	}
+
+	this.faces = faces;
+	this.vertex = vertex;
+	this.texture_coords = texture;
+	this.normals = normals;
+	this.updateBuffers();
+}
+
+//Create string with model info
+function toString()
+{
+	var s =  "ModelTextured(VertexCount:"+this.vertex.length+" NormalCount:"+this.normals.length+
+		" TextureCount:"+this.texture_coords.length+" Faces Count:"+this.faces.length+")\n\nFaceList:\n[";
+	
+	for(var i = 0; i < this.faces.length; i+=9)
+	{
+		s+= "\n   ("+this.faces[i]+", "+this.faces[i+1]+", "+this.faces[i+2]+")  ";
+		s+= "("+this.faces[i+3]+", "+this.faces[i+4]+", "+this.faces[i+5]+")  ";
+		s+= "("+this.faces[i+6]+", "+this.faces[i+7]+", "+this.faces[i+8]+")";
+	}
+
+	s+="\n]\n\nVertex List:\n["
+
+	for(i = 0; i < this.vertex.length; i+=3)
+	{
+		s+= "\n   ("+this.vertex[i]+", "+this.vertex[i+1]+", "+this.vertex[i+2]+")";
+	}
+
+	s+="\n]\n\nTexture Coords List:\n["
+
+	for(i = 0; i < this.texture_coords.length; i+=2)
+	{
+		s+= "\n   ("+this.texture_coords[i]+", "+this.texture_coords[i+1]+")";
+	}
+
+	s+="\n]\n\nNormal List:\n[";
+
+	for(i = 0; i < this.normals.length; i+=3)
+	{
+		s+= "\n   ("+this.normals[i]+", "+this.normals[i+1]+", "+this.normals[i+2]+")";
+	}
+
+	s+="\n]";
+	return s;
 }
 
 //Computing the triangle unit normal vector to vertex 
@@ -238,12 +322,6 @@ function computeVertexNormals()
 		this.normals.push(normalVector.y);
 		this.normals.push(normalVector.z);
 	}
-}
-
-//Create string with model info
-function toString()
-{
-	return "ModelTextured(Size:"+this.size+"t VertexCount:"+this.vertex.length+" NormalCount:"+this.normals.length+" TextureCount:"+this.texture_coords.length+" Faces Count:"+this.faces.length+")"; 
 }
 
 //Test Function that creates a cube with texture and retuns it
