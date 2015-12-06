@@ -45,27 +45,27 @@ function draw(camera)
 	camTransformationMatrix.mul(camera.transformationMatrix);
 
 	// Passing the Model View Matrix to apply the current transformation
-	gl.uniformMatrix4fv(gl.getUniformLocation(shaderProgram.get(), "uMVMatrix"), false, camTransformationMatrix.flatten());
+	gl.uniformMatrix4fv(gl.getUniformLocation(camera.shader, "uMVMatrix"), false, camTransformationMatrix.flatten());
 
-    //Passing the buffers
+    //Passing the buffer
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexPosBuffer);
-    gl.vertexAttribPointer(shaderProgram.get().vertexPositionAttribute, this.vertexPosBuffer.itemSize, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(camera.shader.vertexPositionAttribute, this.vertexPosBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
 	//Textures
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexTextureBuffer);
-    gl.vertexAttribPointer(shaderProgram.get().textureCoordAttribute, this.vertexTextureBuffer.itemSize, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(camera.shader.textureCoordAttribute, this.vertexTextureBuffer.itemSize, gl.FLOAT, false, 0, 0);
    
    	//Set texture to model if there is one
    	if(this.texture != null)
     {
     	gl.activeTexture(gl.TEXTURE0);
 	    gl.bindTexture(gl.TEXTURE_2D, this.texture);
-	    gl.uniform1i(shaderProgram.get().samplerUniform, 0);
+	    gl.uniform1i(camera.shader.samplerUniform, 0);
 	}
     
     //The vertex indices
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.vertexIndexBuffer);
-
+	
 	//Drawing the triangles
 	gl.drawElements(gl.TRIANGLES, this.vertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
@@ -131,6 +131,7 @@ function loadOBJ(data)
 	    	this.vertex.push(parseFloat(tokens[1]));
 	    	this.vertex.push(parseFloat(tokens[2]));
 	    	this.vertex.push(parseFloat(tokens[3]));
+
 	    	this.size += 1;
 		}
 	    else if(tokens[0] == "vn") //Normals

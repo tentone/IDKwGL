@@ -16,9 +16,11 @@ function PrespectiveCamera(canvas, fov, zoom)
 
     //Camera Transformation Matrix
     this.transformationMatrix = new Matrix(4,4);
+    this.shader = null;
 }
 
 //Function Prototypes
+PrespectiveCamera.prototype.useShader = useShader;
 PrespectiveCamera.prototype.startFrame = startFrame;
 PrespectiveCamera.prototype.resize = resize;
 PrespectiveCamera.prototype.toString = toString;
@@ -29,12 +31,20 @@ PrespectiveCamera.prototype.updateProjectionMatrix = updateProjectionMatrix;
 function startFrame()
 {
     //Passing the Projection Matrix to apply the current projection
-    gl.uniformMatrix4fv(gl.getUniformLocation(shaderProgram.get(), "uPMatrix"), false, this.projectionMatrix.flatten());
+    gl.uniformMatrix4fv(gl.getUniformLocation(this.shader, "uPMatrix"), false, this.projectionMatrix.flatten());
 
     //Calculate Camera Transformation Matrix
     this.transformationMatrix = MatrixGenerator.translation(this.position.x, -this.position.y, -this.position.z);
     this.transformationMatrix.mul(MatrixGenerator.rotationMatrix(this.rotation.x, this.rotation.y, this.rotation.z));
     this.transformationMatrix.mul(MatrixGenerator.scalingMatrix(this.zoom, this.zoom, this.zoom));
+}
+
+//Set shader to be used by camera
+function useShader(shader)
+{
+    this.shader = shader.get();
+    gl.useProgram(shader.get());
+    gl.uniformMatrix4fv(gl.getUniformLocation(shader.get(), "uPMatrix"), false, this.projectionMatrix.flatten());
 }
 
 //Change Camera Field of View

@@ -13,9 +13,6 @@ function Shader(gl, fragment, vertex)
 	{
 		throw "Could not initialise shaders";
 	}
-
-	//Set Shader to GL
-	gl.useProgram(this.shaderProgram);
 }
 
 //Function Prototypes

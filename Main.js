@@ -2,11 +2,11 @@
 var model;
 var scene;
 var spectator;
-
 var model_test;
 
 //Global Variables
-var shaderProgram;
+var shaderColor;
+var shaderTexture;
 
 function Main(){}
 
@@ -14,8 +14,8 @@ function Main(){}
 Main.init = function(canvas)
 {
 	//Initialize Shaders
-	//shaderProgram = Shader.colorRenderShader();
-	shaderProgram = Shader.textureRenderShader();
+	shaderColor = Shader.colorRenderShader();
+	shaderTexture = Shader.textureRenderShader();
 
 	//Test Model to load texture
 	model_test = [];
@@ -127,10 +127,12 @@ Main.draw = function()
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     //Draw Stuff to Spectator Camera
+    spectator.camera.useShader(shaderColor);
 	spectator.camera.startFrame();
-	
-	//scene.draw(spectator.camera);
 
+	scene.draw(spectator.camera);
+
+	spectator.camera.useShader(shaderTexture);
 	for(var i = 0; i < model_test.length; i++)
 	{
 		model_test[i].draw(spectator.camera);

@@ -37,7 +37,7 @@ include("Main.js");
 
 //Global App Variables
 var delta = 1000/60;
-var gl;
+var gl = null;
 
 //App class
 function App(){}
