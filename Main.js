@@ -1,12 +1,13 @@
 //Test Stuff
 var model;
-var scene, scene2;
+var scene, scene2, scene3;
 var spectator;
 var particle;
 
 //Global Variables
 var shaderColor;
 var shaderTexture;
+var shaderLight;
 
 function Main(){}
 
@@ -16,6 +17,7 @@ Main.init = function(canvas)
 	//Initialize Shaders
 	shaderColor = Shader.colorRenderShader();
 	shaderTexture = Shader.textureRenderShader();
+	//shaderLight = Shader.lightRenderShader();
 
 	//Test Model to load texture
 	scene2 = new Scene();
@@ -46,6 +48,15 @@ Main.init = function(canvas)
 	scene2.addModel(model);
 
 	model = new Model();
+	model.loadOBJ(cleffa);
+	model.setTexture(Texture.createTexture("data/texture/cleffa.png"));
+	model.scale.set(0.005,0.005,0.005);
+	model.update();
+	scene2.addModel(model);
+
+	particle = new ParticleEmitter(model, new Vector3(0,0,0), new Vector3(0,0,0), new Vector3(0.5,0.5,0.5), 1.0, 0.5, 300, 100, 100);
+
+	model = new Model();
 	model.loadOBJ(baron_nashor);
 	model.setTexture(Texture.createTexture("data/texture/baron_nashor.bmp"));
 	model.position.set(-8,0,0);
@@ -58,15 +69,6 @@ Main.init = function(canvas)
 	model.position.set(-13,0,0);
 	model.update();
 	scene2.addModel(model);
-
-	model = new Model();
-	model.loadOBJ(cleffa);
-	model.setTexture(Texture.createTexture("data/texture/cleffa.png"));
-	model.scale.set(0.005,0.005,0.005);
-	model.update();
-	scene2.addModel(model);
-
-	particle = new ParticleEmitter(model, new Vector3(0,0,0), new Vector3(0,0,0), new Vector3(0.5,0.5,0.5), 1.0, 0.5, 300, 100, 100);
 
 	//Create Scene
 	scene = new Scene();
@@ -170,7 +172,7 @@ Main.draw = function()
 
     //Draw Stuff to Spectator Camera
 	spectator.camera.startFrame();
-	
+
 	spectator.camera.useShader(shaderColor);
 	scene.draw(spectator.camera);
 

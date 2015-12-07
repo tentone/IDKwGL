@@ -41,7 +41,9 @@ function useShader(shader)
 {
     this.shader = shader.get();
     gl.useProgram(shader.get());
-    gl.uniformMatrix4fv(gl.getUniformLocation(shader.get(), "uPMatrix"), false, this.projectionMatrix.flatten());
+
+    gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, this.projectionMatrix.flatten());
+    //gl.uniformMatrix4fv(gl.getUniformLocation(shader.get(), "uPMatrix"), false, this.projectionMatrix.flatten());
 }
 
 //Call every time the canvas is resized

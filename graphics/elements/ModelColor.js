@@ -38,7 +38,7 @@ function draw(camera)
 	camTransformationMatrix.mul(camera.transformationMatrix);
 
 	// Passing the Model View Matrix to apply the current transformation
-	gl.uniformMatrix4fv(gl.getUniformLocation(camera.shader, "uMVMatrix"), false, camTransformationMatrix.flatten());		
+	gl.uniformMatrix4fv(gl.getUniformLocation(camera.shader, "uMVMatrix"), false, camTransformationMatrix.flatten());
 
 	// Associating to the vertex shader
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);

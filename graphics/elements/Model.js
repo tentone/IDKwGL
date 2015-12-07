@@ -7,8 +7,10 @@ function Model()
 	this.normals = []; //Vertex Normals
 	this.faces = []; //Face <vertex>/<texture>/<normal>
 
+	this.materials = [];//Materials
+
 	//Buffers
-	this.normalBuffer = null;
+	this.normalsBuffer = null;
 	this.vertexBuffer = null;
 	this.textureCoordBuffer = null;
 	this.facesBuffer = null;
@@ -95,6 +97,13 @@ function updateBuffers()
  	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.texture_coords), gl.STATIC_DRAW);
     this.textureCoordBuffer.itemSize = 2;
     this.textureCoordBuffer.numItems = this.texture_coords.length/2;			
+
+    //Normals
+	this.normalsBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, this.normalsBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normals), gl.STATIC_DRAW);
+	this.normalsBuffer.itemSize = 3;
+	this.normalsBuffer.numItems = this.normals.length/3;			
 
 	//Vertex indices
     this.facesBuffer = gl.createBuffer();
@@ -297,8 +306,11 @@ function transformOBJData()
 	this.updateBuffers();
 }
 
-function loadMTL()
+//Read MTL data from String
+function loadMTL(data)
 {
+	var lines = data.split("\n");
+
 	//MTL File Spec
 	/*define a material named 'Colored'
     newmtl Colored
@@ -312,6 +324,18 @@ function loadMTL()
    	Materials can be transparent.
    	d 0.9                    # some implementations use 'd'
     Tr 0.1                   # others use 'Tr' (inverted)*/
+
+    //Read Data Lines
+	for(var i = 0; i < lines.length; i++)
+	{
+	    var tokens = lines[i].split(/\s\s*/);
+
+	    if(tokens[0] == "newmtl") //New Material
+	    {
+			//tokens[1] //Material name
+	    }
+	}
+
 }
 
 //Create string with model info
