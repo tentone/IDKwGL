@@ -2,11 +2,14 @@ function World(acceleration)
 {
 	if(acceleration === undefined)
 	{
-		acceleration = new Vector3(0, -9.8, 0);
+		this.acceleration = new Vector3(0, -9.81, 0);
+	}
+	else
+	{
+		this.acceleration = acceleration;
 	}
 
-	this.acceleration = acceleration;
-	this.friction = new Vector3(0.55,0.55,0.55);
+	this.friction = new Vector3(0.55, 0.55, 0.55);
 	this.body = [];
 
 	this.acceleration.mulConst(World.DELTA);
@@ -19,20 +22,22 @@ World.prototype.addBody = addBody;
 World.prototype.update = update;
 World.prototype.toString = toString;	
 
+//Update all bodys in world
 function update()
 {
-	for(var i = 0; i < this.body.length ; i++)
+	for(var i = 0; i < this.body.length; i++)
 	{
-		this.body[i].update();
+		this.body[i].update(this);
 	}	
 }
 
+//Add body to world
 function addBody(body)
 {
 	this.body.push(body);
-	body.setWorld(this);
 }
 
+//World info to String
 function toString()
 {
 	var s = "World (BodyCount:"+this.body.length+")\n   Body List:";

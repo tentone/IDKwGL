@@ -1,18 +1,7 @@
-function Body(world, geometry)
+function Body(geometry)
 {
-	if(world === undefined)
-	{
-		this.world = null;
-		this.has_world = false;
-	}
-	else
-	{
-		this.world = world;
-		this.has_world = true;
-	}
-
+	//Random ID to identify body
 	this.id=Math.random()*10000+Math.random()*10;
-
 	this.geometry = geometry;
 
 	this.collidable = true;
@@ -25,41 +14,44 @@ function Body(world, geometry)
 
 //Functions prototypes
 Body.prototype.update = update;
-Body.prototype.setWorld = setWorld;
 Body.prototype.setCollidable = setCollidable;
 Body.prototype.getGeometry = getGeometry;
+Body.prototype.setStatic = setStatic;
 Body.prototype.toString = toString;
 
 //Updates body status 
-function update()
+function update(world)
 {
-	var willCollide = -1;
+	if(world === undefined)
+	{
+		return;
+	}
 
 	if(!this.is_static)
 	{
-		if(this.has_world)
-		{
-			this.speed.add(world.acceleration);
-		}
+		var willCollide = -1;
+
+		this.speed.add(world.acceleration);
 		this.speed.add(this.acceleration);
+
 		this.speed.mul(world.friction);
 		this.acceleration.mul(world.friction);
 
-		for(var i = 0; i < this.world.body.length; i++)
+		for(var i = 0; i < world.body.length; i++)
 		{
-			if(this.id != this.world.body[i].id)
+			if(this.id != world.body[i].id)
 			{
-				if(this.geometry.willCollide(new Vector3(this.speed.x,0,0),this.world.body[i].getGeometry()))
+				if(this.geometry.willCollide(new Vector3(this.speed.x,0,0),world.body[i].getGeometry()))
 				{
 					willCollide = 0;
 					break;
 				}
-				else if(this.geometry.willCollide(new Vector3(0,this.speed.y,0),this.world.body[i].getGeometry()))
+				else if(this.geometry.willCollide(new Vector3(0,this.speed.y,0),world.body[i].getGeometry()))
 				{
 					willCollide = 1;
 					break;
 				}
-				else if(this.geometry.willCollide(new Vector3(0,0,this.speed.z),this.world.body[i].getGeometry()))
+				else if(this.geometry.willCollide(new Vector3(0,0,this.speed.z),world.body[i].getGeometry()))
 				{
 					willCollide = 2;
 					break;
@@ -70,7 +62,6 @@ function update()
 		//No collision
 		if(willCollide == -1)
 		{	
-			this.position.add(this.speed);
 			this.geometry.position.add(this.speed);
 		}
 		//Collision in X axis
@@ -78,15 +69,13 @@ function update()
 		{
 			if(this.speed.x < 0)
 			{
-				destPos = this.world.body[i].getGeometry().position.x+this.world.body[i].getGeometry().size.x;
+				destPos = world.body[i].getGeometry().position.x+world.body[i].getGeometry().size.x;
 				this.geometry.position.x=destPos;
-				this.position.x=destPos;
 			}
 			else
 			{
-				destPos = this.world.body[i].getGeometry().position.x - this.world.body[i].getGeometry().size.x;
+				destPos = world.body[i].getGeometry().position.x - world.body[i].getGeometry().size.x;
 				this.geometry.position.x=destPos;
-				this.position.x=destPos;
 			}
 			this.speed.set(0,0,0);
 			this.acceleration.set(0,0,0);
@@ -96,15 +85,13 @@ function update()
 		{
 			if(this.speed.y < 0)
 			{
-				destPos = this.world.body[i].geometry.position.y + this.world.body[i].getGeometry().size.y;
+				destPos = world.body[i].geometry.position.y + world.body[i].getGeometry().size.y;
 				this.geometry.position.y=destPos;
-				this.position.y=destPos;
 			}
 			else
 			{
-				destPos = this.world.body[i].geometry.position.y - this.world.body[i].getGeometry().size.y;
+				destPos = world.body[i].geometry.position.y - world.body[i].getGeometry().size.y;
 				this.geometry.position.y=destPos;
-				this.position.y=destPos;
 			}
 			this.speed.set(0,0,0);
 			this.acceleration.set(0,0,0);
@@ -114,33 +101,34 @@ function update()
 		{	
 			if(this.speed.z < 0)
 			{
-				destPos = this.world.body[i].geometry.position.z + this.world.body[i].getGeometry().size.z;
+				destPos = world.body[i].geometry.position.z + world.body[i].getGeometry().size.z;
 				this.geometry.position.z=destPos;
-				this.position.z=destPos;
 			}
 			else
 			{
-				destPos = this.world.body[i].geometry.position.z - this.world.body[i].getGeometry().size.z;
+				destPos = world.body[i].geometry.position.z - world.body[i].getGeometry().size.z;
 				this.geometry.position.z=destPos;
-				this.position.z=destPos;
 			}
 			this.speed.set(0,0,0);
 			this.acceleration.set(0,0,0);
 		}
 	}
+
+	console.log(world.toString());
+	
+	this.position = this.geometry.position;
+}
+
+//Set static
+function setStatic(value)
+{
+	this.body.is_static = value;
 }
 
 //Get Body Geometry
 function getGeometry()
 {
 	return this.geometry;
-}
-
-//Set body world
-function setWorld(world)
-{
-	this.world = world;
-	this.has_world = true;
 }
 
 //Set if body is collidable
@@ -152,5 +140,5 @@ function setCollidable(collidable)
 //String
 function toString()
 {
-	return "Body (Position: " + this.position.toString() + ")";
+	return "Body (Position:" + this.position.toString() + ", Speed:" + this.speed.toString() + ", Acceleration:"+this.acceleration.toString() +")";
 }

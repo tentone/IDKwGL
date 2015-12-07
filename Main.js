@@ -23,7 +23,6 @@ Main.init = function(canvas)
 
 	//Test Model to load texture
 	scene2 = new Scene();
-
 	world = new World();
 	
 	model = Model.cube();
@@ -32,7 +31,12 @@ Main.init = function(canvas)
 	model.update();
 	scene2.addModel(model);
 
-	world.addBody(new GameObject(new Body(null, new Box(new Vector3(-3,20,8), new Vector3(1,1,1), new Vector3(0.5, 0.5, 0.5))), model));
+	var box =  new Box();
+	box.position = new Vector3(-3,0.5,8);
+	box.size = new Vector3(1,1,1);
+	box.ori = new Vector3(0.5, 0.5, 0.5);
+	var game_object = new GameObject(new Body(box), model);
+	world.addBody(game_object);
 
 	model = Model.cube();
 	model.setTexture(Texture.createTexture("data/texture/crate.bmp"));
@@ -40,9 +44,13 @@ Main.init = function(canvas)
 	model.update();
 	scene2.addModel(model);
 
-	world.addBody(new GameObject(new Body(null, new Box(new Vector3(-3,0.5,8), new Vector3(1,1,1), new Vector3(0.5, 0.5, 0.5))), model));
-
-	console.log(world.toString());
+	var box2 =  new Box();
+	box2.position = new Vector3(-3,0.5,8);
+	box2.size = new Vector3(1,1,1);
+	box2.ori = new Vector3(0.5, 0.5, 0.5);
+	var game_object2 = new GameObject(new Body(box2), model);
+	game_object2.setStatic(true);
+	world.addBody(game_object2);
 
 	model = new Model();
 	model.loadOBJ(orc);
@@ -150,6 +158,8 @@ Main.update = function()
 	spectator.update();
 	particle.update();
 
+	world.update();
+	
 	//Model Move Test
 	var update = false;
 	if(App.keyboard.isKeyPressed(Keyboard.DOWN))
@@ -177,8 +187,6 @@ Main.update = function()
 	{
 		model.update();
 	}
-
-	world.update();
 }
 
 //Draw Stuff

@@ -7,15 +7,15 @@ function GameObject(body, model)
 
 //Function prototypes
 GameObject.prototype.update = update;
-GameObject.prototype.setWorld = setWorld;
 GameObject.prototype.setCollidable = setCollidable;
 GameObject.prototype.getGeometry = getGeometry;
+GameObject.prototype.setStatic = setStatic;
 GameObject.prototype.toString = toString;
 
 //Update game object
-function update()
+function update(world)
 {
-	this.body.update();
+	this.body.update(world);
 	this.model.position.set(this.body.geometry.position.x, this.body.geometry.position.y, this.body.geometry.position.z);
 	this.model.update();
 }
@@ -26,19 +26,19 @@ function getGeometry()
 	return this.body.geometry;
 }
 
-
-function setWorld(world)
+//Set static
+function setStatic(value)
 {
-	this.body.world = world;
-	this.body.has_world = true;
+	this.body.is_static = value;
 }
 
+//Set if it can collide
 function setCollidable(collidable)
 {
 	this.body.collidable = collidable;
 }
 
-//String
+//Created info strings
 function toString()
 {
 	return this.body.toString();

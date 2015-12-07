@@ -1,32 +1,9 @@
-function Box(position, size, ori)
+function Box()
 {
-	if(position === undefined)
-	{
-		this.position = new Vector3(0,0,0);
-	}
-	else
-	{
-		this.position = position;
-	}
+	this.position = new Vector3(0,0,0);
+	this.size = new Vector3(0,0,0);
+	this.ori = new Vector3(0,0,0);
 	
-	if(size === undefined)
-	{
-		this.size = new Vector3(0,0,0);
-	}
-	else
-	{
-		this.size = size;
-	}
-
-	if(ori === undefined)
-	{
-		this.ori = new Vector3(0,0,0);
-	}
-	else
-	{
-		this.ori = ori;
-	}
-
 	this.type = Geometry.BOX;
 }
 
@@ -35,6 +12,7 @@ Box.prototype.isColliding = isColliding;
 Box.prototype.willCollide = willCollide;
 Box.prototype.toString = toString;
 
+//Checks if body is colliding
 function isColliding(obj)
 {
 	if(obj.type == Geometry.BOX)
@@ -49,6 +27,7 @@ function isColliding(obj)
 	return false;
 }
 
+//Check if box will collide after apllying a descolation
 function willCollide(speed, obj)
 {
 	if(obj.type == Geometry.BOX)
@@ -63,11 +42,13 @@ function willCollide(speed, obj)
 	return false;
 }
 
+//Retuns string with box info
 function toString()
 {
-	return "Pos"+this.position.toString()+" Size"+this.size.toString();
+	return "Pos"+this.position.toString()+" Size"+this.size.toString()+" Ori"+this.ori.toString();
 }
 
+//Self test function
 Box.test = function()
 {
 	var a = new Box();
