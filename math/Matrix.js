@@ -218,7 +218,7 @@ function sub(val)
 function toString()
 {
 	string = "["
-	var i=0, j;
+	var i = 0, j;
 
 	while(i < this.size.x)
 	{

@@ -65,18 +65,16 @@
 
 		<script id="shader-vertex-light" type="x-shader/x-vertex">
 			attribute vec3 aVertexPosition;
-			attribute vec3 aVertexNormal;
 			attribute vec2 aTextureCoord;
+			attribute vec3 aVertexNormal;
 
 			uniform mat4 uMVMatrix;
 			uniform mat4 uPMatrix;
 			uniform mat3 uNMatrix;
 
 			uniform vec3 uAmbientColor;
-
 			uniform vec3 uPointLightingLocation;
 			uniform vec3 uPointLightingColor;
-
 			uniform bool uUseLighting;
 
 			varying vec2 vTextureCoord;

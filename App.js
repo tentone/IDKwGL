@@ -36,6 +36,7 @@ include("physics/World.js");
 
 include("object/Spectator.js");
 include("object/Player.js");
+include("object/GameObject.js");
 
 include("data/models/cube.js");
 include("data/models/cessna.js");

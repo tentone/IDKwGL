@@ -10,14 +10,13 @@ function Model()
 	this.materials = [];//Materials
 
 	//Buffers
-	this.normalsBuffer = null;
+	this.normalBuffer = null;
 	this.vertexBuffer = null;
 	this.textureCoordBuffer = null;
 	this.facesBuffer = null;
 
 	//Texture
 	this.texture = Texture.generateSolidColorTexture(Color.RED);
-	this.texture2 = Texture.generateSolidColorTexture(Color.RED);
 
 	//Tranformations Control
 	this.position = new Vector3(0,0,0);
@@ -47,11 +46,22 @@ Model.prototype.transformOBJData = transformOBJData;
 function draw(camera)
 {	
     //Clone Camera Global transformation Matrix and multiply
-    camTransformationMatrix = this.transformationMatrix.clone();
+    var camTransformationMatrix = this.transformationMatrix.clone();
 	camTransformationMatrix.mul(camera.transformationMatrix);
 
 	// Passing the Model View Matrix to apply the current transformation
 	gl.uniformMatrix4fv(gl.getUniformLocation(camera.shader, "uMVMatrix"), false, camTransformationMatrix.flatten());
+	//gl.uniformMatrix3fv(gl.getUniformLocation(camera.shader, "uNMatrix"), false, this.normalsMatrix.flatten());
+
+	//Ligthing Test
+	/*var lighting = false;
+	gl.uniform1i(camera.shader.useLightingUniform, lighting);
+	if(lighting)
+	{
+		gl.uniform3f(camera.shader.ambientColorUniform, 0.2, 0.2, 0.2);
+		gl.uniform3f(camera.shader.pointLightingLocationUniform, 0, 0, 0);
+		gl.uniform3f(camera.shader.pointLightingColorUniform, 0.8, 0.8, 0.8);
+	}*/
 
     //Passing the buffer
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
@@ -61,7 +71,11 @@ function draw(camera)
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
     gl.vertexAttribPointer(camera.shader.textureCoordAttribute, this.textureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
-	//Set texture to model if there is one
+    //Normal Coords
+    //gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
+    //gl.vertexAttribPointer(camera.shader.vertexNormalAttribute, this.normalBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+	//Set texture to model
 	gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, this.texture);
     gl.uniform1i(camera.shader.samplerUniform, 0);
@@ -89,21 +103,21 @@ function updateBuffers()
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertex), gl.STATIC_DRAW);
 	this.vertexBuffer.itemSize = 3;
-	this.vertexBuffer.numItems = this.vertex.length/3;			
+	this.vertexBuffer.numItems = this.vertex.length/3;						
 
 	//Texture
     this.textureCoordBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
  	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.texture_coords), gl.STATIC_DRAW);
     this.textureCoordBuffer.itemSize = 2;
-    this.textureCoordBuffer.numItems = this.texture_coords.length/2;			
+    this.textureCoordBuffer.numItems = this.texture_coords.length/2;
 
     //Normals
-	this.normalsBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, this.normalsBuffer);
+	this.normalBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normals), gl.STATIC_DRAW);
-	this.normalsBuffer.itemSize = 3;
-	this.normalsBuffer.numItems = this.normals.length/3;			
+	this.normalBuffer.itemSize = 3;
+	this.normalBuffer.numItems = this.normals.length/3;			
 
 	//Vertex indices
     this.facesBuffer = gl.createBuffer();
@@ -303,6 +317,7 @@ function transformOBJData()
 	this.vertex = vertex;
 	this.texture_coords = texture;
 	this.normals = normals;
+
 	this.updateBuffers();
 }
 
@@ -486,6 +501,7 @@ Model.cube = function()
 		20, 21, 22,   20, 22, 23  // Left face
 	];
 
+	model.computeVertexNormals();
 	model.updateBuffers();
 
 	return model;

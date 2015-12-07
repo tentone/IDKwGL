@@ -127,18 +127,19 @@ Shader.lightRenderShader = function()
 	sp.shaderProgram.vertexNormalAttribute = gl.getAttribLocation(sp.shaderProgram, "aVertexNormal");
     gl.enableVertexAttribArray(sp.shaderProgram.vertexNormalAttribute);
 
+    //The sampler
+    sp.shaderProgram.samplerUniform = gl.getUniformLocation(sp.shaderProgram, "uSampler");
+
 	//The matrices
     sp.shaderProgram.pMatrixUniform = gl.getUniformLocation(sp.shaderProgram, "uPMatrix");
     sp.shaderProgram.mvMatrixUniform = gl.getUniformLocation(sp.shaderProgram, "uMVMatrix");
     sp.shaderProgram.nMatrixUniform = gl.getUniformLocation(sp.shaderProgram, "uNMatrix");
 
+    //Light atributes
     sp.shaderProgram.useLightingUniform = gl.getUniformLocation(sp.shaderProgram, "uUseLighting");
     sp.shaderProgram.ambientColorUniform = gl.getUniformLocation(sp.shaderProgram, "uAmbientColor");
     sp.shaderProgram.pointLightingLocationUniform = gl.getUniformLocation(sp.shaderProgram, "uPointLightingLocation");
     sp.shaderProgram.pointLightingColorUniform = gl.getUniformLocation(sp.shaderProgram, "uPointLightingColor");
     
-    //The sampler
-    sp.shaderProgram.samplerUniform = gl.getUniformLocation(sp.shaderProgram, "uSampler");
-
 	return sp;
 }

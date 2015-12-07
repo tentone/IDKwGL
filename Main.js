@@ -1,8 +1,10 @@
 //Test Stuff
 var model;
-var scene, scene2, scene3;
+var scene, scene2;
 var spectator;
 var particle;
+
+var world;
 
 //Global Variables
 var shaderColor;
@@ -22,11 +24,25 @@ Main.init = function(canvas)
 	//Test Model to load texture
 	scene2 = new Scene();
 
+	world = new World();
+	
+	model = Model.cube();
+	model.setTexture(Texture.createTexture("data/texture/crate.bmp"));
+	model.position.set(-3,20,8);
+	model.update();
+	scene2.addModel(model);
+
+	world.addBody(new GameObject(new Body(null, new Box(new Vector3(-3,20,8), new Vector3(1,1,1), new Vector3(0.5, 0.5, 0.5))), model));
+
 	model = Model.cube();
 	model.setTexture(Texture.createTexture("data/texture/crate.bmp"));
 	model.position.set(-3,0.5,8);
 	model.update();
 	scene2.addModel(model);
+
+	world.addBody(new GameObject(new Body(null, new Box(new Vector3(-3,0.5,8), new Vector3(1,1,1), new Vector3(0.5, 0.5, 0.5))), model));
+
+	console.log(world.toString());
 
 	model = new Model();
 	model.loadOBJ(orc);
@@ -161,6 +177,8 @@ Main.update = function()
 	{
 		model.update();
 	}
+
+	world.update();
 }
 
 //Draw Stuff

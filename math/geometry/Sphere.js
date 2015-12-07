@@ -7,17 +7,19 @@ function Sphere()
 }
 
 Sphere.prototype.isColliding = isColliding;
+Sphere.prototype.willCollide = willCollide;
 
 function isColliding(obj)
 {
-	if(obj.type == Geometry.BOX)
-	{
-		//TODO <ADD CODE HERE>
-	}
-	else if(obj.type == Geometry.SPHERE)
+	if(obj.type == Geometry.SPHERE)
 	{
 		return MathUtils.pointDistance(this.position, obj.position) > this.radius + obj.radius;
 	}
 
+	return false;
+}
+
+function willCollide(speed, obj)
+{
 	return false;
 }
