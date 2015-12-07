@@ -38,11 +38,12 @@ include("object/Spectator.js");
 include("object/Player.js");
 include("object/GameObject.js");
 
-include("data/models/cube.js");
 include("data/models/cessna.js");
 include("data/models/orc.js");
 include("data/models/baron_nashor.js");
 include("data/models/cleffa.js");
+include("data/models/box.js");
+include("data/models/cardboard_boxes.js");
 
 include("Main.js");
 

@@ -7,7 +7,8 @@ function Model()
 	this.normals = []; //Vertex Normals
 	this.faces = []; //Face <vertex>/<texture>/<normal>
 
-	this.materials = [];//Materials
+	//Materials
+	this.materials = [];
 
 	//Buffers
 	this.normalBuffer = null;
@@ -25,6 +26,9 @@ function Model()
 
 	//Update model buffers
 	this.updateBuffers();
+
+	//Normals Matrix
+	this.normalMatrix = new Matrix(3,3);
 
 	//Tranformation Matrix
 	this.transformationMatrix = new Matrix(4,4);
@@ -51,17 +55,7 @@ function draw(camera)
 
 	// Passing the Model View Matrix to apply the current transformation
 	gl.uniformMatrix4fv(gl.getUniformLocation(camera.shader, "uMVMatrix"), false, camTransformationMatrix.flatten());
-	//gl.uniformMatrix3fv(gl.getUniformLocation(camera.shader, "uNMatrix"), false, this.normalsMatrix.flatten());
-
-	//Ligthing Test
-	/*var lighting = false;
-	gl.uniform1i(camera.shader.useLightingUniform, lighting);
-	if(lighting)
-	{
-		gl.uniform3f(camera.shader.ambientColorUniform, 0.2, 0.2, 0.2);
-		gl.uniform3f(camera.shader.pointLightingLocationUniform, 0, 0, 0);
-		gl.uniform3f(camera.shader.pointLightingColorUniform, 0.8, 0.8, 0.8);
-	}*/
+	//gl.uniformMatrix3fv(gl.getUniformLocation(camera.shader, "uNMatrix"), false, this.normalMatrix.flatten());
 
     //Passing the buffer
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
@@ -136,6 +130,7 @@ function clone()
 	model.texture_coords = this.texture_coords;
 	model.normals = this.normals;
 	model.faces = this.faces;
+	model.materials = this.materials;
 
 	model.textureCoordBuffer = this.textureCoordBuffer;
 	model.normalBuffer = this.normalBuffer;
@@ -318,6 +313,7 @@ function transformOBJData()
 	this.texture_coords = texture;
 	this.normals = normals;
 
+	//Update Buffers
 	this.updateBuffers();
 }
 
@@ -350,7 +346,6 @@ function loadMTL(data)
 			//tokens[1] //Material name
 	    }
 	}
-
 }
 
 //Create string with model info
@@ -395,7 +390,7 @@ function toString()
 function computeVertexNormals()
 {
 	//Clearing the new normals array
-	this.normals = [];
+	this.normals.length = 0;
 	
     //Taking 3 vertices from the coordinates array 
     for(var i = 0; i < this.vertex.length; i += 9)

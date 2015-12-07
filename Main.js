@@ -4,8 +4,6 @@ var scene, scene2;
 var spectator;
 var particle;
 
-var world;
-
 //Global Variables
 var shaderColor;
 var shaderTexture;
@@ -17,57 +15,55 @@ function Main(){}
 Main.init = function(canvas)
 {
 	//Initialize Shaders
-	shaderColor = Shader.colorRenderShader();
 	shaderTexture = Shader.textureRenderShader();
-	//shaderLight = Shader.lightRenderShader();
+	shaderLight = Shader.lightRenderShader();
 
 	//Test Model to load texture
 	scene2 = new Scene();
-	world = new World();
-	
+
 	model = Model.cube();
-	model.setTexture(Texture.createTexture("data/texture/crate.bmp"));
-	model.position.set(-3,20,8);
+	model.setTexture(Texture.createTexture("data/texture/wood_box.png"));
+	model.position.set(0,-2,0);
+	model.scale.set(30,1,30);
 	model.update();
 	scene2.addModel(model);
 
-	var box =  new Box();
-	box.position = new Vector3(-3,0.5,8);
-	box.size = new Vector3(1,1,1);
-	box.ori = new Vector3(0.5, 0.5, 0.5);
-	var game_object = new GameObject(new Body(box), model);
-	world.addBody(game_object);
-
-	model = Model.cube();
-	model.setTexture(Texture.createTexture("data/texture/crate.bmp"));
-	model.position.set(-3,0.5,8);
+	model = new Model();
+	model.loadOBJ(cardboard_boxes);
+	model.setTexture(Texture.createTexture("data/texture/cardboard_boxes.png"));
+	model.position.set(-5,-1,0);
 	model.update();
 	scene2.addModel(model);
 
-	var box2 =  new Box();
-	box2.position = new Vector3(-3,0.5,8);
-	box2.size = new Vector3(1,1,1);
-	box2.ori = new Vector3(0.5, 0.5, 0.5);
-	var game_object2 = new GameObject(new Body(box2), model);
-	game_object2.setStatic(true);
-	world.addBody(game_object2);
+	model = new Model();
+	model.loadOBJ(cardboard_boxes);
+	model.setTexture(Texture.createTexture("data/texture/cardboard_boxes.png"));
+	model.position.set(5,-1,-3);
+	model.update();
+	scene2.addModel(model);
+
+	model = Model.cube();
+	model.setTexture(Texture.createTexture("data/texture/wood_box.png"));
+	model.position.set(7,0,8);
+	model.update();
+	scene2.addModel(model);
+
+	model = Model.cube();
+	model.setTexture(Texture.createTexture("data/texture/wood_box.png"));
+	model.position.set(7,2,8);
+	model.update();
+	scene2.addModel(model);
 
 	model = new Model();
 	model.loadOBJ(orc);
 	model.setTexture(Texture.createTexture("data/texture/orc.bmp"));
-	model.position.set(2,1.5,-6);
+	model.position.set(2,-1,-6);
 	model.update();
 	scene2.addModel(model);
 
 	model = model.clone();
-	model.position.set(-2,-0.5,6);
+	model.position.set(-2,-1,6);
 	model.rotation.set(0,90,0);
-	model.update();
-	scene2.addModel(model);
-
-	model = Model.cube();
-	model.setTexture(Texture.createTexture("data/texture/crate_metal.jpg"));
-	model.position.set(2,0.5,-6);
 	model.update();
 	scene2.addModel(model);
 
@@ -83,70 +79,16 @@ Main.init = function(canvas)
 	model = new Model();
 	model.loadOBJ(baron_nashor);
 	model.setTexture(Texture.createTexture("data/texture/baron_nashor.bmp"));
-	model.position.set(-8,0,0);
+	model.position.set(-8,-0.7,0);
 	model.scale.set(0.03,0.03,0.03);
 	model.update();
 	scene2.addModel(model);
 
 	model = model.clone();
 	model.setTexture(Texture.createTexture("data/texture/baron_nashor_green.bmp"));
-	model.position.set(-13,0,0);
+	model.position.set(-15,-0.7,0);
 	model.update();
 	scene2.addModel(model);
-
-	//Create Scene
-	scene = new Scene();
-
-	//Create Test Elements
-	model = new ModelColor();
-	model.loadOBJ(cube);
-	model.position.set(0,0,0);
-	model.update();
-	scene.addModel(model);
-
-	model = new ModelColor();
-	model.loadOBJ(cube);
-	model.position.set(0,1,0);
-	model.update();
-	scene.addModel(model);
-
-	model = new ModelColor();
-	model.loadOBJ(cube);
-	model.position.set(0,2,0);
-	model.update();
-	scene.addModel(model);
-
-	model = new ModelColor();
-	model.loadOBJ(cube);
-	model.position.set(2,0,2);
-	model.update();
-	scene.addModel(model);
-
-	model = new ModelColor();
-	model.loadOBJ(cube);
-	model.position.set(-3,0,5);
-	model.update();
-	scene.addModel(model);
-
-	model = new ModelColor();
-	model.loadOBJ(cube);
-	model.position.set(0,0,-5);
-	model.update();
-	scene.addModel(model);
-
-	model = new ModelColor();
-	model.loadOBJ(cube);
-	model.position.set(0,-1,0);
-	model.scale.set(40,1,40);
-	model.update();
-	scene.addModel(model);
-
-	model = new ModelColor();
-	model.loadOBJ(cessna);
-	model.position.set(0,5,0);
-	model.scale.set(0.3,0.3,0.3);
-	model.update();
-	scene.addModel(model);
 
 	spectator = new Spectator(canvas);
 }
@@ -157,8 +99,6 @@ Main.update = function()
 	//Update Player Camera Position
 	spectator.update();
 	particle.update();
-
-	world.update();
 	
 	//Model Move Test
 	var update = false;
@@ -193,16 +133,16 @@ Main.update = function()
 Main.draw = function()
 {
     //Clearing the frame-buffer and the depth-buffer
-    gl.clearColor(0, 0, 0, 1);
+    gl.clearColor(0.2, 0.2, 0.2, 1);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     //Draw Stuff to Spectator Camera
 	spectator.camera.startFrame();
 
-	spectator.camera.useShader(shaderColor);
-	scene.draw(spectator.camera);
+	//spectator.camera.useShader(shaderColor);
+	//scene.draw(spectator.camera);
 
-	spectator.camera.useShader(shaderTexture);
+	spectator.camera.useShader(shaderLight);
 	scene2.draw(spectator.camera);
 	particle.draw(spectator.camera);
 }

@@ -32,7 +32,7 @@ function update()
 		this.particles[i].update();
 		if(this.particles[i].time < 0)
 		{
-			speed = new Vector3(this.speed.x + this.speed_var.x*MathUtils.randomMod(), this.speed.y + this.speed_var.y*MathUtils.randomMod(), this.speed.z + this.speed_var.z*MathUtils.randomMod());
+			var speed = new Vector3(this.speed.x + this.speed_var.x*MathUtils.randomMod(), this.speed.y + this.speed_var.y*MathUtils.randomMod(), this.speed.z + this.speed_var.z*MathUtils.randomMod());
 			this.particles[i] = new Particle(this.model.clone(), new Vector3(0,0,0), speed, this.scale + this.scale_var*MathUtils.randomMod(), this.time + this.time_var*MathUtils.randomMod());
 		}
 	}
