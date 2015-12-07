@@ -1,6 +1,6 @@
 function Body()
 {	
-	this.geometry = geometry;
+	this.geometry = null;
 	this.canColide = false;
 
 	this.position = new Vector3(0,0,0);

@@ -34,15 +34,15 @@ Texture.generateSolidColorTexture = function(color)
 }
 
 //Create a texture from array (elements by line)
-Texture.crateFromDataArray = function(size, color_list)
+Texture.createFromDataArray = function(size, color_list)
 {
 	color_array = [] 
 	for(var i = 0; i < color_list.length; i++)
 	{
-		color_array.push(color_list[i].r * 255)
-		color_array.push(color_list[i].g * 255)
-		color_array.push(color_list[i].b * 255)
-		color_array.push(255)
+		color_array.push(color_list[i].r * 255);
+		color_array.push(color_list[i].g * 255);
+		color_array.push(color_list[i].b * 255);
+		color_array.push(255);
 	}
 
 	var texture = gl.createTexture();

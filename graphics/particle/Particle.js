@@ -1,11 +1,11 @@
 function Particle(model, position, speed, scale, time)
 {
-	this.model = model;
 	this.position = position;
 	this.speed = speed;
 	this.scale = scale;
 	this.time = time;
 
+	this.model = model;
 	this.model.position.set(this.position.x, this.position.y, this.position.z);
 	this.model.scale.mulConst(this.scale);
 	this.model.update();

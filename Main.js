@@ -2,6 +2,7 @@
 var model;
 var scene, scene2;
 var spectator;
+var particle;
 
 //Global Variables
 var shaderColor;
@@ -27,7 +28,6 @@ Main.init = function(canvas)
 
 	model = new Model();
 	model.loadOBJ(orc);
-	model.transformOBJData()
 	model.setTexture(Texture.createTexture("data/texture/orc.bmp"));
 	model.position.set(2,1.5,-6);
 	model.update();
@@ -39,15 +39,6 @@ Main.init = function(canvas)
 	model.update();
 	scene2.addModel(model);
 
-	model = new Model();
-	model.loadOBJ(sonic);
-	model.transformOBJData()
-	model.setTexture(Texture.createTexture("data/texture/sonic_body.bmp"));
-	model.position.set(4,0,6);
-	model.scale.set(0.02,0.02,0.02)
-	model.update();
-	scene2.addModel(model);
-
 	model = Model.cube();
 	model.setTexture(Texture.createTexture("data/texture/crate_metal.jpg"));
 	model.position.set(2,0.5,-6);
@@ -56,18 +47,26 @@ Main.init = function(canvas)
 
 	model = new Model();
 	model.loadOBJ(baron_nashor);
-	model.transformOBJData()
 	model.setTexture(Texture.createTexture("data/texture/baron_nashor.bmp"));
 	model.position.set(-8,0,0);
 	model.scale.set(0.03,0.03,0.03);
 	model.update();
 	scene2.addModel(model);
 
-	/*model = model.clone();
+	model = model.clone();
 	model.setTexture(Texture.createTexture("data/texture/baron_nashor_green.bmp"));
 	model.position.set(-13,0,0);
 	model.update();
-	scene2.addModel(model);*/
+	scene2.addModel(model);
+
+	model = new Model();
+	model.loadOBJ(cleffa);
+	model.setTexture(Texture.createTexture("data/texture/cleffa.png"));
+	model.scale.set(0.005,0.005,0.005);
+	model.update();
+	scene2.addModel(model);
+
+	particle = new ParticleEmitter(model, new Vector3(0,0,0), new Vector3(0,0,0), new Vector3(0.5,0.5,0.5), 1.0, 0.5, 300, 100, 100);
 
 	//Create Scene
 	scene = new Scene();
@@ -131,6 +130,7 @@ Main.update = function()
 {
 	//Update Player Camera Position
 	spectator.update();
+	particle.update();
 
 	//Model Move Test
 	var update = false;
@@ -166,11 +166,7 @@ Main.draw = function()
 {
     //Clearing the frame-buffer and the depth-buffer
     gl.clearColor(0, 0, 0, 1);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-
-    //gl.enable(gl.BLEND);
-	//gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
-	//gl.disable(gl.BLEND);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     //Draw Stuff to Spectator Camera
 	spectator.camera.startFrame();
@@ -180,6 +176,7 @@ Main.draw = function()
 
 	spectator.camera.useShader(shaderTexture);
 	scene2.draw(spectator.camera);
+	particle.draw(spectator.camera);
 }
 
 //Resize Stuff

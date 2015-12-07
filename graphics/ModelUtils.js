@@ -3,7 +3,7 @@ function ModelUtils(){}
 //Moving vertices to the spherical surface of radius 1
 ModelUtils.moveToSphericalSurface = function(coords)
 {
-    for(i = 0; i < coords.length; i += 3)
+    for(var i = 0; i < coords.length; i += 3)
     {
         var v = new Vector3(coords[i], coords[i+1], coords[i+2]);
         v.normalize();
@@ -28,7 +28,7 @@ ModelUtils.midPointRefinement = function(model, recursionDepth)
     model.computeVertexNormals();
 
     //Each triangle is recursively subdivided into 4 triangles, Iterate through the original triangular faces
-    for(i = 0; i < origCoords.length; i += 9)
+    for(var i = 0; i < origCoords.length; i += 9)
     {
         // Call the recursive subdivision function
         ModelUtils.recSubdivisionMidPoint(new Vector3(origCoords[i],origCoords[i+1],origCoords[i+2]),

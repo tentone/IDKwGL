@@ -5,7 +5,7 @@ function Model()
 	this.vertex = []; //Vertex
 	this.texture_coords = []; //Vertex Texture
 	this.normals = []; //Vertex Normals
-	this.faces = []; //Face <vertex>/<texture>/<normal> 3
+	this.faces = []; //Face <vertex>/<texture>/<normal>
 
 	//Buffers
 	this.normalBuffer = null;
@@ -15,6 +15,7 @@ function Model()
 
 	//Texture
 	this.texture = Texture.generateSolidColorTexture(Color.RED);
+	this.texture2 = Texture.generateSolidColorTexture(Color.RED);
 
 	//Tranformations Control
 	this.position = new Vector3(0,0,0);
@@ -167,7 +168,7 @@ function loadOBJ(data)
 			this.texture_coords.push(parseFloat(tokens[1]));
 	    	this.texture_coords.push(parseFloat(tokens[2]));
 		}
-		else if(tokens[0] == "f") //Faces <vertex>/[texture]/<normal>
+		else if(tokens[0] == "f") //Faces <vertex>/<texture>/<normal>
 		{
 			//3 vertex face
  			//f 16/92/11 14/101/22 1/69/1
@@ -257,16 +258,21 @@ function loadOBJ(data)
 	{
 		this.computeVertexNormals();
 	}
+
+	//Covert collected data
+	this.transformOBJData();
 }
 
 //Tranform OBJ file to single hash level as used in classes
 function transformOBJData()
 {
+	//Create temporary arrays to store all model data
 	vertex = [];
 	texture = [];
 	normals = [];
 	faces = [];
 	
+	//Transform Data
 	for(var i = 0; i < this.faces.length; i += 3)
 	{
 		faces.push(i/3);
@@ -283,6 +289,7 @@ function transformOBJData()
 		normals.push(this.normals[(this.faces[i+2]-1)*3+2]);
 	}
 
+	//Copy array pointer into main data and update bufffers
 	this.faces = faces;
 	this.vertex = vertex;
 	this.texture_coords = texture;
@@ -456,6 +463,7 @@ Model.cube = function()
 	];
 
 	model.updateBuffers();
+
 	return model;
 }
 

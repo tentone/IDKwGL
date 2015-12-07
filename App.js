@@ -42,6 +42,7 @@ include("data/models/cessna.js");
 include("data/models/orc.js");
 include("data/models/sonic.js");
 include("data/models/baron_nashor.js");
+include("data/models/cleffa.js");
 
 include("Main.js");
 
