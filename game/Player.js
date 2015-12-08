@@ -27,47 +27,43 @@ Player.prototype.getId = getId;
 function update(world)
 {
 	var angle = Conversion.degreesToRadians(this.rotation.x);
-	var speed_walk = 0.025;
-	var speed_jump = 0.1;
 
+	var speed_walk = 0.5;
+	var speed_jump = 1;
+
+	//Keyboard input
 	if(App.keyboard.isKeyPressed(Keyboard.SHIFT))
 	{
-		speed_walk = 0.04;
+		speed_walk = 0.6;
 	}
 
-	//Camera Rotate Test
 	if(App.keyboard.isKeyPressed(Keyboard.W))
 	{
-		this.body.acceleration.z += speed_walk * Math.cos(angle);
-		this.body.acceleration.x += speed_walk * Math.sin(angle);
+		this.body.speed.z += speed_walk * Math.cos(angle);
+		this.body.speed.x += speed_walk * Math.sin(angle);
 	}
 	if(App.keyboard.isKeyPressed(Keyboard.S))
 	{
-		this.body.acceleration.z -= speed_walk * Math.cos(angle);
-		this.body.acceleration.x -= speed_walk * Math.sin(angle);
+		this.body.speed.z -= speed_walk * Math.cos(angle);
+		this.body.speed.x -= speed_walk * Math.sin(angle);
 	}
  
 	angle += MathUtils.PID2;
 	if(App.keyboard.isKeyPressed(Keyboard.A))
 	{
-		this.body.acceleration.z -= speed_walk * Math.cos(angle);
-		this.body.acceleration.x -= speed_walk * Math.sin(angle);
+		this.body.speed.z -= speed_walk * Math.cos(angle);
+		this.body.speed.x -= speed_walk * Math.sin(angle);
 	}
 	if(App.keyboard.isKeyPressed(Keyboard.D))
 	{
-		this.body.acceleration.z += speed_walk * Math.cos(angle);
-		this.body.acceleration.x += speed_walk * Math.sin(angle);
+		this.body.speed.z += speed_walk * Math.cos(angle);
+		this.body.speed.x += speed_walk * Math.sin(angle);
 	}
 
 	//Camera Move UP/DOWN
-	if(App.keyboard.isKeyPressed(Keyboard.SPACEBAR))
+	if(this.body.is_colliding.y == 1 && App.keyboard.isKeyJustPressed(Keyboard.SPACEBAR))
 	{
 		this.body.acceleration.y += speed_jump;
-	}
-
-	if(App.keyboard.isKeyPressed(Keyboard.C))
-	{
-		this.body.acceleration.y -= speed_jump;
 	}
 
 	//Camera Mouse Movement

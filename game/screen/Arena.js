@@ -30,8 +30,8 @@ function Arena()
 	//Floor
 	this.model = Model.cube();
 	this.model.setTexture(Texture.createTexture("data/texture/grass.jpg"));
-	this.model.position.set(0, 0, 0);
-	this.model.scale.set(200, 1, 200);
+	this.model.position.set(0, -30, 0);
+	this.model.scale.set(200, 30, 200);
 	this.model.update();
 	this.scene.addModel(this.model);
 	this.world.addBody(new GameObject(this.model));

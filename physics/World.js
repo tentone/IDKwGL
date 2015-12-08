@@ -2,14 +2,15 @@ function World(acceleration)
 {
 	if(acceleration === undefined)
 	{
-		this.acceleration = new Vector3(0, 0, 0);
+		this.acceleration = new Vector3(0, -9.8, 0);
 	}
 	else
 	{
 		this.acceleration = acceleration;
 	}
 
-	this.friction = new Vector3(0.8, 0.8, 0.8);
+	this.friction = new Vector3(0.75, 0.75, 0.75);
+	this.friction_air = new Vector3(0.85, 0.85, 0.85);
 	this.body = [];
 
 	this.acceleration.mulConst(World.DELTA);

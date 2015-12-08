@@ -19,9 +19,7 @@ function isColliding(obj)
 	{
 		var t = new Vector3(this.position.x-this.ori.x, this.position.y-this.ori.y, this.position.z-this.ori.z);
 		var o = new Vector3(obj.position.x-obj.ori.x, obj.position.y-obj.ori.y, obj.position.z-obj.ori.z);
-		return (t.y<(o.y+obj.size.y)) && ((t.y+this.size.y)>o.y)
-			&& (t.x<(o.x+obj.size.x)) && ((t.x+this.size.x)>o.x)
-			&& (t.z<(o.z+obj.size.z)) && ((t.z+this.size.z)>o.z);
+		return (t.y<(o.y+obj.size.y)) && ((t.y+this.size.y)>o.y) && (t.x<(o.x+obj.size.x)) && ((t.x+this.size.x)>o.x) && (t.z<(o.z+obj.size.z)) && ((t.z+this.size.z)>o.z);
 	}
 
 	return false;
@@ -34,9 +32,7 @@ function willCollide(speed, obj)
 	{
 		var t = new Vector3(this.position.x + speed.x -this.ori.x, this.position.y + speed.y -this.ori.y, this.position.z + speed.z -this.ori.z);
 		var o = new Vector3(obj.position.x-obj.ori.x, obj.position.y-obj.ori.y, obj.position.z-obj.ori.z);
-		return (t.y<(o.y+obj.size.y)) && ((t.y+this.size.y)>o.y)
-			&& (t.x<(o.x+obj.size.x)) && ((t.x+this.size.x)>o.x)
-			&& (t.z<(o.z+obj.size.z)) && ((t.z+this.size.z)>o.z);
+		return (t.y<(o.y+obj.size.y)) && ((t.y+this.size.y)>o.y) && (t.x<(o.x+obj.size.x)) && ((t.x+this.size.x)>o.x) && (t.z<(o.z+obj.size.z)) && ((t.z+this.size.z)>o.z);
 	}
 
 	return false;
@@ -45,7 +41,7 @@ function willCollide(speed, obj)
 //Retuns string with box info
 function toString()
 {
-	return "Pos"+this.position.toString()+" Size"+this.size.toString()+" Ori"+this.ori.toString();
+	return "Box (Pos:"+this.position.toString()+" Size:"+this.size.toString()+" Ori:"+this.ori.toString()+")";
 }
 
 //Self test function
