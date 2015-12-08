@@ -33,9 +33,12 @@ include("graphics/ModelUtils.js");
 include("physics/Body.js");
 include("physics/World.js");
 
-include("object/Spectator.js");
-include("object/Player.js");
-include("object/GameObject.js");
+include("game/Spectator.js");
+include("game/Player.js");
+include("game/GameObject.js");
+
+include("game/screen/Arena.js");
+include("game/screen/ArenaTest.js");
 
 include("data/models/cessna.js");
 include("data/models/orc.js");

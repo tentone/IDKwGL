@@ -9,6 +9,7 @@ function Sphere()
 
 Sphere.prototype.isColliding = isColliding;
 Sphere.prototype.willCollide = willCollide;
+Sphere.prototype.toString = toString;
 
 function isColliding(obj)
 {
@@ -23,4 +24,10 @@ function isColliding(obj)
 function willCollide(speed, obj)
 {
 	return false;
+}
+
+//Retuns string with sphere info
+function toString()
+{
+	return "Pos"+this.position.toString()+" Radius"+this.radius+" Ori"+this.ori.toString();
 }

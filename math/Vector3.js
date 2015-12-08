@@ -15,6 +15,7 @@ Vector3.prototype.set = set;
 Vector3.prototype.clone = clone;
 Vector3.prototype.normalize = normalize;
 Vector3.prototype.mulConst = mulConst;
+Vector3.prototype.roundCloseToZero = roundCloseToZero;
 
 //Change all values at once
 function set(x, y, z)
@@ -93,6 +94,7 @@ function mul(val)
 	}
 }
 
+//Mult by const
 function mulConst(val)
 {
 	this.x *= val;
@@ -100,7 +102,25 @@ function mulConst(val)
 	this.z *= val;
 }
 
+//String info
 function toString()
 {
 	return "("+this.x+", "+this.y+", "+this.z+")";
+}
+
+//Round all values close to zero to zero
+function roundCloseToZero()
+{
+	if(MathUtils.inRange(this.x, 0, 0.000001))
+	{
+		this.x = 0;
+	}
+	if(MathUtils.inRange(this.y, 0, 0.000001))
+	{
+		this.y = 0;
+	}
+	if(MathUtils.inRange(this.z, 0, 0.000001))
+	{
+		this.z = 0;
+	}
 }

@@ -18,6 +18,7 @@ function Model()
 
 	//Texture
 	this.texture = Texture.generateSolidColorTexture(Color.RED);
+	this.texture_alt = Texture.generateSolidColorTexture(Color.GREEN);
 
 	//Tranformations Control
 	this.position = new Vector3(0,0,0);
@@ -42,6 +43,7 @@ Model.prototype.loadMTL = loadMTL;
 Model.prototype.toString = toString;
 Model.prototype.computeVertexNormals = computeVertexNormals;
 Model.prototype.transformOBJData = transformOBJData;
+Model.prototype.getBox = getBox;
 
 //Draw Model to camera
 function draw(camera)
@@ -415,6 +417,54 @@ function computeVertexNormals()
 		this.normals.push(normalVector.y);
 		this.normals.push(normalVector.z);
 	}
+}
+
+//Create Box (geometry) from vertex data
+function getBox()
+{
+	var min = new Vector3(this.vertex[0], this.vertex[1], this.vertex[2]);
+	var max = new Vector3(this.vertex[0], this.vertex[1], this.vertex[2]);
+	var buf = new Vector3(0,0,0);
+
+	for(var i = 3; i < this.vertex.length; i += 3)
+	{
+		buf.set(this.vertex[i], this.vertex[i+1], this.vertex[i+2]);
+
+		if(buf.x < min.x)
+			min.x = buf.x;
+		else if(buf.x > max.x)
+			max.x = buf.x;
+	
+		if(buf.y < min.y)
+			min.y = buf.y;
+		else if(buf.y > max.y)
+			max.y = buf.y;
+		
+		if(buf.z < min.z)
+			min.z = buf.z;
+		else if(buf.z > max.z)
+			max.z = buf.z; 
+	}
+
+	//Set min and max to scale
+	min.mul(this.scale);
+	max.mul(this.scale);
+
+	//Create box
+	var box = new Box();
+
+	//Calculate Box Size
+	box.size.set(max.x, max.y, max.z);
+	box.size.sub(min);
+
+	//Set position
+	box.position.set(this.position.x, this.position.y, this.position.z);
+	
+	//Ori zero
+	box.ori.set(0,0,0);
+	box.ori.sub(min);
+	
+	return box;
 }
 
 //Test Function that creates a cube with texture and retuns it

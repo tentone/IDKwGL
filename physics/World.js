@@ -2,14 +2,14 @@ function World(acceleration)
 {
 	if(acceleration === undefined)
 	{
-		this.acceleration = new Vector3(0, -9.81, 0);
+		this.acceleration = new Vector3(0, -9.8, 0);
 	}
 	else
 	{
 		this.acceleration = acceleration;
 	}
 
-	this.friction = new Vector3(0.55, 0.55, 0.55);
+	this.friction = new Vector3(0.75, 0.75, 0.75);
 	this.body = [];
 
 	this.acceleration.mulConst(World.DELTA);
@@ -34,6 +34,7 @@ function update()
 //Add body to world
 function addBody(body)
 {
+	body.setId(this.body.length);
 	this.body.push(body);
 }
 

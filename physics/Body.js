@@ -1,7 +1,7 @@
 function Body(geometry)
 {
 	//Random ID to identify body
-	this.id=Math.random()*10000+Math.random()*10;
+	this.id = -1;
 	this.geometry = geometry;
 
 	this.collidable = true;
@@ -18,6 +18,20 @@ Body.prototype.setCollidable = setCollidable;
 Body.prototype.getGeometry = getGeometry;
 Body.prototype.setStatic = setStatic;
 Body.prototype.toString = toString;
+Body.prototype.setId = setId;
+Body.prototype.getId = getId;
+
+//Set ID
+function setId(value)
+{
+	this.id = value;
+}
+
+//Get ID
+function getId()
+{
+	return this.id;
+}
 
 //Updates body status 
 function update(world)
@@ -29,93 +43,96 @@ function update(world)
 
 	if(!this.is_static)
 	{
-		var willCollide = -1;
+		var willCollide = 0;
 
 		this.speed.add(world.acceleration);
 		this.speed.add(this.acceleration);
 
+		//Mult by friction
 		this.speed.mul(world.friction);
+		this.speed.roundCloseToZero();
+		
 		this.acceleration.mul(world.friction);
+		this.acceleration.roundCloseToZero();
 
 		for(var i = 0; i < world.body.length; i++)
 		{
-			if(this.id != world.body[i].id)
+			if(this.getId() != world.body[i].getId())
 			{
-				if(this.geometry.willCollide(new Vector3(this.speed.x,0,0),world.body[i].getGeometry()))
+				if(this.geometry.willCollide(new Vector3(this.speed.x,0,0), world.body[i].getGeometry()))
 				{
-					willCollide = 0;
+					willCollide += 1;
+					//console.log(this.getGeometry().toString() + "Will collide with " + world.body[i].getGeometry().toString());
 					break;
 				}
-				else if(this.geometry.willCollide(new Vector3(0,this.speed.y,0),world.body[i].getGeometry()))
+
+				if(this.geometry.willCollide(new Vector3(0,this.speed.y,0), world.body[i].getGeometry()))
 				{
-					willCollide = 1;
+					willCollide += 2;
+					//console.log(this.getGeometry().toString() + "Will collide with " + world.body[i].getGeometry().toString());
 					break;
 				}
-				else if(this.geometry.willCollide(new Vector3(0,0,this.speed.z),world.body[i].getGeometry()))
+
+				if(this.geometry.willCollide(new Vector3(0,0,this.speed.z), world.body[i].getGeometry()))
 				{
-					willCollide = 2;
+					willCollide += 4;
+					//console.log(this.getGeometry().toString() + "Will collide with " + world.body[i].getGeometry().toString());
 					break;
 				}
 			}
 		}
 
 		//No collision
-		if(willCollide == -1)
-		{	
-			this.geometry.position.add(this.speed);
-		}
-		//Collision in X axis
-		else if(willCollide == 0)
+		if(willCollide != 0)
 		{
-			if(this.speed.x < 0)
+			//Collision on X axis
+			if((willCollide & 1) == 1)
 			{
-				destPos = world.body[i].getGeometry().position.x+world.body[i].getGeometry().size.x;
-				this.geometry.position.x=destPos;
+				if(this.speed.x < 0)
+				{
+					this.geometry.position.x = world.body[i].getGeometry().position.x - world.body[i].getGeometry().ori.x + world.body[i].getGeometry().size.x;
+				}
+				else
+				{
+					this.geometry.position.x = world.body[i].getGeometry().position.x - world.body[i].getGeometry().ori.x - this.geometry.size.x;
+				}
+				this.speed.x = 0;
+				this.acceleration.x = 0;
 			}
-			else
+
+			//Collision on Y axis
+			if((willCollide & 2) == 2)
 			{
-				destPos = world.body[i].getGeometry().position.x - world.body[i].getGeometry().size.x;
-				this.geometry.position.x=destPos;
+				if(this.speed.y < 0)
+				{
+					this.geometry.position.y = world.body[i].getGeometry().position.y - world.body[i].getGeometry().ori.y + world.body[i].getGeometry().size.y;
+				}
+				else
+				{
+					this.geometry.position.y = world.body[i].getGeometry().position.y - world.body[i].getGeometry().ori.y - this.geometry.size.y;
+				}
+				this.speed.y = 0;
+				this.acceleration.y = 0;
 			}
-			this.speed.set(0,0,0);
-			this.acceleration.set(0,0,0);
-		}
-		//Collision in Y axis
-		else if(willCollide == 1)
-		{
-			if(this.speed.y < 0)
-			{
-				destPos = world.body[i].geometry.position.y + world.body[i].getGeometry().size.y;
-				this.geometry.position.y=destPos;
+
+			//Collision on Z axis
+			if((willCollide & 4) == 4)
+			{	
+				if(this.speed.z < 0)
+				{
+					this.geometry.position.z = world.body[i].getGeometry().position.z - world.body[i].getGeometry().ori.z + world.body[i].getGeometry().size.z;
+				}
+				else
+				{
+					this.geometry.position.z = world.body[i].getGeometry().position.z - world.body[i].getGeometry().ori.z - this.geometry.size.z;
+				}
+				this.speed.z = 0;
+				this.acceleration.z = 0;
 			}
-			else
-			{
-				destPos = world.body[i].geometry.position.y - world.body[i].getGeometry().size.y;
-				this.geometry.position.y=destPos;
-			}
-			this.speed.set(0,0,0);
-			this.acceleration.set(0,0,0);
-		}
-		//Collision in Z axis
-		else
-		{	
-			if(this.speed.z < 0)
-			{
-				destPos = world.body[i].geometry.position.z + world.body[i].getGeometry().size.z;
-				this.geometry.position.z=destPos;
-			}
-			else
-			{
-				destPos = world.body[i].geometry.position.z - world.body[i].getGeometry().size.z;
-				this.geometry.position.z=destPos;
-			}
-			this.speed.set(0,0,0);
-			this.acceleration.set(0,0,0);
 		}
 	}
 
-	console.log(world.toString());
-	
+	this.geometry.position.add(this.speed);
 	this.position = this.geometry.position;
 }
 
