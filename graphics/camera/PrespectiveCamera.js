@@ -64,7 +64,7 @@ function resize(x, y)
 //Calculate Camera Projection Matrix
 function updateProjectionMatrix()
 {
-    this.projectionMatrix = PrespectiveCamera.perspectiveProjectionMatrix(this.fov, this.aspect_ratio, 0.1, 500);
+    this.projectionMatrix = PrespectiveCamera.perspectiveProjectionMatrix(this.fov, this.aspect_ratio, 0.1, 3000);
 }
 
 //Create Info String

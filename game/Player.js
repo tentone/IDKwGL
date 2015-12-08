@@ -6,7 +6,7 @@ function Player(canvas)
 	
 	//Player Body
 	this.box = new Box();
-	this.box.size.set(2,4,2);
+	this.box.size.set(4,6,4);
 	this.box.position.set(0,8,0);
 
 	this.body = new Body(this.box);
@@ -34,7 +34,7 @@ function update(world)
 	//Keyboard input
 	if(App.keyboard.isKeyPressed(Keyboard.SHIFT))
 	{
-		speed_walk = 0.6;
+		speed_walk = 0.8;
 	}
 
 	if(App.keyboard.isKeyPressed(Keyboard.W))
@@ -47,7 +47,7 @@ function update(world)
 		this.body.speed.z -= speed_walk * Math.cos(angle);
 		this.body.speed.x -= speed_walk * Math.sin(angle);
 	}
- 
+
 	angle += MathUtils.PID2;
 	if(App.keyboard.isKeyPressed(Keyboard.A))
 	{

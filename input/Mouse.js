@@ -26,6 +26,7 @@ Mouse.SENSITIVITY = 0.2;
 
 //Functions Prototype
 Mouse.prototype.buttonPressed = buttonPressed;
+Mouse.prototype.buttonJustPressed = buttonJustPressed;
 Mouse.prototype.updatePosition = updatePosition;
 Mouse.prototype.updateKey = updateKey;
 Mouse.prototype.toString = toString;
@@ -35,6 +36,12 @@ Mouse.prototype.update = update;
 function buttonPressed(button)
 {
 	return this.keys[button].isPressed;
+}
+
+//Check if a mouse button was just pressed
+function buttonJustPressed(button)
+{
+	return this.keys[button].justPressed;
 }
 
 //Update Mouse Position

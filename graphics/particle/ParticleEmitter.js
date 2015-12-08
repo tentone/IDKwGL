@@ -15,7 +15,7 @@ function ParticleEmitter(model, position, speed, speed_var, scale, scale_var, ti
 	for(var i = 0; i < particle_count; i++)
 	{
 		speed = new Vector3(this.speed.x + this.speed_var.x*MathUtils.randomMod(), this.speed.y + this.speed_var.y*MathUtils.randomMod(), this.speed.z + this.speed_var.z*MathUtils.randomMod());
-		this.particles.push(new Particle(model.clone(), this.position, speed, this.scale + this.scale_var*MathUtils.randomMod(), this.time + this.time_var*MathUtils.randomMod()));
+		this.particles.push(new Particle(model.clone(), this.position.clone(), speed, this.scale + this.scale_var*MathUtils.randomMod(), this.time + this.time_var*MathUtils.randomMod()));
 	}
 }
 
@@ -33,7 +33,7 @@ function update()
 		if(this.particles[i].time < 0)
 		{
 			var speed = new Vector3(this.speed.x + this.speed_var.x*MathUtils.randomMod(), this.speed.y + this.speed_var.y*MathUtils.randomMod(), this.speed.z + this.speed_var.z*MathUtils.randomMod());
-			this.particles[i] = new Particle(this.model.clone(), new Vector3(0,0,0), speed, this.scale + this.scale_var*MathUtils.randomMod(), this.time + this.time_var*MathUtils.randomMod());
+			this.particles[i] = new Particle(this.model.clone(), this.position.clone(), speed, this.scale + this.scale_var*MathUtils.randomMod(), this.time + this.time_var*MathUtils.randomMod());
 		}
 	}
 }

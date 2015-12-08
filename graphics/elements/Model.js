@@ -52,6 +52,7 @@ Model.prototype.toString = toString;
 Model.prototype.computeVertexNormals = computeVertexNormals;
 Model.prototype.transformOBJData = transformOBJData;
 Model.prototype.getBox = getBox;
+Model.prototype.mulTextureCoords = mulTextureCoords;
 
 //Draw Model to camera
 function draw(camera, light)
@@ -519,6 +520,17 @@ function toString()
 	return s;
 }
 
+//Mult values by texture coords
+function mulTextureCoords(x, y)
+{
+	for(var i = 0; i < this.texture_coords.length; i += 2)
+	{
+		this.texture_coords[i] *= x;
+		this.texture_coords[i+1] *= y;
+	}
+	this.updateBuffers();
+}
+
 //Computing the triangle unit normal vector to vertex 
 function computeVertexNormals()
 {
@@ -586,7 +598,7 @@ function getBox()
 		this.box.size.sub(min);
 
 		//Set position
-		this.box.position.set(this.position.x, this.position.y, this.position.z);
+		this.box.position.set(-this.position.x, this.position.y, this.position.z);
 		
 		//Ori zero
 		this.box.ori.set(0,0,0);

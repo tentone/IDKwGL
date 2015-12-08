@@ -41,15 +41,17 @@ include("game/screen/Arena.js");
 include("game/screen/ArenaTest.js");
 include("game/screen/ArenaTest2.js");
 
-include("data/models/cessna.js");
 include("data/models/orc.js");
 include("data/models/baron_nashor.js");
-include("data/models/cleffa.js");
-include("data/models/box.js");
 include("data/models/cardboard_boxes.js");
 include("data/models/pulse_rifle.js");
-include("data/models/candle.js");
 include("data/models/house.js");
+include("data/models/tank.js");
+include("data/models/wine_cask.js");
+include("data/models/bus.js");
+include("data/models/skybox.js");
+include("data/models/ua.js");
+include("data/models/target.js");
 
 include("Main.js");
 

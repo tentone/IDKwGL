@@ -48,6 +48,7 @@ function toString()
 Color.WHITE = new Color(1.0, 1.0, 1.0);
 Color.BLACK = new Color(0, 0, 0);
 Color.RED = new Color(1.0, 0, 0);
+Color.YELLOW = new Color(1.0, 1.0, 0);
 Color.BLUE = new Color(0, 0, 1.0);
 Color.GREEN = new Color(0, 1.0, 0);
 Color.PURPLE = new Color(1.0, 0.0, 1.0);
