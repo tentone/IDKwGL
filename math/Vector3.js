@@ -10,6 +10,7 @@ Vector3.prototype.toString = toString;
 Vector3.prototype.add = add;
 Vector3.prototype.sub = sub;
 Vector3.prototype.mul = mul;
+Vector3.prototype.div = div;
 Vector3.prototype.equals = equals;
 Vector3.prototype.set = set;
 Vector3.prototype.clone = clone;
@@ -95,6 +96,21 @@ function mul(val)
 		this.x *= val.x;
 		this.y *= val.y;
 		this.z *= val.z;
+	}
+}
+
+//Div
+function div(val)
+{
+	if(typeof val != typeof this)
+	{
+		throw "Incompatible types";
+	}
+	else
+	{
+		this.x /= val.x;
+		this.y /= val.y;
+		this.z /= val.z;
 	}
 }
 

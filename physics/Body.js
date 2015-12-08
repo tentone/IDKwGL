@@ -5,7 +5,7 @@ function Body(geometry)
 	this.geometry = geometry;
 
 	this.collidable = true;
-	this.is_static = false;
+	this.is_static = true;
 
 	this.position = new Vector3(0,0,0);
 	this.speed = new Vector3(0,0,0);
@@ -59,37 +59,25 @@ function update(world)
 		{
 			if(this.getId() != world.body[i].getId())
 			{
-
-				 
 				dist= new Vector3(world.body[i].getGeometry().position.x , world.body[i].getGeometry().position.y , world.body[i].getGeometry().position.z);
 				dist.sub(this.geometry.position);
 
-				if(MathUtils.dotProduct(this.speed,dist)>0) { // Only checks bodies in front of this object
-
-					if(this.geometry.willCollide(new Vector3(this.speed.x,0,0), world.body[i].getGeometry()))
-					{
-						willCollide += 1;
-						//console.log(this.getGeometry().toString() + "Will collide with " + world.body[i].getGeometry().toString());
-						break;
-					}
-
-					if(this.geometry.willCollide(new Vector3(0,this.speed.y,0), world.body[i].getGeometry()))
-					{
-						willCollide += 2;
-						//console.log(this.getGeometry().toString() + "Will collide with " + world.body[i].getGeometry().toString());
-						break;
-					}
-
-					if(this.geometry.willCollide(new Vector3(0,0,this.speed.z), world.body[i].getGeometry()))
-					{
-						willCollide += 4;
-						//console.log(this.getGeometry().toString() + "Will collide with " + world.body[i].getGeometry().toString());
-						break;
-					}
-							
+				// Only checks bodies in front of this object
+				if(this.geometry.willCollide(new Vector3(0,this.speed.y,0), world.body[i].getGeometry()))
+				{
+					willCollide += 2;
+					break;
 				}
-
-				
+				if(this.geometry.willCollide(new Vector3(this.speed.x,0,0), world.body[i].getGeometry()))
+				{
+					willCollide += 1;
+					break;
+				}
+				if(this.geometry.willCollide(new Vector3(0,0,this.speed.z), world.body[i].getGeometry()))
+				{
+					willCollide += 4;
+					break;
+				}
 			}
 		}
 

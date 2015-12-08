@@ -8,6 +8,7 @@ function PrespectiveCamera(canvas, fov, zoom)
     //Camera Movement
 	this.position = new Vector3(0,0,0); //Position
     this.rotation = new Vector3(0,0,0); //View Angle
+    this.ori = new Vector3(0,0,0);
     this.zoom = zoom; //Camera Zoom
 
     //Camera Projetion Matrix
@@ -41,6 +42,7 @@ function useShader(shader)
 {
     this.shader = shader.get();
     gl.useProgram(shader.get());
+    gl.uniformMatrix4fv(gl.getUniformLocation(this.shader, "uPMatrix"), false, this.projectionMatrix.flatten());
 }
 
 //Change Camera Field of View

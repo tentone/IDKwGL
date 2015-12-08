@@ -7,11 +7,16 @@ function Model()
 	this.normals = []; //Vertex Normals
 	this.faces = []; //Face <vertex>/<texture>/<normal>
 
-	//Store relation between faces and materials (face_index_ini, face_index_end, material_index)
-	this.faces_material = [];
+	//Colision Box 
+	this.box = null;
 
-	//Materials
+	//Store relation between faces and materials 
+	this.face_material = []; //<face_index_ini>, <face_index_end>, <material_index>
 	this.material = [];
+
+	//Auto Rotate Flags
+	this.follow_camera_horizontal = false;
+	this.follow_camera_vertical = false;
 
 	//Buffers
 	this.normalBuffer = null;
@@ -21,7 +26,6 @@ function Model()
 
 	//Texture
 	this.texture = Texture.generateSolidColorTexture(Color.RED);
-	this.texture_alt = Texture.generateSolidColorTexture(Color.GREEN);
 
 	//Tranformations Control
 	this.position = new Vector3(0,0,0);
@@ -39,6 +43,7 @@ function Model()
 Model.prototype.draw = draw;
 Model.prototype.update = update;
 Model.prototype.setTexture = setTexture;
+Model.prototype.setSize = setSize;
 Model.prototype.clone = clone;
 Model.prototype.updateBuffers = updateBuffers;
 Model.prototype.loadOBJ = loadOBJ;
@@ -51,6 +56,12 @@ Model.prototype.getBox = getBox;
 //Draw Model to camera
 function draw(camera, light)
 {	
+	if(this.follow_camera_vertical)
+	{
+		this.rotation.y = -camera.rotation.y;
+		this.update();
+	}
+	
     //Clone Camera Global transformation Matrix and multiply
     var camTransformationMatrix = this.transformationMatrix.clone();
 	camTransformationMatrix.mul(camera.transformationMatrix);
@@ -59,7 +70,6 @@ function draw(camera, light)
 	var normalMatrix = MathUtils.matrix3Invert(camTransformationMatrix);
 
 	// Passing the Model View Matrix to apply the current transformation
-	gl.uniformMatrix4fv(gl.getUniformLocation(camera.shader, "uPMatrix"), false, camera.projectionMatrix.flatten());
 	gl.uniformMatrix4fv(gl.getUniformLocation(camera.shader, "uMVMatrix"), false, camTransformationMatrix.flatten());
 	gl.uniformMatrix3fv(gl.getUniformLocation(camera.shader, "uNMatrix"), false, normalMatrix.flatten());
 	
@@ -67,9 +77,6 @@ function draw(camera, light)
 	if(light == null || light === undefined)
 	{
 		gl.uniform1i(camera.shader.useLightingUniform, false);
-	    gl.uniform3f(camera.shader.ambientColorUniform, 0.3, 0.3, 0.3);
-		gl.uniform3f(camera.shader.pointLightingLocationUniform, 0.0, 1.0, 0.0);
-	    gl.uniform3f(camera.shader.pointLightingColorUniform, 0.7, 0.7, 0.7);
 	}
 	else
 	{
@@ -92,15 +99,19 @@ function draw(camera, light)
     gl.vertexAttribPointer(camera.shader.vertexNormalAttribute, this.normalBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
     //Faces buffer
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.facesBuffer);
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.facesBuffer);
 
-	//Set texture to model
-	gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, this.texture);
-    gl.uniform1i(camera.shader.samplerUniform, 0);
-	
-	//Drawing the triangles
-	gl.drawElements(gl.TRIANGLES, this.facesBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+	//Draw trough all texture (cant use gl.drawelementsrange for some reason)
+    for(var i = 0; i < this.face_material.length; i += 3)
+    {
+		//Set texture to model
+		gl.activeTexture(gl.TEXTURE0);
+	    gl.bindTexture(gl.TEXTURE_2D, this.material[this.face_material[i+2]].texture);
+	    gl.uniform1i(camera.shader.samplerUniform, 0);
+		
+		//Drawing the triangles
+		gl.drawElements(gl.TRIANGLES, this.face_material[i+1], gl.UNSIGNED_SHORT, 0);
+	}
 }
 
 //Recalculate Tranformation Matrix (Should be called after changing position)
@@ -153,7 +164,7 @@ function clone()
 	model.normals = this.normals;
 	model.faces = this.faces;
 	model.material = this.material;
-	model.faces_material = this.faces_material;
+	model.face_material = this.face_material;
 
 	model.textureCoordBuffer = this.textureCoordBuffer;
 	model.normalBuffer = this.normalBuffer;
@@ -162,6 +173,9 @@ function clone()
 
 	model.texture = this.texture;
 
+	model.follow_camera_vertical = this.follow_camera_vertical;
+	model.follow_camera_horizontal = this.follow_camera_horizontal;
+
 	model.position.set(this.position.x, this.position.y, this.position.z);
 	model.rotation.set(this.rotation.x, this.rotation.y, this.rotation.z);
 	model.scale.set(this.scale.x, this.scale.y, this.scale.z);
@@ -169,10 +183,26 @@ function clone()
 	return model;
 }
 
+//Set model size with absolute values
+function setSize(x,y,z)
+{
+	this.scale.set(x,y,z);
+	this.scale.div(this.getBox().size);
+}
+
 //Attach texture image to this model
 function setTexture(texture)
 {
 	this.texture = texture;
+
+	this.material = [];
+	this.material[0] = new Material("mat");
+	this.material[0].texture = texture;
+
+	this.face_material = [];
+	this.face_material[0] = 0 ;
+	this.face_material[1] = this.faces.length;
+	this.face_material[2] = 0;
 }
 
 //OBJ file read from string
@@ -185,6 +215,8 @@ function loadOBJ(data)
 	this.normals = []; //Vertex Normals
 	this.texture_coords = []; //Vertex Terure
 	this.faces = []; //Face
+	this.face_material = [];
+	this.box = null;
 
 	// Check every line and store 
 	for(var i = 0; i < lines.length; i++)
@@ -285,19 +317,25 @@ function loadOBJ(data)
 			if(j != this.material.length)
 			{
 				//If faces material has elements add last index
-				if(this.faces_material.length != 0)
+				if(this.face_material.length != 0)
 				{
-					this.faces_material[this.faces_material.length-2] = this.faces.length-1;
+					this.face_material[this.face_material.length-2] = this.faces.length/3;
 				}
 
-				this.faces_material.push(this.faces.length);
-				this.faces_material.push(0);
-				this.faces_material.push(j); //material_index
+				//Add new material
+				this.face_material.push(this.faces.length/3); //Ini Position
+				this.face_material.push(this.faces.length/3); //End Position (temporary)
+				this.face_material.push(j); //Material Index
 			}
 		}
 	}
 	
-	//If no coord found complete with "random" data
+	if(this.face_material.length > 0)
+	{
+		this.face_material[this.face_material.length-2] = this.faces.length/3;
+	}
+
+	//If no coord found complete with data
 	if(this.texture_coords.length == 0)
 	{
 		//Full texture to all triangles
@@ -375,47 +413,56 @@ function loadMTL(data, texture_folder)
 {
 	var lines = data.split("\n");
     var index = -1;
+    
+    //Clear material list
+    this.material = [];
 
     //Read Data lines
 	for(var i = 0; i < lines.length; i++)
 	{
 	    var tokens = lines[i].split(/\s\s*/);
-
+	    
 	    //New Material
 	    if(tokens[0] == "newmtl")
 	    {
-	    	material.push(new Material(tokens[1]));
 			index++;
+	    	this.material[index] = new Material(tokens[1]);
 	    }
 
 	    //If material found
-	    if(material_index >= 0)
+	    if(index >= 0)
 		{
-			//Texture
-			if(tokens[0] == "map_Ka" || tokens[0] == "map_Kd" || tokens[0] == "map_Ks")
+			var offset = 0
+			while(offset < tokens.length && tokens[offset] == "")
 			{
-				material[index].texture = Texture.createTexture(texture_folder + tokens[1]);
+				offset++;
+			}
+
+			//Texture
+			if(tokens[offset] == "map_Kd")
+			{
+				this.material[index].texture = Texture.createTexture("data/texture/" + texture_folder + "/" + tokens[1+offset]);
 			}
 			//Ambient intensity
-			else if(tokens[0] == "Ka")
+			else if(tokens[offset] == "Ka")
 			{
-				material[index].ambientColor.r = parseFloat(tokens[1]);
-				material[index].ambientColor.g = parseFloat(tokens[2]);
-				material[index].ambientColor.b = parseFloat(tokens[3]);
+				this.material[index].ambientColor.r = parseFloat(tokens[offset+1]);
+				this.material[index].ambientColor.g = parseFloat(tokens[offset+2]);
+				this.material[index].ambientColor.b = parseFloat(tokens[offset+3]);
 			}
 			//Diffuse intensity
-			else if(tokens[0] == "Kd")
+			else if(tokens[offset] == "Kd")
 			{
-				material[index].diffuseColor.r = parseFloat(tokens[1]);
-				material[index].diffuseColor.g = parseFloat(tokens[2]);
-				material[index].diffuseColor.b = parseFloat(tokens[3]);
+				this.material[index].diffuseColor.r = parseFloat(tokens[offset+1]);
+				this.material[index].diffuseColor.g = parseFloat(tokens[offset+2]);
+				this.material[index].diffuseColor.b = parseFloat(tokens[offset+3]);
 			}
 			//Specular intensity
-			else if(tokens[0] == "Ks")
+			else if(tokens[offset] == "Ks")
 			{
-				material[index].specularColor.r = parseFloat(tokens[1]);
-				material[index].specularColor.g = parseFloat(tokens[2]);
-				material[index].specularColor.b = parseFloat(tokens[3]);
+				this.material[index].specularColor.r = parseFloat(tokens[offset+1]);
+				this.material[index].specularColor.g = parseFloat(tokens[offset+2]);
+				this.material[index].specularColor.b = parseFloat(tokens[offset+3]);
 			}		
 		}
 	}
@@ -454,7 +501,20 @@ function toString()
 	{
 		s+= "\n   ("+this.normals[i]+", "+this.normals[i+1]+", "+this.normals[i+2]+")";
 	}
+	
+	s+="\n]\n\nMaterial List:\n[";
 
+	for(i = 0; i < this.material.length; i++)
+	{
+		s+= "\n   ("+this.material.toString()+")";
+	}
+
+	s+="\n]\n\nFace Material List:\n[";
+
+	for(i = 0; i < this.face_material.length; i+=3)
+	{
+		s+= "\n   ("+this.face_material[i]+", "+this.face_material[i+1]+", "+this.face_material[i+2]+")";
+	}
 	s+="\n]";
 	return s;
 }
@@ -487,49 +547,53 @@ function computeVertexNormals()
 //Create Box (geometry) from vertex data
 function getBox()
 {
-	var min = new Vector3(this.vertex[0], this.vertex[1], this.vertex[2]);
-	var max = new Vector3(this.vertex[0], this.vertex[1], this.vertex[2]);
-	var buf = new Vector3(0,0,0);
-
-	for(var i = 3; i < this.vertex.length; i += 3)
+	//If not available calculate box from vertex data
+	if(this.box == null)
 	{
-		buf.set(this.vertex[i], this.vertex[i+1], this.vertex[i+2]);
+		var min = new Vector3(this.vertex[0], this.vertex[1], this.vertex[2]);
+		var max = new Vector3(this.vertex[0], this.vertex[1], this.vertex[2]);
+		var buf = new Vector3(0,0,0);
 
-		if(buf.x < min.x)
-			min.x = buf.x;
-		else if(buf.x > max.x)
-			max.x = buf.x;
-	
-		if(buf.y < min.y)
-			min.y = buf.y;
-		else if(buf.y > max.y)
-			max.y = buf.y;
+		for(var i = 3; i < this.vertex.length; i += 3)
+		{
+			buf.set(this.vertex[i], this.vertex[i+1], this.vertex[i+2]);
+
+			if(buf.x < min.x)
+				min.x = buf.x;
+			else if(buf.x > max.x)
+				max.x = buf.x;
 		
-		if(buf.z < min.z)
-			min.z = buf.z;
-		else if(buf.z > max.z)
-			max.z = buf.z; 
+			if(buf.y < min.y)
+				min.y = buf.y;
+			else if(buf.y > max.y)
+				max.y = buf.y;
+			
+			if(buf.z < min.z)
+				min.z = buf.z;
+			else if(buf.z > max.z)
+				max.z = buf.z; 
+		}
+
+		//Set min and max to scale
+		min.mul(this.scale);
+		max.mul(this.scale);
+
+		//Create box
+		this.box = new Box();
+
+		//Calculate Box Size
+		this.box.size.set(max.x, max.y, max.z);
+		this.box.size.sub(min);
+
+		//Set position
+		this.box.position.set(this.position.x, this.position.y, this.position.z);
+		
+		//Ori zero
+		this.box.ori.set(0,0,0);
+		this.box.ori.sub(min);
 	}
-
-	//Set min and max to scale
-	min.mul(this.scale);
-	max.mul(this.scale);
-
-	//Create box
-	var box = new Box();
-
-	//Calculate Box Size
-	box.size.set(max.x, max.y, max.z);
-	box.size.sub(min);
-
-	//Set position
-	box.position.set(this.position.x, this.position.y, this.position.z);
 	
-	//Ori zero
-	box.ori.set(0,0,0);
-	box.ori.sub(min);
-	
-	return box;
+	return this.box;
 }
 
 //Test Function that creates a cube with texture and retuns it
@@ -716,6 +780,8 @@ Model.plane = function()
 		//Back face    
 		4, 5, 6, 4, 6, 7
 	];
+
+	model.follow_camera_vertical = true;
 
 	model.updateBuffers();
 

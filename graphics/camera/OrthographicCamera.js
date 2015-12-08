@@ -21,6 +21,7 @@ function OrthographicCamera(canvas, size_y)
 }
 
 //Function Prototypes
+OrthographicCamera.prototype.useShader = useShader;
 OrthographicCamera.prototype.startFrame = startFrame;
 OrthographicCamera.prototype.resize = resize;
 OrthographicCamera.prototype.toString = toString;
