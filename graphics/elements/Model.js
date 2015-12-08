@@ -27,9 +27,6 @@ function Model()
 	//Update model buffers
 	this.updateBuffers();
 
-	//Normals Matrix
-	this.normalMatrix = new Matrix(3,3);
-
 	//Tranformation Matrix
 	this.transformationMatrix = new Matrix(4,4);
 }
@@ -53,9 +50,18 @@ function draw(camera)
     var camTransformationMatrix = this.transformationMatrix.clone();
 	camTransformationMatrix.mul(camera.transformationMatrix);
 
+	//Normal matrix
+	var normalMatrix = MathUtils.matrix3Invert(camTransformationMatrix);
+
 	// Passing the Model View Matrix to apply the current transformation
 	gl.uniformMatrix4fv(gl.getUniformLocation(camera.shader, "uMVMatrix"), false, camTransformationMatrix.flatten());
-	//gl.uniformMatrix3fv(gl.getUniformLocation(camera.shader, "uNMatrix"), false, this.normalMatrix.flatten());
+	gl.uniformMatrix3fv(gl.getUniformLocation(camera.shader, "uNMatrix"), false, normalMatrix.flatten());
+
+	//Lights
+    gl.uniform1i(camera.shader.useLightingUniform, true);
+    gl.uniform3f(camera.shader.ambientColorUniform,0.4,0.4,0.4);
+	gl.uniform3f(camera.shader.pointLightingLocationUniform,0.0,0.0,0.0);
+    gl.uniform3f(camera.shader.pointLightingColorUniform,0.6,0.6,0.6);
 
     //Passing the buffer
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
@@ -66,8 +72,8 @@ function draw(camera)
     gl.vertexAttribPointer(camera.shader.textureCoordAttribute, this.textureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
     //Normal Coords
-    //gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
-    //gl.vertexAttribPointer(camera.shader.vertexNormalAttribute, this.normalBuffer.itemSize, gl.FLOAT, false, 0, 0);
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
+    gl.vertexAttribPointer(camera.shader.vertexNormalAttribute, this.normalBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
 	//Set texture to model
 	gl.activeTexture(gl.TEXTURE0);
@@ -485,6 +491,44 @@ Model.cube = function()
 		1.0, 1.0,
 		0.0, 1.0
 	];
+
+	model.normals  =
+	[
+		//Front face
+		0.0,  0.0,  1.0,
+		0.0,  0.0,  1.0,
+		0.0,  0.0,  1.0,
+		0.0,  0.0,  1.0,
+		// Back face
+		0.0,  0.0, -1.0,
+		0.0,  0.0, -1.0,
+		0.0,  0.0, -1.0,
+		0.0,  0.0, -1.0,
+		//Top face
+		0.0,  1.0,  0.0,
+		0.0,  1.0,  0.0,
+		0.0,  1.0,  0.0,
+		0.0,  1.0,  0.0,
+
+		//Bottom face
+		0.0, -1.0,  0.0,
+		0.0, -1.0,  0.0,
+		0.0, -1.0,  0.0,
+		0.0, -1.0,  0.0,
+
+		//Right face
+		1.0,  0.0,  0.0,
+		1.0,  0.0,  0.0,
+		1.0,  0.0,  0.0,
+		1.0,  0.0,  0.0,
+
+		//Left face
+		-1.0,  0.0,  0.0,
+		-1.0,  0.0,  0.0,
+		-1.0,  0.0,  0.0,
+		-1.0,  0.0,  0.0,
+    ];
+
 
 	model.faces =
 	[

@@ -15,8 +15,7 @@ include("input/Mouse.js");
 
 include("graphics/elements/Scene.js");
 include("graphics/elements/Model.js");
-include("graphics/elements/ModelColor.js");
-include("graphics/elements/LightSource.js");
+include("graphics/elements/Light.js");
 include("graphics/elements/Texture.js");
 include("graphics/elements/Material.js");
 

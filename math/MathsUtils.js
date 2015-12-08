@@ -10,6 +10,30 @@ MathUtils.randomMod = function()
     return 2*Math.random() - 1;
 }
 
+//Invert 3x3 matrix
+MathUtils.matrix3Invert = function(m)
+{
+    var determinant = m.matrix[0][0]*(m.matrix[1][1]*m.matrix[2][2]-m.matrix[2][1]*m.matrix[1][2])-m.matrix[0][1]*(m.matrix[1][0]*m.matrix[2][2]-m.matrix[1][2]*m.matrix[2][0])+m.matrix[0][2]*(m.matrix[1][0]*m.matrix[2][1]-m.matrix[1][1]*m.matrix[2][0]);
+
+    if(determinant != 0)
+    {
+        var result = new Matrix(3,3);
+        var invdet = 1/determinant;
+        result.matrix[0][0] =  (m.matrix[1][1]*m.matrix[2][2]-m.matrix[2][1]*m.matrix[1][2]) * invdet;
+        result.matrix[1][0] = -(m.matrix[0][1]*m.matrix[2][2]-m.matrix[0][2]*m.matrix[2][1]) * invdet;
+        result.matrix[2][0] =  (m.matrix[0][1]*m.matrix[1][2]-m.matrix[0][2]*m.matrix[1][1]) * invdet;
+        result.matrix[0][1] = -(m.matrix[1][0]*m.matrix[2][2]-m.matrix[1][2]*m.matrix[2][0]) * invdet;
+        result.matrix[1][1] =  (m.matrix[0][0]*m.matrix[2][2]-m.matrix[0][2]*m.matrix[2][0]) * invdet;
+        result.matrix[2][1] = -(m.matrix[0][0]*m.matrix[1][2]-m.matrix[1][0]*m.matrix[0][2]) * invdet;
+        result.matrix[0][2] =  (m.matrix[1][0]*m.matrix[2][1]-m.matrix[2][0]*m.matrix[1][1]) * invdet;
+        result.matrix[1][2] = -(m.matrix[0][0]*m.matrix[2][1]-m.matrix[2][0]*m.matrix[0][1]) * invdet;
+        result.matrix[2][2] =  (m.matrix[0][0]*m.matrix[1][1]-m.matrix[1][0]*m.matrix[0][1]) * invdet;
+        return result;
+    }
+
+    return null;
+}
+
 //Calculate distance between p1 and p2 (Vector3)
 MathUtils.pointDistance = function(p1, p2)
 {

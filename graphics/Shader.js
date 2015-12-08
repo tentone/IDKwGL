@@ -71,22 +71,6 @@ Shader.getShader = function(gl, id)
 	return shader;
 }
 
-//Shader to render models using color (as used in classes)
-Shader.colorRenderShader = function()
-{
-	var sp = new Shader(gl, "shader-vertex-color", "shader-fragment-color");
-
-	//Vertex Coordinates 
-	sp.shaderProgram.vertexPositionAttribute = gl.getAttribLocation(sp.shaderProgram, "aVertexPosition");
-	gl.enableVertexAttribArray(sp.shaderProgram.vertexPositionAttribute);
-
-	//Vertex Colors 
-	sp.shaderProgram.vertexColorAttribute = gl.getAttribLocation(sp.shaderProgram, "aVertexColor");
-	gl.enableVertexAttribArray(sp.shaderProgram.vertexColorAttribute);
-
-	return sp;
-}
-
 //Shader to render textured models
 Shader.textureRenderShader = function()
 {
@@ -111,7 +95,7 @@ Shader.textureRenderShader = function()
 }
 
 
-Shader.lightRenderShader = function()
+Shader.lightVertexRenderShader = function()
 {
 	var sp = new Shader(gl, "shader-vertex-light", "shader-fragment-light");
 	
@@ -125,8 +109,8 @@ Shader.lightRenderShader = function()
     gl.enableVertexAttribArray(sp.shaderProgram.textureCoordAttribute);
 
     //Normals
-    //sp.shaderProgram.vertexNormalAttribute = gl.getAttribLocation(sp.shaderProgram, "aVertexNormal");
-    //gl.enableVertexAttribArray(sp.shaderProgram.vertexNormalAttribute);
+    sp.shaderProgram.vertexNormalAttribute = gl.getAttribLocation(sp.shaderProgram, "aVertexNormal");
+    gl.enableVertexAttribArray(sp.shaderProgram.vertexNormalAttribute);
 	
     //The sampler
     sp.shaderProgram.samplerUniform = gl.getUniformLocation(sp.shaderProgram, "uSampler");
@@ -134,7 +118,41 @@ Shader.lightRenderShader = function()
 	//The matrices
     sp.shaderProgram.pMatrixUniform = gl.getUniformLocation(sp.shaderProgram, "uPMatrix");
     sp.shaderProgram.mvMatrixUniform = gl.getUniformLocation(sp.shaderProgram, "uMVMatrix");
-    //sp.shaderProgram.nMatrixUniform = gl.getUniformLocation(sp.shaderProgram, "uNMatrix");
+    sp.shaderProgram.nMatrixUniform = gl.getUniformLocation(sp.shaderProgram, "uNMatrix");
+
+    //Light atributes
+    sp.shaderProgram.useLightingUniform = gl.getUniformLocation(sp.shaderProgram, "uUseLighting");
+    sp.shaderProgram.ambientColorUniform = gl.getUniformLocation(sp.shaderProgram, "uAmbientColor");
+    sp.shaderProgram.pointLightingLocationUniform = gl.getUniformLocation(sp.shaderProgram, "uPointLightingLocation");
+    sp.shaderProgram.pointLightingColorUniform = gl.getUniformLocation(sp.shaderProgram, "uPointLightingColor");
+    
+	return sp;
+}
+
+Shader.lightPixelRenderShader = function()
+{
+	var sp = new Shader(gl, "shader-vertex-light-pixel", "shader-fragment-light-pixel");
+	
+	//Vertex Coordinates 
+	sp.shaderProgram.vertexPositionAttribute = gl.getAttribLocation(sp.shaderProgram, "aVertexPosition");
+	gl.enableVertexAttribArray(sp.shaderProgram.vertexPositionAttribute);
+
+
+	//Texture coordinates
+    sp.shaderProgram.textureCoordAttribute = gl.getAttribLocation(sp.shaderProgram, "aTextureCoord");
+    gl.enableVertexAttribArray(sp.shaderProgram.textureCoordAttribute);
+
+    //Normals
+    sp.shaderProgram.vertexNormalAttribute = gl.getAttribLocation(sp.shaderProgram, "aVertexNormal");
+    gl.enableVertexAttribArray(sp.shaderProgram.vertexNormalAttribute);
+	
+    //The sampler
+    sp.shaderProgram.samplerUniform = gl.getUniformLocation(sp.shaderProgram, "uSampler");
+
+	//The matrices
+    sp.shaderProgram.pMatrixUniform = gl.getUniformLocation(sp.shaderProgram, "uPMatrix");
+    sp.shaderProgram.mvMatrixUniform = gl.getUniformLocation(sp.shaderProgram, "uMVMatrix");
+    sp.shaderProgram.nMatrixUniform = gl.getUniformLocation(sp.shaderProgram, "uNMatrix");
 
     //Light atributes
     sp.shaderProgram.useLightingUniform = gl.getUniformLocation(sp.shaderProgram, "uUseLighting");
