@@ -1,8 +1,17 @@
 //Light Constructor
 function Light()
 {
-	this.enabled = true; // A new light source is always on
-	this.position = new Vector4(0.0, 0.0, 1.0, 0.0); // And is directional
-	this.intensity = new Color(1.0, 1.0, 1.0); // White light
-	this.ambientIntensity = new Color(0.2, 0.2, 0.2); // Ambient component
+	this.enabled = true;
+	this.ambient = new Color(0.1, 0.1, 0.1);
+	this.position = new Vector3(0.0, 5.0, 0.0);
+	this.intensity = new Color(0.7, 0.7, 0.7);
+}
+
+//Functions prototypes
+Light.prototype.toString = toString;
+
+//Info to String
+function toString()
+{
+	return "Light(Enabled:"+this.enabled+" Position:"+this.position+")";
 }

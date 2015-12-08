@@ -26,8 +26,8 @@ function update()
 }
 
 //Draw particles into camera
-function draw(camera)
+function draw(camera, light)
 {
-	this.model.draw(camera);
+	this.model.draw(camera, light);
 }
 

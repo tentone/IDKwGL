@@ -46,6 +46,7 @@ include("data/models/baron_nashor.js");
 include("data/models/cleffa.js");
 include("data/models/box.js");
 include("data/models/cardboard_boxes.js");
+include("data/models/link.js");
 
 include("Main.js");
 

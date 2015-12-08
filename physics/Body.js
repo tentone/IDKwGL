@@ -59,26 +59,37 @@ function update(world)
 		{
 			if(this.getId() != world.body[i].getId())
 			{
-				if(this.geometry.willCollide(new Vector3(this.speed.x,0,0), world.body[i].getGeometry()))
-				{
-					willCollide += 1;
-					//console.log(this.getGeometry().toString() + "Will collide with " + world.body[i].getGeometry().toString());
-					break;
+
+				 
+				dist= new Vector3(world.body[i].getGeometry().position.x , world.body[i].getGeometry().position.y , world.body[i].getGeometry().position.z);
+				dist.sub(this.geometry.position);
+
+				if(MathUtils.dotProduct(this.speed,dist)>0) { // Only checks bodies in front of this object
+
+					if(this.geometry.willCollide(new Vector3(this.speed.x,0,0), world.body[i].getGeometry()))
+					{
+						willCollide += 1;
+						//console.log(this.getGeometry().toString() + "Will collide with " + world.body[i].getGeometry().toString());
+						break;
+					}
+
+					if(this.geometry.willCollide(new Vector3(0,this.speed.y,0), world.body[i].getGeometry()))
+					{
+						willCollide += 2;
+						//console.log(this.getGeometry().toString() + "Will collide with " + world.body[i].getGeometry().toString());
+						break;
+					}
+
+					if(this.geometry.willCollide(new Vector3(0,0,this.speed.z), world.body[i].getGeometry()))
+					{
+						willCollide += 4;
+						//console.log(this.getGeometry().toString() + "Will collide with " + world.body[i].getGeometry().toString());
+						break;
+					}
+							
 				}
 
-				if(this.geometry.willCollide(new Vector3(0,this.speed.y,0), world.body[i].getGeometry()))
-				{
-					willCollide += 2;
-					//console.log(this.getGeometry().toString() + "Will collide with " + world.body[i].getGeometry().toString());
-					break;
-				}
-
-				if(this.geometry.willCollide(new Vector3(0,0,this.speed.z), world.body[i].getGeometry()))
-				{
-					willCollide += 4;
-					//console.log(this.getGeometry().toString() + "Will collide with " + world.body[i].getGeometry().toString());
-					break;
-				}
+				
 			}
 		}
 
@@ -90,11 +101,11 @@ function update(world)
 			{
 				if(this.speed.x < 0)
 				{
-					this.geometry.position.x = world.body[i].getGeometry().position.x - world.body[i].getGeometry().ori.x + world.body[i].getGeometry().size.x;
+					this.geometry.position.x = world.body[i].getGeometry().position.x - world.body[i].getGeometry().ori.x + world.body[i].getGeometry().size.x + this.geometry.ori.x;
 				}
 				else
 				{
-					this.geometry.position.x = world.body[i].getGeometry().position.x - world.body[i].getGeometry().ori.x - this.geometry.size.x;
+					this.geometry.position.x = world.body[i].getGeometry().position.x - world.body[i].getGeometry().ori.x - this.geometry.ori.x;
 				}
 				this.speed.x = 0;
 				this.acceleration.x = 0;
@@ -105,11 +116,11 @@ function update(world)
 			{
 				if(this.speed.y < 0)
 				{
-					this.geometry.position.y = world.body[i].getGeometry().position.y - world.body[i].getGeometry().ori.y + world.body[i].getGeometry().size.y;
+					this.geometry.position.y = world.body[i].getGeometry().position.y - world.body[i].getGeometry().ori.y + world.body[i].getGeometry().size.y + this.geometry.ori.y;
 				}
 				else
 				{
-					this.geometry.position.y = world.body[i].getGeometry().position.y - world.body[i].getGeometry().ori.y - this.geometry.size.y;
+					this.geometry.position.y = world.body[i].getGeometry().position.y - world.body[i].getGeometry().ori.y - this.geometry.ori.y;
 				}
 				this.speed.y = 0;
 				this.acceleration.y = 0;
@@ -120,11 +131,11 @@ function update(world)
 			{	
 				if(this.speed.z < 0)
 				{
-					this.geometry.position.z = world.body[i].getGeometry().position.z - world.body[i].getGeometry().ori.z + world.body[i].getGeometry().size.z;
+					this.geometry.position.z = world.body[i].getGeometry().position.z - world.body[i].getGeometry().ori.z + world.body[i].getGeometry().size.z + this.geometry.ori.z;
 				}
 				else
 				{
-					this.geometry.position.z = world.body[i].getGeometry().position.z - world.body[i].getGeometry().ori.z - this.geometry.size.z;
+					this.geometry.position.z = world.body[i].getGeometry().position.z - world.body[i].getGeometry().ori.z - this.geometry.ori.z;
 				}
 				this.speed.z = 0;
 				this.acceleration.z = 0;

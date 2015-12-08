@@ -25,6 +25,7 @@ function set(x, y, z)
 	this.z = z;
 }
 
+//Clone vector3
 function clone()
 {
 	return new Vector3(this.x, this.y, this.z);
@@ -52,6 +53,7 @@ function equals(val)
 	}
 }
 
+//Add
 function add(val)
 {
 	if(typeof val != typeof this)
@@ -66,6 +68,7 @@ function add(val)
 	}
 }
 
+//Sub
 function sub(val)
 {
 	if(typeof val != typeof this)
@@ -80,6 +83,7 @@ function sub(val)
 	}
 }
 
+//Mult
 function mul(val)
 {
 	if(typeof val != typeof this)

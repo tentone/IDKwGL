@@ -39,11 +39,11 @@ function update()
 }
 
 //Draw particles into camera
-function draw(camera)
+function draw(camera, light)
 {
 	for(var i = 0; i < this.particles.length; i++)
 	{
-		this.particles[i].draw(camera);
+		this.particles[i].draw(camera, light);
 	}
 }
 

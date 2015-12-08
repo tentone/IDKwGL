@@ -71,30 +71,7 @@ Shader.getShader = function(gl, id)
 	return shader;
 }
 
-//Shader to render textured models
-Shader.textureRenderShader = function()
-{
-	var sp = new Shader(gl, "shader-vertex-texture", "shader-fragment-texture");
-
-	//Vertex Coordinates 
-	sp.shaderProgram.vertexPositionAttribute = gl.getAttribLocation(sp.shaderProgram, "aVertexPosition");
-	gl.enableVertexAttribArray(sp.shaderProgram.vertexPositionAttribute);
-
-	//Texture coordinates
-	sp.shaderProgram.textureCoordAttribute = gl.getAttribLocation(sp.shaderProgram, "aTextureCoord");
-	gl.enableVertexAttribArray(sp.shaderProgram.textureCoordAttribute);
-
-	//The matrices
-	sp.shaderProgram.pMatrixUniform = gl.getUniformLocation(sp.shaderProgram, "uPMatrix");
-	sp.shaderProgram.mvMatrixUniform = gl.getUniformLocation(sp.shaderProgram, "uMVMatrix");
-
-	//The sampler
-	sp.shaderProgram.samplerUniform = gl.getUniformLocation(sp.shaderProgram, "uSampler");
-
-	return sp;
-}
-
-
+//Per vertex light (from learningwebgl.com)
 Shader.lightVertexRenderShader = function()
 {
 	var sp = new Shader(gl, "shader-vertex-light", "shader-fragment-light");
@@ -129,6 +106,7 @@ Shader.lightVertexRenderShader = function()
 	return sp;
 }
 
+//Per pixel light (from learningwebgl.com)
 Shader.lightPixelRenderShader = function()
 {
 	var sp = new Shader(gl, "shader-vertex-light-pixel", "shader-fragment-light-pixel");

@@ -5,11 +5,10 @@ function Player(canvas)
 }
 
 //Player class function prototypes
-Player.prototype.updatePosition = updatePosition;
 Player.prototype.toString = toString;
 Player.prototype.update = update;
 
-//Update Player Status
+//Update player
 function update()
 {
 	var angle = Conversion.degreesToRadians(this.rotation.x);
@@ -25,16 +24,17 @@ function update()
 		this.camera.position.z -= 0.1 * Math.cos(angle);
 		this.camera.position.x -= 0.1 * Math.sin(angle);
 	}
-
+ 
+	angle += MathUtils.PID2;
 	if(App.keyboard.isKeyPressed(Keyboard.A))
 	{
-		this.camera.position.z -= 0.1 * Math.cos(angle+MathUtils.PID2);
-		this.camera.position.x -= 0.1 * Math.sin(angle+MathUtils.PID2);
+		this.camera.position.z -= 0.1 * Math.cos(angle);
+		this.camera.position.x -= 0.1 * Math.sin(angle);
 	}
 	if(App.keyboard.isKeyPressed(Keyboard.D))
 	{
-		this.camera.position.z += 0.1 * Math.cos(angle+MathUtils.PID2);
-		this.camera.position.x += 0.1 * Math.sin(angle+MathUtils.PID2);
+		this.camera.position.z += 0.1 * Math.cos(angle);
+		this.camera.position.x += 0.1 * Math.sin(angle);
 	}
 
 	//Camera Keyboard Movement
@@ -48,16 +48,8 @@ function update()
 	}
 
 	//Camera Mouse Movement
-	if(App.isMouseLocked())
-	{
-		this.rotation.x += 0.2 * App.mouse.pos_diff.x;
-		this.rotation.y += 0.2 * App.mouse.pos_diff.y;
-	}
-	else if(App.mouse.buttonPressed(Mouse.LEFT))
-	{
-		this.rotation.x += 0.2 * App.mouse.pos_diff.x;
-		this.rotation.y += 0.2 * App.mouse.pos_diff.y;
-	}
+	this.rotation.x += Mouse.SENSITIVITY * App.mouse.pos_diff.x;
+	this.rotation.y += Mouse.SENSITIVITY * App.mouse.pos_diff.y;
 
 	//Camera Move UP/DOWN
 	if(App.keyboard.isKeyPressed(Keyboard.SPACEBAR))
@@ -68,11 +60,7 @@ function update()
 	{
 		this.camera.position.y -= 0.1;
 	}
-}
 
-//Update camera with player movement
-function updatePosition()
-{
 	//Limit Vertical Rotation
 	if(this.rotation.y < -90)
 	{

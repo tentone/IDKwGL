@@ -7,10 +7,12 @@ function Sphere()
 	this.type = Geometry.SPHERE;
 }
 
+//Functions Prototypes
 Sphere.prototype.isColliding = isColliding;
 Sphere.prototype.willCollide = willCollide;
 Sphere.prototype.toString = toString;
 
+//Check if its colliding
 function isColliding(obj)
 {
 	if(obj.type == Geometry.SPHERE)
@@ -21,6 +23,7 @@ function isColliding(obj)
 	return false;
 }
 
+//Check if will collide after movement
 function willCollide(speed, obj)
 {
 	return false;

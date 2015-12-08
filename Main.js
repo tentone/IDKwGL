@@ -2,7 +2,6 @@
 var screen;
 
 //Global Shaders
-var shaderTexture;
 var shaderLightVertex;
 var shaderLightPixel;
 
@@ -12,11 +11,10 @@ function Main(){}
 Main.init = function(canvas)
 {
 	//Initialize Shaders
-	shaderTexture = Shader.textureRenderShader();
 	shaderLightVertex = Shader.lightVertexRenderShader();
 	shaderLightPixel = Shader.lightPixelRenderShader();
 
-	screen = new ArenaTest();
+	screen = new Arena();
 }
 
 //Logic Update
@@ -34,5 +32,5 @@ Main.draw = function()
 //Resize Stuff
 Main.resize = function(canvas)
 {
-	screen.resize();
+	screen.resize(canvas);
 }

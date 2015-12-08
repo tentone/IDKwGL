@@ -8,16 +8,17 @@ function ArenaTest()
 
 	//Test elements (PHYSICS)
 	this.model = Model.cube();
-	this.model.setTexture(Texture.generateSolidColorTexture(Color.BLUE));
+	this.model.setTexture(Texture.createTexture("data/texture/wood_box.png"));
 	this.model.position.set(0,-2,0);
 	this.model.scale.set(30,1,30);
 	this.model.update();
 	this.scene.addModel(this.model);
-	this.world.addBody(this.game_object = new GameObject(this.model));
+	this.world.addBody(new GameObject(this.model));
+	this.world.body[this.world.body.length-1].setStatic(true);
 
 	this.model = new Model();
 	this.model.loadOBJ(baron_nashor);
-	this.model.setTexture(Texture.generateSolidColorTexture(Color.PURPLE));
+	this.model.setTexture(Texture.createTexture("data/texture/baron_nashor.bmp"));
 	this.model.position.set(-8,4,0);
 	this.model.scale.set(0.03,0.03,0.03);
 	this.model.update();
@@ -27,12 +28,19 @@ function ArenaTest()
 
 	this.model = new Model.cube();
 	this.model.setTexture(Texture.generateSolidColorTexture(Color.GREEN));
-	this.model.position.set(8,2,0);
-	this.model.scale.set(1,2,1);
+	this.model.position.set(8,5,0);
+	this.model.scale.set(3,3,3);
 	this.model.update();
 	this.scene.addModel(this.model);
 	this.world.addBody(new GameObject(this.model));
 	this.world.body[this.world.body.length-1].setStatic(true);
+
+	this.model = new Model.cube();
+	this.model.setTexture(Texture.generateSolidColorTexture(Color.BLUE));
+	this.model.position.set(7,4,5);
+	this.model.update();
+	this.scene.addModel(this.model);
+	this.world.addBody(this.game_object = new GameObject(this.model));
 
 	//Test elements
 	this.model = new Model();
@@ -91,6 +99,13 @@ function ArenaTest()
 	this.model.update();
 	this.scene.addModel(this.model);
 
+	this.model = new Model.cube();
+	this.model.setTexture(Texture.generateSolidColorTexture(Color.BLUE));
+	this.model.position.set(7,4,5);
+	this.model.update();
+	this.scene.addModel(this.model);
+	this.world.addBody(this.weapon = new GameObject(this.model));
+
 	this.spectator = new Spectator(canvas);
 }
 
@@ -102,7 +117,6 @@ function update()
 {
 	//Update Player Camera Position
 	this.world.update();
-	console.log(this.world.toString());
 	this.spectator.update();
 	this.particle.update();
 	

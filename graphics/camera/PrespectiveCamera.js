@@ -41,7 +41,6 @@ function useShader(shader)
 {
     this.shader = shader.get();
     gl.useProgram(shader.get());
-    gl.uniformMatrix4fv(gl.getUniformLocation(shader.get(), "uPMatrix"), false, this.projectionMatrix.flatten());
 }
 
 //Change Camera Field of View

@@ -7,8 +7,11 @@ function Model()
 	this.normals = []; //Vertex Normals
 	this.faces = []; //Face <vertex>/<texture>/<normal>
 
+	//Store relation between faces and materials (face_index_ini, face_index_end, material_index)
+	this.faces_material = [];
+
 	//Materials
-	this.materials = [];
+	this.material = [];
 
 	//Buffers
 	this.normalBuffer = null;
@@ -35,9 +38,9 @@ function Model()
 //Function Prototypes
 Model.prototype.draw = draw;
 Model.prototype.update = update;
+Model.prototype.setTexture = setTexture;
 Model.prototype.clone = clone;
 Model.prototype.updateBuffers = updateBuffers;
-Model.prototype.setTexture = setTexture;
 Model.prototype.loadOBJ = loadOBJ;
 Model.prototype.loadMTL = loadMTL;
 Model.prototype.toString = toString;
@@ -46,7 +49,7 @@ Model.prototype.transformOBJData = transformOBJData;
 Model.prototype.getBox = getBox;
 
 //Draw Model to camera
-function draw(camera)
+function draw(camera, light)
 {	
     //Clone Camera Global transformation Matrix and multiply
     var camTransformationMatrix = this.transformationMatrix.clone();
@@ -56,34 +59,45 @@ function draw(camera)
 	var normalMatrix = MathUtils.matrix3Invert(camTransformationMatrix);
 
 	// Passing the Model View Matrix to apply the current transformation
+	gl.uniformMatrix4fv(gl.getUniformLocation(camera.shader, "uPMatrix"), false, camera.projectionMatrix.flatten());
 	gl.uniformMatrix4fv(gl.getUniformLocation(camera.shader, "uMVMatrix"), false, camTransformationMatrix.flatten());
 	gl.uniformMatrix3fv(gl.getUniformLocation(camera.shader, "uNMatrix"), false, normalMatrix.flatten());
+	
+	//Light render
+	if(light == null || light === undefined)
+	{
+		gl.uniform1i(camera.shader.useLightingUniform, false);
+	    gl.uniform3f(camera.shader.ambientColorUniform, 0.3, 0.3, 0.3);
+		gl.uniform3f(camera.shader.pointLightingLocationUniform, 0.0, 1.0, 0.0);
+	    gl.uniform3f(camera.shader.pointLightingColorUniform, 0.7, 0.7, 0.7);
+	}
+	else
+	{
+	    gl.uniform1i(camera.shader.useLightingUniform, light.enabled);
+	    gl.uniform3f(camera.shader.ambientColorUniform, light.ambient.r, light.ambient.g, light.ambient.b);
+		gl.uniform3f(camera.shader.pointLightingLocationUniform, light.position.x, light.position.y, light.position.z);
+	    gl.uniform3f(camera.shader.pointLightingColorUniform, light.intensity.r, light.intensity.g, light.intensity.b);
+	}
 
-	//Lights
-    gl.uniform1i(camera.shader.useLightingUniform, true);
-    gl.uniform3f(camera.shader.ambientColorUniform,0.4,0.4,0.4);
-	gl.uniform3f(camera.shader.pointLightingLocationUniform,0.0,0.0,0.0);
-    gl.uniform3f(camera.shader.pointLightingColorUniform,0.6,0.6,0.6);
-
-    //Passing the buffer
+    //Vertex buffer
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
     gl.vertexAttribPointer(camera.shader.vertexPositionAttribute, this.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
-	//Texture Coords
+	//Texture Coords buffer
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
     gl.vertexAttribPointer(camera.shader.textureCoordAttribute, this.textureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
-    //Normal Coords
+    //Normal Coords buffer
     gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
     gl.vertexAttribPointer(camera.shader.vertexNormalAttribute, this.normalBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+    //Faces buffer
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.facesBuffer);
 
 	//Set texture to model
 	gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, this.texture);
     gl.uniform1i(camera.shader.samplerUniform, 0);
-
-    //The vertex indices
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.facesBuffer);
 	
 	//Drawing the triangles
 	gl.drawElements(gl.TRIANGLES, this.facesBuffer.numItems, gl.UNSIGNED_SHORT, 0);
@@ -92,8 +106,8 @@ function draw(camera)
 //Recalculate Tranformation Matrix (Should be called after changing position)
 function update()
 {
-	this.transformationMatrix = MatrixGenerator.translation(this.position.x, this.position.y, this.position.z);
-    this.transformationMatrix.mul(MatrixGenerator.rotationMatrix(this.rotation.x, this.rotation.y, this.rotation.z));
+	this.transformationMatrix = MatrixGenerator.rotationMatrix(this.rotation.x, this.rotation.y, this.rotation.z);
+    this.transformationMatrix.mul(MatrixGenerator.translation(this.position.x, this.position.y, this.position.z));
     this.transformationMatrix.mul(MatrixGenerator.scalingMatrix(this.scale.x, this.scale.y, this.scale.z));
 }
 
@@ -138,7 +152,8 @@ function clone()
 	model.texture_coords = this.texture_coords;
 	model.normals = this.normals;
 	model.faces = this.faces;
-	model.materials = this.materials;
+	model.material = this.material;
+	model.faces_material = this.faces_material;
 
 	model.textureCoordBuffer = this.textureCoordBuffer;
 	model.normalBuffer = this.normalBuffer;
@@ -177,24 +192,28 @@ function loadOBJ(data)
 		// The tokens/values in each line Separation between tokens is 1 or mode whitespaces
 	    var tokens = lines[i].split(/\s\s*/);
 
-	    if(tokens[0] == "v") //Vertices
+		//Vertices
+	    if(tokens[0] == "v")
 	    {
 	    	this.vertex.push(parseFloat(tokens[1]));
 	    	this.vertex.push(parseFloat(tokens[2]));
 	    	this.vertex.push(parseFloat(tokens[3]));
 		}
-	    else if(tokens[0] == "vn") //Normals
+		//Normals
+	    else if(tokens[0] == "vn")
 	    {
 	    	this.normals.push(parseFloat(tokens[1]));
 	    	this.normals.push(parseFloat(tokens[2]));
 	    	this.normals.push(parseFloat(tokens[3]));
 		}
-		else if(tokens[0] == "vt") //Texture
+		//Texture coords
+		else if(tokens[0] == "vt")
 		{
 			this.texture_coords.push(parseFloat(tokens[1]));
 	    	this.texture_coords.push(parseFloat(tokens[2]));
 		}
-		else if(tokens[0] == "f") //Faces <vertex>/<texture>/<normal>
+		//Faces <vertex>/<texture>/<normal>
+		else if(tokens[0] == "f")
 		{
 			//3 vertex face
  			//f 16/92/11 14/101/22 1/69/1
@@ -248,6 +267,32 @@ function loadOBJ(data)
 				this.faces.push(val[0]); //Vertex
 				this.faces.push(val[1]); //Texture
 				this.faces.push(val[2]); //Normal
+			}
+		}
+		//Material
+		else if(tokens[0] == "usemtl")
+		{
+			//Search MTL index
+			for(var j = 0; j < this.material.length; j++)
+			{
+				if(this.material[j].name == tokens[1])
+				{
+					break;
+				}
+			}
+
+			//Check if material was found and add to list
+			if(j != this.material.length)
+			{
+				//If faces material has elements add last index
+				if(this.faces_material.length != 0)
+				{
+					this.faces_material[this.faces_material.length-2] = this.faces.length-1;
+				}
+
+				this.faces_material.push(this.faces.length);
+				this.faces_material.push(0);
+				this.faces_material.push(j); //material_index
 			}
 		}
 	}
@@ -326,33 +371,53 @@ function transformOBJData()
 }
 
 //Read MTL data from String
-function loadMTL(data)
+function loadMTL(data, texture_folder)
 {
 	var lines = data.split("\n");
+    var index = -1;
 
-	//MTL File Spec
-	/*define a material named 'Colored'
-    newmtl Colored
-    The ambient color of the material is declared using Ka.
-    Ka 1.000 1.000 1.000     # white
-    Similarly, the diffuse color is declared using Kd.
-    Kd 1.000 1.000 1.000     # white
-    The specular color is declared using Ks, and weighted using the specular exponent Ns.
-    Ks 0.000 0.000 0.000     # black (off)
-   		Ns 10.000                # ranges between 0 and 1000
-   	Materials can be transparent.
-   	d 0.9                    # some implementations use 'd'
-    Tr 0.1                   # others use 'Tr' (inverted)*/
-
-    //Read Data Lines
+    //Read Data lines
 	for(var i = 0; i < lines.length; i++)
 	{
 	    var tokens = lines[i].split(/\s\s*/);
 
-	    if(tokens[0] == "newmtl") //New Material
+	    //New Material
+	    if(tokens[0] == "newmtl")
 	    {
-			//tokens[1] //Material name
+	    	material.push(new Material(tokens[1]));
+			index++;
 	    }
+
+	    //If material found
+	    if(material_index >= 0)
+		{
+			//Texture
+			if(tokens[0] == "map_Ka" || tokens[0] == "map_Kd" || tokens[0] == "map_Ks")
+			{
+				material[index].texture = Texture.createTexture(texture_folder + tokens[1]);
+			}
+			//Ambient intensity
+			else if(tokens[0] == "Ka")
+			{
+				material[index].ambientColor.r = parseFloat(tokens[1]);
+				material[index].ambientColor.g = parseFloat(tokens[2]);
+				material[index].ambientColor.b = parseFloat(tokens[3]);
+			}
+			//Diffuse intensity
+			else if(tokens[0] == "Kd")
+			{
+				material[index].diffuseColor.r = parseFloat(tokens[1]);
+				material[index].diffuseColor.g = parseFloat(tokens[2]);
+				material[index].diffuseColor.b = parseFloat(tokens[3]);
+			}
+			//Specular intensity
+			else if(tokens[0] == "Ks")
+			{
+				material[index].specularColor.r = parseFloat(tokens[1]);
+				material[index].specularColor.g = parseFloat(tokens[2]);
+				material[index].specularColor.b = parseFloat(tokens[3]);
+			}		
+		}
 	}
 }
 
@@ -590,7 +655,68 @@ Model.cube = function()
 		20, 21, 22,   20, 22, 23  // Left face
 	];
 
-	model.computeVertexNormals();
+	model.updateBuffers();
+
+	return model;
+}
+
+//Test Function that creates a cube with texture and retuns it
+Model.plane = function()
+{
+	var model = new Model();
+
+	model.texture = Texture.generateSolidColorTexture(Color.GREEN);
+
+	model.vertex =
+	[
+		//Face Front
+		-1.0, -1.0,  0.0,
+		1.0, -1.0,  0.0,
+		1.0,  1.0,  0.0,
+		-1.0,  1.0,  0.0,
+		//Face Back
+		-1.0, -1.0,  0.0,
+		1.0, -1.0,  0.0,
+		1.0,  1.0,  0.0,
+		-1.0,  1.0,  0.0
+	];
+
+	model.texture_coords =
+	[
+		//Front Face
+		0.0, 0.0,
+		1.0, 0.0,
+		1.0, 1.0,
+		0.0, 1.0,
+		//Back Face
+		0.0, 0.0,
+		1.0, 0.0,
+		1.0, 1.0,
+		0.0, 1.0
+	];
+
+	model.normals  =
+	[
+		//Back face
+		0.0,  0.0, -1.0,
+		0.0,  0.0, -1.0,
+		0.0,  0.0, -1.0,
+		0.0,  0.0, -1.0,
+		//Front face
+		0.0,  0.0,  1.0,
+		0.0,  0.0,  1.0,
+		0.0,  0.0,  1.0,
+		0.0,  0.0,  1.0
+    ];
+
+	model.faces =
+	[
+		//Front face
+		0, 1, 2, 0, 2, 3,
+		//Back face    
+		4, 5, 6, 4, 6, 7
+	];
+
 	model.updateBuffers();
 
 	return model;
