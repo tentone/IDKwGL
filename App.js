@@ -50,8 +50,6 @@ include("data/models/tank.js");
 include("data/models/wine_cask.js");
 include("data/models/bus.js");
 include("data/models/skybox.js");
-include("data/models/ua.js");
-include("data/models/target.js");
 
 include("Main.js");
 

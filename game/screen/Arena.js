@@ -22,15 +22,6 @@ function Arena()
 	this.skybox.rotation.set(90,0,0);
 	this.skybox.update();
 
-	//Target
-	this.model = new Model();
-	this.model.loadOBJ(target);
-	this.model.setTexture(Texture.createTexture("data/texture/target.png"));
-	this.model.position.set(0,10,0);
-	this.model.scale.set(2,2,2);
-	this.model.update();
-	this.scene.addModel(this.model);
-
 	//Tank
 	this.model = new Model();
 	this.model.loadOBJ(tank);
@@ -169,7 +160,7 @@ function Arena()
 	this.world.addBody(new GameObject(this.model));
 	
 	//Grass
-	for(var i = 0; i < 200; i++)
+	for(var i = 0; i < 150; i++)
 	{
 		this.model = Model.plane()
 		this.model.setTexture(Texture.createTexture("data/texture/grass_sprite.png"));
@@ -200,7 +191,6 @@ function Arena()
 	this.player = new Player(canvas);
 	this.world.addBody(this.player);
 	this.world.body[this.world.body.length-1].setStatic(false);
-
 
 	//Static camera for weapon and HUD
 	this.camera_static = new Spectator(canvas);
