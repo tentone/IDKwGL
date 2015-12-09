@@ -8,11 +8,12 @@ function Arena()
 	//Bullet
 	this.bullet = new Model();
 	this.bullet.loadOBJ(skybox);
-	this.bullet.setTexture(Texture.generateSolidColorTexture(Color.YELLOW));
-	this.bullet.scale.set(0.5,0.5,0.5);
-	this.bullet.position.set(0,100,0);
+	this.bullet.setTexture(Texture.generateSolidColorTexture(Color.WHITE));
+	this.bullet.position.set(0,8,0);
+
 	this.bullet.update();
-	this.bullet_particle = new Particle(this.bullet.clone(), new Vector3(0,8,0), new Vector3(0,0,0), 1, 0);
+	this.bullet_particle = new Particle(this.bullet.clone(), new Vector3(0,8,0), new Vector3(0,0,0), 1, 10000);
+	this.bullet_particle_list = [];
 
 	//Skybox
 	this.skybox = new Model();
@@ -160,7 +161,7 @@ function Arena()
 	this.world.addBody(new GameObject(this.model));
 	
 	//Grass
-	for(var i = 0; i < 150; i++)
+	for(var i = 0; i < 200; i++)
 	{
 		this.model = Model.plane()
 		this.model.setTexture(Texture.createTexture("data/texture/grass_sprite.png"));
@@ -192,6 +193,7 @@ function Arena()
 	this.world.addBody(this.player);
 	this.world.body[this.world.body.length-1].setStatic(false);
 
+
 	//Static camera for weapon and HUD
 	this.camera_static = new Spectator(canvas);
 }
@@ -212,7 +214,30 @@ function update()
 	//Fire Gun
 	if(App.mouse.buttonJustPressed(Mouse.LEFT))
 	{
+		var angle = - Conversion.degreesToRadians(this.player.rotation.x);
+		
+		var position = this.player.camera.position.clone();
+		position.x = -position.x;
+		position.y -= 6
+
+		var bullet_particle = new Particle(this.bullet.clone(), position, new Vector3(0,0,0), 1, 100);		
+		bullet_particle.speed.z = 10 * Math.cos(angle);
+		bullet_particle.speed.x = 10 * Math.sin(angle);
+		bullet_particle.speed.y = 10 * Math.sin(Conversion.degreesToRadians(-this.player.rotation.y));
+		this.bullet_particle_list.push(bullet_particle);
 		this.scene.light.intensity.set(1,1,0.6);
+	}
+
+	for(var i=0; i< this.bullet_particle_list.length;i++)
+	{
+		if(this.bullet_particle_list[i].time < 0)
+		{
+			this.bullet_particle_list.splice(i, 1);
+		}
+		else
+		{
+			this.bullet_particle_list[i].update();
+		}
 	}
 }
 
@@ -226,9 +251,10 @@ function draw()
 	this.player.camera.startFrame();
 	this.player.camera.useShader(shaderLightPixel);
 	this.scene.draw(this.player.camera);
-	if(this.bullet_particle.time > 0)
+
+	for(var i=0; i< this.bullet_particle_list.length;i++)
 	{
-		this.bullet_particle.model.draw(this.player.camera);
+		this.bullet_particle_list[i].draw(this.player.camera,this.scene.light);	
 	}
 
 	//Draw static camera
