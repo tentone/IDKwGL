@@ -11,6 +11,8 @@ Key.prototype.isPressed = isPressed;
 Key.prototype.justPressed = justPressed;
 Key.prototype.justReleased = justReleased;
 Key.prototype.update = update;
+Key.prototype.toString = toString;
+Key.prototype.set = set;
 
 //Action List
 Key.KEY_DOWN = 0;
@@ -56,6 +58,14 @@ function justPressed()
 function justReleased()
 {
 	return this.justReleased;
+}
+
+//Set key values
+function set(just_pressed, is_pressed, just_released)
+{
+	this.justPressed = just_pressed;
+	this.isPressed = is_pressed;
+	this.justReleased = just_released;
 }
 
 //Print Key

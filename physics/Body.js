@@ -48,16 +48,8 @@ function update(world)
 		this.speed.add(world.acceleration);
 		this.speed.add(this.acceleration);
 		
-		if(this.is_colliding.z == 1)
-		{
-			this.acceleration.mul(world.friction);
-			this.speed.mul(world.friction);
-		}
-		else
-		{
-			this.acceleration.mul(world.friction_air);
-			this.speed.mul(world.friction_air);
-		}
+		this.acceleration.mul(world.friction);
+		this.speed.mul(world.friction);
 
 		this.speed.roundCloseToZero();
 		this.is_colliding.set(0, 0, 0);

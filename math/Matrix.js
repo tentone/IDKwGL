@@ -4,11 +4,10 @@ function Matrix(size_x, size_y)
 	this.matrix = [];
 	this.size = new Vector2(size_x, size_y);
 
-	var i, j;
-	for(i = 0; i < this.size.x; i++)
+	for(var i = 0; i < this.size.x; i++)
 	{
 		this.matrix[i] = [];
-		for(j = 0; j < this.size.y; j++)
+		for(var j = 0; j < this.size.y; j++)
 		{
 			this.matrix[i][j] = 0; 
 		}
@@ -32,6 +31,28 @@ Matrix.prototype.mul = mul;
 Matrix.prototype.mulTN = mulTN;
 Matrix.prototype.flatten = flatten;
 Matrix.prototype.clone = clone;
+Matrix.prototype.clear = clear;
+
+//Clears matrix data to 0's if matrix if square clears to indentity
+function clear()
+{
+	for(var i = 0; i < this.size.x; i++)
+	{
+		this.matrix[i] = [];
+		for(var j = 0; j < this.size.y; j++)
+		{
+			this.matrix[i][j] = 0; 
+		}
+	}
+
+	if(this.size.x == this.size.y)
+	{
+		for(i = 0; i < this.size.x; i++)
+		{
+			this.matrix[i][i] = 1;
+		}
+	}
+}
 
 //Convert to array collum oriented
 function flatten()

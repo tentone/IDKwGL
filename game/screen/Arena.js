@@ -5,16 +5,6 @@ function Arena()
 	this.scene = new Scene();
 	this.scene_grass = new Scene();
 
-	//Bullet
-	this.bullet = new Model();
-	this.bullet.loadOBJ(skybox);
-	this.bullet.setTexture(Texture.generateSolidColorTexture(Color.WHITE));
-	this.bullet.position.set(0,8,0);
-
-	this.bullet.update();
-	this.bullet_particle = new Particle(this.bullet.clone(), new Vector3(0,8,0), new Vector3(0,0,0), 1, 10000);
-	this.bullet_particle_list = [];
-
 	//Skybox
 	this.skybox = new Model();
 	this.skybox.loadOBJ(skybox);
@@ -161,7 +151,7 @@ function Arena()
 	this.world.addBody(new GameObject(this.model));
 	
 	//Grass
-	for(var i = 0; i < 200; i++)
+	for(var i = 0; i < 100; i++)
 	{
 		this.model = Model.plane()
 		this.model.setTexture(Texture.createTexture("data/texture/grass_sprite.png"));
@@ -172,13 +162,23 @@ function Arena()
 	}
 
 	//Tank smoke
-	this.model = Model.plane()
+	this.model = Model.plane();
 	this.model.setTexture(Texture.createTexture("data/texture/smoke.jpg"));
 	this.model.scale.set(4, 4, 1);
 	this.model.position.set(MathUtils.randomMod()*400, 2, MathUtils.randomMod()*400);
 	this.model.update();
+	this.particle = new ParticleEmitter(this.model, new Vector3(-250,8,100), new Vector3(0,0.7,0), new Vector3(0.3,0.5,0.3), 4, 2, 200, 100, 20);
 
-	this.particle = new ParticleEmitter(this.model, new Vector3(-250,0,100), new Vector3(0,0.7,0), new Vector3(0.3,0.5,0.3), 1, 0.75, 300, 200, 100);
+	//Bullet
+	this.bullet = new Model();
+	this.bullet.loadOBJ(skybox);
+	this.bullet.setTexture(Texture.generateSolidColorTexture(Color.WHITE));
+	this.bullet.scale.set(0.3,0.3,0.3);
+	this.bullet.position.set(0,8,0);
+	this.bullet.update();
+	
+	this.bullet_particle = new Particle(this.bullet.clone(), new Vector3(0,8,0), new Vector3(0,0,0), 1, 10000);
+	this.bullet_particle_list = [];
 
 	//Weapon
 	this.weapon = new Model();
@@ -193,9 +193,13 @@ function Arena()
 	this.world.addBody(this.player);
 	this.world.body[this.world.body.length-1].setStatic(false);
 
-
 	//Static camera for weapon and HUD
-	this.camera_static = new Spectator(canvas);
+	this.camera_static = new PrespectiveCamera(canvas, 70, 1);
+
+	//Crossair and orthographicCamera
+	this.cross = Model.plane();
+	this.cross.setTexture(Texture.createTexture("data/texture/cross.png"));
+	this.hud_camera = new OrthographicCamera(canvas, 20);
 }
 
 Arena.prototype.draw = draw;
@@ -214,20 +218,17 @@ function update()
 	//Fire Gun
 	if(App.mouse.buttonJustPressed(Mouse.LEFT))
 	{
-		var angle = - Conversion.degreesToRadians(this.player.rotation.x);
-		
+		var angle = Conversion.degreesToRadians(-this.player.rotation.x);
 		var position = this.player.camera.position.clone();
 		position.x = -position.x;
-		position.y -= 6
 
-		var bullet_particle = new Particle(this.bullet.clone(), position, new Vector3(0,0,0), 1, 100);		
-		bullet_particle.speed.z = 10 * Math.cos(angle);
-		bullet_particle.speed.x = 10 * Math.sin(angle);
-		bullet_particle.speed.y = 10 * Math.sin(Conversion.degreesToRadians(-this.player.rotation.y));
+		var bullet_particle = new Particle(this.bullet.clone(), position, new Vector3(Math.sin(angle),Math.sin(Conversion.degreesToRadians(-this.player.rotation.y)),Math.cos(angle)), 1, 100);		
+		bullet_particle.speed.mulConst(3);
 		this.bullet_particle_list.push(bullet_particle);
 		this.scene.light.intensity.set(1,1,0.6);
 	}
 
+	//Update bullet list
 	for(var i=0; i< this.bullet_particle_list.length;i++)
 	{
 		if(this.bullet_particle_list[i].time < 0)
@@ -244,30 +245,43 @@ function update()
 function draw()
 {
     //Clearing the frame-buffer and the depth-buffer
-    gl.clearColor(0.1, 0.1, 0.1, 1);
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.clearColor(0, 0, 0, 1);
+    gl.clear(gl.COLOR_BUFFER_BIT);
 
-    //Draw  play camera
+    gl.enable(gl.DEPTH_TEST);
+    gl.depthFunc(gl.LESS);
+
+    //Prepare player camera
 	this.player.camera.startFrame();
 	this.player.camera.useShader(shaderLightPixel);
-	this.scene.draw(this.player.camera);
 
-	for(var i=0; i< this.bullet_particle_list.length;i++)
+   	//Draw scene, skybox and bullets
+	this.scene.draw(this.player.camera);
+	this.skybox.draw(this.player.camera);
+	for(var i = 0; i < this.bullet_particle_list.length; i++)
 	{
 		this.bullet_particle_list[i].draw(this.player.camera,this.scene.light);	
 	}
 
 	//Draw static camera
-	this.camera_static.camera.startFrame();
-	this.camera_static.camera.useShader(shaderLightPixel);
-	this.weapon.draw(this.camera_static.camera);
-	this.skybox.draw(this.player.camera);
-
-	//Render Grass
+	this.camera_static.startFrame();
+	this.camera_static.useShader(shaderLightPixel);
+	this.weapon.draw(this.camera_static);
+	
+    //Enable bleding
 	gl.enable(gl.BLEND);
 	gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+
+	//Render Grass and particles
 	this.scene_grass.draw(this.player.camera);
 	this.particle.draw(this.player.camera);
+
+	//Render HUD
+	this.hud_camera.startFrame();
+	this.hud_camera.useShader(shaderLightPixel);
+	this.cross.draw(this.hud_camera);
+
+	//Disable Blending
 	gl.disable(gl.BLEND);
 }
 
@@ -275,5 +289,6 @@ function draw()
 function resize(canvas)
 {
 	this.player.camera.resize(canvas.width, canvas.height);
-	this.camera_static.camera.resize(canvas.width, canvas.height);
+	this.camera_static.resize(canvas.width, canvas.height);
+	this.hud_camera.resize(canvas.width, canvas.height);
 }

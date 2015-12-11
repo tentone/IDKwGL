@@ -9,6 +9,12 @@ function Mouse()
 	this.pos = new Vector2(0,0);
 	this.pos_diff = new Vector2(0,0);
 
+	//Raw Mouse Buttons
+	this.raw_keys = [];
+	this.raw_keys[0] = new Key();
+	this.raw_keys[1] = new Key();
+	this.raw_keys[2] = new Key();
+
 	//Mouse Buttons
 	this.keys = [];
 	this.keys[0] = new Key();
@@ -26,6 +32,7 @@ Mouse.SENSITIVITY = 0.2;
 
 //Functions Prototype
 Mouse.prototype.buttonPressed = buttonPressed;
+Mouse.prototype.buttonJustReleased = buttonJustReleased;
 Mouse.prototype.buttonJustPressed = buttonJustPressed;
 Mouse.prototype.updatePosition = updatePosition;
 Mouse.prototype.updateKey = updateKey;
@@ -44,6 +51,12 @@ function buttonJustPressed(button)
 	return this.keys[button].justPressed;
 }
 
+//Check if a mouse button was just released
+function buttonJustReleased(button)
+{
+	return this.keys[button].justReleased;
+}
+
 //Update Mouse Position
 function updatePosition(x, y, x_diff, y_diff)
 {
@@ -56,12 +69,27 @@ function updatePosition(x, y, x_diff, y_diff)
 //Update Mouse Key
 function updateKey(button, action)
 {
-	this.keys[button].update(action);
+	this.raw_keys[button].update(action);
 }
 
 //Update Mouse State (Calculate position diff)
 function update()
 {
+	//Update mouse keys state
+	for(var i = 0; i < this.raw_keys.length; i++)
+	{
+		if(this.raw_keys[i].justPressed && this.keys[i].justPressed)
+		{
+			this.raw_keys[i].justPressed = false;
+		}
+		if(this.raw_keys[i].justReleased && this.keys[i].justReleased)
+		{
+			this.raw_keys[i].justReleased = false;
+		}
+		this.keys[i].set(this.raw_keys[i].justPressed, this.raw_keys[i].isPressed, this.raw_keys[i].justReleased);
+	}
+
+	//Update Mouse Position if needed
 	if(this.raw_mouse_pos_updated)
 	{
 		this.pos_diff.x = this.raw_mouse_movement.x;
@@ -82,6 +110,7 @@ function update()
 //Return string with mouse position
 function toString()
 {
-	return "Pos:" + this.pos.toString() + " Diff:" + this.pos_diff.toString();
+	return "Pos:" + this.pos.toString() + " Diff:" + this.pos_diff.toString() + "\n   Left: " + this.keys[0].toString() +
+		"\n   Middle: " + this.keys[1].toString() + "\n   Right: " + this.keys[2].toString();
 }
 

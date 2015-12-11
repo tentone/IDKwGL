@@ -29,7 +29,7 @@ function update(world)
 	var angle = Conversion.degreesToRadians(this.rotation.x);
 
 	var speed_walk = 0.5;
-	var speed_jump = 1;
+	var speed_jump = 1.4;
 
 	//Keyboard input
 	if(App.keyboard.isKeyPressed(Keyboard.SHIFT))

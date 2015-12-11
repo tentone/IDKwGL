@@ -60,6 +60,9 @@ var gl = null;
 //App class
 function App(){}
 
+//Time control
+App.time = 0;
+
 //Input Input
 App.keyboard;
 App.mouse;
@@ -99,12 +102,14 @@ App.initialize = function()
 	//Mouse Button Down
 	document.onmousedown = function(event)
 	{
+		//console.log("Mouse button " + event.which + " down");
 		App.mouse.updateKey(event.which-1, Key.KEY_DOWN);
 	}
 
 	//Mouse Button Up
 	document.onmouseup = function(event)
 	{
+		//console.log("Mouse button " + event.which + " up");
 		App.mouse.updateKey(event.which-1, Key.KEY_UP);
 	}
 
@@ -129,9 +134,7 @@ App.initGL = function()
 {
 	try
 	{
-		gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-		gl.enable(gl.DEPTH_TEST);
-		//gl.enable(gl.CULL_FACE);
+		gl = canvas.getContext("webgl", {alpha: false}) || canvas.getContext("experimental-webgl", {alpha: false});
 		gl.viewport(0, 0, canvas.width, canvas.height);
 	}
 	catch(e){}
@@ -147,6 +150,7 @@ App.loop = function()
 {
 	//Update Mouse Values (to keep in sync with game actions)
 	App.mouse.update();
+	App.time += delta;
 
 	Main.update();
 	Main.draw();

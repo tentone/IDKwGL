@@ -23,8 +23,10 @@ MatrixGenerator.rotationMatrix = function(degrees_x, degrees_y, degrees_z)
 
 	xc = Math.cos(rad.x);
 	xs = Math.sin(rad.x);
+	
 	yc = Math.cos(rad.y);
 	ys = Math.sin(rad.y);
+
 	zc = Math.cos(rad.z);
 	zs = Math.sin(rad.z);
 

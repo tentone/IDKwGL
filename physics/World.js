@@ -9,8 +9,7 @@ function World(acceleration)
 		this.acceleration = acceleration;
 	}
 
-	this.friction = new Vector3(0.75, 0.75, 0.75);
-	this.friction_air = new Vector3(0.85, 0.85, 0.85);
+	this.friction = new Vector3(0.80, 0.80, 0.80);
 	this.body = [];
 
 	this.acceleration.mulConst(World.DELTA);
