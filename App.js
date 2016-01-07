@@ -38,8 +38,7 @@ include("game/Player.js");
 include("game/GameObject.js");
 
 include("game/screen/Arena.js");
-include("game/screen/ArenaTest.js");
-include("game/screen/ArenaTest2.js");
+include("game/screen/ArenaPhysics.js");
 
 include("data/models/orc.js");
 include("data/models/baron_nashor.js");

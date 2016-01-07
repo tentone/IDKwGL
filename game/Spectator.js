@@ -12,29 +12,30 @@ Spectator.prototype.toString = toString;
 function update()
 {
 	var angle = Conversion.degreesToRadians(this.rotation.x);
+	var speed = 1.5;
 
 	//Camera Rotate Test
 	if(App.keyboard.isKeyPressed(Keyboard.W))
 	{
-		this.camera.position.z += 0.1 * Math.cos(angle);
-		this.camera.position.x += 0.1 * Math.sin(angle);
+		this.camera.position.z += speed * Math.cos(angle);
+		this.camera.position.x += speed * Math.sin(angle);
 	}
 	if(App.keyboard.isKeyPressed(Keyboard.S))
 	{
-		this.camera.position.z -= 0.1 * Math.cos(angle);
-		this.camera.position.x -= 0.1 * Math.sin(angle);
+		this.camera.position.z -= speed * Math.cos(angle);
+		this.camera.position.x -= speed * Math.sin(angle);
 	}
  
 	angle += MathUtils.PID2;
 	if(App.keyboard.isKeyPressed(Keyboard.A))
 	{
-		this.camera.position.z -= 0.1 * Math.cos(angle);
-		this.camera.position.x -= 0.1 * Math.sin(angle);
+		this.camera.position.z -= speed * Math.cos(angle);
+		this.camera.position.x -= speed * Math.sin(angle);
 	}
 	if(App.keyboard.isKeyPressed(Keyboard.D))
 	{
-		this.camera.position.z += 0.1 * Math.cos(angle);
-		this.camera.position.x += 0.1 * Math.sin(angle);
+		this.camera.position.z += speed * Math.cos(angle);
+		this.camera.position.x += speed * Math.sin(angle);
 	}
 
 	//Camera Keyboard Movement
@@ -54,11 +55,11 @@ function update()
 	//Camera Move UP/DOWN
 	if(App.keyboard.isKeyPressed(Keyboard.SPACEBAR))
 	{
-		this.camera.position.y += 0.1;
+		this.camera.position.y += speed;
 	}
 	if(App.keyboard.isKeyPressed(Keyboard.CTRL))
 	{
-		this.camera.position.y -= 0.1;
+		this.camera.position.y -= speed;
 	}
 
 	//Limit Vertical Rotation
