@@ -193,13 +193,13 @@ function Arena()
 	this.world.addBody(this.player);
 	this.world.body[this.world.body.length-1].setStatic(false);
 
-	//Static camera for weapon and HUD
+	//Static camera for Weapon
 	this.camera_static = new PrespectiveCamera(canvas, 70, 1);
 
-	//Crossair and orthographicCamera
+	//Crossair and HUD camera
+	this.hud_camera = new OrthographicCamera(canvas, 20);
 	this.cross = Model.plane();
 	this.cross.setTexture(Texture.createTexture("data/texture/cross.png"));
-	this.hud_camera = new OrthographicCamera(canvas, 20);
 }
 
 Arena.prototype.draw = draw;
@@ -275,7 +275,7 @@ function draw()
 	//Render Grass and particles
 	this.scene_grass.draw(this.player.camera);
 	this.particle.draw(this.player.camera);
-
+	
 	//Render HUD
 	this.hud_camera.startFrame();
 	this.hud_camera.useShader(shaderLightPixel);

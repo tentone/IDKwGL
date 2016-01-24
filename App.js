@@ -18,6 +18,7 @@ include("graphics/elements/Model.js");
 include("graphics/elements/Light.js");
 include("graphics/elements/Texture.js");
 include("graphics/elements/Material.js");
+include("graphics/elements/Sprite.js");
 
 include("graphics/particle/Particle.js");
 include("graphics/particle/ParticleEmitter.js");
@@ -33,13 +34,6 @@ include("graphics/ModelUtils.js");
 include("physics/Body.js");
 include("physics/World.js");
 
-include("game/Spectator.js");
-include("game/Player.js");
-include("game/GameObject.js");
-
-include("game/screen/Arena.js");
-include("game/screen/ArenaPhysics.js");
-
 include("data/models/orc.js");
 include("data/models/baron_nashor.js");
 include("data/models/cardboard_boxes.js");
@@ -49,6 +43,14 @@ include("data/models/tank.js");
 include("data/models/wine_cask.js");
 include("data/models/bus.js");
 include("data/models/skybox.js");
+
+include("game/Spectator.js");
+include("game/Player.js");
+include("game/GameObject.js");
+
+include("game/screen/Arena.js");
+include("game/screen/Test2D.js");
+include("game/screen/ArenaPhysics.js");
 
 include("Main.js");
 

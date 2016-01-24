@@ -1,4 +1,4 @@
-//Constructor
+//Prespective camera constructor from canvas fov and zoom values
 function PrespectiveCamera(canvas, fov, zoom)
 {
     //Camera Screen Interface
@@ -8,10 +8,10 @@ function PrespectiveCamera(canvas, fov, zoom)
     //Camera Movement
 	this.position = new Vector3(0,0,0); //Position
     this.rotation = new Vector3(0,0,0); //View Angle
-    this.ori = new Vector3(0,0,0);
+    this.ori = new Vector3(0,0,0); //Origin
     this.zoom = zoom; //Camera Zoom
 
-    //Camera Projetion Matrix
+    //Camera Properties
     this.fov = fov;
     this.updateProjectionMatrix();
 

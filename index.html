@@ -88,13 +88,13 @@
 				vec3 lightWeighting;
 				if (!uUseLighting)
 				{
-				lightWeighting = vec3(1.0, 1.0, 1.0);
+					lightWeighting = vec3(1.0, 1.0, 1.0);
 				}
 				else
 				{
-				vec3 lightDirection = normalize(uPointLightingLocation - vPosition.xyz);
-				float directionalLightWeighting = max(dot(normalize(vTransformedNormal), lightDirection), 0.0);
-				lightWeighting = uAmbientColor + uPointLightingColor * directionalLightWeighting;
+					vec3 lightDirection = normalize(uPointLightingLocation - vPosition.xyz);
+					float directionalLightWeighting = max(dot(normalize(vTransformedNormal), lightDirection), 0.0);
+					lightWeighting = uAmbientColor + uPointLightingColor * directionalLightWeighting;
 				}
 
 				vec4 fragmentColor;

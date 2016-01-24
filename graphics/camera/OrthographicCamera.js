@@ -1,12 +1,28 @@
-//Constructor from y size and canvas
-function OrthographicCamera(canvas, size_y)
+//Constructor from y size or x and y size and canvas
+function OrthographicCamera(canvas, size_y, size_x)
 {
-    //Camera Screen Interface
-    this.aspect_ratio = canvas.width/canvas.height; //x/y
-    this.screen_size = new Vector2(canvas.width, canvas.height);
+    if(size_x === undefined)
+    {
+        if(size_y === undefined)
+        {
+            this.aspect_ratio = 1;
+            this.screen_size = new Vector2(1, 1);
+            this.size = new Vector2(1, 1);
+        }
+        else
+        {
+            this.aspect_ratio = canvas.width/canvas.height; //x/y
+            this.screen_size = new Vector2(canvas.width, canvas.height);
+            this.size = new Vector2(size_y*this.aspect_ratio, size_y);
+        }
+    }
+    else
+    {
+        this.aspect_ratio = size_x/size_y; //x/y
+        this.screen_size = new Vector2(size_x, size_y);
+        this.size = new Vector2(size_x, size_y);
+    }
 
-    //Camera Specs
-    this.size = new Vector2(size_y*this.aspect_ratio, size_y);
 
     //Camera Movement
 	this.position = new Vector3(0,0,0); //Position
@@ -25,6 +41,7 @@ function OrthographicCamera(canvas, size_y)
 OrthographicCamera.prototype.useShader = useShader;
 OrthographicCamera.prototype.startFrame = startFrame;
 OrthographicCamera.prototype.resize = resize;
+OrthographicCamera.prototype.setProjectionMatrix = setProjectionMatrix;
 OrthographicCamera.prototype.toString = toString;
 
 //Call before start a frame on this camera
@@ -53,6 +70,12 @@ function resize(x, y)
 
     //Calculate Projection Matrix
     this.projectionMatrix = OrthographicCamera.orthogonalProjectionMatrix(-this.size.x, this.size.x, -this.size.y, this.size.y, -this.size.y, this.size.y);
+}
+
+//Set custom projection matrix to camera
+function setProjectionMatrix(matrix)
+{
+    this.projectionMatrix = matrix;
 }
 
 //Create string with camera info

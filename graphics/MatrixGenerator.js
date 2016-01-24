@@ -17,7 +17,7 @@ MatrixGenerator.rotationMatrix = function(degrees_x, degrees_y, degrees_z)
 {
 	var mat = new Matrix(4,4);
 
-	//Calculate Z>Y>X TODO <CHECK THIS>
+	//TODO <Check this code> calculate Z>Y>X
 	/*var rad = new Vector3(-degrees_x, degrees_y, -degrees_z);
 	rad.mulConst(Conversion.degToRadRat);
 

@@ -5,14 +5,14 @@ function Model()
 	this.vertex = []; //Vertex
 	this.texture_coords = []; //Vertex Texture
 	this.normals = []; //Vertex Normals
-	this.faces = []; //Face <vertex>/<texture>/<normal>
+	this.faces = []; //Face <vertex / texture / normal>
 
-	//Colision Box 
+	//Bounding box
 	this.box = null;
 
 	//Store relation between faces and materials 
-	this.face_material = []; //<face_index_ini>, <face_index_end>, <material_index>
-	this.material = [];
+	this.face_material = []; //<Face Index Ini / Face Index End / Material>
+	this.material = []; //Material Array
 
 	//Auto Rotate Flags
 	this.follow_camera_horizontal = false;
@@ -102,7 +102,7 @@ function draw(camera, light)
     //Faces buffer
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.facesBuffer);
 
-	//Draw trough all texture (cant use gl.drawelementsrange for some reason)
+	//Draw trough all texture
     for(var i = 0; i < this.face_material.length; i += 3)
     {
 		//Set texture to model
@@ -155,7 +155,7 @@ function updateBuffers()
     this.facesBuffer.numItems = this.faces.length;
 }
 
-//Creates a copy of this model (keeps same vertex, buffer and texture data)
+//Creates a copy of this model (keeps same vertex, buffer and texture data pointers)
 function clone()
 {
 	var model = new Model();
@@ -185,7 +185,7 @@ function clone()
 }
 
 //Set model size with absolute values
-function setSize(x,y,z)
+function setSize(x, y, z)
 {
 	this.scale.set(x,y,z);
 	this.scale.div(this.getBox().size);
@@ -556,7 +556,7 @@ function computeVertexNormals()
 	}
 }
 
-//Create Box (geometry) from vertex data
+//Get Bouding box created from vertex data
 function getBox()
 {
 	//If not available calculate box from vertex data
@@ -700,35 +700,38 @@ Model.cube = function()
 		0.0,  1.0,  0.0,
 		0.0,  1.0,  0.0,
 		0.0,  1.0,  0.0,
-
 		//Bottom face
 		0.0, -1.0,  0.0,
 		0.0, -1.0,  0.0,
 		0.0, -1.0,  0.0,
 		0.0, -1.0,  0.0,
-
 		//Right face
 		1.0,  0.0,  0.0,
 		1.0,  0.0,  0.0,
 		1.0,  0.0,  0.0,
 		1.0,  0.0,  0.0,
-
 		//Left face
 		-1.0,  0.0,  0.0,
 		-1.0,  0.0,  0.0,
 		-1.0,  0.0,  0.0,
-		-1.0,  0.0,  0.0,
+		-1.0,  0.0,  0.0
     ];
 
 
 	model.faces =
 	[
-		0, 1, 2,      0, 2, 3,    // Front face
-		4, 5, 6,      4, 6, 7,    // Back face
-		8, 9, 10,     8, 10, 11,  // Top face
-		12, 13, 14,   12, 14, 15, // Bottom face
-		16, 17, 18,   16, 18, 19, // Right face
-		20, 21, 22,   20, 22, 23  // Left face
+		//Front face
+		0, 1, 2, 0, 2, 3,    
+		//Back face
+		4, 5, 6, 4, 6, 7,    
+		//Top face
+		8, 9, 10, 8, 10, 11,
+		//Bottom face
+		12, 13, 14, 12, 14, 15,
+		//Right face
+		16, 17, 18, 16, 18, 19,
+		//Left face
+		20, 21, 22, 20, 22, 23
 	];
 
 	model.updateBuffers();
@@ -792,9 +795,8 @@ Model.plane = function()
 		//Back face    
 		4, 5, 6, 4, 6, 7
 	];
-
+	
 	model.follow_camera_vertical = true;
-
 	model.updateBuffers();
 
 	return model;

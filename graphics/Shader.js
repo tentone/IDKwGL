@@ -18,6 +18,7 @@ function Shader(gl, fragment, vertex)
 //Function Prototypes
 Shader.prototype.get = get;
 
+//Get shader program pointer
 function get()
 {
 	return this.shaderProgram;

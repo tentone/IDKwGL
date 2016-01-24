@@ -20,15 +20,20 @@ Main.init = function(canvas)
 //Logic Update
 Main.update = function()
 {
-	if(App.keyboard.isKeyPressed(Keyboard.O))
+	if(App.keyboard.isKeyPressed(Keyboard.I))
 	{
 		screen = new Arena();
+	}
+	else if(App.keyboard.isKeyPressed(Keyboard.O))
+	{
+		screen = new Test2D();
 	}
 	else if(App.keyboard.isKeyPressed(Keyboard.P))
 	{
 		screen = new ArenaPhysics();
 	}
 
+	
 	screen.update();
 }
 

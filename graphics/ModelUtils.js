@@ -5,12 +5,11 @@ ModelUtils.moveToSphericalSurface = function(coords)
 {
     for(var i = 0; i < coords.length; i += 3)
     {
-        var v = new Vector3(coords[i], coords[i+1], coords[i+2]);
-        v.normalize();
-        
-        coords[i] = v.x;
-        coords[i+1] = v.y;
-        coords[i+2] = v.z;
+        var vec = new Vector3(coords[i], coords[i+1], coords[i+2]);
+        vec.normalize();
+        coords[i] = vec.x;
+        coords[i+1] = vec.y;
+        coords[i+2] = vec.z;
     }
 }
 

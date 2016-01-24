@@ -13,19 +13,6 @@ function ArenaPhysics()
 	this.skybox.rotation.set(90,0,0);
 	this.skybox.update();
 
-	//Crate Pile
-	/*for(var i = 0; i < 200; i++)
-	{
-		this.model = Model.cube();
-		this.model.setTexture(Texture.createTexture("data/texture/wood_box.png"));
-		this.model.position.set(MathUtils.randomMod()*200,  MathUtils.randomMod()*300, MathUtils.randomMod()*200);
-		this.model.scale.set(5,5,5);
-		this.model.update();
-		this.scene.addModel(this.model);
-		this.world.addBody(new GameObject(this.model));
-		this.world.body[this.world.body.length-1].setStatic(false);
-	}*/
-
 	//Floor
 	this.model = Model.cube();
 	this.model.setTexture(Texture.createTextureRepeat("data/texture/grass.jpg"));
@@ -86,6 +73,7 @@ time = 0;
 
 function update()
 {
+	//Spawn box 
     time++;
     if(time % 5 == 0)
     {
