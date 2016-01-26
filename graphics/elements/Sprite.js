@@ -1,7 +1,7 @@
 function Sprite()
 {
 	//Square single sided sprite data
-	this.vertex = [-1.0, -1.0,  0.0, 1.0, -1.0,  0.0, 1.0,  1.0,  0.0, -1.0,  1.0,  0.0];
+	this.vertex = [0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0,  0.0];
 	this.texture_coords = [0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0];
 	this.normals = [0.0,  0.0,  1.0, 0.0,  0.0,  1.0, 0.0,  0.0,  1.0, 0.0,  0.0,  1.0];
 	this.faces = [0, 1, 2, 0, 2, 3]; //Face <vertex / texture / normal>
@@ -139,7 +139,7 @@ function updateBuffers()
 //Creates a copy of this sprite (keeps same vertex, buffer and texture data pointers)
 function clone()
 {
-	var sprite = new sprite();
+	var sprite = new Sprite();
 
 	sprite.vertex = this.vertex;
 	sprite.texture_coords = this.texture_coords;

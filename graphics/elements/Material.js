@@ -7,8 +7,6 @@ function Material(name)
 	this.ambientColor = new Color(1,1,1);
 	this.diffuseColor = new Color(1,1,1);
 	this.specularColor = new Color(0.5,0.5,0.5);
-
-
 }
 
 //Functions Prototypes

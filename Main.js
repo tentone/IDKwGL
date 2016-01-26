@@ -14,7 +14,7 @@ Main.init = function(canvas)
 	shaderLightVertex = Shader.lightVertexRenderShader();
 	shaderLightPixel = Shader.lightPixelRenderShader();
 
-	screen = new Arena();
+	screen = new Test2D();
 }
 
 //Logic Update

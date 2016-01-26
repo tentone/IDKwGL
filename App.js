@@ -89,8 +89,8 @@ App.initialize = function()
 	//Keyboard OnKeyUp Event
 	document.onkeyup = function(event)
 	{
-	    App.keyboard.update(event.keyCode, Key.KEY_UP);
-	    //console.log("Keyboard KeyUp: "+String.fromCharCode(event.keyCode)+" ("+event.keyCode+")");
+		App.keyboard.update(event.keyCode, Key.KEY_UP);
+		//console.log("Keyboard KeyUp: "+String.fromCharCode(event.keyCode)+" ("+event.keyCode+")");
 	}
 
 	//Mouse Move Position
@@ -137,6 +137,7 @@ App.initGL = function()
 	{
 		gl = canvas.getContext("webgl", {alpha: false}) || canvas.getContext("experimental-webgl", {alpha: false});
 		gl.viewport(0, 0, canvas.width, canvas.height);
+
 	}
 	catch(e){}
 
@@ -189,5 +190,5 @@ App.isMouseLocked = function()
 // Auxuiliary function to include JS files in app
 function include(jsFile)
 {
-   document.write('<script type="text/javascript" src="'+ jsFile+ '"></script>');
+	document.write('<script type="text/javascript" src="'+ jsFile+ '"></script>');
 }

@@ -51,7 +51,6 @@ function equals(val)
 	}
 }
 
-
 function add(val)
 {
 	if(typeof val != typeof this)

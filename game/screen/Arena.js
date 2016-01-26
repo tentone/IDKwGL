@@ -246,7 +246,7 @@ function draw()
 {
     //Clearing the frame-buffer and the depth-buffer
     gl.clearColor(0, 0, 0, 1);
-    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LESS);
@@ -268,6 +268,9 @@ function draw()
 	this.camera_static.useShader(shaderLightPixel);
 	this.weapon.draw(this.camera_static);
 	
+	//Disable depth test
+	gl.disable(gl.DEPTH_TEST);
+
     //Enable bleding
 	gl.enable(gl.BLEND);
 	gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
