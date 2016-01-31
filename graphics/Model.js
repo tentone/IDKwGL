@@ -59,7 +59,7 @@ function draw(camera, light)
 {	
 	if(this.follow_camera_vertical)
 	{
-		this.rotation.y = -camera.rotation.y;
+		this.rotation.y = camera.rotation.y;
 		this.update();
 	}
 	
@@ -571,19 +571,31 @@ function getBox()
 			buf.set(this.vertex[i], this.vertex[i+1], this.vertex[i+2]);
 
 			if(buf.x < min.x)
+			{
 				min.x = buf.x;
+			}
 			else if(buf.x > max.x)
+			{
 				max.x = buf.x;
+			}
 		
 			if(buf.y < min.y)
+			{
 				min.y = buf.y;
+			}
 			else if(buf.y > max.y)
+			{
 				max.y = buf.y;
-			
+			}
+
 			if(buf.z < min.z)
-				min.z = buf.z;
+			{
+				min.z = buf.z;			
+			}
 			else if(buf.z > max.z)
-				max.z = buf.z; 
+			{
+				max.z = buf.z;
+			} 
 		}
 
 		//Set min and max to scale

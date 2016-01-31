@@ -13,12 +13,12 @@ include("input/Key.js");
 include("input/Keyboard.js");
 include("input/Mouse.js");
 
-include("graphics/elements/Scene.js");
-include("graphics/elements/Model.js");
-include("graphics/elements/Light.js");
-include("graphics/elements/Texture.js");
-include("graphics/elements/Material.js");
-include("graphics/elements/Sprite.js");
+include("graphics/Scene.js");
+include("graphics/Model.js");
+include("graphics/Light.js");
+include("graphics/Texture.js");
+include("graphics/Material.js");
+include("graphics/Sprite.js");
 
 include("graphics/particle/Particle.js");
 include("graphics/particle/ParticleEmitter.js");
@@ -55,13 +55,13 @@ include("game/screen/ArenaPhysics.js");
 include("Main.js");
 
 //Global App Variables
-var delta = 1000/60;
 var gl = null;
 
 //App class
 function App(){}
 
 //Time control
+App.delta_time = 0;
 App.time = 0;
 
 //Input Input
@@ -103,15 +103,15 @@ App.initialize = function()
 	//Mouse Button Down
 	document.onmousedown = function(event)
 	{
-		//console.log("Mouse button " + event.which + " down");
 		App.mouse.updateKey(event.which-1, Key.KEY_DOWN);
+		//console.log("Mouse button " + event.which + " down");
 	}
 
 	//Mouse Button Up
 	document.onmouseup = function(event)
 	{
-		//console.log("Mouse button " + event.which + " up");
 		App.mouse.updateKey(event.which-1, Key.KEY_UP);
+		//console.log("Mouse button " + event.which + " up");
 	}
 
 	//Request to lock mouse if canvas is clicked (cross-browser)
@@ -127,6 +127,7 @@ App.initialize = function()
 
 	App.initGL(canvas);
 	Main.init(canvas);
+	
 	App.loop();
 }
 
@@ -152,11 +153,15 @@ App.loop = function()
 {
 	//Update Mouse Values (to keep in sync with game actions)
 	App.mouse.update();
-	App.time += delta;
-
+	
 	Main.update();
 	Main.draw();
-	setTimeout(App.loop, delta);
+
+	//Update time
+	App.delta_time = new Date - App.time;
+	App.time += App.delta;
+
+	setTimeout(App.loop, 0);
 }
 
 // Called every time page is resized

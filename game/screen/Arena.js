@@ -200,6 +200,36 @@ function Arena()
 	this.hud_camera = new OrthographicCamera(canvas, 20);
 	this.cross = Model.plane();
 	this.cross.setTexture(Texture.createTexture("data/texture/cross.png"));
+
+	//XYZ Referencial
+	this.referencial =  new Scene();
+	this.referencial_o = Model.cube();
+	this.referencial_o.scale.set(1.0, 1.0, 1.0);
+	this.referencial_o.update();
+	this.referencial_o.setTexture(Texture.generateSolidColorTexture(Color.WHITE));
+	
+	this.referencial_x = Model.cube();
+	this.referencial_x.position.set(10.0, 0.0, 0.0);
+	this.referencial_x.scale.set(10.0, 0.5, 0.5);
+	this.referencial_x.update();
+	this.referencial_x.setTexture(Texture.generateSolidColorTexture(Color.RED));
+	
+	this.referencial_y = Model.cube();
+	this.referencial_y.scale.set(0.5, 10.0, 0.5);
+	this.referencial_y.position.set(0.0, 10.0, 0.0);
+	this.referencial_y.update();
+	this.referencial_y.setTexture(Texture.generateSolidColorTexture(Color.GREEN));
+
+	this.referencial_z = Model.cube();
+	this.referencial_z.scale.set(0.5, 0.5, 10.0);
+	this.referencial_z.position.set(0.0, 0.0, 10.0);
+	this.referencial_z.update();
+	this.referencial_z.setTexture(Texture.generateSolidColorTexture(Color.BLUE));
+	
+	this.referencial.addModel(this.referencial_o);
+	this.referencial.addModel(this.referencial_x);
+	this.referencial.addModel(this.referencial_y);
+	this.referencial.addModel(this.referencial_z);
 }
 
 Arena.prototype.draw = draw;
@@ -263,14 +293,13 @@ function draw()
 		this.bullet_particle_list[i].draw(this.player.camera,this.scene.light);	
 	}
 
+	this.referencial.draw(this.player.camera);
+
 	//Draw static camera
 	this.camera_static.startFrame();
 	this.camera_static.useShader(shaderLightPixel);
 	this.weapon.draw(this.camera_static);
 	
-	//Disable depth test
-	gl.disable(gl.DEPTH_TEST);
-
     //Enable bleding
 	gl.enable(gl.BLEND);
 	gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
