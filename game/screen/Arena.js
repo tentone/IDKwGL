@@ -73,6 +73,14 @@ function Arena()
 	this.scene.addModel(this.model);
 	this.world.addBody(new GameObject(this.model));
 
+	//Test Crate
+	this.cube = Model.cube();
+	this.cube.setTexture(Texture.createTexture("data/texture/wall.png"));
+	this.cube.position.set(40,5,40);
+	this.cube.scale.set(5,5,5);
+	this.cube.update();
+	this.scene.addModel(this.cube);
+
 	//Crate Pile
 	this.model = Model.cube();
 	this.model.setTexture(Texture.createTexture("data/texture/wood_box.png"));
@@ -151,7 +159,7 @@ function Arena()
 	this.world.addBody(new GameObject(this.model));
 	
 	//Grass
-	for(var i = 0; i < 100; i++)
+	for(var i = 0; i < 200; i++)
 	{
 		this.model = Model.plane()
 		this.model.setTexture(Texture.createTexture("data/texture/grass_sprite.png"));
@@ -242,20 +250,42 @@ function update()
 	this.world.update();
 	this.particle.update();
 
-	//Restore light intesity
-	this.scene.light.intensity.set(0.6, 0.6, 0.6);
+	//TODO <DEBUG>
+	//console.log(this.player.toString());
+
+	//TODO <DEBUG> Move crate
+	if(App.keyboard.isKeyPressed(Keyboard.LEFT))
+	{
+		this.cube.position.x += 1;
+	}
+	if(App.keyboard.isKeyPressed(Keyboard.RIGHT))
+	{
+		this.cube.position.x -= 1;
+	}
+	if(App.keyboard.isKeyPressed(Keyboard.UP))
+	{
+		this.cube.position.z += 1;
+	}
+	if(App.keyboard.isKeyPressed(Keyboard.DOWN))
+	{
+		this.cube.position.z -= 1;
+	}
+	this.cube.update();
 
 	//Fire Gun
 	if(App.mouse.buttonJustPressed(Mouse.LEFT))
 	{
-		var angle = Conversion.degreesToRadians(-this.player.rotation.x);
+		var angle_horizontal = Conversion.degreesToRadians(-this.player.rotation.x);
+		var angle_vertical = Conversion.degreesToRadians(-this.player.rotation.y);
+		var cos_angle_vertical = Math.cos(angle_vertical);
+		var direction = new Vector3(Math.sin(angle_horizontal)*cos_angle_vertical, Math.sin(angle_vertical), Math.cos(angle_horizontal)*cos_angle_vertical);
+
 		var position = this.player.camera.position.clone();
 		position.x = -position.x;
 
-		var bullet_particle = new Particle(this.bullet.clone(), position, new Vector3(Math.sin(angle),Math.sin(Conversion.degreesToRadians(-this.player.rotation.y)),Math.cos(angle)), 1, 100);		
+		var bullet_particle = new Particle(this.bullet.clone(), position, direction, 1, 100);		
 		bullet_particle.speed.mulConst(3);
 		this.bullet_particle_list.push(bullet_particle);
-		this.scene.light.intensity.set(1,1,0.6);
 	}
 
 	//Update bullet list

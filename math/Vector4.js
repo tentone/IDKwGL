@@ -32,12 +32,12 @@ function set(x, y, z, w)
 
 function normalize()
 {
-    var norm = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+    var norm = Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z + this.w*this.w);
     this.x /= norm;
     this.y /= norm;
     this.z /= norm;
+    this.w /= norm;
 }
-
 
 function equals(val)
 {

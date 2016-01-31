@@ -34,13 +34,10 @@ include("graphics/ModelUtils.js");
 include("physics/Body.js");
 include("physics/World.js");
 
-include("data/models/orc.js");
-include("data/models/baron_nashor.js");
 include("data/models/cardboard_boxes.js");
 include("data/models/pulse_rifle.js");
 include("data/models/house.js");
 include("data/models/tank.js");
-include("data/models/wine_cask.js");
 include("data/models/bus.js");
 include("data/models/skybox.js");
 
@@ -128,7 +125,7 @@ App.initialize = function()
 	App.initGL(canvas);
 	Main.init(canvas);
 	
-	App.loop();
+	App.loop()
 }
 
 //Initialize WebGL
@@ -161,7 +158,7 @@ App.loop = function()
 	App.delta_time = new Date - App.time;
 	App.time += App.delta;
 
-	setTimeout(App.loop, 0);
+	setTimeout(App.loop, 10);
 }
 
 // Called every time page is resized
@@ -190,6 +187,25 @@ App.setFullscreen = function(event)
 App.isMouseLocked = function()
 {
 	return document.pointerLockElement === canvas || document.mozPointerLockElement === canvas || document.webkitPointerLockElement === canvas;
+}
+
+App.readFile = function(file)
+{
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", file, false);
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                return rawFile.responseText;
+            }
+        }
+    }
+    rawFile.send(null);
+
+    return null;
 }
 
 // Auxuiliary function to include JS files in app

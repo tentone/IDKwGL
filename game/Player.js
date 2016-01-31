@@ -81,10 +81,10 @@ function update(world)
 	}
 
 	//Update Camera Rotation Values
-	var angle = Conversion.degreesToRadians(this.rotation.x);
+	var angle_horizontal = Conversion.degreesToRadians(this.rotation.x);
 	this.camera.rotation.y = this.rotation.x;
-	this.camera.rotation.z = this.rotation.y * Math.sin(angle);
-	this.camera.rotation.x = this.rotation.y * Math.cos(angle);
+	this.camera.rotation.z = this.rotation.y * Math.sin(angle_horizontal);
+	this.camera.rotation.x = this.rotation.y * Math.cos(angle_horizontal);
 
 	//Update player as a body
 	this.body.update(world);
@@ -124,5 +124,5 @@ function setCollidable(collidable)
 //Return string with player info
 function toString()
 {
-	return "Position:"+this.position.toString()+" Rotation:"+this.rotation.toString();
+	return "Position:"+this.box.position.toString()+" Rotation:"+this.rotation.toString();
 }
