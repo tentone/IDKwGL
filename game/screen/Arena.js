@@ -24,14 +24,15 @@ function Arena()
 	this.world.addBody(new GameObject(this.model));
 
 	//Bus
-	this.model = new Model();
-	this.model.loadOBJ(bus);
-	this.model.setTexture(Texture.createTexture("data/texture/bus.bmp"));
-	this.model.scale.set(0.08, 0.08, 0.08);
-	this.model.position.set(100,19.8,300);
-	this.model.update();
-	this.scene.addModel(this.model);
-	this.world.addBody(new GameObject(this.model));
+	this.bus = new Model();
+	this.bus.loadOBJ(bus);
+	this.bus.setTexture(Texture.createTexture("data/texture/bus.bmp"));
+	this.bus.scale.set(0.08, 0.08, 0.08);
+	this.bus.position.set(100,19.8,300);
+	this.bus.update();
+
+	this.scene.addModel(this.bus);
+	this.world.addBody(new GameObject(this.bus));
 
 	//House
 	this.model = new Model();
@@ -72,14 +73,6 @@ function Arena()
 	this.model.update();
 	this.scene.addModel(this.model);
 	this.world.addBody(new GameObject(this.model));
-
-	//Test Crate
-	this.cube = Model.cube();
-	this.cube.setTexture(Texture.createTexture("data/texture/wall.png"));
-	this.cube.position.set(40,5,40);
-	this.cube.scale.set(5,5,5);
-	this.cube.update();
-	this.scene.addModel(this.cube);
 
 	//Crate Pile
 	this.model = Model.cube();
@@ -217,20 +210,20 @@ function Arena()
 	this.referencial_o.setTexture(Texture.generateSolidColorTexture(Color.WHITE));
 	
 	this.referencial_x = Model.cube();
-	this.referencial_x.position.set(10.0, 0.0, 0.0);
-	this.referencial_x.scale.set(10.0, 0.5, 0.5);
+	this.referencial_x.position.set(30.0, 0.0, 0.0);
+	this.referencial_x.scale.set(30.0, 0.5, 0.5);
 	this.referencial_x.update();
 	this.referencial_x.setTexture(Texture.generateSolidColorTexture(Color.RED));
 	
 	this.referencial_y = Model.cube();
-	this.referencial_y.scale.set(0.5, 10.0, 0.5);
-	this.referencial_y.position.set(0.0, 10.0, 0.0);
+	this.referencial_y.scale.set(0.5, 30.0, 0.5);
+	this.referencial_y.position.set(0.0, 30.0, 0.0);
 	this.referencial_y.update();
 	this.referencial_y.setTexture(Texture.generateSolidColorTexture(Color.GREEN));
 
 	this.referencial_z = Model.cube();
-	this.referencial_z.scale.set(0.5, 0.5, 10.0);
-	this.referencial_z.position.set(0.0, 0.0, 10.0);
+	this.referencial_z.scale.set(0.5, 0.5, 30.0);
+	this.referencial_z.position.set(0.0, 0.0, 30.0);
 	this.referencial_z.update();
 	this.referencial_z.setTexture(Texture.generateSolidColorTexture(Color.BLUE));
 	
@@ -250,28 +243,16 @@ function update()
 	this.world.update();
 	this.particle.update();
 
-	//TODO <DEBUG>
-	//console.log(this.player.toString());
-
-	//TODO <DEBUG> Move crate
-	if(App.keyboard.isKeyPressed(Keyboard.LEFT))
-	{
-		this.cube.position.x += 1;
-	}
-	if(App.keyboard.isKeyPressed(Keyboard.RIGHT))
-	{
-		this.cube.position.x -= 1;
-	}
-	if(App.keyboard.isKeyPressed(Keyboard.UP))
-	{
-		this.cube.position.z += 1;
-	}
-	if(App.keyboard.isKeyPressed(Keyboard.DOWN))
-	{
-		this.cube.position.z -= 1;
-	}
-	this.cube.update();
-
+	//TODO <REMOVE THIS>
+	/*console.log("");
+	console.log(this.player.toString());
+	console.log("");
+	console.log(this.player.camera.toString());
+	console.log("");
+	console.log("Bus");
+	console.log("Position: "+this.bus.position.toString());
+	console.log("Box Position: "+this.bus.box.position.toString());*/
+	
 	//Fire Gun
 	if(App.mouse.buttonJustPressed(Mouse.LEFT))
 	{
@@ -281,8 +262,7 @@ function update()
 		var direction = new Vector3(Math.sin(angle_horizontal)*cos_angle_vertical, Math.sin(angle_vertical), Math.cos(angle_horizontal)*cos_angle_vertical);
 
 		var position = this.player.camera.position.clone();
-		position.x = -position.x;
-
+		
 		var bullet_particle = new Particle(this.bullet.clone(), position, direction, 1, 100);		
 		bullet_particle.speed.mulConst(3);
 		this.bullet_particle_list.push(bullet_particle);

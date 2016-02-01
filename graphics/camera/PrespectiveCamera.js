@@ -21,18 +21,28 @@ function PrespectiveCamera(canvas, fov, zoom)
 }
 
 //Function Prototypes
-PrespectiveCamera.prototype.useShader = useShader;
+PrespectiveCamera.prototype.setRotation = setRotation;
 PrespectiveCamera.prototype.startFrame = startFrame;
+PrespectiveCamera.prototype.useShader = useShader;
 PrespectiveCamera.prototype.resize = resize;
 PrespectiveCamera.prototype.toString = toString;
 PrespectiveCamera.prototype.setFov = setFov;
 PrespectiveCamera.prototype.updateProjectionMatrix = updateProjectionMatrix;
 
+//Set camera rotation
+function setRotation(horizontal_rotation, vertical_rotation)
+{
+    var horizontal_rotation_radians = Conversion.degreesToRadians(horizontal_rotation);
+    this.rotation.x = vertical_rotation * Math.cos(horizontal_rotation_radians);
+    this.rotation.y = horizontal_rotation;
+    this.rotation.z = vertical_rotation * Math.sin(horizontal_rotation_radians);
+}
+
 //Call before start a frame on this camera
 function startFrame()
 {
     //Calculate Camera Transformation Matrix
-    this.transformationMatrix = MatrixGenerator.translation(this.position.x, -this.position.y, -this.position.z);
+    this.transformationMatrix = MatrixGenerator.translation(-this.position.x, -this.position.y, -this.position.z);
     this.transformationMatrix.mul(MatrixGenerator.rotationMatrix(this.rotation.x, this.rotation.y, this.rotation.z));
     this.transformationMatrix.mul(MatrixGenerator.scalingMatrix(this.zoom, this.zoom, this.zoom));
 }
@@ -70,7 +80,7 @@ function updateProjectionMatrix()
 //Create Info String
 function toString()
 {
-    return "PrespectiveCamera (Position:"+this.position.toString()+" Rotation:"+this.rotation.toString()+" FOV:"+this.fov+" ScreenSize:"+this.screen_size.toString()+" AspectRatio:"+this.aspect_ratio+")";
+    return "PrespectiveCamera\nPosition:"+this.position.toString()+"\nRotation:"+this.rotation.toString()+"\nFOV:"+this.fov+"\nScreenSize:"+this.screen_size.toString()+"\nAspectRatio:"+this.aspect_ratio;
 }
 
 //Perpective Projection Matrix Generator (Angel / Shreiner)

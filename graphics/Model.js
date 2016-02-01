@@ -48,11 +48,11 @@ Model.prototype.clone = clone;
 Model.prototype.updateBuffers = updateBuffers;
 Model.prototype.loadOBJ = loadOBJ;
 Model.prototype.loadMTL = loadMTL;
-Model.prototype.toString = toString;
-Model.prototype.computeVertexNormals = computeVertexNormals;
 Model.prototype.transformOBJData = transformOBJData;
 Model.prototype.getBox = getBox;
 Model.prototype.mulTextureCoords = mulTextureCoords;
+Model.prototype.computeVertexNormals = computeVertexNormals;
+Model.prototype.toString = toString;
 
 //Draw Model to camera
 function draw(camera, light)
@@ -469,57 +469,6 @@ function loadMTL(data, texture_folder)
 	}
 }
 
-//Create string with model info
-function toString()
-{
-	var s =  "Model(VertexCount:"+this.vertex.length+" NormalCount:"+this.normals.length+
-		" TextureCount:"+this.texture_coords.length+" Faces Count:"+this.faces.length+")\n\nFaceList:\n[";
-	
-	for(var i = 0; i < this.faces.length; i+=9)
-	{
-		s+= "\n   ("+this.faces[i]+", "+this.faces[i+1]+", "+this.faces[i+2]+")  ";
-		s+= "("+this.faces[i+3]+", "+this.faces[i+4]+", "+this.faces[i+5]+")  ";
-		s+= "("+this.faces[i+6]+", "+this.faces[i+7]+", "+this.faces[i+8]+")";
-	}
-
-	s+="\n]\n\nVertex List:\n["
-
-	for(i = 0; i < this.vertex.length; i+=3)
-	{
-		s+= "\n   ("+this.vertex[i]+", "+this.vertex[i+1]+", "+this.vertex[i+2]+")";
-	}
-
-	s+="\n]\n\nTexture Coords List:\n["
-
-	for(i = 0; i < this.texture_coords.length; i+=2)
-	{
-		s+= "\n   ("+this.texture_coords[i]+", "+this.texture_coords[i+1]+")";
-	}
-
-	s+="\n]\n\nNormal List:\n[";
-
-	for(i = 0; i < this.normals.length; i+=3)
-	{
-		s+= "\n   ("+this.normals[i]+", "+this.normals[i+1]+", "+this.normals[i+2]+")";
-	}
-	
-	s+="\n]\n\nMaterial List:\n[";
-
-	for(i = 0; i < this.material.length; i++)
-	{
-		s+= "\n   ("+this.material.toString()+")";
-	}
-
-	s+="\n]\n\nFace Material List:\n[";
-
-	for(i = 0; i < this.face_material.length; i+=3)
-	{
-		s+= "\n   ("+this.face_material[i]+", "+this.face_material[i+1]+", "+this.face_material[i+2]+")";
-	}
-	s+="\n]";
-	return s;
-}
-
 //Mult values by texture coords
 function mulTextureCoords(x, y)
 {
@@ -605,19 +554,64 @@ function getBox()
 		//Create box
 		this.box = new Box();
 
-		//Calculate Box Size
-		this.box.size.set(max.x, max.y, max.z);
-		this.box.size.sub(min);
-
-		//Set position
-		this.box.position.set(-this.position.x, this.position.y, this.position.z);
-		
-		//Ori zero
-		this.box.ori.set(0,0,0);
-		this.box.ori.sub(min);
+		//Set Box size position and origin point
+		this.box.size.set(max.x-min.x, max.y-min.y, max.z-min.z);
+		this.box.position.set(this.position.x, this.position.y, this.position.z);
+		this.box.ori.set(-min.x,-min.y,-min.z);
 	}
 	
 	return this.box;
+}
+
+//Create string with model info
+function toString()
+{
+	var s = "Model(VertexCount:"+this.vertex.length+" NormalCount:"+this.normals.length+
+		" TextureCount:"+this.texture_coords.length+" Faces Count:"+this.faces.length+")\n\nFaceList:\n[";
+	
+	for(var i = 0; i < this.faces.length; i+=9)
+	{
+		s+= "\n   ("+this.faces[i]+", "+this.faces[i+1]+", "+this.faces[i+2]+")  ";
+		s+= "("+this.faces[i+3]+", "+this.faces[i+4]+", "+this.faces[i+5]+")  ";
+		s+= "("+this.faces[i+6]+", "+this.faces[i+7]+", "+this.faces[i+8]+")";
+	}
+
+	s+="\n]\n\nVertex List:\n["
+
+	for(i = 0; i < this.vertex.length; i+=3)
+	{
+		s+= "\n   ("+this.vertex[i]+", "+this.vertex[i+1]+", "+this.vertex[i+2]+")";
+	}
+
+	s+="\n]\n\nTexture Coords List:\n["
+
+	for(i = 0; i < this.texture_coords.length; i+=2)
+	{
+		s+= "\n   ("+this.texture_coords[i]+", "+this.texture_coords[i+1]+")";
+	}
+
+	s+="\n]\n\nNormal List:\n[";
+
+	for(i = 0; i < this.normals.length; i+=3)
+	{
+		s+= "\n   ("+this.normals[i]+", "+this.normals[i+1]+", "+this.normals[i+2]+")";
+	}
+	
+	s+="\n]\n\nMaterial List:\n[";
+
+	for(i = 0; i < this.material.length; i++)
+	{
+		s+= "\n   ("+this.material.toString()+")";
+	}
+
+	s+="\n]\n\nFace Material List:\n[";
+
+	for(i = 0; i < this.face_material.length; i+=3)
+	{
+		s+= "\n   ("+this.face_material[i]+", "+this.face_material[i+1]+", "+this.face_material[i+2]+")";
+	}
+	s+="\n]";
+	return s;
 }
 
 //Test Function that creates a cube with texture and retuns it
@@ -786,7 +780,7 @@ Model.plane = function()
 		0.0, 1.0
 	];
 
-	model.normals  =
+	model.normals =
 	[
 		//Back face
 		0.0,  0.0, -1.0,
@@ -813,4 +807,3 @@ Model.plane = function()
 
 	return model;
 }
-

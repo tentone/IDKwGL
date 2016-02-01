@@ -4,6 +4,7 @@ function Material(name)
 	this.name = name;
 	this.texture = null;
 
+	//TODO <CHANGE THIS>
 	this.ambientColor = new Color(1,1,1);
 	this.diffuseColor = new Color(1,1,1);
 	this.specularColor = new Color(1,1,1);

@@ -2,10 +2,9 @@
 function Light()
 {
 	this.enabled = true;
-
-	this.position = new Vector3(0.0, 5.0, 0.0);
-	this.ambient = new Color(0.1, 0.1, 0.1);
-	this.intensity = new Color(0.7, 0.7, 0.7);
+	this.position = new Vector3(0.0, 0.0, 0.0);
+	this.ambient = new Color(0.2, 0.2, 0.2);
+	this.intensity = new Color(1.0, 0.0, 0.0);
 }
 
 //Functions prototypes

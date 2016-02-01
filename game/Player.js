@@ -37,30 +37,31 @@ function update(world)
 		speed_walk = 0.8;
 	}
 
+	//Move WASD
 	if(App.keyboard.isKeyPressed(Keyboard.W))
 	{
 		this.body.speed.z += speed_walk * Math.cos(angle);
-		this.body.speed.x += speed_walk * Math.sin(angle);
+		this.body.speed.x -= speed_walk * Math.sin(angle);
 	}
 	if(App.keyboard.isKeyPressed(Keyboard.S))
 	{
 		this.body.speed.z -= speed_walk * Math.cos(angle);
-		this.body.speed.x -= speed_walk * Math.sin(angle);
+		this.body.speed.x += speed_walk * Math.sin(angle);
 	}
 
 	angle += MathUtils.PID2;
 	if(App.keyboard.isKeyPressed(Keyboard.A))
 	{
 		this.body.speed.z -= speed_walk * Math.cos(angle);
-		this.body.speed.x -= speed_walk * Math.sin(angle);
+		this.body.speed.x += speed_walk * Math.sin(angle);
 	}
 	if(App.keyboard.isKeyPressed(Keyboard.D))
 	{
 		this.body.speed.z += speed_walk * Math.cos(angle);
-		this.body.speed.x += speed_walk * Math.sin(angle);
+		this.body.speed.x -= speed_walk * Math.sin(angle);
 	}
 
-	//Camera Move UP/DOWN
+	//Jump
 	if(this.body.is_colliding.y == 1 && App.keyboard.isKeyJustPressed(Keyboard.SPACEBAR))
 	{
 		this.body.acceleration.y += speed_jump;
@@ -79,12 +80,14 @@ function update(world)
 	{
 		this.rotation.y = 90;
 	}
+	
+	//this.camera.setRotation(this.rotation.x, this.rotation.y);
+	var horizontal_rotation = this.rotation.x;
+	var vertical_rotation = this.rotation.y;
 
-	//Update Camera Rotation Values
-	var angle_horizontal = Conversion.degreesToRadians(this.rotation.x);
-	this.camera.rotation.y = this.rotation.x;
-	this.camera.rotation.z = this.rotation.y * Math.sin(angle_horizontal);
-	this.camera.rotation.x = this.rotation.y * Math.cos(angle_horizontal);
+	this.camera.rotation.y = horizontal_rotation;
+	this.camera.rotation.x = vertical_rotation * Math.cos(Conversion.degreesToRadians(horizontal_rotation));
+	this.camera.rotation.z = vertical_rotation * Math.cos(Conversion.degreesToRadians(90 - horizontal_rotation));
 
 	//Update player as a body
 	this.body.update(world);
@@ -124,5 +127,5 @@ function setCollidable(collidable)
 //Return string with player info
 function toString()
 {
-	return "Position:"+this.box.position.toString()+" Rotation:"+this.rotation.toString();
+	return "Player\nPosition:"+this.box.position.toString()+"\nRotation:"+this.rotation.toString();
 }

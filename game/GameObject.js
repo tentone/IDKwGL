@@ -38,7 +38,7 @@ function getId()
 function update(world)
 {
 	this.body.update(world);
-	this.model.position.set(-this.body.geometry.position.x, this.body.geometry.position.y, this.body.geometry.position.z);
+	this.model.position.set(this.body.geometry.position.x, this.body.geometry.position.y, this.body.geometry.position.z);
 	this.model.update();
 }
 

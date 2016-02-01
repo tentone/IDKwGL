@@ -135,7 +135,6 @@ App.initGL = function()
 	{
 		gl = canvas.getContext("webgl", {alpha: false}) || canvas.getContext("experimental-webgl", {alpha: false});
 		gl.viewport(0, 0, canvas.width, canvas.height);
-
 	}
 	catch(e){}
 
@@ -158,7 +157,7 @@ App.loop = function()
 	App.delta_time = new Date - App.time;
 	App.time += App.delta;
 
-	setTimeout(App.loop, 10);
+	setTimeout(App.loop, 0);
 }
 
 // Called every time page is resized

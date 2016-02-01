@@ -94,14 +94,13 @@ function clone()
 //Tranpose this matrix
 function transpose()
 {
-	var i, j;
     var mat = [];
+	var i, j;
 
     for(i = 0; i < this.size.y; i++)
     {
     	mat[i] = [];
-
-        for (j = 0; j < this.size.x; j++)
+        for(j = 0; j < this.size.x; j++)
         {
             mat[i][j] = this.matrix[j][i];
         }
@@ -122,22 +121,19 @@ function mulTN(val)
 	}
 	else
 	{
-		if(this.size.x != val.size.y || this.size.y != val.size.x)
+		if(this.size.x != val.size.y)
 		{
-			throw "Matrix cant be multiplied";
+			throw "Matrix cant be multiplied (check matrix size)";
 		}
 
-		mat = new Matrix(this.size.y, val.size.x);
+		var mat = new Matrix(this.size.y, val.size.x);
 
-		var i, j, k;
-		var sum;
-
-        for(i = 0; i < this.size.y; i++)
+        for(var i = 0; i < this.size.y; i++)
         {
-            for (j = 0; j < val.size.x; j++)
+            for (var j = 0; j < val.size.x; j++)
             {
-                sum = 0;
-                for(k = 0; k < this.size.x; k++)
+                var sum = 0;
+                for(var k = 0; k < this.size.x; k++)
                 {
                     sum += this.matrix[k][i] * val.matrix[j][k];
                 }
@@ -158,22 +154,19 @@ function mul(val)
 	}
 	else
 	{
-		if(this.size.x != val.size.y || this.size.y != val.size.x)
+		if(this.size.x != val.size.y)
 		{
-			throw "Matrix cant be multiplied";
+			throw "Matrix cant be multiplied  (check matrix size)";
 		}
 
-		mat = new Matrix(this.size.y, val.size.x);
+		var mat = new Matrix(this.size.y, val.size.x);
 
-		var i, j, k;
-		var sum;
-
-        for(i = 0; i < this.size.y; i++)
+        for(var i = 0; i < this.size.y; i++)
         {
-            for (j = 0; j < val.size.x; j++)
+            for(var j = 0; j < val.size.x; j++)
             {
-                sum = 0;
-                for(k = 0; k < this.size.x; k++)
+                var sum = 0;
+                for(var k = 0; k < this.size.x; k++)
                 {
                     sum += this.matrix[k][i] * val.matrix[j][k];
                 }
@@ -200,10 +193,10 @@ function add(val)
 		{
 			throw "Matrix has different size";
 		}
-		var i,j;
-		for(i = 0; i < this.size.x; i++)
+
+		for(var i = 0; i < this.size.x; i++)
 		{
-			for(j = 0; j < this.size.y; j++)
+			for(var j = 0; j < this.size.y; j++)
 			{
 				this.matrix[i][j] += val.matrix[i][j];
 			}
@@ -224,10 +217,10 @@ function sub(val)
 		{
 			throw "Matrix has different size";
 		}
-		var i,j;
-		for(i = 0; i < this.size.x; i++)
+
+		for(var i = 0; i < this.size.x; i++)
 		{
-			for(j = 0; j < this.size.y; j++)
+			for(var j = 0; j < this.size.y; j++)
 			{
 				this.matrix[i][j] -= val.matrix[i][j];
 			}
@@ -238,8 +231,8 @@ function sub(val)
 //toString Matrix info
 function toString()
 {
-	string = "["
-	var i = 0, j;
+	var string = "["
+	var i = 0, j = 0;
 
 	while(i < this.size.x)
 	{
@@ -261,6 +254,7 @@ function toString()
 			string += "\n ";
 		}
 	}
+	
 	return string + "]";
 }
 

@@ -5,7 +5,7 @@ MatrixGenerator.translation = function(translate_x, translate_y, translate_z)
 {
 	var mat = new Matrix(4,4);
 	
-	mat.matrix[0][3] = translate_x;
+	mat.matrix[0][3] = 0 + translate_x;
 	mat.matrix[1][3] = translate_y;
 	mat.matrix[2][3] = translate_z;	
 	
@@ -65,7 +65,7 @@ MatrixGenerator.scalingMatrix = function(scale_x, scale_y, scale_z)
 
 	mat.matrix[0][0] = scale_x;
 	mat.matrix[1][1] = scale_y;
-	mat.matrix[2][2] = scale_z;	
-	
+	mat.matrix[2][2] = scale_z;
+
 	return mat;	
 }

@@ -117,6 +117,5 @@ function draw()
 function resize(canvas)
 {
 	this.player.camera.resize(canvas.width, canvas.height);
-	this.camera_static.resize(canvas.width, canvas.height);
 	this.hud_camera.resize(canvas.width, canvas.height);
 }

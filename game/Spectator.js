@@ -72,11 +72,8 @@ function update()
 		this.rotation.y = 90;
 	}
 
-	//Update Camera Rotation Values
-	var angle = Conversion.degreesToRadians(this.rotation.x);
-	this.camera.rotation.y = this.rotation.x;
-	this.camera.rotation.z = this.rotation.y * Math.sin(angle);
-	this.camera.rotation.x = this.rotation.y * Math.cos(angle);
+	//Set camera rotation
+	this.camera.setRotation(this.rotation.x, this.rotation.y);
 }
 
 //Return string with player info

@@ -2,7 +2,7 @@
 
 <html>
 	<head>
-		<title>Projeto CV</title>
+		<title>IDKWGL Demo</title>
 		<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 		<style>
 			#canvas
@@ -85,6 +85,7 @@
 			void main(void)
 			{
 				vec3 lightWeighting = vec3(1.0, 1.0, 1.0);
+				
 				/*if (!uUseLighting)
 				{
 					lightWeighting = vec3(1.0, 1.0, 1.0);
@@ -96,8 +97,7 @@
 					lightWeighting = uAmbientColor + uPointLightingColor * directionalLightWeighting;
 				}*/
 
-				vec4 fragmentColor;
-				fragmentColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+				vec4 fragmentColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
 				gl_FragColor = vec4(fragmentColor.rgb * lightWeighting, fragmentColor.a);
 			}
 		</script>

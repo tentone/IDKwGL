@@ -19,7 +19,7 @@ function addModel(model)
 function draw(camera)
 {
 	//Draw Models to Camera
-	for(i = 0; i < this.models.length; i++)
+	for(var i = 0; i < this.models.length; i++)
 	{
 		this.models[i].draw(camera, this.light);
 	}
