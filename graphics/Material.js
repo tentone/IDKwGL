@@ -2,13 +2,16 @@
 function Material(name)
 {
 	this.name = name;
-	this.texture = null;
 
-	//TODO <CHANGE THIS>
-	this.ambientColor = new Color(1,1,1);
-	this.diffuseColor = new Color(1,1,1);
-	this.specularColor = new Color(1,1,1);
-	this.phongCoef = 1;
+	this.texture = null; //Texture
+	this.bump_map = null; //Bump Map
+
+	this.ka = new Color(1,1,1); //Ambient Value
+	this.kd = new Color(1,1,1); //Diffuse Value
+	this.ks = new Color(1,1,1); //Specular Value
+	this.ns = 1; //Specular Intensity (Phong constant) range [1, 1000]
+	
+	this.alpha = 1; //Alpha Value
 }
 
 //Functions Prototypes

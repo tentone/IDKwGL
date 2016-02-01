@@ -444,27 +444,32 @@ function loadMTL(data, texture_folder)
 			{
 				this.material[index].texture = Texture.createTexture("data/texture/" + texture_folder + "/" + tokens[1+offset]);
 			}
-			//Ambient intensity
+			//Ambient color
 			else if(tokens[offset] == "Ka")
 			{
-				this.material[index].ambientColor.r = parseFloat(tokens[offset+1]);
-				this.material[index].ambientColor.g = parseFloat(tokens[offset+2]);
-				this.material[index].ambientColor.b = parseFloat(tokens[offset+3]);
+				this.material[index].ka.r = parseFloat(tokens[offset+1]);
+				this.material[index].ka.g = parseFloat(tokens[offset+2]);
+				this.material[index].ka.b = parseFloat(tokens[offset+3]);
 			}
-			//Diffuse intensity
+			//Diffuse color
 			else if(tokens[offset] == "Kd")
 			{
-				this.material[index].diffuseColor.r = parseFloat(tokens[offset+1]);
-				this.material[index].diffuseColor.g = parseFloat(tokens[offset+2]);
-				this.material[index].diffuseColor.b = parseFloat(tokens[offset+3]);
+				this.material[index].kd.r = parseFloat(tokens[offset+1]);
+				this.material[index].kd.g = parseFloat(tokens[offset+2]);
+				this.material[index].kd.b = parseFloat(tokens[offset+3]);
 			}
-			//Specular intensity
+			//Specular color
 			else if(tokens[offset] == "Ks")
 			{
-				this.material[index].specularColor.r = parseFloat(tokens[offset+1]);
-				this.material[index].specularColor.g = parseFloat(tokens[offset+2]);
-				this.material[index].specularColor.b = parseFloat(tokens[offset+3]);
-			}		
+				this.material[index].ks.r = parseFloat(tokens[offset+1]);
+				this.material[index].ks.g = parseFloat(tokens[offset+2]);
+				this.material[index].ks.b = parseFloat(tokens[offset+3]);
+			}
+			//Specular intensity
+			else if(tokens[offset] == "Ns")
+			{
+				this.material[index].ns = parseFloat(tokens[offset+1]);
+			}
 		}
 	}
 }
