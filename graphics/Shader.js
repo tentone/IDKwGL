@@ -1,8 +1,8 @@
 function Shader(gl, fragment, vertex)
 {
 	//Initialize Shader
-	this.fragmentShader = Shader.getShader(gl, fragment);
-	this.vertexShader = Shader.getShader(gl, vertex);
+	this.fragmentShader = Shader.createFragmentShader(gl, fragment);
+	this.vertexShader = Shader.createVertexShader(gl, vertex);
 	this.shaderProgram = gl.createProgram();
 	
 	gl.attachShader(this.shaderProgram, this.vertexShader);
@@ -24,41 +24,11 @@ function get()
 	return this.shaderProgram;
 }
 
-//Read shader and compile it
-Shader.getShader = function(gl, id)
+//Create vertex shader from string
+Shader.createVertexShader = function(gl, str)
 {
-	//Read shader text
-	var shaderScript = document.getElementById(id);
-	if (!shaderScript)
-	{
-		return null;
-	}
-
-	var str = "";
-	var k = shaderScript.firstChild;
-	while(k)
-	{
-		if (k.nodeType == 3)
-		{
-			str += k.textContent;
-		}
-		k = k.nextSibling;
-	}
-
 	//Create Shader object
-	var shader;
-	if(shaderScript.type == "x-shader/x-fragment")
-	{
-		shader = gl.createShader(gl.FRAGMENT_SHADER);
-	}
-	else if(shaderScript.type == "x-shader/x-vertex")
-	{
-		shader = gl.createShader(gl.VERTEX_SHADER);
-	}
-	else
-	{
-		throw "Invalid shader";
-	}
+	var shader = gl.createShader(gl.VERTEX_SHADER);
 
 	//Compile Shader
 	gl.shaderSource(shader, str);
@@ -72,45 +42,29 @@ Shader.getShader = function(gl, id)
 	return shader;
 }
 
-//Per vertex light (from learningwebgl.com)
-Shader.lightVertexRenderShader = function()
+
+//Create fragment shader from string
+Shader.createFragmentShader = function(gl, str)
 {
-	var sp = new Shader(gl, "shader-vertex-light", "shader-fragment-light");
-	
-	//Vertex Coordinates 
-	sp.shaderProgram.vertexPositionAttribute = gl.getAttribLocation(sp.shaderProgram, "aVertexPosition");
-	gl.enableVertexAttribArray(sp.shaderProgram.vertexPositionAttribute);
+	//Create Shader object
+	var shader = gl.createShader(gl.FRAGMENT_SHADER);;
 
+	//Compile Shader
+	gl.shaderSource(shader, str);
+	gl.compileShader(shader);
 
-	//Texture coordinates
-    sp.shaderProgram.textureCoordAttribute = gl.getAttribLocation(sp.shaderProgram, "aTextureCoord");
-    gl.enableVertexAttribArray(sp.shaderProgram.textureCoordAttribute);
+	if(!gl.getShaderParameter(shader, gl.COMPILE_STATUS))
+	{
+		throw "Error in shader compilation ("+gl.getShaderInfoLog(shader)+")";
+	}
 
-    //Normals
-    sp.shaderProgram.vertexNormalAttribute = gl.getAttribLocation(sp.shaderProgram, "aVertexNormal");
-    gl.enableVertexAttribArray(sp.shaderProgram.vertexNormalAttribute);
-	
-    //The sampler
-    sp.shaderProgram.samplerUniform = gl.getUniformLocation(sp.shaderProgram, "uSampler");
-
-	//The matrices
-    sp.shaderProgram.pMatrixUniform = gl.getUniformLocation(sp.shaderProgram, "uPMatrix");
-    sp.shaderProgram.mvMatrixUniform = gl.getUniformLocation(sp.shaderProgram, "uMVMatrix");
-    sp.shaderProgram.nMatrixUniform = gl.getUniformLocation(sp.shaderProgram, "uNMatrix");
-
-    //Light atributes
-    sp.shaderProgram.useLightingUniform = gl.getUniformLocation(sp.shaderProgram, "uUseLighting");
-    sp.shaderProgram.ambientColorUniform = gl.getUniformLocation(sp.shaderProgram, "uAmbientColor");
-    sp.shaderProgram.pointLightingLocationUniform = gl.getUniformLocation(sp.shaderProgram, "uPointLightingLocation");
-    sp.shaderProgram.pointLightingColorUniform = gl.getUniformLocation(sp.shaderProgram, "uPointLightingColor");
-    
-	return sp;
+	return shader;
 }
 
 //Per pixel light (from learningwebgl.com)
 Shader.lightPixelRenderShader = function()
 {
-	var sp = new Shader(gl, "shader-vertex-light-pixel", "shader-fragment-light-pixel");
+	var sp = new Shader(gl, App.readFile("data/shaders/light-vertex.glsl"), App.readFile("data/shaders/light-fragment.glsl"));
 	
 	//Vertex Coordinates 
 	sp.shaderProgram.vertexPositionAttribute = gl.getAttribLocation(sp.shaderProgram, "aVertexPosition");

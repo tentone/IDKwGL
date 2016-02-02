@@ -212,7 +212,7 @@ function Arena()
 	this.cross.setTexture(Texture.createTexture("data/texture/cross.png"));
 
 	//XYZ Referencial
-	this.referencial =  new Scene();
+	this.referencial = new Scene();
 	this.referencial_o = Model.cube();
 	this.referencial_o.scale.set(1.0, 1.0, 1.0);
 	this.referencial_o.update();
