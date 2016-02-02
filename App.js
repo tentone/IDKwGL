@@ -39,7 +39,6 @@ include("data/models/pulse_rifle.js");
 include("data/models/house.js");
 include("data/models/tank.js");
 include("data/models/bus.js");
-include("data/models/skybox.js");
 
 include("game/Spectator.js");
 include("game/Player.js");
@@ -188,23 +187,35 @@ App.isMouseLocked = function()
 	return document.pointerLockElement === canvas || document.mozPointerLockElement === canvas || document.webkitPointerLockElement === canvas;
 }
 
-App.readFile = function(file)
+//Read text file
+App.readFile = function(fname)
 {
-    var rawFile = new XMLHttpRequest();
-    rawFile.open("GET", file, false);
-    rawFile.onreadystatechange = function ()
+    var file = new XMLHttpRequest();
+    var ready = false;
+    var data = null;
+
+    //Request file to server
+    file.open("GET", fname, false);
+    file.onreadystatechange = function ()
     {
-        if(rawFile.readyState === 4)
+        if(file.readyState === 4)
         {
-            if(rawFile.status === 200 || rawFile.status == 0)
+            if(file.status === 200 || file.status == 0)
             {
-                return rawFile.responseText;
+                data = file.responseText;
             }
+        	ready = true;
         }
     }
-    rawFile.send(null);
+    file.send(null);
 
-    return null;
+    //Wait for request response
+    while(!ready)
+    {
+    	sleep(1);
+    }
+
+    return data;
 }
 
 // Auxuiliary function to include JS files in app

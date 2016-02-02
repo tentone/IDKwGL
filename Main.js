@@ -11,7 +11,6 @@ function Main(){}
 Main.init = function(canvas)
 {
 	//Initialize Shaders
-	shaderLightVertex = Shader.lightVertexRenderShader();
 	shaderLightPixel = Shader.lightPixelRenderShader();
 
 	screen = new Arena();

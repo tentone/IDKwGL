@@ -7,7 +7,7 @@ function Arena()
 
 	//Skybox
 	this.skybox = new Model();
-	this.skybox.loadOBJ(skybox);
+	this.skybox.loadOBJ(App.readFile("data/models/skybox/skybox.obj"));
 	this.skybox.setTexture(Texture.createTexture("data/texture/skybox.png"));
 	this.skybox.scale.set(800,800,800);
 	this.skybox.rotation.set(90,0,0);
@@ -22,6 +22,15 @@ function Arena()
 	this.model.update();
 	this.scene.addModel(this.model);
 	this.world.addBody(new GameObject(this.model));
+
+	//Eyebot
+	this.model = new Model();
+	this.model.loadOBJ(App.readFile("data/models/eyebot/eyebot.obj"));
+	this.model.setTexture(Texture.createTexture("data/texture/eyebot.png"));
+	this.model.position.set(0,20,-100);
+	this.model.scale.set(0.5,0.5,0.5);
+	this.model.update();
+	this.scene.addModel(this.model);
 
 	//Bus
 	this.bus = new Model();
@@ -172,7 +181,7 @@ function Arena()
 
 	//Bullet
 	this.bullet = new Model();
-	this.bullet.loadOBJ(skybox);
+	this.bullet.loadOBJ(App.readFile("data/models/skybox/skybox.obj"));
 	this.bullet.setTexture(Texture.generateSolidColorTexture(Color.WHITE));
 	this.bullet.scale.set(0.3,0.3,0.3);
 	this.bullet.position.set(0,8,0);

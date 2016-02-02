@@ -33,7 +33,6 @@ ModelUtils.midPointRefinement = function(model, recursionDepth)
         ModelUtils.recSubdivisionMidPoint(new Vector3(origCoords[i],origCoords[i+1],origCoords[i+2]),
                                           new Vector3(origCoords[i+3],origCoords[i+4],origCoords[i+5]),
                                           new Vector3(origCoords[i+6],origCoords[i+7],origCoords[i+8]),
-
                                           new Vector3(origColors[i],origColors[i+1],origColors[i+2]),
                                           new Vector3(origColors[i+3],origColors[i+4],origColors[i+5]),
                                           new Vector3(origColors[i+6],origColors[i+7],origColors[i+8]),
