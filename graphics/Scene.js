@@ -4,7 +4,7 @@ function Scene()
 	this.models = [];
 	this.lights = [];
 
-	this.light = new Light();
+	this.light = new PointLight();
 }
 
 //Functions Prototypes

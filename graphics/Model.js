@@ -577,8 +577,9 @@ function getBox()
 //Create string with model info
 function toString()
 {
-	var s = "Model(VertexCount:"+this.vertex.length+" NormalCount:"+this.normals.length+
-		" TextureCount:"+this.texture_coords.length+" Faces Count:"+this.faces.length+")\n\nFaceList:\n[";
+	var s = "Model\n   VertexCount:"+this.vertex.length+"\n   NormalCount:"+this.normals.length+
+		"\n   TextureCount:"+this.texture_coords.length+"\n   Faces Count:"+this.faces.length+
+		"\n\n   FaceList:\n[";
 	
 	for(var i = 0; i < this.faces.length; i+=9)
 	{

@@ -20,5 +20,5 @@ Material.prototype.toString = toString;
 //Material info to String
 function toString()
 {
-	return "Material (Name:"+this.name+", Texture:"+this.texture+")";
+	return "Material\n   Name:"+this.name+"\n   Texture:"+this.texture;
 }

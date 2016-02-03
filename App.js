@@ -15,21 +15,23 @@ include("input/Mouse.js");
 
 include("graphics/Scene.js");
 include("graphics/Model.js");
-include("graphics/Light.js");
 include("graphics/Texture.js");
 include("graphics/Material.js");
 include("graphics/Sprite.js");
+include("graphics/MatrixGenerator.js");
+include("graphics/Color.js");
+include("graphics/Shader.js");
+include("graphics/ModelUtils.js");
+
+include("graphics/light/Light.js");
+include("graphics/light/DirectionalLight.js");
+include("graphics/light/PointLight.js");
 
 include("graphics/particle/Particle.js");
 include("graphics/particle/ParticleEmitter.js");
 
 include("graphics/camera/OrthographicCamera.js");
 include("graphics/camera/PrespectiveCamera.js");
-
-include("graphics/MatrixGenerator.js");
-include("graphics/Color.js");
-include("graphics/Shader.js");
-include("graphics/ModelUtils.js");
 
 include("physics/Body.js");
 include("physics/World.js");
@@ -71,6 +73,8 @@ App.initialize = function()
 	var canvas = document.getElementById("canvas");
 	canvas.width  = window.innerWidth;
 	canvas.height = window.innerHeight;
+
+	Matrix.test();
 	
 	//Initialize Input
 	App.keyboard = new Keyboard();
