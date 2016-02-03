@@ -18,24 +18,24 @@ function update()
 	if(App.keyboard.isKeyPressed(Keyboard.W))
 	{
 		this.camera.position.z += speed * Math.cos(angle);
-		this.camera.position.x += speed * Math.sin(angle);
+		this.camera.position.x -= speed * Math.sin(angle);
 	}
 	if(App.keyboard.isKeyPressed(Keyboard.S))
 	{
 		this.camera.position.z -= speed * Math.cos(angle);
-		this.camera.position.x -= speed * Math.sin(angle);
+		this.camera.position.x += speed * Math.sin(angle);
 	}
  
 	angle += MathUtils.PID2;
 	if(App.keyboard.isKeyPressed(Keyboard.A))
 	{
 		this.camera.position.z -= speed * Math.cos(angle);
-		this.camera.position.x -= speed * Math.sin(angle);
+		this.camera.position.x += speed * Math.sin(angle);
 	}
 	if(App.keyboard.isKeyPressed(Keyboard.D))
 	{
 		this.camera.position.z += speed * Math.cos(angle);
-		this.camera.position.x += speed * Math.sin(angle);
+		this.camera.position.x -= speed * Math.sin(angle);
 	}
 
 	//Camera Keyboard Movement

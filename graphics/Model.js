@@ -762,12 +762,6 @@ Model.plane = function()
 
 	model.vertex =
 	[
-		//Face Front
-		-1.0, -1.0,  0.0,
-		1.0, -1.0,  0.0,
-		1.0,  1.0,  0.0,
-		-1.0,  1.0,  0.0,
-		//Face Back
 		-1.0, -1.0,  0.0,
 		1.0, -1.0,  0.0,
 		1.0,  1.0,  0.0,
@@ -776,12 +770,6 @@ Model.plane = function()
 
 	model.texture_coords =
 	[
-		//Front Face
-		0.0, 0.0,
-		1.0, 0.0,
-		1.0, 1.0,
-		0.0, 1.0,
-		//Back Face
 		0.0, 0.0,
 		1.0, 0.0,
 		1.0, 1.0,
@@ -790,12 +778,6 @@ Model.plane = function()
 
 	model.normals =
 	[
-		//Back face
-		0.0,  0.0, -1.0,
-		0.0,  0.0, -1.0,
-		0.0,  0.0, -1.0,
-		0.0,  0.0, -1.0,
-		//Front face
 		0.0,  0.0,  1.0,
 		0.0,  0.0,  1.0,
 		0.0,  0.0,  1.0,
@@ -804,10 +786,7 @@ Model.plane = function()
 
 	model.faces =
 	[
-		//Front face
-		0, 1, 2, 0, 2, 3,
-		//Back face    
-		4, 5, 6, 4, 6, 7
+		0, 1, 2, 0, 2, 3
 	];
 	
 	model.follow_camera_vertical = true;

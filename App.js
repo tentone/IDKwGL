@@ -43,6 +43,7 @@ include("data/models/bus.js");
 include("game/Spectator.js");
 include("game/Player.js");
 include("game/GameObject.js");
+include("game/Referencial.js");
 
 include("game/screen/Arena.js");
 include("game/screen/Test2D.js");

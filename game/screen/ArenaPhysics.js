@@ -90,9 +90,6 @@ function update()
 
 	//Update Player Camera Position
 	this.world.update();
-
-	//Restore light intesity
-	this.scene.light.intensity.set(0.6, 0.6, 0.6);
 }
 
 function draw()
