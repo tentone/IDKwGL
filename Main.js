@@ -2,7 +2,6 @@
 var screen;
 
 //Global Shaders
-var shaderLightVertex;
 var shaderLightPixel;
 
 function Main(){}

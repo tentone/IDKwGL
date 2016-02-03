@@ -164,7 +164,7 @@ function Arena()
 	for(var i = 0; i < 200; i++)
 	{
 		this.model = Model.plane()
-		this.model.setTexture(Texture.createTexture("data/texture/grass_sprite.png"));
+		this.model.setTexture(Texture.createTexture("data/texture/grass_sprite_2.png"));
 		this.model.scale.set(16, 4, 1);
 		this.model.position.set(MathUtils.randomMod()*400, 2, MathUtils.randomMod()*400);
 		this.model.update();
@@ -173,7 +173,7 @@ function Arena()
 
 	//Tank smoke
 	this.model = Model.plane();
-	this.model.setTexture(Texture.createTexture("data/texture/smoke.jpg"));
+	this.model.setTexture(Texture.createTexture("data/texture/smoke_2.png"));
 	this.model.scale.set(4, 4, 1);
 	this.model.position.set(MathUtils.randomMod()*400, 2, MathUtils.randomMod()*400);
 	this.model.update();

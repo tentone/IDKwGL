@@ -64,12 +64,11 @@ Shader.createFragmentShader = function(gl, str)
 //Per pixel light (from learningwebgl.com)
 Shader.lightPixelRenderShader = function()
 {
-	var sp = new Shader(gl, App.readFile("data/shaders/light-vertex.glsl"), App.readFile("data/shaders/light-fragment.glsl"));
+	var sp = new Shader(gl, App.readFile("data/shaders/light-fragment.glsl"), App.readFile("data/shaders/light-vertex.glsl"));
 	
 	//Vertex Coordinates 
 	sp.shaderProgram.vertexPositionAttribute = gl.getAttribLocation(sp.shaderProgram, "aVertexPosition");
 	gl.enableVertexAttribArray(sp.shaderProgram.vertexPositionAttribute);
-
 
 	//Texture coordinates
     sp.shaderProgram.textureCoordAttribute = gl.getAttribLocation(sp.shaderProgram, "aTextureCoord");
