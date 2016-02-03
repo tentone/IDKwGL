@@ -92,5 +92,8 @@ Shader.lightPixelRenderShader = function()
     sp.shaderProgram.pointLightingLocationUniform = gl.getUniformLocation(sp.shaderProgram, "uPointLightingLocation");
     sp.shaderProgram.pointLightingColorUniform = gl.getUniformLocation(sp.shaderProgram, "uPointLightingColor");
     
+    //Camera position
+    sp.shaderProgram.cameraPositionUniform = gl.getUniformLocation(sp.shaderProgram, "uCameraPosition");
+
 	return sp;
 }

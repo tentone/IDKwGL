@@ -3,7 +3,7 @@ function Sprite()
 	//Square single sided sprite data
 	this.vertex = [0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0,  0.0];
 	this.texture_coords = [0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0];
-	this.normals = [0.0,  0.0,  1.0, 0.0,  0.0,  1.0, 0.0,  0.0,  1.0, 0.0,  0.0,  1.0];
+	this.normals = [0.0,  0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0];
 	this.faces = [0, 1, 2, 0, 2, 3]; //Face <vertex / texture / normal>
 
 	//Auto Rotate Flags

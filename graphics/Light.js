@@ -4,8 +4,8 @@ function Light()
 	this.enabled = true;
 
 	this.position = new Vector3(0.0, 0.0, 0.0);
-	this.ambient = new Color(1.0, 1.0, 1.0);
-	this.color = new Color(0.0, 0.0, 0.0);
+	this.ambient = new Color(0.0, 0.0, 0.0);
+	this.color = new Color(0.2, 0.5, 0.3);
 }
 
 //Functions prototypes

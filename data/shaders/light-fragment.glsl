@@ -5,11 +5,12 @@ varying vec3 vTransformedNormal;
 varying vec4 vPosition;
 
 uniform bool uUseLighting;
-uniform bool uUseTextures;
 
 uniform vec3 uAmbientColor;
 uniform vec3 uPointLightingLocation;
 uniform vec3 uPointLightingColor;
+
+uniform vec3 uCameraPosition;
 
 uniform sampler2D uSampler;
 
@@ -23,7 +24,7 @@ void main(void)
 	}
 	else
 	{
-		vec3 lightDirection = normalize(uPointLightingLocation + vPosition.xyz);
+		vec3 lightDirection = normalize(uPointLightingLocation - vPosition.xyz);
 		float directionalLightWeighting = max(dot(normalize(vTransformedNormal), lightDirection), 0.0);
 		lightWeighting = uAmbientColor + uPointLightingColor * directionalLightWeighting;
 	}

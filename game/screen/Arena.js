@@ -12,7 +12,8 @@ function Arena()
 	this.skybox.scale.set(800,800,800);
 	this.skybox.rotation.set(90,0,0);
 	this.skybox.update();
-
+	this.scene.addModel(this.skybox);
+	
 	//Tank
 	this.model = new Model();
 	this.model.loadOBJ(tank);
@@ -272,7 +273,6 @@ function draw()
 
    	//Draw main scene
 	this.scene.draw(this.player.camera);
-	this.skybox.draw(this.player.camera);
 	for(var i = 0; i < this.bullet_particle_list.length; i++)
 	{
 		this.bullet_particle_list[i].draw(this.player.camera,this.scene.light);	
