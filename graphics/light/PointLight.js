@@ -4,7 +4,7 @@ function PointLight()
 	this.enabled = true;
 
 	//Light Caracteristics
-	this.ambient = new Vector3(0.0, 0.0, 0.0);
+	this.ambient = new Vector3(0.2, 0.2, 0.2);
 	this.position = new Vector3(0.0, 0.0, 0.0);
 	this.color = new Color(0.2, 0.5, 0.3);
 

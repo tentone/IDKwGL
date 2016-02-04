@@ -88,9 +88,6 @@ function draw(camera, light)
 		gl.uniform1i(camera.shader.useLightingUniform, light.enabled);
 		gl.uniform3f(camera.shader.ambientColorUniform, light.ambient.r, light.ambient.g, light.ambient.b);
 		gl.uniform3f(camera.shader.pointLightingColorUniform, light.color.r, light.color.g, light.color.b);
-
-		//Camera specs
-		gl.uniform3f(camera.shader.cameraPositionUniform, camera.position.x, camera.position.y, camera.position.z);
 	}
 
     //Vertex buffer

@@ -73,9 +73,9 @@ App.initialize = function()
 	var canvas = document.getElementById("canvas");
 	canvas.width  = window.innerWidth;
 	canvas.height = window.innerHeight;
-
-	Matrix.test();
 	
+	Matrix.test();
+
 	//Initialize Input
 	App.keyboard = new Keyboard();
 	App.mouse = new Mouse();

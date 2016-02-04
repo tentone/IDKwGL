@@ -33,8 +33,8 @@ PrespectiveCamera.prototype.updateProjectionMatrix = updateProjectionMatrix;
 function setRotation(horizontal_rotation, vertical_rotation)
 {
     var horizontal_rotation_radians = Conversion.degreesToRadians(horizontal_rotation);
-    this.rotation.x = vertical_rotation * Math.cos(horizontal_rotation_radians);
     this.rotation.y = horizontal_rotation;
+    this.rotation.x = vertical_rotation * Math.cos(horizontal_rotation_radians);
     this.rotation.z = vertical_rotation * Math.sin(horizontal_rotation_radians);
 }
 

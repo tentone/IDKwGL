@@ -148,7 +148,6 @@ function mul(val)
 			throw "Matrix cant be multiplied  (check matrix size)";
 		}
 
-		//TODO <CHANGE HERE THIS IS INCORRECT>
 		var mat = new Matrix(this.size.y, val.size.x);
 		for(var i = 0; i < this.size.y; i++)
 		{
@@ -282,6 +281,7 @@ Matrix.mul = function(a, b)
 	return null;
 }
 
+
 //Self testing function 
 Matrix.test = function()
 {
@@ -324,8 +324,6 @@ Matrix.test = function()
 	d.matrix[1][3] = 5;
 	d.matrix[2][3] = 1;
 	d.matrix[3][3] = -3;
-
-	var e =  new Matrix(4,4);
 
 	//f = [0,3,9,2;-2,5,3,1;-12,1,-4,-3;6,2,3,-1]
 	var f = new Matrix(4,4);
@@ -377,8 +375,23 @@ Matrix.test = function()
 	console.log("\nI = A * B");
 	console.log(i.toString());
 
+	//I (Old method)
+	//var i = Matrix.mulOld(a, b);
+	//console.log("\nI = A * B OLD METHOD");
+	//console.log(i.toString());
+
 	//J = B * A
 	var j = Matrix.mul(b, a);
 	console.log("\nI = B * A");
 	console.log(j.toString());
+
+	//K = G * ID(4x4)
+	var k = Matrix.mul(g, c);
+	console.log("\nK = G * ID(4x4)");
+	console.log(k.toString());
+
+	//K (Old method)
+	//var k = Matrix.mulOld(g, c);
+	//console.log("\nK = G * ID(4x4) OLD METHOD");
+	//console.log(k.toString());
 }
