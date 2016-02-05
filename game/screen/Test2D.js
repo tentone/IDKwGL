@@ -43,7 +43,7 @@ function draw()
 	
 	this.wall.draw(this.camera);
 	this.wall2.draw(this.camera);
-	this.wall3.draw(this.camera
+	this.wall3.draw(this.camera);
 	this.fence.draw(this.camera);
 }
 

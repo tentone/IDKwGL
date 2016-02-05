@@ -31,6 +31,7 @@ Matrix.prototype.transpose = transpose;
 Matrix.prototype.add = add;
 Matrix.prototype.sub = sub;
 Matrix.prototype.mul = mul;
+Matrix.prototype.mulTranspose = mulTranspose;
 Matrix.prototype.toString = toString;
 
 //Clears matrix data to 0's if matrix if square clears to indentity
@@ -168,6 +169,40 @@ function mul(val)
 	}
 }
 
+//Multiply Matrix and transpose after multiplication
+function mulTranspose(val)
+{
+	if(typeof val != typeof this)
+	{
+		throw "Incompatible types";
+	}
+	else
+	{
+		if(this.size.x != val.size.y)
+		{
+			throw "Matrix cant be multiplied  (check matrix size)";
+		}
+
+		var mat = new Matrix(this.size.y, val.size.x);
+		for(var i = 0; i < this.size.y; i++)
+		{
+			for(var j = 0; j < val.size.x; j++)
+			{
+				var sum = 0;
+				for(var k = 0; k < this.size.x; k++)
+				{
+					sum += this.matrix[k][i] * val.matrix[j][k];
+				}
+				mat.matrix[i][j] = sum;
+			}
+		}
+
+		this.matrix = mat.matrix;
+		this.size.x = mat.size.x;
+		this.size.y = mat.size.y;
+	}
+}
+
 //Add to matrix (have to be same size)
 function add(val)
 {
@@ -281,7 +316,41 @@ Matrix.mul = function(a, b)
 	return null;
 }
 
+//Multiply Matrix and transpose after multiplication
+Matrix.mulTranspose = function(a, b)
+{
+	if(typeof b != typeof a)
+	{
+		throw "Incompatible types";
+		return null;
+	}
+	else
+	{
+		if(a.size.x != b.size.y)
+		{
+			throw "Matrix cant be multiplied (check matrix size)";
+			return null;
+		}
 
+		var mat = new Matrix(a.size.y, b.size.x);
+		for(var i = 0; i < a.size.y; i++)
+		{
+			for(var j = 0; j < b.size.x; j++)
+			{
+				var sum = 0;
+				for(var k = 0; k < a.size.x; k++)
+				{
+					sum += a.matrix[k][i] * b.matrix[j][k];
+				}
+				mat.matrix[i][j] = sum;
+			}
+		}
+
+		return mat;
+	}
+	return null;
+}
+	
 //Self testing function 
 Matrix.test = function()
 {

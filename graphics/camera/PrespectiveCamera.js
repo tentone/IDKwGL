@@ -38,9 +38,10 @@ function setRotation(horizontal_rotation, vertical_rotation)
     var cos_angle_vertical = Math.cos(angle_vertical);
     this.direction = new Vector3(Math.sin(angle_horizontal)*cos_angle_vertical, Math.sin(angle_vertical), Math.cos(angle_horizontal)*cos_angle_vertical);
 
+    var horizontal_rotation_radians = Conversion.degreesToRadians(horizontal_rotation);
     this.rotation.y = horizontal_rotation;
-    this.rotation.x = -vertical_rotation * Math.cos(Conversion.degreesToRadians(horizontal_rotation%90));
-    this.rotation.z = -vertical_rotation * Math.sin(Conversion.degreesToRadians(horizontal_rotation));
+    this.rotation.x = vertical_rotation * Math.cos(horizontal_rotation_radians);
+    this.rotation.z = vertical_rotation * Math.sin(horizontal_rotation_radians);
 }
 
 //Call before start a frame on this camera

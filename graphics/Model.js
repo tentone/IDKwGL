@@ -64,8 +64,7 @@ function draw(camera, light)
 	}
 	
     //Clone Camera Global transformation Matrix and multiply
-    var camTransformationMatrix = Matrix.mul(this.transformationMatrix, camera.transformationMatrix);
-    camTransformationMatrix.transpose();
+    var camTransformationMatrix = Matrix.mulTranspose(this.transformationMatrix, camera.transformationMatrix);
     
 	//Normal matrix
 	var normalMatrix = MathUtils.matrix3Invert(camTransformationMatrix);

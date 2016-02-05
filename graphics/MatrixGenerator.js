@@ -28,7 +28,7 @@ MatrixGenerator.rotationMatrix = function(degrees_x, degrees_y, degrees_z)
 		temp.matrix[0][1] = -temp.matrix[1][0];
 		temp.matrix[1][1] = temp.matrix[0][0];
 
-		mat.mul(temp);
+		mat.mulTranspose(temp);
 	}
 	if(degrees_y != 0)
 	{
@@ -40,7 +40,7 @@ MatrixGenerator.rotationMatrix = function(degrees_x, degrees_y, degrees_z)
 		temp.matrix[2][0] = -temp.matrix[0][2];
 		temp.matrix[2][2] = temp.matrix[0][0];
 
-		mat.mul(temp);
+		mat.mulTranspose(temp);
 	}
 	if(degrees_x != 0)
 	{
@@ -52,7 +52,7 @@ MatrixGenerator.rotationMatrix = function(degrees_x, degrees_y, degrees_z)
 		temp.matrix[1][2] = -temp.matrix[2][1];
 		temp.matrix[2][2] = temp.matrix[1][1];
 
-		mat.mul(temp);
+		mat.mulTranspose(temp);
 	}
 
 	return mat;

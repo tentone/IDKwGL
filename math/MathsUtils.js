@@ -1,5 +1,6 @@
 function MathUtils(){}
 
+MathUtils.PI = Math.PI;
 MathUtils.PI2 = Math.PI*2;
 MathUtils.PID2 = Math.PI*0.5;
 MathUtils.PID4 = Math.PI*0.25;
