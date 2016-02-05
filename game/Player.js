@@ -6,7 +6,8 @@ function Player(canvas)
 	
 	//Player Body
 	this.box = new Box();
-	this.box.size.set(4,6,4);
+	this.box.size.set(6,6,6);
+	this.box.ori.set(2,0,2);
 	this.box.position.set(0,8,0);
 
 	this.body = new Body(this.box);
@@ -81,13 +82,8 @@ function update(world)
 		this.rotation.y = 90;
 	}
 	
-	//this.camera.setRotation(this.rotation.x, this.rotation.y);
-	var horizontal_rotation = this.rotation.x;
-	var vertical_rotation = this.rotation.y;
-
-	this.camera.rotation.y = horizontal_rotation;
-	this.camera.rotation.x = vertical_rotation * Math.cos(Conversion.degreesToRadians(horizontal_rotation));
-	this.camera.rotation.z = vertical_rotation * Math.cos(Conversion.degreesToRadians(90 - horizontal_rotation));
+	//Set camera rotation
+	this.camera.setRotation(this.rotation.x, this.rotation.y);
 
 	//Update player as a body
 	this.body.update(world);

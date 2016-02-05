@@ -84,15 +84,15 @@ function flatten()
 
 	var array = [];
 	var i, j;
-
-	for(i = 0; i < this.size.x; i++)
+	
+	for(i = 0; i < this.size.y; i++)
 	{
-		for(j = 0; j < this.size.y; j++)
+		for(j = 0; j < this.size.x; j++)
 		{
-			array[i*this.size.y + j] = this.matrix[i][j];
+			array[i*this.size.x + j] = this.matrix[i][j];
 		}
 	}
-	
+
 	return new Float32Array(array);
 }
 
@@ -149,16 +149,16 @@ function mul(val)
 		}
 
 		var mat = new Matrix(this.size.y, val.size.x);
-		for(var i = 0; i < this.size.y; i++)
+		for(var j = 0; j < val.size.x; j++)
 		{
-			for(var j = 0; j < val.size.x; j++)
+			for(var i = 0; i < this.size.y; i++)
 			{
 				var sum = 0;
 				for(var k = 0; k < this.size.x; k++)
 				{
 					sum += this.matrix[k][i] * val.matrix[j][k];
 				}
-				mat.matrix[i][j] = sum;
+				mat.matrix[j][i] = sum;
 			}
 		}
 

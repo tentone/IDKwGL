@@ -5,7 +5,7 @@ MatrixGenerator.translation = function(translate_x, translate_y, translate_z)
 {
 	var mat = new Matrix(4,4);
 	
-	mat.matrix[0][3] = 0 + translate_x;
+	mat.matrix[0][3] = translate_x;
 	mat.matrix[1][3] = translate_y;
 	mat.matrix[2][3] = translate_z;	
 	
@@ -42,7 +42,7 @@ MatrixGenerator.rotationMatrix = function(degrees_x, degrees_y, degrees_z)
 
 		mat.mul(temp);
 	}
-	if(degrees_x != 0) //true
+	if(degrees_x != 0)
 	{
 		var temp = new Matrix(4,4);
 		var radians = Conversion.degreesToRadians(degrees_x);

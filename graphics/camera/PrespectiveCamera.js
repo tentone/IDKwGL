@@ -7,7 +7,8 @@ function PrespectiveCamera(canvas, fov, zoom)
 
     //Camera Movement
 	this.position = new Vector3(0,0,0); //Position
-    this.rotation = new Vector3(0,0,0); //View Angle
+    this.rotation = new Vector3(0,0,0); //Camera Rotation in degrees
+    this.direction = new Vector3(0,0,0); //Camera direction unitary vector
     this.ori = new Vector3(0,0,0); //Origin
     this.zoom = zoom; //Camera Zoom
 
@@ -32,10 +33,14 @@ PrespectiveCamera.prototype.updateProjectionMatrix = updateProjectionMatrix;
 //Set camera rotation
 function setRotation(horizontal_rotation, vertical_rotation)
 {
-    var horizontal_rotation_radians = Conversion.degreesToRadians(horizontal_rotation);
+    var angle_horizontal = Conversion.degreesToRadians(-horizontal_rotation);
+    var angle_vertical = Conversion.degreesToRadians(-vertical_rotation);
+    var cos_angle_vertical = Math.cos(angle_vertical);
+    this.direction = new Vector3(Math.sin(angle_horizontal)*cos_angle_vertical, Math.sin(angle_vertical), Math.cos(angle_horizontal)*cos_angle_vertical);
+
     this.rotation.y = horizontal_rotation;
-    this.rotation.x = vertical_rotation * Math.cos(horizontal_rotation_radians);
-    this.rotation.z = vertical_rotation * Math.sin(horizontal_rotation_radians);
+    this.rotation.x = -vertical_rotation * Math.cos(Conversion.degreesToRadians(horizontal_rotation%90));
+    this.rotation.z = -vertical_rotation * Math.sin(Conversion.degreesToRadians(horizontal_rotation));
 }
 
 //Call before start a frame on this camera
@@ -83,24 +88,7 @@ function toString()
     return "PrespectiveCamera\nPosition:"+this.position.toString()+"\nRotation:"+this.rotation.toString()+"\nFOV:"+this.fov+"\nScreenSize:"+this.screen_size.toString()+"\nAspectRatio:"+this.aspect_ratio;
 }
 
-//Perpective Projection Matrix Generator (Angel / Shreiner)
-PrespectiveCamera.perspectiveProjectionMatrixAS = function(fovy, aspect, near, far)
-{
-    var f = 1 / Math.tan(0.5 * Conversion.degreesToRadians(fovy));
-    var d = far - near;
-    var result = new Matrix(4,4);
-
-    result.matrix[0][0] = f / aspect;
-    result.matrix[1][1] = f;
-    result.matrix[2][2] = -(near + far) / d;
-    result.matrix[2][3] = -2 * near * far / d;
-    result.matrix[3][2] = -1;
-    result.matrix[3][3] = 0;
-
-    return result;
-}
-
-//Prespective Projection Matrix (Mine)
+//Prespective Projection Matrix (Mine V2)
 PrespectiveCamera.perspectiveProjectionMatrix = function(fov, aspect, near, far)
 {
     var depth = far - near;

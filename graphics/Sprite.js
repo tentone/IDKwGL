@@ -49,9 +49,9 @@ function draw(camera, light)
 	}
 	
     //Clone Camera Global transformation Matrix and multiply
-    var camTransformationMatrix = this.transformationMatrix.clone();
-	camTransformationMatrix.mul(camera.transformationMatrix);
-
+    var camTransformationMatrix = Matrix.mul(this.transformationMatrix, camera.transformationMatrix);
+	camTransformationMatrix.transpose();
+	
 	//Normal matrix
 	var normalMatrix = MathUtils.matrix3Invert(camTransformationMatrix);
 
@@ -102,9 +102,9 @@ function draw(camera, light)
 //Recalculate Tranformation Matrix (Should be called after changing position)
 function update()
 {
-	this.transformationMatrix = MatrixGenerator.rotationMatrix(this.rotation.x, this.rotation.y, this.rotation.z);
+	this.transformationMatrix = MatrixGenerator.scalingMatrix(this.scale.x, this.scale.y, this.scale.z);
+    this.transformationMatrix.mul(MatrixGenerator.rotationMatrix(this.rotation.x, this.rotation.y, this.rotation.z));
     this.transformationMatrix.mul(MatrixGenerator.translation(this.position.x, this.position.y, this.position.z));
-    this.transformationMatrix.mul(MatrixGenerator.scalingMatrix(this.scale.x, this.scale.y, this.scale.z));
 }
 
 //Recreate data buffers (Should be called after structural changes)

@@ -7,9 +7,9 @@ function Test2D()
 	this.wall.scale.set(5,5,0);
 	this.wall.update();
 
-	this.wall2 = this.wall.clone();
-	this.wall2.position.set(5,0,0);
-	this.wall2.update();
+	this.wall3 = this.wall.clone();
+	this.wall3.position.set(5,10,0);
+	this.wall3.update();
 
 	this.wall2 = this.wall.clone();
 	this.wall2.position.set(5,0,0);
@@ -43,6 +43,7 @@ function draw()
 	
 	this.wall.draw(this.camera);
 	this.wall2.draw(this.camera);
+	this.wall3.draw(this.camera
 	this.fence.draw(this.camera);
 }
 

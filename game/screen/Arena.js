@@ -10,7 +10,7 @@ function Arena()
 	this.skybox.loadOBJ(App.readFile("data/models/skybox/skybox.obj"));
 	this.skybox.setTexture(Texture.createTexture("data/texture/skybox.png"));
 	this.skybox.scale.set(800,800,800);
-	this.skybox.rotation.set(90,0,0);
+	this.skybox.rotation.set(-90,0,0);
 	this.skybox.update();
 	this.scene.addModel(this.skybox);
 	
@@ -214,6 +214,14 @@ function Arena()
 
 	//Referencial
 	this.referencial = new Referencial();
+
+	//Test Cube
+	this.cube = Model.cube();
+	this.cube.setTexture(Texture.createTexture("data/texture/wood_box.png"));
+	this.cube.position.set(0,0,0);
+	this.cube.scale.set(5,5,5);
+	this.cube.update();
+	this.scene.addModel(this.cube);
 }
 
 Arena.prototype.draw = draw;
@@ -235,7 +243,6 @@ function update()
 		var direction = new Vector3(Math.sin(angle_horizontal)*cos_angle_vertical, Math.sin(angle_vertical), Math.cos(angle_horizontal)*cos_angle_vertical);
 
 		var position = this.player.camera.position.clone();
-		
 		var bullet_particle = new Particle(this.bullet.clone(), position, direction, 1, 100);		
 		bullet_particle.speed.mulConst(3);
 		this.bullet_particle_list.push(bullet_particle);
@@ -253,6 +260,33 @@ function update()
 			this.bullet_particle_list[i].update();
 		}
 	}
+
+	//Rotate cube
+	if(App.keyboard.isKeyPressed(Keyboard.UP))
+	{
+		this.cube.rotation.y += 2;
+	}
+	if(App.keyboard.isKeyPressed(Keyboard.DOWN))
+	{
+		this.cube.rotation.y -= 2;
+	}
+	if(App.keyboard.isKeyPressed(Keyboard.RIGHT))
+	{
+		this.cube.rotation.x += 2;
+	}
+	if(App.keyboard.isKeyPressed(Keyboard.LEFT))
+	{
+		this.cube.rotation.x -= 2;
+	}
+	if(App.keyboard.isKeyPressed(Keyboard.L))
+	{
+		this.cube.rotation.z += 2;
+	}
+	if(App.keyboard.isKeyPressed(Keyboard.K))
+	{
+		this.cube.rotation.z -= 2;
+	}
+	this.cube.update();
 }
 
 function draw()
@@ -273,9 +307,11 @@ function draw()
 
    	//Draw main scene
 	this.scene.draw(this.player.camera);
+
+	//Draw bullets
 	for(var i = 0; i < this.bullet_particle_list.length; i++)
 	{
-		this.bullet_particle_list[i].draw(this.player.camera,this.scene.light);	
+		this.bullet_particle_list[i].draw(this.player.camera, this.scene.light);	
 	}
 
 	//Draw static camera
@@ -289,7 +325,8 @@ function draw()
 
 	//Render Grass and particles
 	this.scene_grass.draw(this.player.camera);
-	this.particle.draw(this.player.camera);
+
+	this.particle.draw(this.player.camera, this.scene.light);
 	
 	//Render HUD
 	this.hud_camera.startFrame();
