@@ -150,13 +150,15 @@ App.loop = function()
 	//Update Mouse Values (to keep in sync with game actions)
 	App.mouse.update();
 	
+	//Update and render stuff
 	Main.update();
 	Main.draw();
 
-	//Update time
+	//Update time values
 	App.delta_time = new Date - App.time;
-	App.time += App.delta;
+	App.time += App.delta_time;
 
+	//Call loop again
 	setTimeout(App.loop, 0);
 }
 

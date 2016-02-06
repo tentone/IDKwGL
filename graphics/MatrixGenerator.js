@@ -12,6 +12,34 @@ MatrixGenerator.translation = function(translate_x, translate_y, translate_z)
 	return mat;
 }
 
+//Creates rotation from direction vector (Vector3)
+MatrixGenerator.directionMatrix = function(direction)
+{
+
+	var mat = new Matrix(4,4);
+	var up = new Vector3(0,1,0);
+
+	var xaxis = Vector3.cross(up, direction);
+	xaxis.normalize();
+
+	var yaxis = Vector3.cross(direction, xaxis);
+	yaxis.normalize();
+
+	mat.matrix[0][0] = xaxis.x;
+	mat.matrix[1][0] = yaxis.x;
+	mat.matrix[2][0] = direction.x;
+
+	mat.matrix[0][1] = xaxis.y;
+	mat.matrix[1][1] = yaxis.y;
+	mat.matrix[2][1] = direction.y;
+
+	mat.matrix[0][2] = xaxis.z;
+	mat.matrix[1][2] = yaxis.z;
+	mat.matrix[2][2] = direction.z;
+
+	return mat;
+}
+
 //Generate Rotation Matrix
 MatrixGenerator.rotationMatrix = function(degrees_x, degrees_y, degrees_z)
 {

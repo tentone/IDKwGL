@@ -7,8 +7,8 @@ function Arena()
 
 	//Skybox
 	this.skybox = new Model();
+	this.skybox.loadMTL(App.readFile("data/models/skybox/skybox.mtl"), "data/models/skybox");
 	this.skybox.loadOBJ(App.readFile("data/models/skybox/skybox.obj"));
-	this.skybox.setTexture(Texture.createTexture("data/texture/skybox.png"));
 	this.skybox.scale.set(800,800,800);
 	this.skybox.rotation.set(-90,0,0);
 	this.skybox.update();
@@ -26,8 +26,8 @@ function Arena()
 
 	//Eyebot
 	this.model = new Model();
+	this.model.loadMTL(App.readFile("data/models/eyebot/eyebot.mtl"), "data/models/eyebot");
 	this.model.loadOBJ(App.readFile("data/models/eyebot/eyebot.obj"));
-	this.model.setTexture(Texture.createTexture("data/texture/eyebot.png"));
 	this.model.position.set(0,20,-100);
 	this.model.scale.set(0.5,0.5,0.5);
 	this.model.update();
@@ -35,8 +35,8 @@ function Arena()
 
 	//Bus
 	this.bus = new Model();
+	this.bus.loadMTL(App.readFile("data/models/bus/bus.mtl"), "data/models/bus");
 	this.bus.loadOBJ(App.readFile("data/models/bus/bus.obj"));
-	this.bus.setTexture(Texture.createTexture("data/texture/bus.bmp"));
 	this.bus.scale.set(0.08, 0.08, 0.08);
 	this.bus.position.set(100,19.8,300);
 	this.bus.rotation.set(0,180,0);
@@ -241,13 +241,13 @@ function update()
 		var position = this.player.camera.position.clone();
 
 		//Add bullet to array
-		var bullet_particle = new Particle(this.bullet.clone(), position, direction, 1, 100);		
-		bullet_particle.speed.mulConst(3);
+		var bullet_particle = new Particle(this.bullet.clone(), position, direction, 1, 200);		
+		bullet_particle.speed.mulConst(5);
 		this.bullet_particle_list.push(bullet_particle);
 	}
 
 	//Update bullet list
-	for(var i=0; i< this.bullet_particle_list.length;i++)
+	for(var i = 0; i < this.bullet_particle_list.length; i++)
 	{
 		if(this.bullet_particle_list[i].time < 0)
 		{

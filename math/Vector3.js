@@ -5,6 +5,12 @@ function Vector3(x, y, z)
 	this.z = z;
 }
 
+//Cross product
+Vector3.cross = function(a, b)
+{
+    return new Vector3(a.y*b.z - a.z*b.y, a.z*b.x - a.x*b.z, a.x*b.y - a.y*b.x);
+}
+
 //Method Prototypes
 Vector3.prototype.toString = toString;
 Vector3.prototype.add = add;

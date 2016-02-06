@@ -7,12 +7,12 @@ function PrespectiveCamera(canvas, fov, zoom)
 
     //Camera Movement
 	this.position = new Vector3(0,0,0); //Position
-    this.rotation = new Vector3(0,0,0); //Camera Rotation in degrees
-    this.direction = new Vector3(0,0,0); //Camera direction unitary vector
+    this.rotation = new Vector3(0,0,0); //Rotation in degrees
+    this.direction = new Vector3(0,0,1); //Ddirection unitary vector
     this.ori = new Vector3(0,0,0); //Origin
-    this.zoom = zoom; //Camera Zoom
 
     //Camera Properties
+    this.zoom = zoom;
     this.fov = fov;
     this.updateProjectionMatrix();
 
@@ -33,20 +33,14 @@ PrespectiveCamera.prototype.updateProjectionMatrix = updateProjectionMatrix;
 //Set camera rotation
 function setRotation(horizontal_rotation, vertical_rotation)
 {
-    //Force vertical rotation to zero
-    vertical_rotation = 0;
-    
     //Calculate Direction Vector
     var angle_horizontal = Conversion.degreesToRadians(-horizontal_rotation);
     var angle_vertical = Conversion.degreesToRadians(-vertical_rotation);
     var cos_angle_vertical = Math.cos(angle_vertical);
     this.direction = new Vector3(Math.sin(angle_horizontal)*cos_angle_vertical, Math.sin(angle_vertical), Math.cos(angle_horizontal)*cos_angle_vertical);
 
-    //Calculate camera rotation
-    var horizontal_rotation_radians = Conversion.degreesToRadians(horizontal_rotation);
+    //Set camera rotation
     this.rotation.y = horizontal_rotation;
-    //this.rotation.x = vertical_rotation * Math.cos(horizontal_rotation_radians);
-    //this.rotation.z = vertical_rotation * Math.sin(horizontal_rotation_radians);
 }
 
 //Call before start a frame on this camera
@@ -54,7 +48,8 @@ function startFrame()
 {
     //Calculate Camera Transformation Matrix
     this.transformationMatrix = MatrixGenerator.translation(-this.position.x, -this.position.y, -this.position.z);
-    this.transformationMatrix.mul(MatrixGenerator.rotationMatrix(this.rotation.x, this.rotation.y, this.rotation.z));
+    //this.transformationMatrix.mul(MatrixGenerator.rotationMatrix(this.rotation.x, this.rotation.y, this.rotation.z));
+    this.transformationMatrix.mul(MatrixGenerator.directionMatrix(this.direction));
     this.transformationMatrix.mul(MatrixGenerator.scalingMatrix(this.zoom, this.zoom, this.zoom));
 }
 
@@ -94,7 +89,7 @@ function toString()
     return "PrespectiveCamera\nPosition:"+this.position.toString()+"\nRotation:"+this.rotation.toString()+"\nFOV:"+this.fov+"\nScreenSize:"+this.screen_size.toString()+"\nAspectRatio:"+this.aspect_ratio;
 }
 
-//Prespective Projection Matrix (Mine V2)
+//Prespective Projection Matrix
 PrespectiveCamera.perspectiveProjectionMatrix = function(fov, aspect, near, far)
 {
     var depth = far - near;

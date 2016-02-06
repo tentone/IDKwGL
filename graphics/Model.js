@@ -109,8 +109,8 @@ function draw(camera, light)
     {
 		//Set texture to model
 		gl.activeTexture(gl.TEXTURE0);
-	    gl.bindTexture(gl.TEXTURE_2D, this.material[this.face_material[i+2]].texture);
-	    gl.uniform1i(camera.shader.samplerUniform, 0);
+		gl.bindTexture(gl.TEXTURE_2D, this.material[this.face_material[i+2]].texture);
+		gl.uniform1i(camera.shader.samplerUniform, 0);
 		
 		//Drawing the triangles
 		gl.drawElements(gl.TRIANGLES, this.face_material[i+1], gl.UNSIGNED_SHORT, 0);
@@ -214,12 +214,12 @@ function loadOBJ(data)
 	var lines = data.split("\n");
 
 	//Clear Data
-	this.vertex = []; //Vertex
+	this.vertex = []; //Vertex Points
 	this.normals = []; //Vertex Normals
-	this.texture_coords = []; //Vertex Terure
+	this.texture_coords = []; //Vertex Texture Coords
 	this.faces = []; //Face
-	this.face_material = [];
-	this.box = null;
+	this.face_material = []; //Face range and material
+	this.box = null; //Bounding Box
 
 	// Check every line and store 
 	for(var i = 0; i < lines.length; i++)
@@ -442,9 +442,14 @@ function loadMTL(data, texture_folder)
 			}
 
 			//Texture
-			if(tokens[offset] == "map_Kd")
+			if(tokens[offset] == "map_Kd" || tokens[offset] == "map_Ka")
 			{
-				this.material[index].texture = Texture.createTexture("data/texture/" + texture_folder + "/" + tokens[1+offset]);
+				this.material[index].texture = Texture.createTexture(texture_folder + "/" + tokens[1+offset]);
+			}
+			//Bump map
+			else if(tokens[offset] == "map_bump" || tokens[offset] == "bump")
+			{
+				this.material[index].bump_map = Texture.createTexture(texture_folder + "/" + tokens[1+offset]);
 			}
 			//Ambient color
 			else if(tokens[offset] == "Ka")

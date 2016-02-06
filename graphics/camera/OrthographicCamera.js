@@ -23,10 +23,9 @@ function OrthographicCamera(canvas, size_y, size_x)
         this.size = new Vector2(size_x, size_y);
     }
 
-
     //Camera Movement
 	this.position = new Vector3(0,0,0); //Position
-    this.rotation = new Vector3(0,0,0); //View Angle
+    this.rotation = 0; //View Angle
     this.zoom = 1.0; //Camera Zoom
 
     //Camera Projetion Matrix
@@ -49,7 +48,7 @@ function startFrame()
 {
     //Calculate Camera Transformation Matrix
     this.transformationMatrix = MatrixGenerator.translation(this.position.x, this.position.y, this.position.z);
-    this.transformationMatrix.mul(MatrixGenerator.rotationMatrix(this.rotation.x, this.rotation.y, this.rotation.z));
+    this.transformationMatrix.mul(MatrixGenerator.rotationMatrix(0, 0, this.rotation));
 }
 
 //Set shader to be used by camera
