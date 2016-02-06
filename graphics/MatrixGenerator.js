@@ -9,7 +9,7 @@ MatrixGenerator.translation = function(translate_x, translate_y, translate_z)
 	mat.matrix[1][3] = translate_y;
 	mat.matrix[2][3] = translate_z;	
 	
-	return mat;	
+	return mat;
 }
 
 //Generate Rotation Matrix
@@ -28,7 +28,7 @@ MatrixGenerator.rotationMatrix = function(degrees_x, degrees_y, degrees_z)
 		temp.matrix[0][1] = -temp.matrix[1][0];
 		temp.matrix[1][1] = temp.matrix[0][0];
 
-		mat.mulTranspose(temp);
+		mat.mul(temp);
 	}
 	if(degrees_y != 0)
 	{
@@ -40,7 +40,7 @@ MatrixGenerator.rotationMatrix = function(degrees_x, degrees_y, degrees_z)
 		temp.matrix[2][0] = -temp.matrix[0][2];
 		temp.matrix[2][2] = temp.matrix[0][0];
 
-		mat.mulTranspose(temp);
+		mat.mul(temp);
 	}
 	if(degrees_x != 0)
 	{
@@ -52,7 +52,7 @@ MatrixGenerator.rotationMatrix = function(degrees_x, degrees_y, degrees_z)
 		temp.matrix[1][2] = -temp.matrix[2][1];
 		temp.matrix[2][2] = temp.matrix[1][1];
 
-		mat.mulTranspose(temp);
+		mat.mul(temp);
 	}
 
 	return mat;

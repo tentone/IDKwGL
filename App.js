@@ -36,11 +36,9 @@ include("graphics/camera/PrespectiveCamera.js");
 include("physics/Body.js");
 include("physics/World.js");
 
-include("data/models/cardboard_boxes.js");
 include("data/models/pulse_rifle.js");
 include("data/models/house.js");
 include("data/models/tank.js");
-include("data/models/bus.js");
 
 include("game/Spectator.js");
 include("game/Player.js");

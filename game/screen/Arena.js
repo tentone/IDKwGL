@@ -35,12 +35,12 @@ function Arena()
 
 	//Bus
 	this.bus = new Model();
-	this.bus.loadOBJ(bus);
+	this.bus.loadOBJ(App.readFile("data/models/bus/bus.obj"));
 	this.bus.setTexture(Texture.createTexture("data/texture/bus.bmp"));
 	this.bus.scale.set(0.08, 0.08, 0.08);
 	this.bus.position.set(100,19.8,300);
+	this.bus.rotation.set(0,180,0);
 	this.bus.update();
-
 	this.scene.addModel(this.bus);
 	this.world.addBody(new GameObject(this.bus));
 
@@ -237,12 +237,10 @@ function update()
 	//Fire Gun
 	if(App.mouse.buttonJustPressed(Mouse.LEFT))
 	{
-		var angle_horizontal = Conversion.degreesToRadians(-this.player.rotation.x);
-		var angle_vertical = Conversion.degreesToRadians(-this.player.rotation.y);
-		var cos_angle_vertical = Math.cos(angle_vertical);
-		var direction = new Vector3(Math.sin(angle_horizontal)*cos_angle_vertical, Math.sin(angle_vertical), Math.cos(angle_horizontal)*cos_angle_vertical);
-
+		var direction = this.player.camera.direction.clone();
 		var position = this.player.camera.position.clone();
+
+		//Add bullet to array
 		var bullet_particle = new Particle(this.bullet.clone(), position, direction, 1, 100);		
 		bullet_particle.speed.mulConst(3);
 		this.bullet_particle_list.push(bullet_particle);

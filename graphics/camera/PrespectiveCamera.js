@@ -33,15 +33,20 @@ PrespectiveCamera.prototype.updateProjectionMatrix = updateProjectionMatrix;
 //Set camera rotation
 function setRotation(horizontal_rotation, vertical_rotation)
 {
+    //Force vertical rotation to zero
+    vertical_rotation = 0;
+    
+    //Calculate Direction Vector
     var angle_horizontal = Conversion.degreesToRadians(-horizontal_rotation);
     var angle_vertical = Conversion.degreesToRadians(-vertical_rotation);
     var cos_angle_vertical = Math.cos(angle_vertical);
     this.direction = new Vector3(Math.sin(angle_horizontal)*cos_angle_vertical, Math.sin(angle_vertical), Math.cos(angle_horizontal)*cos_angle_vertical);
 
+    //Calculate camera rotation
     var horizontal_rotation_radians = Conversion.degreesToRadians(horizontal_rotation);
     this.rotation.y = horizontal_rotation;
-    this.rotation.x = vertical_rotation * Math.cos(horizontal_rotation_radians);
-    this.rotation.z = vertical_rotation * Math.sin(horizontal_rotation_radians);
+    //this.rotation.x = vertical_rotation * Math.cos(horizontal_rotation_radians);
+    //this.rotation.z = vertical_rotation * Math.sin(horizontal_rotation_radians);
 }
 
 //Call before start a frame on this camera
