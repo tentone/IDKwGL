@@ -7,11 +7,12 @@ function ArenaPhysics()
 
 	//Skybox
 	this.skybox = new Model();
+	this.skybox.loadMTL(App.readFile("data/models/skybox/skybox.mtl"), "data/models/skybox");
 	this.skybox.loadOBJ(App.readFile("data/models/skybox/skybox.obj"));
-	this.skybox.setTexture(Texture.createTexture("data/texture/skybox.png"));
 	this.skybox.scale.set(800,800,800);
 	this.skybox.rotation.set(-90,0,0);
 	this.skybox.update();
+	this.scene.addModel(this.skybox);
 
 	//Floor
 	this.model = Model.cube();
@@ -86,6 +87,8 @@ function update()
         this.world.addBody(new GameObject(this.model));
         this.world.body[this.world.body.length-1].setStatic(false);
     }
+
+    //Update spectator position
 	this.player.update();
 
 	//Update Player Camera Position
@@ -98,6 +101,7 @@ function draw()
     gl.clearColor(0, 0, 0, 1);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+    //Configure depth test
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LESS);
 
@@ -105,9 +109,8 @@ function draw()
 	this.player.camera.startFrame();
 	this.player.camera.useShader(shaderLightPixel);
 
-   	//Draw scene, skybox
+   	//Draw scene
 	this.scene.draw(this.player.camera);
-	this.skybox.draw(this.player.camera);
 }
 
 //Resize cameras

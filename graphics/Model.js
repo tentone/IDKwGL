@@ -14,10 +14,6 @@ function Model()
 	this.face_material = []; //<Face Index Ini / Face Index End / Material>
 	this.material = []; //Material Array
 
-	//Auto Rotate Flags
-	this.follow_camera_horizontal = false;
-	this.follow_camera_vertical = false;
-
 	//Buffers
 	this.normalBuffer = null;
 	this.vertexBuffer = null;
@@ -28,6 +24,7 @@ function Model()
 	this.texture = Texture.generateSolidColorTexture(Color.RED);
 
 	//Tranformations Control
+	this.origin = new Vector3(0,0,0);
 	this.position = new Vector3(0,0,0);
 	this.rotation = new Vector3(0,0,0);
 	this.scale = new Vector3(1,1,1);
@@ -56,13 +53,7 @@ Model.prototype.toString = toString;
 
 //Draw Model to camera
 function draw(camera, light)
-{	
-	if(this.follow_camera_vertical)
-	{
-		this.rotation.y = -camera.rotation.y;
-		this.update();
-	}
-	
+{
     //Clone Camera Global transformation Matrix and multiply
     var camTransformationMatrix = Matrix.mulTranspose(this.transformationMatrix, camera.transformationMatrix);
     
@@ -121,6 +112,7 @@ function draw(camera, light)
 function update()
 {
 	this.transformationMatrix = MatrixGenerator.scalingMatrix(this.scale.x, this.scale.y, this.scale.z);
+	this.transformationMatrix.mul(MatrixGenerator.translation(-this.origin.x, -this.origin.y, -this.origin.z));
     this.transformationMatrix.mul(MatrixGenerator.rotationMatrix(this.rotation.x, this.rotation.y, this.rotation.z));
     this.transformationMatrix.mul(MatrixGenerator.translation(this.position.x, this.position.y, this.position.z));
 }
@@ -175,9 +167,6 @@ function clone()
 	model.facesBuffer = this.facesBuffer;
 
 	model.texture = this.texture;
-
-	model.follow_camera_vertical = this.follow_camera_vertical;
-	model.follow_camera_horizontal = this.follow_camera_horizontal;
 
 	model.position.set(this.position.x, this.position.y, this.position.z);
 	model.rotation.set(this.rotation.x, this.rotation.y, this.rotation.z);
@@ -794,8 +783,6 @@ Model.plane = function()
 		0, 1, 2, 0, 2, 3
 	];
 	
-	model.follow_camera_vertical = true;
 	model.updateBuffers();
-
 	return model;
 }

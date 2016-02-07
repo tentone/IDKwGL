@@ -30,6 +30,7 @@ include("graphics/light/PointLight.js");
 include("graphics/particle/Particle.js");
 include("graphics/particle/ParticleEmitter.js");
 
+include("graphics/camera/Camera.js");
 include("graphics/camera/OrthographicCamera.js");
 include("graphics/camera/PrespectiveCamera.js");
 

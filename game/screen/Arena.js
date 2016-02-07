@@ -164,21 +164,25 @@ function Arena()
 	//Grass
 	for(var i = 0; i < 200; i++)
 	{
-		this.model = Model.plane()
+		this.model = new Sprite();
 		this.model.setTexture(Texture.createTexture("data/texture/grass_sprite_2.png"));
+		this.model.follow_camera_rotation = true;
 		this.model.scale.set(16, 4, 1);
+		this.model.origin.set(8, 2, 0);
 		this.model.position.set(MathUtils.randomMod()*400, 2, MathUtils.randomMod()*400);
 		this.model.update();
 		this.scene_grass.addModel(this.model);
 	}
 
 	//Tank smoke
-	this.model = Model.plane();
+	this.model = new Sprite();
 	this.model.setTexture(Texture.createTexture("data/texture/smoke_2.png"));
 	this.model.scale.set(4, 4, 1);
+	this.model.origin.set(2, 2, 0);
+	this.model.follow_camera_rotation = true;
 	this.model.position.set(MathUtils.randomMod()*400, 2, MathUtils.randomMod()*400);
 	this.model.update();
-	this.particle = new ParticleEmitter(this.model, new Vector3(-250,8,100), new Vector3(0,0.7,0), new Vector3(0.3,0.5,0.3), 4, 2, 200, 100, 20);
+	this.particle = new ParticleEmitter(this.model, new Vector3(-250,8,100), new Vector3(0,0.7,0), new Vector3(0.3,0.5,0.3), 6, 4, 150, 150, 50);
 
 	//Bullet
 	this.bullet = new Model();
@@ -208,9 +212,11 @@ function Arena()
 	this.camera_static = new PrespectiveCamera(canvas, 70, 1);
 
 	//Crossair and HUD camera
-	this.hud_camera = new OrthographicCamera(canvas, 20);
-	this.cross = Model.plane();
+	this.hud_camera = new OrthographicCamera(canvas, 10);
+	this.cross = new Sprite();
 	this.cross.setTexture(Texture.createTexture("data/texture/cross.png"));
+	this.cross.position.set(-0.5, -0.5, 0);
+	this.cross.update();
 
 	//Referencial
 	this.referencial = new Referencial();
@@ -290,9 +296,10 @@ function update()
 function draw()
 {
     //Clearing the frame-buffer and the depth-buffer
-    gl.clearColor(0, 0, 0, 1);
+    gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+    //Enable depth test
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LESS);
 
@@ -323,7 +330,6 @@ function draw()
 
 	//Render Grass and particles
 	this.scene_grass.draw(this.player.camera);
-
 	this.particle.draw(this.player.camera, this.scene.light);
 	
 	//Render HUD

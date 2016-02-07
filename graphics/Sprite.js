@@ -7,8 +7,7 @@ function Sprite()
 	this.faces = [0, 1, 2, 0, 2, 3]; //Face <vertex / texture / normal>
 
 	//Auto Rotate Flags
-	this.follow_camera_horizontal = false;
-	this.follow_camera_vertical = false;
+	this.follow_camera_rotation = false;
 
 	//Buffers
 	this.normalBuffer = null;
@@ -20,6 +19,7 @@ function Sprite()
 	this.texture = Texture.generateSolidColorTexture(Color.RED);
 
 	//Tranformations Control
+	this.origin = new Vector3(0,0,0);
 	this.position = new Vector3(0,0,0);
 	this.rotation = new Vector3(0,0,0);
 	this.scale = new Vector3(1,1,1);
@@ -42,7 +42,7 @@ Sprite.prototype.updateBuffers = updateBuffers;
 //Draw sprite to camera
 function draw(camera, light)
 {
-	if(this.follow_camera_vertical)
+	if(this.follow_camera_rotation && camera.type == Camera.PRESPECTIVE)
 	{
 		this.rotation.y = -camera.rotation.y;
 		this.update();
@@ -102,6 +102,7 @@ function draw(camera, light)
 function update()
 {
 	this.transformationMatrix = MatrixGenerator.scalingMatrix(this.scale.x, this.scale.y, this.scale.z);
+	this.transformationMatrix.mul(MatrixGenerator.translation(-this.origin.x, -this.origin.y, -this.origin.z));
     this.transformationMatrix.mul(MatrixGenerator.rotationMatrix(this.rotation.x, this.rotation.y, this.rotation.z));
     this.transformationMatrix.mul(MatrixGenerator.translation(this.position.x, this.position.y, this.position.z));
 }
@@ -143,24 +144,14 @@ function clone()
 {
 	var sprite = new Sprite();
 
-	sprite.vertex = this.vertex;
-	sprite.texture_coords = this.texture_coords;
-	sprite.normals = this.normals;
-	sprite.faces = this.faces;
-
-	sprite.textureCoordBuffer = this.textureCoordBuffer;
-	sprite.normalBuffer = this.normalBuffer;
-	sprite.vertexBuffer = this.vertexBuffer;
-	sprite.facesBuffer = this.facesBuffer;
-
 	sprite.texture = this.texture;
 
-	sprite.follow_camera_vertical = this.follow_camera_vertical;
-	sprite.follow_camera_horizontal = this.follow_camera_horizontal;
+	sprite.follow_camera_rotation = this.follow_camera_rotation;
 
 	sprite.position.set(this.position.x, this.position.y, this.position.z);
 	sprite.rotation.set(this.rotation.x, this.rotation.y, this.rotation.z);
 	sprite.scale.set(this.scale.x, this.scale.y, this.scale.z);
+	sprite.origin.set(this.origin.x, this.origin.y, this.origin.z);
 
 	return sprite;
 }

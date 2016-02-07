@@ -1,6 +1,10 @@
 //Constructor from y size or x and y size and canvas
 function OrthographicCamera(canvas, size_y, size_x)
 {
+    //Set camera type
+    this.type = Camera.ORTHOGRAPHIC;
+
+    //Collect size arguments
     if(size_x === undefined)
     {
         if(size_y === undefined)
@@ -25,7 +29,7 @@ function OrthographicCamera(canvas, size_y, size_x)
 
     //Camera Movement
 	this.position = new Vector3(0,0,0); //Position
-    this.rotation = 0; //View Angle
+    this.rotation = 0; //Camera Rotation
     this.zoom = 1.0; //Camera Zoom
 
     //Camera Projetion Matrix

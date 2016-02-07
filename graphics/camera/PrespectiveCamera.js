@@ -1,6 +1,9 @@
 //Prespective camera constructor from canvas fov and zoom values
 function PrespectiveCamera(canvas, fov, zoom)
 {
+    //Camera type
+    this.type = Camera.PRESPECTIVE;
+
     //Camera Screen Interface
     this.aspect_ratio = canvas.width/canvas.height; //x/y
     this.screen_size = new Vector2(canvas.width, canvas.height);
