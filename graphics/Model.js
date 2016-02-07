@@ -71,13 +71,10 @@ function draw(camera, light)
 	}
 	else
 	{
-		//Light position
+	    gl.uniform1i(camera.shader.useLightingUniform, light.enabled);
+	    gl.uniform3f(camera.shader.ambientColorUniform, light.ambient.r, light.ambient.g, light.ambient.b);
 		gl.uniform3f(camera.shader.pointLightingLocationUniform, light.position.x, light.position.y, light.position.z);
-
-		//Light options
-		gl.uniform1i(camera.shader.useLightingUniform, light.enabled);
-		gl.uniform3f(camera.shader.ambientColorUniform, light.ambient.r, light.ambient.g, light.ambient.b);
-		gl.uniform3f(camera.shader.pointLightingColorUniform, light.color.r, light.color.g, light.color.b);
+	    gl.uniform3f(camera.shader.pointLightingColorUniform, light.color.r, light.color.g, light.color.b);
 	}
 
     //Vertex buffer
