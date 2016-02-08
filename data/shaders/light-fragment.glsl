@@ -5,7 +5,6 @@ varying vec3 vTransformedNormal;
 varying vec4 vPosition;
 
 uniform bool uUseLighting;
-
 uniform vec3 uAmbientColor;
 uniform vec3 uPointLightingLocation;
 uniform vec3 uPointLightingColor;
@@ -16,19 +15,19 @@ void main(void)
 {
 	vec3 lightWeighting;
 	
-	if(!uUseLighting)
+	if(uUseLighting)
 	{
-		lightWeighting = vec3(1.0, 1.0, 1.0);
-	}
-	else
-	{
-		vec3 lightDirection = normalize(uPointLightingLocation - vPosition.xyz);
+		vec3 lightDirection = normalize(uPointLightingLocation.xyz - vPosition.xyz);
 		float directionalLightWeighting = max(dot(normalize(vTransformedNormal), lightDirection), 0.0);
 		lightWeighting = uAmbientColor + uPointLightingColor * directionalLightWeighting;
 	}
+	else
+	{
+		lightWeighting = vec3(1.0, 1.0, 1.0);
+	}
 
-	vec4 fragmentColor;
-	fragmentColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+	//Calculate fragment color
+	vec4 fragmentColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
 	gl_FragColor = vec4(fragmentColor.rgb * lightWeighting, fragmentColor.a);
 
 	//Check transparent fragments and discard them

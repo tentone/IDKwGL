@@ -8,7 +8,7 @@ function Player(canvas)
 	this.box = new Box();
 	this.box.size.set(6,6,6);
 	this.box.ori.set(2,0,2);
-	this.box.position.set(0,8,0);
+	this.box.position.set(0,12,0);
 
 	this.body = new Body(this.box);
 

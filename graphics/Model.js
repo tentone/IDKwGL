@@ -54,9 +54,9 @@ Model.prototype.toString = toString;
 //Draw Model to camera
 function draw(camera, light)
 {
-    //Clone Camera Global transformation Matrix and multiply
-    var camTransformationMatrix = Matrix.mulTranspose(this.transformationMatrix, camera.transformationMatrix);
-    
+	//Clone Camera Global transformation Matrix and multiply
+	var camTransformationMatrix = Matrix.mulTranspose(this.transformationMatrix, camera.transformationMatrix);
+
 	//Normal matrix
 	var normalMatrix = MathUtils.matrix3Invert(camTransformationMatrix);
 
@@ -71,30 +71,34 @@ function draw(camera, light)
 	}
 	else
 	{
-	    gl.uniform1i(camera.shader.useLightingUniform, light.enabled);
-	    gl.uniform3f(camera.shader.ambientColorUniform, light.ambient.r, light.ambient.g, light.ambient.b);
+		//Light atributes
+		gl.uniform1i(camera.shader.useLightingUniform, light.enabled);
+		gl.uniform3f(camera.shader.ambientColorUniform, light.ambient.r, light.ambient.g, light.ambient.b);
 		gl.uniform3f(camera.shader.pointLightingLocationUniform, light.position.x, light.position.y, light.position.z);
-	    gl.uniform3f(camera.shader.pointLightingColorUniform, light.color.r, light.color.g, light.color.b);
+		gl.uniform3f(camera.shader.pointLightingColorUniform, light.color.r, light.color.g, light.color.b);
+
+		//Camera position
+		gl.uniform3f(camera.shader.cameraLocationUniform, camera.position.x, camera.position.y, camera.position.z);
 	}
 
-    //Vertex buffer
+	//Vertex buffer
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
-    gl.vertexAttribPointer(camera.shader.vertexPositionAttribute, this.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	gl.vertexAttribPointer(camera.shader.vertexPositionAttribute, this.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
 	//Texture Coords buffer
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
-    gl.vertexAttribPointer(camera.shader.textureCoordAttribute, this.textureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	gl.vertexAttribPointer(camera.shader.textureCoordAttribute, this.textureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
-    //Normal Coords buffer
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
-    gl.vertexAttribPointer(camera.shader.vertexNormalAttribute, this.normalBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	//Normal Coords buffer
+	gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
+	gl.vertexAttribPointer(camera.shader.vertexNormalAttribute, this.normalBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
-    //Faces buffer
+	//Faces buffer
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.facesBuffer);
 
 	//Draw trough all texture
-    for(var i = 0; i < this.face_material.length; i += 3)
-    {
+	for(var i = 0; i < this.face_material.length; i += 3)
+	{
 		//Set texture to model
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, this.material[this.face_material[i+2]].texture);
@@ -125,13 +129,13 @@ function updateBuffers()
 	this.vertexBuffer.numItems = this.vertex.length/3;						
 
 	//Texture
-    this.textureCoordBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
- 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.texture_coords), gl.STATIC_DRAW);
-    this.textureCoordBuffer.itemSize = 2;
-    this.textureCoordBuffer.numItems = this.texture_coords.length/2;
+	this.textureCoordBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.texture_coords), gl.STATIC_DRAW);
+	this.textureCoordBuffer.itemSize = 2;
+	this.textureCoordBuffer.numItems = this.texture_coords.length/2;
 
-    //Normals
+	//Normals
 	this.normalBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normals), gl.STATIC_DRAW);
@@ -139,11 +143,11 @@ function updateBuffers()
 	this.normalBuffer.numItems = this.normals.length/3;			
 
 	//Vertex indices
-    this.facesBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.facesBuffer);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.faces), gl.STATIC_DRAW);
-    this.facesBuffer.itemSize = 1;
-    this.facesBuffer.numItems = this.faces.length;
+	this.facesBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.facesBuffer);
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.faces), gl.STATIC_DRAW);
+	this.facesBuffer.itemSize = 1;
+	this.facesBuffer.numItems = this.faces.length;
 }
 
 //Creates a copy of this model (keeps same vertex, buffer and texture data pointers)
@@ -211,33 +215,33 @@ function loadOBJ(data)
 	for(var i = 0; i < lines.length; i++)
 	{
 		// The tokens/values in each line Separation between tokens is 1 or mode whitespaces
-	    var tokens = lines[i].split(/\s\s*/);
+		var tokens = lines[i].split(/\s\s*/);
 
 		//Vertices
-	    if(tokens[0] == "v")
-	    {
-	    	this.vertex.push(parseFloat(tokens[1]));
-	    	this.vertex.push(parseFloat(tokens[2]));
-	    	this.vertex.push(parseFloat(tokens[3]));
+		if(tokens[0] == "v")
+		{
+			this.vertex.push(parseFloat(tokens[1]));
+			this.vertex.push(parseFloat(tokens[2]));
+			this.vertex.push(parseFloat(tokens[3]));
 		}
 		//Normals
-	    else if(tokens[0] == "vn")
-	    {
-	    	this.normals.push(parseFloat(tokens[1]));
-	    	this.normals.push(parseFloat(tokens[2]));
-	    	this.normals.push(parseFloat(tokens[3]));
+		else if(tokens[0] == "vn")
+		{
+			this.normals.push(parseFloat(tokens[1]));
+			this.normals.push(parseFloat(tokens[2]));
+			this.normals.push(parseFloat(tokens[3]));
 		}
 		//Texture coords
 		else if(tokens[0] == "vt")
 		{
 			this.texture_coords.push(parseFloat(tokens[1]));
-	    	this.texture_coords.push(parseFloat(tokens[2]));
+			this.texture_coords.push(parseFloat(tokens[2]));
 		}
 		//Faces <vertex>/<texture>/<normal>
 		else if(tokens[0] == "f")
 		{
 			//3 vertex face
- 			//f 16/92/11 14/101/22 1/69/1
+			//f 16/92/11 14/101/22 1/69/1
 			if(tokens.length == 4)
 			{
 				var val = tokens[1].split("/");
@@ -256,7 +260,7 @@ function loadOBJ(data)
 				this.faces.push(parseInt(val[2]));; //Normal
 			}
 			//4 vertex face (Quad)
-	        //f 16/92/11 40/109/40 38/114/38 14/101/22
+			//f 16/92/11 40/109/40 38/114/38 14/101/22
 			else if(tokens.length == 5)
 			{
 				var val = tokens[1].split("/");
@@ -401,25 +405,25 @@ function transformOBJData()
 function loadMTL(data, texture_folder)
 {
 	var lines = data.split("\n");
-    var index = -1;
-    
-    //Clear material list
-    this.material = [];
+	var index = -1;
 
-    //Read Data lines
+	//Clear material list
+	this.material = [];
+
+	//Read Data lines
 	for(var i = 0; i < lines.length; i++)
 	{
-	    var tokens = lines[i].split(/\s\s*/);
-	    
-	    //New Material
-	    if(tokens[0] == "newmtl")
-	    {
-			index++;
-	    	this.material[index] = new Material(tokens[1]);
-	    }
+		var tokens = lines[i].split(/\s\s*/);
 
-	    //If material found
-	    if(index >= 0)
+		//New Material
+		if(tokens[0] == "newmtl")
+		{
+			index++;
+			this.material[index] = new Material(tokens[1]);
+		}
+
+		//If material found
+		if(index >= 0)
 		{
 			var offset = 0
 			while(offset < tokens.length && tokens[offset] == "")
@@ -484,16 +488,16 @@ function computeVertexNormals()
 	//Clearing the new normals array
 	this.normals.length = 0;
 	
-    //Taking 3 vertices from the coordinates array 
-    for(var i = 0; i < this.vertex.length; i += 9)
-    {
+	//Taking 3 vertices from the coordinates array 
+	for(var i = 0; i < this.vertex.length; i += 9)
+	{
 		//Compute unit normal vector for each triangle
-        var normalVector = MathUtils.computeNormalVector(new Vector3(this.vertex[i], this.vertex[i+1], this.vertex[i+2]), new Vector3(this.vertex[i+3], this.vertex[i+4], this.vertex[i+5]), new Vector3(this.vertex[i+6], this.vertex[i+7], this.vertex[i+8]));
+		var normalVector = MathUtils.computeNormalVector(new Vector3(this.vertex[i], this.vertex[i+1], this.vertex[i+2]), new Vector3(this.vertex[i+3], this.vertex[i+4], this.vertex[i+5]), new Vector3(this.vertex[i+6], this.vertex[i+7], this.vertex[i+8]));
 
-        //Store normal 3 times
-        this.normals.push(normalVector.x);
-        this.normals.push(normalVector.y);
-        this.normals.push(normalVector.z);
+		//Store normal 3 times
+		this.normals.push(normalVector.x);
+		this.normals.push(normalVector.y);
+		this.normals.push(normalVector.z);
 		this.normals.push(normalVector.x);
 		this.normals.push(normalVector.y);
 		this.normals.push(normalVector.z);
@@ -720,7 +724,7 @@ Model.cube = function()
 		-1.0,  0.0,  0.0,
 		-1.0,  0.0,  0.0,
 		-1.0,  0.0,  0.0
-    ];
+	];
 
 
 	model.faces =
@@ -773,7 +777,7 @@ Model.plane = function()
 		0.0,  0.0,  -1.0,
 		0.0,  0.0,  -1.0,
 		0.0,  0.0,  -1.0
-    ];
+	];
 
 	model.faces =
 	[

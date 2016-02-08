@@ -33,6 +33,15 @@ function Arena()
 	this.model.update();
 	this.scene.addModel(this.model);
 
+	//Asian Girl
+	this.model = new Model();
+	this.model.loadMTL(App.readFile("data/models/asiangirl/asiangirl.mtl"), "data/models/asiangirl");
+	this.model.loadOBJ(App.readFile("data/models/asiangirl/asiangirl.obj"));
+	this.model.position.set(-100,0,-100);
+	this.model.scale.set(0.15,0.15,0.15);
+	this.model.update();
+	this.scene.addModel(this.model);
+
 	//Bus
 	this.bus = new Model();
 	this.bus.loadMTL(App.readFile("data/models/bus/bus.mtl"), "data/models/bus");
@@ -197,8 +206,8 @@ function Arena()
 
 	//Weapon
 	this.weapon = new Model();
-	this.weapon.loadOBJ(pulse_rifle);
-	this.weapon.setTexture(Texture.createTexture("data/texture/pulse_rifle.png"));
+	this.weapon.loadMTL(App.readFile("data/models/pulse rifle/pulse rifle.mtl"), "data/models/pulse rifle");
+	this.weapon.loadOBJ(App.readFile("data/models/pulse rifle/pulse rifle.obj"));
 	this.weapon.scale.set(2, 2, 2);
 	this.weapon.position.set(-0.3,-0.3,0.5);
 	this.weapon.update();
@@ -250,6 +259,26 @@ function update()
 		var bullet_particle = new Particle(this.bullet.clone(), position, direction, 1, 200);		
 		bullet_particle.speed.mulConst(5);
 		this.bullet_particle_list.push(bullet_particle);
+	}
+
+	//Weapon change
+	if(App.keyboard.isKeyPressed(Keyboard.NUM1))
+	{
+		this.weapon = new Model();
+		this.weapon.loadMTL(App.readFile("data/models/pulse rifle/pulse rifle.mtl"), "data/models/pulse rifle");
+		this.weapon.loadOBJ(App.readFile("data/models/pulse rifle/pulse rifle.obj"));
+		this.weapon.scale.set(2, 2, 2);
+		this.weapon.position.set(-0.3,-0.3,0.5);
+		this.weapon.update();
+	}
+	if(App.keyboard.isKeyPressed(Keyboard.NUM2))
+	{
+		this.weapon = new Model();
+		this.weapon.loadMTL(App.readFile("data/models/scoped rifle/scoped rifle.mtl"), "data/models/scoped rifle");
+		this.weapon.loadOBJ(App.readFile("data/models/scoped rifle/scoped rifle.obj"));
+		this.weapon.scale.set(2, 2, 2);
+		this.weapon.position.set(-0.3,-0.3,0.5);
+		this.weapon.update();
 	}
 
 	//Update bullet list
@@ -322,7 +351,7 @@ function draw()
 	//Draw static camera
 	this.camera_static.startFrame();
 	this.camera_static.useShader(shaderLightPixel);
-	this.weapon.draw(this.camera_static);
+	this.weapon.draw(this.camera_static, this.scene.light);
 	
     //Enable bleding
 	gl.enable(gl.BLEND);

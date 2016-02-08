@@ -91,6 +91,6 @@ Shader.lightPixelRenderShader = function()
 	sp.shaderProgram.ambientColorUniform = gl.getUniformLocation(sp.shaderProgram, "uAmbientColor");
 	sp.shaderProgram.pointLightingLocationUniform = gl.getUniformLocation(sp.shaderProgram, "uPointLightingLocation");
 	sp.shaderProgram.pointLightingColorUniform = gl.getUniformLocation(sp.shaderProgram, "uPointLightingColor");
-
+	
 	return sp;
 }
