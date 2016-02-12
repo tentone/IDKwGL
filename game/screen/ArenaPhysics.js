@@ -1,5 +1,14 @@
 function ArenaPhysics()
 {
+	//IDK Logo
+	this.camera = new OrthographicCamera(canvas, 20);
+	this.idk = new Sprite();
+	this.idk.setTexture(Texture.createTexture("data/texture/idk.png"));
+	this.idk.scale.set(this.camera.size.y/2,this.camera.size.y/4,1);
+	this.idk.origin.set(this.camera.size.x/3,0,0);
+	this.idk.position.set(this.camera.size.x-1,-this.camera.size.y+1,0);
+	this.idk.update();
+
 	//Create scene and world
 	this.world = new World(new Vector3(0, -20.8, 0));
 	this.scene = new Scene();
@@ -105,12 +114,15 @@ function draw()
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LESS);
 
-    //Prepare player camera
+    //Draw scene to player camera
 	this.player.camera.startFrame();
-	this.player.camera.useShader(shaderLightPixel);
-
-   	//Draw scene
+	this.player.camera.useShader(shaderDefault);
 	this.scene.draw(this.player.camera);
+
+	//Draw idk logo
+	this.camera.startFrame();
+	this.camera.useShader(shaderDefault);
+	this.idk.draw(this.camera);
 }
 
 //Resize cameras

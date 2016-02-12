@@ -19,6 +19,13 @@ function Test2D()
 	this.fence.setTexture(Texture.createTexture("data/texture/wallrunner/spikes.png"));
 	this.fence.scale.set(12,3,0);
 	this.fence.update();
+
+	this.idk = new Sprite();
+	this.idk.setTexture(Texture.createTexture("data/texture/idk.png"));
+	this.idk.scale.set(this.camera.size.y/2,this.camera.size.y/4,1);
+	this.idk.origin.set(this.camera.size.x/3,0,0);
+	this.idk.position.set(this.camera.size.x-1,-this.camera.size.y+1,0);
+	this.idk.update();
 }
 
 Test2D.prototype.draw = draw;
@@ -38,13 +45,14 @@ function draw()
 	gl.enable(gl.BLEND);
 	gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
+	//Draw stuff
 	this.camera.startFrame();
-	this.camera.useShader(shaderLightPixel);
-	
+	this.camera.useShader(shaderDefault);
 	this.wall.draw(this.camera);
 	this.wall2.draw(this.camera);
 	this.wall3.draw(this.camera);
 	this.fence.draw(this.camera);
+	this.idk.draw(this.camera);
 }
 
 function resize()

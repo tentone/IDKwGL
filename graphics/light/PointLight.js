@@ -5,9 +5,9 @@ function PointLight()
 	this.type = Light.POINT;
 
 	//Light Caracteristics
-	this.ambient = new Color(0.0, 0.0, 0.0);
+	this.ambient = new Color(1.0, 1.0, 1.0);
 	this.position = new Vector3(0.0, 0.0, 0.0);
-	this.color = new Color(0.8, 1.0, 0.8);
+	this.color = new Color(0.0, 0.0, 0.0);
 }
 
 //Functions prototypes

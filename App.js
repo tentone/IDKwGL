@@ -13,6 +13,7 @@ include("input/Key.js");
 include("input/Keyboard.js");
 include("input/Mouse.js");
 
+include("graphics/Font.js");
 include("graphics/Scene.js");
 include("graphics/Model.js");
 include("graphics/Texture.js");
@@ -193,32 +194,30 @@ App.isMouseLocked = function()
 //Read text file
 App.readFile = function(fname)
 {
-    var file = new XMLHttpRequest();
-    var ready = false;
-    var data = null;
+	var file = new XMLHttpRequest();
+	var ready = false;
+	var data = null;
 
-    //Request file to server
-    file.open("GET", fname, false);
-    file.onreadystatechange = function ()
-    {
-        if(file.readyState === 4)
-        {
-            if(file.status === 200 || file.status == 0)
-            {
-                data = file.responseText;
-            }
-        	ready = true;
-        }
-    }
-    file.send(null);
+	//Request file to server
+	file.open("GET", fname, false);
 
-    //Wait for request response
-    while(!ready)
-    {
-    	sleep(1);
-    }
+	//Get file
+	file.onreadystatechange = function ()
+	{
+		if(file.readyState === 4)
+		{
+			if(file.status === 200 || file.status == 0)
+			{
+				data = file.responseText;
+			}
+			ready = true;
+		}
+	}
 
-    return data;
+	//Send null to ensure that file was received
+	file.send(null);
+
+	return data;
 }
 
 // Auxuiliary function to include JS files in app

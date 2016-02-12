@@ -2,7 +2,7 @@ function Keyboard()
 {
 	this.keys = [];
 
-	for(i = 0; i < 256; i++)
+	for(var i = 0; i < 256; i++)
 	{
 		this.keys.push(new Key());
 	}

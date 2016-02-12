@@ -60,7 +60,7 @@ function startFrame()
 function useShader(shader)
 {
     this.shader = shader.get();
-    gl.useProgram(shader.get());
+    gl.useProgram(this.shader);
     gl.uniformMatrix4fv(gl.getUniformLocation(this.shader, "uPMatrix"), false, this.projectionMatrix.flatten());
 }
 

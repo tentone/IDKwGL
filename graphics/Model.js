@@ -65,7 +65,7 @@ function draw(camera, light)
 	gl.uniformMatrix3fv(gl.getUniformLocation(camera.shader, "uNMatrix"), false, normalMatrix.flatten());
 	
 	//Light render
-	if(light == null || light === undefined)
+	/*if(light == null || light === undefined)
 	{
 		gl.uniform1i(camera.shader.useLightingUniform, false);
 	}
@@ -79,7 +79,7 @@ function draw(camera, light)
 
 		//Camera position
 		gl.uniform3f(camera.shader.cameraLocationUniform, camera.position.x, camera.position.y, camera.position.z);
-	}
+	}*/
 
 	//Vertex buffer
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);

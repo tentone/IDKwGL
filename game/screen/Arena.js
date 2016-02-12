@@ -5,6 +5,24 @@ function Arena()
 	this.scene = new Scene();
 	this.scene_grass = new Scene();
 
+	//Cameras
+	this.camera_static = new PrespectiveCamera(canvas, 70, 1);
+	this.hud_camera = new OrthographicCamera(canvas, 10);
+
+	//IDK Logo
+	this.idk = new Sprite();
+	this.idk.setTexture(Texture.createTexture("data/texture/idk.png"));
+	this.idk.scale.set(this.hud_camera.size.y/2,this.hud_camera.size.y/4,1);
+	this.idk.origin.set(this.hud_camera.size.x/3,0,0);
+	this.idk.position.set(this.hud_camera.size.x-1,-this.hud_camera.size.y+1,0);
+	this.idk.update();
+	
+	//Crosshair
+	this.cross = new Sprite();
+	this.cross.setTexture(Texture.createTexture("data/texture/cross.png"));
+	this.cross.position.set(-0.5, -0.5, 0);
+	this.cross.update();
+
 	//Skybox
 	this.skybox = new Model();
 	this.skybox.loadMTL(App.readFile("data/models/skybox/skybox.mtl"), "data/models/skybox");
@@ -217,22 +235,12 @@ function Arena()
 	this.world.addBody(this.player);
 	this.world.body[this.world.body.length-1].setStatic(false);
 
-	//Static camera for Weapon
-	this.camera_static = new PrespectiveCamera(canvas, 70, 1);
-
-	//Crossair and HUD camera
-	this.hud_camera = new OrthographicCamera(canvas, 10);
-	this.cross = new Sprite();
-	this.cross.setTexture(Texture.createTexture("data/texture/cross.png"));
-	this.cross.position.set(-0.5, -0.5, 0);
-	this.cross.update();
-
 	//Referencial
 	this.referencial = new Referencial();
 
 	//Test Cube
 	this.cube = Model.cube();
-	this.cube.setTexture(Texture.createTexture("data/texture/wood_box.png"));
+	this.cube.setTexture(font.page_texture[0]);//Texture.createTexture("data/texture/wood_box.png"));
 	this.cube.position.set(0,0,0);
 	this.cube.scale.set(5,5,5);
 	this.cube.update();
@@ -326,7 +334,7 @@ function draw()
 {
     //Clearing the frame-buffer and the depth-buffer
     gl.clearColor(0, 0, 0, 0);
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     //Enable depth test
     gl.enable(gl.DEPTH_TEST);
@@ -334,7 +342,7 @@ function draw()
 
     //Prepare player camera
 	this.player.camera.startFrame();
-	this.player.camera.useShader(shaderLightPixel);
+	this.player.camera.useShader(shaderDefault);
 
 	//Draw referencial
 	this.referencial.draw(this.player.camera);
@@ -347,11 +355,6 @@ function draw()
 	{
 		this.bullet_particle_list[i].draw(this.player.camera, this.scene.light);	
 	}
-
-	//Draw static camera
-	this.camera_static.startFrame();
-	this.camera_static.useShader(shaderLightPixel);
-	this.weapon.draw(this.camera_static, this.scene.light);
 	
     //Enable bleding
 	gl.enable(gl.BLEND);
@@ -363,11 +366,19 @@ function draw()
 	
 	//Render HUD
 	this.hud_camera.startFrame();
-	this.hud_camera.useShader(shaderLightPixel);
+	this.hud_camera.useShader(shaderDefault);
 	this.cross.draw(this.hud_camera);
 
 	//Disable Blending
 	gl.disable(gl.BLEND);
+
+	//Draw IDK Logo
+	this.idk.draw(this.hud_camera);
+
+	//Draw static camera
+	this.camera_static.startFrame();
+	this.camera_static.useShader(shaderDefault);
+	this.weapon.draw(this.camera_static, this.scene.light);
 }
 
 //Resize cameras

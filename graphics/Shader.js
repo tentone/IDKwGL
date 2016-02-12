@@ -61,7 +61,33 @@ Shader.createFragmentShader = function(gl, str)
 	return shader;
 }
 
-//Per pixel light (from learningwebgl.com)
+//Defaul shader with no surface shading
+Shader.defaultShader = function()
+{
+	var sp = new Shader(gl, App.readFile("data/shaders/default-fragment.glsl"), App.readFile("data/shaders/default-vertex.glsl"));
+
+	//Vertex Coordinates 
+	sp.shaderProgram.vertexPositionAttribute = gl.getAttribLocation(sp.shaderProgram, "aVertexPosition");
+	gl.enableVertexAttribArray(sp.shaderProgram.vertexPositionAttribute);
+
+	//Texture coordinates
+	sp.shaderProgram.textureCoordAttribute = gl.getAttribLocation(sp.shaderProgram, "aTextureCoord");
+	gl.enableVertexAttribArray(sp.shaderProgram.textureCoordAttribute);
+
+	//Normals
+	sp.shaderProgram.vertexNormalAttribute = gl.getAttribLocation(sp.shaderProgram, "aVertexNormal");
+	gl.enableVertexAttribArray(sp.shaderProgram.vertexNormalAttribute);
+
+	//The sampler
+	sp.shaderProgram.samplerUniform = gl.getUniformLocation(sp.shaderProgram, "uSampler");
+	sp.shaderProgram.pMatrixUniform = gl.getUniformLocation(sp.shaderProgram, "uPMatrix");
+	sp.shaderProgram.mvMatrixUniform = gl.getUniformLocation(sp.shaderProgram, "uMVMatrix");
+	sp.shaderProgram.nMatrixUniform = gl.getUniformLocation(sp.shaderProgram, "uNMatrix");
+	
+	return sp;
+}
+
+//Per pixel phong shading
 Shader.lightPixelRenderShader = function()
 {
 	var sp = new Shader(gl, App.readFile("data/shaders/light-fragment.glsl"), App.readFile("data/shaders/light-vertex.glsl"));

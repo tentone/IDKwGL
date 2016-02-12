@@ -3,14 +3,20 @@ var screen;
 
 //Global Shaders
 var shaderLightPixel;
+var shaderDefault;
+
+//Test font
+var font;
 
 function Main(){}
 
 //Initialize
 Main.init = function(canvas)
 {
-	//Initialize Shaders
 	shaderLightPixel = Shader.lightPixelRenderShader();
+	shaderDefault = Shader.defaultShader();
+	
+	font = new Font();
 
 	screen = new Arena();
 }

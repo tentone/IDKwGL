@@ -37,7 +37,6 @@ function OrthographicCamera(canvas, size_y, size_x)
 
     //Camera Transformation Matrix
     this.transformationMatrix = new Matrix(4,4);
-    this.shader = null;
 }
 
 //Function Prototypes
@@ -59,8 +58,8 @@ function startFrame()
 function useShader(shader)
 {
     this.shader = shader.get();
-    gl.useProgram(shader.get());
-    gl.uniformMatrix4fv(gl.getUniformLocation(shader.get(), "uPMatrix"), false, this.projectionMatrix.flatten());
+    gl.useProgram(this.shader);
+    gl.uniformMatrix4fv(gl.getUniformLocation(this.shader, "uPMatrix"), false, this.projectionMatrix.flatten());
 }
 
 //Call every time the canvas is resized
