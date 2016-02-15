@@ -7,7 +7,7 @@ function Font(fname, folder)
 	this.italic = false;
 	this.charset = "";
 	this.unicode = false;
-	this.stretchH = true;
+	this.stretchH = 100;
 	this.smooth = true;
 	this.aa = true;
 	this.padding = [1,1,1,1];
@@ -19,6 +19,10 @@ function Font(fname, folder)
 	this.scale = new Vector2(1, 1);
 	this.pages = 0;
 	this.packed = false;
+	this.alphaChnl = 0;
+	this.redChnl = 0;
+	this.blueChnl = 0;
+	this.greenChnl = 0;
 
 	//Pages info (Indexed by id)
 	this.page_id = [];
@@ -111,7 +115,7 @@ function loadFont(fname, folder)
 				}
 				else if(field[0] == "stretchH")
 				{
-					this.stretchH = (field[1] == "1");
+					this.stretchH = parseInt(field[1]);
 				}
 				else if(field[0] == "smooth")
 				{
@@ -166,6 +170,23 @@ function loadFont(fname, folder)
 				{
 					this.aa = (field[1] == "1");
 				}
+				else if(field[0] == "alphaChnl")
+				{
+					this.alphaChnl = parseInt(field[1]);
+				}
+				else if(field[0] == "redChnl")
+				{
+					this.redChnl = parseInt(field[1]);
+				}
+				else if(field[0] == "blueChnl")
+				{
+					this.blueChnl = parseInt(field[1]);
+				}
+				else if(field[0] == "greenChnl")
+				{
+					this.greenChnl = parseInt(field[1]);
+				}
+
 			}
 		}
 		else if(content[0] == "page")
@@ -247,11 +268,33 @@ function loadFont(fname, folder)
 		}
 		else if(content[0] == "kernings")
 		{
-			//TODO <ADD CODE HERE>
+			for(var j = 1; j < content.length; j++)
+			{
+				var field = content[j].split("=");
+				if(field[0] == "count")
+				{
+					this.kerning_count = parseInt(field[1]);
+				}
+			}
 		}
 		else if(content[0] == "kerning")
 		{
-			//TODO <ADD CODE HERE>
+			for(var j = 1; j < content.length; j++)
+			{
+				var field = content[j].split("=");
+				if(field[0] == "first")
+				{
+					this.kerning_first.push(parseInt(field[1]));
+				}
+				else if(field[0] == "second")
+				{
+					this.kerning_second.push(parseInt(field[1]));
+				}
+				else if(field[0] == "amount")
+				{
+					this.kerning_amount.push(parseInt(field[1]));
+				}
+			}
 		}
 	}
 }
