@@ -13,6 +13,7 @@ include("input/Key.js");
 include("input/Keyboard.js");
 include("input/Mouse.js");
 
+include("graphics/Text.js");
 include("graphics/Font.js");
 include("graphics/Scene.js");
 include("graphics/Model.js");
