@@ -13,8 +13,6 @@ include("input/Key.js");
 include("input/Keyboard.js");
 include("input/Mouse.js");
 
-include("graphics/Text.js");
-include("graphics/Font.js");
 include("graphics/Scene.js");
 include("graphics/Model.js");
 include("graphics/Texture.js");
@@ -24,6 +22,8 @@ include("graphics/MatrixGenerator.js");
 include("graphics/Color.js");
 include("graphics/Shader.js");
 include("graphics/ModelUtils.js");
+include("graphics/Text.js");
+include("graphics/Font.js");
 
 include("graphics/light/Light.js");
 include("graphics/light/DirectionalLight.js");
@@ -73,7 +73,7 @@ App.initialize = function()
 	var canvas = document.getElementById("canvas");
 	canvas.width  = window.innerWidth;
 	canvas.height = window.innerHeight;
-
+	
 	//Initialize Input
 	App.keyboard = new Keyboard();
 	App.mouse = new Mouse();

@@ -65,6 +65,7 @@ function Font(fname, folder)
 	}
 }
 
+//Functions prototypes
 Font.prototype.loadFont = loadFont;
 Font.prototype.toString = toString;
 
@@ -262,12 +263,13 @@ function toString()
 	s += "\n   Bold:" + this.bold;
 	s += "\n   Italic:" + this.italic;
 	s += "\n   Smooth:" + this.smooth;
-	
+	s += "\n   Page Info:";
+	//TODO <ADD CODE HERE>
 	s += "\n   CharList:";
 	for(var i = 0; i < this.char_id.length; i++)
 	{
 		var id = this.char_id[i];
-		s += "\n      " + id + " Pos(" + this.char_pos[id].x + ", " + this.char_pos[id].y + ")";
+		s += "\n      " + id + " Pos" + this.char_pos[id].toString() + " Size" + this.char_size[id].toString();
 	}
 
 	return s;

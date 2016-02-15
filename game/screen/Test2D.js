@@ -20,6 +20,13 @@ function Test2D()
 	this.fence.scale.set(12,3,0);
 	this.fence.update();
 
+	this.font = new Font("data/font/arial.fnt", "data/font/");
+	
+	this.text = new Text("abc", this.font);
+	this.text.position.set(-3,4,0);
+	this.text.scale.set(5,5,0);
+	this.text.update();
+
 	this.idk = new Sprite();
 	this.idk.setTexture(Texture.createTexture("data/texture/idk.png"));
 	this.idk.scale.set(this.camera.size.y/2,this.camera.size.y/4,1);
@@ -52,6 +59,8 @@ function draw()
 	this.wall2.draw(this.camera);
 	this.wall3.draw(this.camera);
 	this.fence.draw(this.camera);
+	
+	this.text.draw(this.camera);
 	this.idk.draw(this.camera);
 }
 
