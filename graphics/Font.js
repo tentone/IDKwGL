@@ -299,6 +299,7 @@ function loadFont(fname, folder)
 	}
 }
 
+//Create info string
 function toString()
 {
 	var s = "Font " + this.face;
@@ -306,8 +307,6 @@ function toString()
 	s += "\n   Bold:" + this.bold;
 	s += "\n   Italic:" + this.italic;
 	s += "\n   Smooth:" + this.smooth;
-	s += "\n   Page Info:";
-	//TODO <ADD CODE HERE>
 	s += "\n   CharList:";
 	for(var i = 0; i < this.char_id.length; i++)
 	{

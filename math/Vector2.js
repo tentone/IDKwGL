@@ -9,6 +9,7 @@ Vector2.prototype.toString = toString;
 Vector2.prototype.add = add;
 Vector2.prototype.sub = sub;
 Vector2.prototype.mul = mul;
+Vector2.prototype.div = div;
 Vector2.prototype.equals = equals;
 Vector2.prototype.set = set;
 
@@ -72,6 +73,19 @@ function mul(val)
 	{
 		this.x *= val.x;
 		this.y *= val.y;
+	}
+}
+
+function div(val)
+{
+	if(typeof val != typeof this)
+	{
+		throw "Incompatible types";
+	}
+	else
+	{
+		this.x /= val.x;
+		this.y /= val.y;
 	}
 }
 

@@ -70,7 +70,7 @@ function Arena()
 	this.bus.update();
 	this.scene.addModel(this.bus);
 	this.world.addBody(new GameObject(this.bus));
-
+	
 	//House
 	this.model = new Model();
 	this.model.loadOBJ(house);

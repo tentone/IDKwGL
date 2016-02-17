@@ -22,7 +22,7 @@ function Test2D()
 
 	this.font = new Font("data/font/arial.fnt", "data/font/");
 	
-	this.text = new Text("abc", this.font);
+	this.text = new Text("Abc", this.font);
 	this.text.position.set(-3,4,0);
 	this.text.scale.set(5,5,0);
 	this.text.update();
@@ -55,10 +55,10 @@ function draw()
 	//Draw stuff
 	this.camera.startFrame();
 	this.camera.useShader(shaderDefault);
-	this.wall.draw(this.camera);
+	/*this.wall.draw(this.camera);
 	this.wall2.draw(this.camera);
 	this.wall3.draw(this.camera);
-	this.fence.draw(this.camera);
+	this.fence.draw(this.camera);*/
 	
 	this.text.draw(this.camera);
 	this.idk.draw(this.camera);

@@ -65,8 +65,12 @@ function setText(text)
 		this.vertex.push(0.0);
 
 		var char = text.charCodeAt(i);
-		var pos = new Vector2((font.char_pos[char].x+font.char_offset[char].x)/font.scale.x, (font.char_pos[char].y+font.char_offset[char].y)/font.scale.y);
-		var size = new Vector2(font.char_size[char].x/font.scale.x, font.char_size[char].y/font.scale.y);
+		var pos = new Vector2(font.char_pos[char].x, font.char_pos[char].y);
+		//pos.add(font.char_offset[char]);
+		pos.div(font.scale);
+
+		var size = new Vector2(font.char_size[char].x, font.char_size[char].y);
+		size.div(font.scale);
 
 		//Add texture coords
 		this.texture_coords.push(pos.x);
