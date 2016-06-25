@@ -11,7 +11,7 @@ A really basic WebGL based graphic library for the web
  - Mouse and keyboard input
 
 ### FPS Game example
- - https://rawgit.com/tentone/IDKwGL/master/index.html
+ - https://tentone.dynu.net/idkgl/index.html
  - Simple FPS Game
  - WASD to move, mouse to look around and shoot SHIFT to run
  - 1 and 2 to change weapons
