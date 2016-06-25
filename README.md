@@ -12,3 +12,4 @@ A WebGL based graphic library for the web
  - Mouse and keyboard input
 
 ### Examples
+ - Simple FPS Game test tentone.dynu.net/idkgl/index.html
