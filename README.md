@@ -1,4 +1,5 @@
 ![alt tag](https://raw.githubusercontent.com/tentone/IDKwGL/master/data/idk.png)
+
 A really basic WebGL based graphic library for the web
 
 ### Features
@@ -11,7 +12,7 @@ A really basic WebGL based graphic library for the web
  - Mouse and keyboard input
 
 ### FPS Game example
- - https://tentone.dynu.net/idkgl/index.html
+ - http://tentone.dynu.net/idkgl/index.html
  - Simple FPS Game
  - WASD to move, mouse to look around and shoot SHIFT to run
  - 1 and 2 to change weapons
