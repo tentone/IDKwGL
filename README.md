@@ -1,6 +1,7 @@
-#IDKwGL
+![alt tag](https://raw.githubusercontent.com/tentone/IDKwGL/master/data/texture/idk.png)
 
-A WebGL based graphic library for the web
+#IDKwGL
+A really basic WebGL based graphic library for the web
 
 ### Features
  - Bitmap Fonts support with filtering
@@ -11,5 +12,7 @@ A WebGL based graphic library for the web
  - Math library with support for Vectors and Matrix operations
  - Mouse and keyboard input
 
-### Examples
+### FPS Game example
  - Simple FPS Game test tentone.dynu.net/idkgl/index.html
+ - WASD to move, mouse to look around and shoot SHIFT to run
+ - 1 and 2 to change weapons

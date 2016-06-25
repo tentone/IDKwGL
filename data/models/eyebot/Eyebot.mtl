@@ -12,10 +12,10 @@ newmtl Material_000001
 	Kd 1.0000 1.0000 1.0000
 	Ks 1.0000 1.0000 1.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka Eyebot_d.png
-	map_Kd Eyebot_d.png
-	map_bump Eyebot_n.png
-	bump Eyebot_n.png
+	map_Ka Eyebot_d.jpg
+	map_Kd Eyebot_d.jpg
+	map_bump Eyebot_n.jpg
+	bump Eyebot_n.jpg
 
 newmtl Material_000ca6
 	Ns 33.0000
@@ -28,7 +28,7 @@ newmtl Material_000ca6
 	Kd 1.0000 1.0000 1.0000
 	Ks 1.0000 1.0000 1.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka Eyebot_d.png
-	map_Kd Eyebot_d.png
-	map_bump Eyebot_n.png
-	bump Eyebot_n.png
+	map_Ka Eyebot_d.jpg
+	map_Kd Eyebot_d.jpg
+	map_bump Eyebot_n.jpg
+	bump Eyebot_n.jpg

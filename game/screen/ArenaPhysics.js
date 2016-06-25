@@ -88,7 +88,7 @@ function update()
     if(time % 5 == 0)
     {
         this.model = Model.cube();
-        this.model.setTexture(Texture.createTexture("data/texture/wood_box.png"));
+        this.model.setTexture(Texture.createTexture("data/texture/wood_box.jpg"));
         this.model.position.set(MathUtils.randomMod()*400,  MathUtils.randomMod()*300, MathUtils.randomMod()*400);
         this.model.scale.set(5,5,5);
         this.model.update();

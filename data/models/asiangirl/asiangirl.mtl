@@ -12,11 +12,11 @@ newmtl Girl_asian_bs
 	Kd 1.0000 1.0000 1.0000
 	Ks 1.0000 1.0000 1.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka girl_asian_body_d.png
-	map_Kd girl_asian_body_d.png
-	map_Ks girl_asian_body_s.png
-	map_bump girl_asian_body_n.png
-	bump girl_asian_body_n.png
+	map_Ka girl_asian_body_d.jpg
+	map_Kd girl_asian_body_d.jpg
+	map_Ks girl_asian_body_s.jpg
+	map_bump girl_asian_body_n.jpg
+	bump girl_asian_body_n.jpg
 
 newmtl Girl_Asian_head_bs
 	Ns 32.0000
@@ -29,11 +29,11 @@ newmtl Girl_Asian_head_bs
 	Kd 1.0000 1.0000 1.0000
 	Ks 1.0000 1.0000 1.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka girl_asian_head_d.png
-	map_Kd girl_asian_head_d.png
-	map_Ks girl_asian_head_s.png
-	map_bump girl_asian_head_n.png
-	bump girl_asian_head_n.png
+	map_Ka girl_asian_head_d.jpg
+	map_Kd girl_asian_head_d.jpg
+	map_Ks girl_asian_head_s.jpg
+	map_bump girl_asian_head_n.jpg
+	bump girl_asian_head_n.jpg
 
 newmtl Girl_Asian_hair_fb_hard
 	Ns 32.0000

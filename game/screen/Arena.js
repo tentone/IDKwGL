@@ -35,7 +35,7 @@ function Arena()
 	//Tank
 	this.model = new Model();
 	this.model.loadOBJ(tank);
-	this.model.setTexture(Texture.createTexture("data/texture/tank.png"));
+	this.model.setTexture(Texture.createTexture("data/texture/tank.jpg"));
 	this.model.scale.set(15, 15, 15);
 	this.model.position.set(-250,0,100);
 	this.model.update();
@@ -74,7 +74,7 @@ function Arena()
 	//House
 	this.model = new Model();
 	this.model.loadOBJ(house);
-	this.model.setTexture(Texture.createTexture("data/texture/house.png"));
+	this.model.setTexture(Texture.createTexture("data/texture/house.jpg"));
 	this.model.scale.set(7, 7, 7);
 	this.model.position.set(300,0,500);
 	this.model.update();
@@ -113,7 +113,7 @@ function Arena()
 
 	//Crate Pile
 	this.model = Model.cube();
-	this.model.setTexture(Texture.createTexture("data/texture/wood_box.png"));
+	this.model.setTexture(Texture.createTexture("data/texture/wood_box.jpg"));
 	this.model.position.set(-200,5,0);
 	this.model.scale.set(5,5,5);
 	this.model.update();
@@ -215,7 +215,7 @@ function Arena()
 	this.bullet = new Model();
 	this.bullet.loadOBJ(App.readFile("data/models/skybox/skybox.obj"));
 	this.bullet.setTexture(Texture.generateSolidColorTexture(Color.WHITE));
-	this.bullet.scale.set(0.3,0.3,0.3);
+	this.bullet.scale.set(0.2,0.2,0.2);
 	this.bullet.position.set(0,8,0);
 	this.bullet.update();
 	
@@ -224,8 +224,8 @@ function Arena()
 
 	//Weapon
 	this.weapon = new Model();
-	this.weapon.loadMTL(App.readFile("data/models/pulse rifle/pulse rifle.mtl"), "data/models/pulse rifle");
-	this.weapon.loadOBJ(App.readFile("data/models/pulse rifle/pulse rifle.obj"));
+	this.weapon.loadOBJ(App.readFile("data/models/pulserifle/pulserifle.obj"));
+	this.weapon.setTexture(Texture.createTexture("data/models/pulserifle/tex1.jpg"));
 	this.weapon.scale.set(2, 2, 2);
 	this.weapon.position.set(-0.3,-0.3,0.5);
 	this.weapon.update();
@@ -240,7 +240,7 @@ function Arena()
 
 	//Test Cube
 	this.cube = Model.cube();
-	this.cube.setTexture(font.page_texture[0]);//Texture.createTexture("data/texture/wood_box.png"));
+	this.cube.setTexture(font.page_texture[0]);
 	this.cube.position.set(0,0,0);
 	this.cube.scale.set(5,5,5);
 	this.cube.update();
@@ -273,8 +273,8 @@ function update()
 	if(App.keyboard.isKeyPressed(Keyboard.NUM1))
 	{
 		this.weapon = new Model();
-		this.weapon.loadMTL(App.readFile("data/models/pulse rifle/pulse rifle.mtl"), "data/models/pulse rifle");
-		this.weapon.loadOBJ(App.readFile("data/models/pulse rifle/pulse rifle.obj"));
+		this.weapon.loadOBJ(App.readFile("data/models/pulserifle/pulserifle.obj"));
+		this.weapon.setTexture(Texture.createTexture("data/models/pulserifle/tex1.jpg"));
 		this.weapon.scale.set(2, 2, 2);
 		this.weapon.position.set(-0.3,-0.3,0.5);
 		this.weapon.update();
@@ -282,8 +282,8 @@ function update()
 	if(App.keyboard.isKeyPressed(Keyboard.NUM2))
 	{
 		this.weapon = new Model();
-		this.weapon.loadMTL(App.readFile("data/models/scoped rifle/scoped rifle.mtl"), "data/models/scoped rifle");
-		this.weapon.loadOBJ(App.readFile("data/models/scoped rifle/scoped rifle.obj"));
+		this.weapon.loadOBJ(App.readFile("data/models/scopedrifle/scopedrifle.obj"));
+		this.weapon.setTexture(Texture.createTexture("data/models/scopedrifle/tex1.jpg"));
 		this.weapon.scale.set(2, 2, 2);
 		this.weapon.position.set(-0.3,-0.3,0.5);
 		this.weapon.update();

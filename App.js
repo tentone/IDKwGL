@@ -82,35 +82,30 @@ App.initialize = function()
 	document.onkeydown = function(event)
 	{
 		App.keyboard.update(event.keyCode, Key.KEY_DOWN);
-		//console.log("Keyboard KeyDown: "+String.fromCharCode(event.keyCode)+" ("+event.keyCode+")");
 	}
 
 	//Keyboard OnKeyUp Event
 	document.onkeyup = function(event)
 	{
 		App.keyboard.update(event.keyCode, Key.KEY_UP);
-		//console.log("Keyboard KeyUp: "+String.fromCharCode(event.keyCode)+" ("+event.keyCode+")");
 	}
 
 	//Mouse Move Position
 	document.onmousemove = function(event)
 	{
 		App.mouse.updatePosition(event.clientX, event.clientY, event.movementX, event.movementY);
-		//console.log("Mouse Position:"+App.mouse.toString());
 	}
 
 	//Mouse Button Down
 	document.onmousedown = function(event)
 	{
 		App.mouse.updateKey(event.which-1, Key.KEY_DOWN);
-		//console.log("Mouse button " + event.which + " down");
 	}
 
 	//Mouse Button Up
 	document.onmouseup = function(event)
 	{
 		App.mouse.updateKey(event.which-1, Key.KEY_UP);
-		//console.log("Mouse button " + event.which + " up");
 	}
 
 	//Request to lock mouse if canvas is clicked (cross-browser)
@@ -196,7 +191,8 @@ App.isMouseLocked = function()
 App.readFile = function(fname)
 {
 	var file = new XMLHttpRequest();
-	var ready = false;
+	file.overrideMimeType("text/plain");
+	
 	var data = null;
 
 	//Request file to server
@@ -205,13 +201,9 @@ App.readFile = function(fname)
 	//Get file
 	file.onreadystatechange = function ()
 	{
-		if(file.readyState === 4)
+		if(file.status === 200 || file.status === 0)
 		{
-			if(file.status === 200 || file.status == 0)
-			{
-				data = file.responseText;
-			}
-			ready = true;
+			data = file.responseText;
 		}
 	}
 
@@ -221,8 +213,23 @@ App.readFile = function(fname)
 	return data;
 }
 
-// Auxuiliary function to include JS files in app
-function include(jsFile)
+//Auxuiliary function to include JS files in app
+function include(file)
 {
-	document.write('<script type="text/javascript" src="'+ jsFile+ '"></script>');
+	if(file.endsWith(".js"))
+	{
+		var js = document.createElement("script");
+		js.src = file;
+		js.type = "text/javascript";
+		js.async = false;
+		document.body.appendChild(js);
+	}
+	else if(file.endsWith(".css"))
+	{
+		var css = document.createElement("link");
+		css.href = file;
+		css.rel = "stylesheet";
+		document.body.appendChild(css);
+	}	
 }
+
