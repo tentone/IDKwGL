@@ -19,6 +19,7 @@
  - WASD to move, mouse to look around and shoot SHIFT to run
  - 1 and 2 to change weapons
 
+![alt tag](https://raw.githubusercontent.com/tentone/IDKwGL/master/data/screenshot/1.jpg)![alt tag](https://raw.githubusercontent.com/tentone/IDKwGL/master/data/screenshot/2.jpg)![alt tag](https://raw.githubusercontent.com/tentone/IDKwGL/master/data/screenshot/3.jpg)
 
 ## License
  - Distributed under MIT license available on the github repository
