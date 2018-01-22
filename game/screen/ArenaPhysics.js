@@ -75,46 +75,42 @@ function ArenaPhysics()
 	this.player.camera.position.y += 50;
 }
 
-ArenaPhysics.prototype.draw = draw;
-ArenaPhysics.prototype.update = update;
-ArenaPhysics.prototype.resize = resize;
+var time = 0;
 
-time = 0;
-
-function update()
+ArenaPhysics.prototype.update = function()
 {
 	//Spawn boxes in random position
-    time++;
-    if(time % 5 == 0)
-    {
-        this.model = Model.cube();
-        this.model.setTexture(Texture.createTexture("data/texture/wood_box.jpg"));
-        this.model.position.set(MathUtils.randomMod()*400,  MathUtils.randomMod()*300, MathUtils.randomMod()*400);
-        this.model.scale.set(5,5,5);
-        this.model.update();
-        this.scene.addModel(this.model);
-        this.world.addBody(new GameObject(this.model));
-        this.world.body[this.world.body.length-1].setStatic(false);
-    }
+	time++;
+	if(time % 5 == 0)
+	{
+		this.model = Model.cube();
+		this.model.setTexture(Texture.createTexture("data/texture/wood_box.jpg"));
+		this.model.position.set(MathUtils.randomMod()*400,  MathUtils.randomMod()*300, MathUtils.randomMod()*400);
+		this.model.scale.set(5,5,5);
+		this.model.update();
+		this.scene.addModel(this.model);
+		this.world.addBody(new GameObject(this.model));
+		this.world.body[this.world.body.length-1].setStatic(false);
+	}
 
-    //Update spectator position
+	//Update spectator position
 	this.player.update();
 
 	//Update Player Camera Position
 	this.world.update();
 }
 
-function draw()
+ArenaPhysics.prototype.draw = function()
 {
-    //Clearing the frame-buffer and the depth-buffer
-    gl.clearColor(0, 0, 0, 1);
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+	//Clearing the frame-buffer and the depth-buffer
+	gl.clearColor(0, 0, 0, 1);
+	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    //Configure depth test
-    gl.enable(gl.DEPTH_TEST);
-    gl.depthFunc(gl.LESS);
+	//Configure depth test
+	gl.enable(gl.DEPTH_TEST);
+	gl.depthFunc(gl.LESS);
 
-    //Draw scene to player camera
+	//Draw scene to player camera
 	this.player.camera.startFrame();
 	this.player.camera.useShader(shaderDefault);
 	this.scene.draw(this.player.camera);
@@ -126,7 +122,7 @@ function draw()
 }
 
 //Resize cameras
-function resize(canvas)
+ArenaPhysics.prototype.resize = function(canvas)
 {
 	this.player.camera.resize(canvas.width, canvas.height);
 	this.camera.resize(canvas.width, canvas.height);

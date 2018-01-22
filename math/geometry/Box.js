@@ -7,13 +7,8 @@ function Box()
 	this.type = Geometry.BOX;
 }
 
-//Function Prototypes
-Box.prototype.isColliding = isColliding;
-Box.prototype.willCollide = willCollide;
-Box.prototype.toString = toString;
-
 //Checks if body is colliding
-function isColliding(obj)
+Box.prototype.isColliding = function(obj)
 {
 	if(obj.type == Geometry.BOX)
 	{
@@ -26,7 +21,7 @@ function isColliding(obj)
 }
 
 //Check if box will collide after apllying a descolation
-function willCollide(speed, obj)
+Box.prototype.willCollide = function(speed, obj)
 {
 	if(obj.type == Geometry.BOX)
 	{
@@ -39,7 +34,7 @@ function willCollide(speed, obj)
 }
 
 //Retuns string with box info
-function toString()
+Box.prototype.toString = function()
 {
 	return "Box (Pos:"+this.position.toString()+" Size:"+this.size.toString()+" Ori:"+this.ori.toString()+")";
 }

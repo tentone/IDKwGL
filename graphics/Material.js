@@ -16,11 +16,8 @@ function Material(name)
 	this.alpha = 1; //Alpha Value
 }
 
-//Functions Prototypes
-Material.prototype.toString = toString;
-
 //Material info to String
-function toString()
+Material.prototype.toString = function()
 {
 	return "Material\n   Name:"+this.name+"\n   Texture:"+this.texture;
 }

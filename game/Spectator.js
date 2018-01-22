@@ -4,12 +4,8 @@ function Spectator(canvas)
 	this.rotation = new Vector2(0.0, 0.0); //Horizontal / Vertical
 }
 
-//Class function prototypes
-Spectator.prototype.update = update;
-Spectator.prototype.toString = toString;
-
 //Update Spectator
-function update()
+Spectator.prototype.update = function()
 {
 	var angle = Conversion.degreesToRadians(this.rotation.x);
 	var speed = 1.5;
@@ -77,7 +73,7 @@ function update()
 }
 
 //Return string with player info
-function toString()
+Spectator.prototype.toString = function()
 {
 	return "Position:"+this.position.toString()+" Rotation:"+this.rotation.toString();
 }

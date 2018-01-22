@@ -4,22 +4,13 @@ function Vector2(x, y)
 	this.y = y;
 }
 
-//Method Prototypes
-Vector2.prototype.toString = toString;
-Vector2.prototype.add = add;
-Vector2.prototype.sub = sub;
-Vector2.prototype.mul = mul;
-Vector2.prototype.div = div;
-Vector2.prototype.equals = equals;
-Vector2.prototype.set = set;
-
-function set(x, y)
+Vector2.prototype.set = function(x, y)
 {
 	this.x = x;
 	this.y = y;
 }
 
-function equals(val)
+Vector2.prototype.equals = function(val)
 {
 	if(typeof val != typeof this)
 	{
@@ -31,13 +22,13 @@ function equals(val)
 	}
 }
 
-function add(x, y)
+Vector2.prototype.add = function(x, y)
 {
 	this.x += x;
 	this.y += y;
 }
 
-function add(val)
+Vector2.prototype.add = function(val)
 {
 	if(typeof val != typeof this)
 	{
@@ -50,7 +41,7 @@ function add(val)
 	}
 }
 
-function sub(val)
+Vector2.prototype.sub = function(val)
 {
 	if(typeof val != typeof this)
 	{
@@ -63,7 +54,7 @@ function sub(val)
 	}
 }
 
-function mul(val)
+Vector2.prototype.mul = function(val)
 {
 	if(typeof val != typeof this)
 	{
@@ -76,7 +67,7 @@ function mul(val)
 	}
 }
 
-function div(val)
+Vector2.prototype.div = function(val)
 {
 	if(typeof val != typeof this)
 	{
@@ -89,7 +80,7 @@ function div(val)
 	}
 }
 
-function toString()
+Vector2.prototype.toString = function()
 {
 	return "("+this.x+", "+this.y+")";
 }

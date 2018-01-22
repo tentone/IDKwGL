@@ -31,16 +31,8 @@ function Sprite()
 	this.transformationMatrix = new Matrix(4,4);
 }
 
-//Function Prototypes
-Sprite.prototype.draw = draw;
-Sprite.prototype.update = update;
-Sprite.prototype.setTexture = setTexture;
-Sprite.prototype.setSize = setSize;
-Sprite.prototype.clone = clone;
-Sprite.prototype.updateBuffers = updateBuffers;
-
 //Draw sprite to camera
-function draw(camera, light)
+Sprite.prototype.draw = function(camera, light)
 {
 	if(this.follow_camera_rotation && camera.type == Camera.PRESPECTIVE)
 	{
@@ -48,8 +40,8 @@ function draw(camera, light)
 		this.update();
 	}
 	
-    //Clone Camera Global transformation Matrix and multiply
-    var camTransformationMatrix = Matrix.mulTranspose(this.transformationMatrix, camera.transformationMatrix);
+	//Clone Camera Global transformation Matrix and multiply
+	var camTransformationMatrix = Matrix.mulTranspose(this.transformationMatrix, camera.transformationMatrix);
 	
 	//Normal matrix
 	var normalMatrix = MathUtils.matrix3Invert(camTransformationMatrix);
@@ -74,41 +66,41 @@ function draw(camera, light)
 		gl.uniform3f(camera.shader.pointLightingColorUniform, light.color.r, light.color.g, light.color.b);
 	}*/
 
-    //Vertex buffer
+	//Vertex buffer
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
-    gl.vertexAttribPointer(camera.shader.vertexPositionAttribute, this.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	gl.vertexAttribPointer(camera.shader.vertexPositionAttribute, this.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
 	//Texture Coords buffer
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
-    gl.vertexAttribPointer(camera.shader.textureCoordAttribute, this.textureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	gl.vertexAttribPointer(camera.shader.textureCoordAttribute, this.textureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
-    //Normal Coords buffer
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
-    gl.vertexAttribPointer(camera.shader.vertexNormalAttribute, this.normalBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	//Normal Coords buffer
+	gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
+	gl.vertexAttribPointer(camera.shader.vertexNormalAttribute, this.normalBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
-    //Faces buffer
+	//Faces buffer
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.facesBuffer);
 
 	//Set texture
 	gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, this.texture);
-    gl.uniform1i(camera.shader.samplerUniform, 0);
+	gl.bindTexture(gl.TEXTURE_2D, this.texture);
+	gl.uniform1i(camera.shader.samplerUniform, 0);
 	
 	//Drawing the triangles
 	gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
 }
 
 //Recalculate Tranformation Matrix (Should be called after changing position)
-function update()
+Sprite.prototype.update = function()
 {
 	this.transformationMatrix = MatrixGenerator.scalingMatrix(this.scale.x, this.scale.y, this.scale.z);
 	this.transformationMatrix.mul(MatrixGenerator.translation(-this.origin.x, -this.origin.y, -this.origin.z));
-    this.transformationMatrix.mul(MatrixGenerator.rotationMatrix(this.rotation.x, this.rotation.y, this.rotation.z));
-    this.transformationMatrix.mul(MatrixGenerator.translation(this.position.x, this.position.y, this.position.z));
+	this.transformationMatrix.mul(MatrixGenerator.rotationMatrix(this.rotation.x, this.rotation.y, this.rotation.z));
+	this.transformationMatrix.mul(MatrixGenerator.translation(this.position.x, this.position.y, this.position.z));
 }
 
 //Recreate data buffers (Should be called after structural changes)
-function updateBuffers()
+Sprite.prototype.updateBuffers = function()
 {
 	//Vertex
 	this.vertexBuffer = gl.createBuffer();
@@ -118,13 +110,13 @@ function updateBuffers()
 	this.vertexBuffer.numItems = this.vertex.length/3;						
 
 	//Texture
-    this.textureCoordBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
- 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.texture_coords), gl.STATIC_DRAW);
-    this.textureCoordBuffer.itemSize = 2;
-    this.textureCoordBuffer.numItems = this.texture_coords.length/2;
+	this.textureCoordBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.texture_coords), gl.STATIC_DRAW);
+	this.textureCoordBuffer.itemSize = 2;
+	this.textureCoordBuffer.numItems = this.texture_coords.length/2;
 
-    //Normals
+	//Normals
 	this.normalBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normals), gl.STATIC_DRAW);
@@ -132,15 +124,15 @@ function updateBuffers()
 	this.normalBuffer.numItems = this.normals.length/3;			
 
 	//Vertex indices
-    this.facesBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.facesBuffer);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.faces), gl.STATIC_DRAW);
-    this.facesBuffer.itemSize = 1;
-    this.facesBuffer.numItems = this.faces.length;
+	this.facesBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.facesBuffer);
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.faces), gl.STATIC_DRAW);
+	this.facesBuffer.itemSize = 1;
+	this.facesBuffer.numItems = this.faces.length;
 }
 
 //Creates a copy of this sprite (keeps same vertex, buffer and texture data pointers)
-function clone()
+Sprite.prototype.clone = function()
 {
 	var sprite = new Sprite();
 
@@ -157,13 +149,13 @@ function clone()
 }
 
 //Set sprite size with absolute values
-function setSize(x, y)
+Sprite.prototype.setSize = function(x, y)
 {
 	this.scale.set(x, y, 1);
 }
 
 //Attach texture image to this sprite
-function setTexture(texture)
+Sprite.prototype.setTexture = function(texture)
 {
 	this.texture = texture;
 }

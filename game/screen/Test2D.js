@@ -35,13 +35,9 @@ function Test2D()
 	this.idk.update();
 }
 
-Test2D.prototype.draw = draw;
-Test2D.prototype.update = update;
-Test2D.prototype.resize = resize;
+Test2D.prototype.update = function(){}
 
-function update(){}
-
-function draw()
+Test2D.prototype.draw = function()
 {
 	//Clear screen
 	gl.clearColor(0.5, 0.5, 0.5, 1);
@@ -64,7 +60,7 @@ function draw()
 	this.idk.draw(this.camera);
 }
 
-function resize()
+Test2D.prototype.resize = function()
 {
 	this.camera.resize(canvas.width, canvas.height);
 }

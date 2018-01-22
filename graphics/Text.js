@@ -32,15 +32,8 @@ function Text(text, font)
 	this.setText(text);
 }
 
-//Function Prototypes
-Text.prototype.setText = setText;
-Text.prototype.draw = draw;
-Text.prototype.update = update;
-Text.prototype.clone = clone;
-Text.prototype.updateBuffers = updateBuffers;
-
 //Set text
-function setText(text)
+Text.prototype.setText = function(text)
 {
 	//Clear old data
 	this.vertex = [];
@@ -114,7 +107,7 @@ function setText(text)
 }
 
 //Draw text to camera
-function draw(camera, light)
+Text.prototype.draw = function(camera, light)
 {
 	//Clone Camera Global transformation Matrix and multiply
 	var camTransformationMatrix = Matrix.mulTranspose(this.transformationMatrix, camera.transformationMatrix);
@@ -151,7 +144,7 @@ function draw(camera, light)
 }
 
 //Recalculate Tranformation Matrix (Should be called after changing position)
-function update()
+Text.prototype.update = function()
 {
 	this.transformationMatrix = MatrixGenerator.scalingMatrix(this.scale.x, this.scale.y, this.scale.z);
 	this.transformationMatrix.mul(MatrixGenerator.translation(-this.origin.x, -this.origin.y, -this.origin.z));
@@ -160,7 +153,7 @@ function update()
 }
 
 //Recreate data buffers
-function updateBuffers()
+Text.prototype.updateBuffers = function()
 {
 	//Vertex
 	this.vertexBuffer = gl.createBuffer();
@@ -192,7 +185,7 @@ function updateBuffers()
 }
 
 //Creates a copy of this text (keeps same vertex, buffer and texture data pointers)
-function clone()
+Text.prototype.clone = function()
 {
 	var text = new Text();
 

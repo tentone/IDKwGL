@@ -1,15 +1,9 @@
 function Screen()
 {}
 
-Screen.prototype.draw = draw;
-Screen.prototype.update = update;
-Screen.prototype.resize = resize;
 
-function update()
-{}
+Screen.prototype.update = function(){}
 
-function draw()
-{}
+Screen.prototype.draw = function(){}
 
-function resize()
-{}
+Screen.prototype.resize = function(){}

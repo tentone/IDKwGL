@@ -11,21 +11,8 @@ Vector3.cross = function(a, b)
     return new Vector3(a.y*b.z - a.z*b.y, a.z*b.x - a.x*b.z, a.x*b.y - a.y*b.x);
 }
 
-//Method Prototypes
-Vector3.prototype.toString = toString;
-Vector3.prototype.add = add;
-Vector3.prototype.sub = sub;
-Vector3.prototype.mul = mul;
-Vector3.prototype.div = div;
-Vector3.prototype.equals = equals;
-Vector3.prototype.set = set;
-Vector3.prototype.clone = clone;
-Vector3.prototype.normalize = normalize;
-Vector3.prototype.mulConst = mulConst;
-Vector3.prototype.roundCloseToZero = roundCloseToZero;
-
 //Change all values at once
-function set(x, y, z)
+Vector3.prototype.set = function(x, y, z)
 {
 	this.x = x;
 	this.y = y;
@@ -33,13 +20,13 @@ function set(x, y, z)
 }
 
 //Clone vector3
-function clone()
+Vector3.prototype.clone = function()
 {
 	return new Vector3(this.x, this.y, this.z);
 }
 
 //Normalize Vector
-function normalize()
+Vector3.prototype.normalize = function()
 {
     var norm = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
     this.x /= norm;
@@ -48,7 +35,7 @@ function normalize()
 }
 
 //Compare values
-function equals(val)
+Vector3.prototype.equals = function(val)
 {
 	if(typeof val != typeof this)
 	{
@@ -61,7 +48,7 @@ function equals(val)
 }
 
 //Add
-function add(val)
+Vector3.prototype.add = function(val)
 {
 	if(typeof val != typeof this)
 	{
@@ -76,7 +63,7 @@ function add(val)
 }
 
 //Sub
-function sub(val)
+Vector3.prototype.sub = function(val)
 {
 	if(typeof val != typeof this)
 	{
@@ -91,7 +78,7 @@ function sub(val)
 }
 
 //Mult
-function mul(val)
+Vector3.prototype.mul = function(val)
 {
 	if(typeof val != typeof this)
 	{
@@ -106,7 +93,7 @@ function mul(val)
 }
 
 //Div
-function div(val)
+Vector3.prototype.div = function(val)
 {
 	if(typeof val != typeof this)
 	{
@@ -121,7 +108,7 @@ function div(val)
 }
 
 //Mult by const
-function mulConst(val)
+Vector3.prototype.mulConst = function(val)
 {
 	this.x *= val;
 	this.y *= val;
@@ -129,13 +116,13 @@ function mulConst(val)
 }
 
 //String info
-function toString()
+Vector3.prototype.toString = function()
 {
 	return "("+this.x+", "+this.y+", "+this.z+")";
 }
 
 //Round all values close to zero to zero
-function roundCloseToZero()
+Vector3.prototype.roundCloseToZero = function()
 {
 	if(MathUtils.inRange(this.x, 0, 0.000001))
 	{

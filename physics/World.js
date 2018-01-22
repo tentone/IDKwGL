@@ -17,13 +17,8 @@ function World(acceleration)
 
 World.DELTA = 1/60;
 
-//Function prototypes
-World.prototype.addBody = addBody;
-World.prototype.update = update;
-World.prototype.toString = toString;	
-
 //Update all bodys in world
-function update()
+World.prototype.update = function()
 {
 	for(var i = 0; i < this.body.length; i++)
 	{
@@ -32,14 +27,14 @@ function update()
 }
 
 //Add body to world
-function addBody(body)
+World.prototype.addBody = function(body)
 {
 	body.setId(this.body.length);
 	this.body.push(body);
 }
 
 //World info to String
-function toString()
+World.prototype.toString = function()
 {
 	var s = "World (BodyCount:"+this.body.length+")\n   Body List:";
 

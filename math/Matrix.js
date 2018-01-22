@@ -22,20 +22,8 @@ function Matrix(size_x, size_y)
 	}
 }
 
-//Function Prototypes
-Matrix.prototype.clear = clear;
-Matrix.prototype.equals = equals;
-Matrix.prototype.flatten = flatten;
-Matrix.prototype.clone = clone;
-Matrix.prototype.transpose = transpose;
-Matrix.prototype.add = add;
-Matrix.prototype.sub = sub;
-Matrix.prototype.mul = mul;
-Matrix.prototype.mulTranspose = mulTranspose;
-Matrix.prototype.toString = toString;
-
 //Clears matrix data to 0's if matrix if square clears to indentity
-function clear()
+Matrix.prototype.clear = function()
 {
 	for(var i = 0; i < this.size.x; i++)
 	{
@@ -56,7 +44,7 @@ function clear()
 }
 
 //Checks if matri is equals to another
-function equals(val)
+Matrix.prototype.equals = function(val)
 {
 	if(typeof val != typeof this)
 	{
@@ -78,7 +66,7 @@ function equals(val)
 }
 
 //Convert to array collum oriented
-function flatten()
+Matrix.prototype.flatten = function()
 {
 	var mat = this.clone();
 	mat.transpose();
@@ -98,7 +86,7 @@ function flatten()
 }
 
 //Clone matrix into new object
-function clone()
+Matrix.prototype.clone = function()
 {
 	var mat = new Matrix(this.size.x, this.size.y);
 	var i, j;
@@ -115,28 +103,28 @@ function clone()
 }
 
 //Tranpose this matrix
-function transpose()
+Matrix.prototype.transpose = function()
 {
-    var mat = [];
+	var mat = [];
 	var i, j;
 
-    for(i = 0; i < this.size.y; i++)
-    {
-    	mat[i] = [];
-        for(j = 0; j < this.size.x; j++)
-        {
-            mat[i][j] = this.matrix[j][i];
-        }
-    }
+	for(i = 0; i < this.size.y; i++)
+	{
+		mat[i] = [];
+		for(j = 0; j < this.size.x; j++)
+		{
+			mat[i][j] = this.matrix[j][i];
+		}
+	}
 
-    //Update Matrix Values
-    this.size.y = this.size.x;
-    this.size.x = i;
-    this.matrix = mat;
+	//Update Matrix Values
+	this.size.y = this.size.x;
+	this.size.x = i;
+	this.matrix = mat;
 }
 
 //Multiply Matrix
-function mul(val)
+Matrix.prototype.mul = function(val)
 {
 	if(typeof val != typeof this)
 	{
@@ -170,7 +158,7 @@ function mul(val)
 }
 
 //Multiply Matrix and transpose after multiplication
-function mulTranspose(val)
+Matrix.prototype.mulTranspose = function(val)
 {
 	if(typeof val != typeof this)
 	{
@@ -204,7 +192,7 @@ function mulTranspose(val)
 }
 
 //Add to matrix (have to be same size)
-function add(val)
+Matrix.prototype.add = function(val)
 {
 	if(typeof val != typeof this)
 	{
@@ -228,7 +216,7 @@ function add(val)
 }
 
 //Sub from matrix (have to be same size)
-function sub(val)
+Matrix.prototype.sub = function(val)
 {
 	if(typeof val != typeof this)
 	{
@@ -252,7 +240,7 @@ function sub(val)
 }
 
 //toString Matrix info
-function toString()
+Matrix.prototype.toString = function()
 {
 	var string = "["
 	var i = 0, j = 0;

@@ -14,29 +14,20 @@ function Body(geometry)
 	this.is_colliding = new Vector3(0,0,0);
 }
 
-//Functions prototypes
-Body.prototype.update = update;
-Body.prototype.setCollidable = setCollidable;
-Body.prototype.getGeometry = getGeometry;
-Body.prototype.setStatic = setStatic;
-Body.prototype.toString = toString;
-Body.prototype.setId = setId;
-Body.prototype.getId = getId;
-
 //Set ID
-function setId(value)
+Body.prototype.setId = function(value)
 {
 	this.id = value;
 }
 
 //Get ID
-function getId()
+Body.prototype.getId = function()
 {
 	return this.id;
 }
 
 //Updates body status 
-function update(world)
+Body.prototype.update = function(world)
 {
 	if(world === undefined)
 	{
@@ -123,25 +114,25 @@ function update(world)
 }
 
 //Set static
-function setStatic(value)
+Body.prototype.setStatic = function(value)
 {
 	this.body.is_static = value;
 }
 
 //Get Body Geometry
-function getGeometry()
+Body.prototype.getGeometry = function()
 {
 	return this.geometry;
 }
 
 //Set if body is collidable
-function setCollidable(collidable)
+Body.prototype.setCollidable = function(collidable)
 {
 	this.collidable = collidable;
 }
 
 //String
-function toString()
+Body.prototype.toString = function()
 {
 	return "Body (Position:" + this.position.toString() + ", Speed:" + this.speed.toString() + ", Acceleration:"+this.acceleration.toString() +")";
 }

@@ -10,11 +10,8 @@ function PointLight()
 	this.color = new Color(0.0, 0.0, 0.0);
 }
 
-//Functions prototypes
-PointLight.prototype.toString = toString;
-
 //Returns string with info
-function toString()
+PointLight.prototype.toString = function()
 {
 	return "Point Light\nEnabled:"+this.enabled+"\nPosition:"+this.position.toString()+"\nColor:"+this.color.toString();
 }

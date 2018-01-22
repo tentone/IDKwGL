@@ -6,23 +6,14 @@ function Vector4(x, y, z, w)
 	this.w = w;
 }
 
-//Method Prototypes
-Vector4.prototype.toString = toString;
-Vector4.prototype.add = add;
-Vector4.prototype.sub = sub;
-Vector4.prototype.mul = mul;
-Vector4.prototype.equals = equals;
-Vector4.prototype.set = set;
-Vector4.prototype.normalize = normalize;
-Vector4.prototype.toVector3 = toVector3;
 
 //Returns a new vector3 with values without w
-function toVector3()
+Vector4.prototype.toVector3 = function()
 {
 	return new Vector3(this.x, this.y, this.z);
 }
 
-function set(x, y, z, w)
+Vector4.prototype.set = function(x, y, z, w)
 {
 	this.x = x;
 	this.y = y;
@@ -30,16 +21,16 @@ function set(x, y, z, w)
 	this.w = w;
 }
 
-function normalize()
+Vector4.prototype.normalize = function()
 {
-    var norm = Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z + this.w*this.w);
-    this.x /= norm;
-    this.y /= norm;
-    this.z /= norm;
-    this.w /= norm;
+	var norm = Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z + this.w*this.w);
+	this.x /= norm;
+	this.y /= norm;
+	this.z /= norm;
+	this.w /= norm;
 }
 
-function equals(val)
+Vector4.prototype.equals = function(val)
 {
 	if(typeof val != typeof this)
 	{
@@ -51,7 +42,7 @@ function equals(val)
 	}
 }
 
-function add(val)
+Vector4.prototype.add = function(val)
 {
 	if(typeof val != typeof this)
 	{
@@ -67,7 +58,7 @@ function add(val)
 }
 
 //Subtract Vector
-function sub(val)
+Vector4.prototype.sub = function(val)
 {
 	//Check type of val
 	if(typeof val != typeof this)
@@ -84,7 +75,7 @@ function sub(val)
 }
 
 //Multiply Vector
-function mul(val)
+Vector4.prototype.mul = function(val)
 {
 	//Check type of val
 	if(typeof val != typeof this)
@@ -101,7 +92,7 @@ function mul(val)
 }
 
 //toString Vector Values
-function toString()
+Vector4.prototype.toString = function()
 {
 	return "("+this.x+", "+this.y+", "+this.z+", "+this.w+")";
 }

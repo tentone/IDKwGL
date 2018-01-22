@@ -247,11 +247,7 @@ function Arena()
 	this.scene.addModel(this.cube);
 }
 
-Arena.prototype.draw = draw;
-Arena.prototype.update = update;
-Arena.prototype.resize = resize;
-
-function update()
+Arena.prototype.update = function()
 {
 	//Update Player Camera Position
 	this.world.update();
@@ -330,24 +326,24 @@ function update()
 	this.cube.update();
 }
 
-function draw()
+Arena.prototype.draw = function()
 {
-    //Clearing the frame-buffer and the depth-buffer
-    gl.clearColor(0, 0, 0, 0);
+	//Clearing the frame-buffer and the depth-buffer
+	gl.clearColor(0, 0, 0, 0);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    //Enable depth test
-    gl.enable(gl.DEPTH_TEST);
-    gl.depthFunc(gl.LESS);
+	//Enable depth test
+	gl.enable(gl.DEPTH_TEST);
+	gl.depthFunc(gl.LESS);
 
-    //Prepare player camera
+	//Prepare player camera
 	this.player.camera.startFrame();
 	this.player.camera.useShader(shaderDefault);
 
 	//Draw referencial
 	this.referencial.draw(this.player.camera);
 
-   	//Draw main scene
+	//Draw main scene
 	this.scene.draw(this.player.camera);
 
 	//Draw bullets
@@ -356,7 +352,7 @@ function draw()
 		this.bullet_particle_list[i].draw(this.player.camera, this.scene.light);	
 	}
 	
-    //Enable bleding
+	//Enable bleding
 	gl.enable(gl.BLEND);
 	gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
 
@@ -382,7 +378,7 @@ function draw()
 }
 
 //Resize cameras
-function resize(canvas)
+Arena.prototype.resize = function(canvas)
 {
 	this.player.camera.resize(canvas.width, canvas.height);
 	this.camera_static.resize(canvas.width, canvas.height);

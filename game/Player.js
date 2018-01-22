@@ -15,17 +15,8 @@ function Player(canvas)
 	this.can_jump = true;
 }
 
-//Player class function prototypes
-Player.prototype.toString = toString;
-Player.prototype.update = update;
-Player.prototype.setCollidable = setCollidable;
-Player.prototype.getGeometry = getGeometry;
-Player.prototype.setStatic = setStatic;
-Player.prototype.setId = setId;
-Player.prototype.getId = getId;
-
 //Update player
-function update(world)
+Player.prototype.update = function(world)
 {
 	var angle = Conversion.degreesToRadians(this.rotation.x);
 
@@ -91,37 +82,37 @@ function update(world)
 }
 
 //Set ID for body
-function setId(value)
+Player.prototype.setId = function(value)
 {
 	this.body.setId(value);
 }
 
 //Get body ID
-function getId()
+Player.prototype.getId = function()
 {
 	return this.body.getId();
 }
 
 //Get Body Geometry
-function getGeometry()
+Player.prototype.getGeometry = function()
 {
 	return this.body.geometry;
 }
 
 //Set static
-function setStatic(value)
+Player.prototype.setStatic = function(value)
 {
 	this.body.is_static = value;
 }
 
 //Set if it can collide
-function setCollidable(collidable)
+Player.prototype.setCollidable = function(collidable)
 {
 	this.body.collidable = collidable;
 }
 
 //Return string with player info
-function toString()
+Player.prototype.toString = function()
 {
 	return "Player\nPosition:"+this.box.position.toString()+"\nRotation:"+this.rotation.toString();
 }

@@ -36,23 +36,8 @@ function Model()
 	this.transformationMatrix = new Matrix(4,4);
 }
 
-//Function Prototypes
-Model.prototype.draw = draw;
-Model.prototype.update = update;
-Model.prototype.setTexture = setTexture;
-Model.prototype.setSize = setSize;
-Model.prototype.clone = clone;
-Model.prototype.updateBuffers = updateBuffers;
-Model.prototype.loadOBJ = loadOBJ;
-Model.prototype.loadMTL = loadMTL;
-Model.prototype.transformOBJData = transformOBJData;
-Model.prototype.getBox = getBox;
-Model.prototype.mulTextureCoords = mulTextureCoords;
-Model.prototype.computeVertexNormals = computeVertexNormals;
-Model.prototype.toString = toString;
-
 //Draw Model to camera
-function draw(camera, light)
+Model.prototype.draw = function(camera, light)
 {
 	//Clone Camera Global transformation Matrix and multiply
 	var camTransformationMatrix = Matrix.mulTranspose(this.transformationMatrix, camera.transformationMatrix);
@@ -110,16 +95,16 @@ function draw(camera, light)
 }
 
 //Recalculate Tranformation Matrix (Should be called after changing position)
-function update()
+Model.prototype.update = function()
 {
 	this.transformationMatrix = MatrixGenerator.scalingMatrix(this.scale.x, this.scale.y, this.scale.z);
 	this.transformationMatrix.mul(MatrixGenerator.translation(-this.origin.x, -this.origin.y, -this.origin.z));
-    this.transformationMatrix.mul(MatrixGenerator.rotationMatrix(this.rotation.x, this.rotation.y, this.rotation.z));
-    this.transformationMatrix.mul(MatrixGenerator.translation(this.position.x, this.position.y, this.position.z));
+	this.transformationMatrix.mul(MatrixGenerator.rotationMatrix(this.rotation.x, this.rotation.y, this.rotation.z));
+	this.transformationMatrix.mul(MatrixGenerator.translation(this.position.x, this.position.y, this.position.z));
 }
 
 //Recreate data buffers (Should be called after structural changes)
-function updateBuffers()
+Model.prototype.updateBuffers = function()
 {
 	//Vertex
 	this.vertexBuffer = gl.createBuffer();
@@ -151,7 +136,7 @@ function updateBuffers()
 }
 
 //Creates a copy of this model (keeps same vertex, buffer and texture data pointers)
-function clone()
+Model.prototype.clone = function()
 {
 	var model = new Model();
 
@@ -177,14 +162,14 @@ function clone()
 }
 
 //Set model size with absolute values
-function setSize(x, y, z)
+Model.prototype.setSize = function(x, y, z)
 {
 	this.scale.set(x,y,z);
 	this.scale.div(this.getBox().size);
 }
 
 //Attach texture image to this model
-function setTexture(texture)
+Model.prototype.setTexture = function(texture)
 {
 	this.texture = texture;
 
@@ -199,7 +184,7 @@ function setTexture(texture)
 }
 
 //OBJ file read from string
-function loadOBJ(data)
+Model.prototype.loadOBJ = function(data)
 {
 	var lines = data.split("\n");
 
@@ -366,7 +351,7 @@ function loadOBJ(data)
 }
 
 //Tranform OBJ file to single hash level as used in classes
-function transformOBJData()
+Model.prototype.transformOBJData = function()
 {
 	//Create temporary arrays to store all model data
 	vertex = [];
@@ -402,7 +387,7 @@ function transformOBJData()
 }
 
 //Read MTL data from String
-function loadMTL(data, texture_folder)
+Model.prototype.loadMTL = function(data, texture_folder)
 {
 	var lines = data.split("\n");
 	var index = -1;
@@ -472,7 +457,7 @@ function loadMTL(data, texture_folder)
 }
 
 //Mult values by texture coords
-function mulTextureCoords(x, y)
+Model.prototype.mulTextureCoords = function(x, y)
 {
 	for(var i = 0; i < this.texture_coords.length; i += 2)
 	{
@@ -483,7 +468,7 @@ function mulTextureCoords(x, y)
 }
 
 //Computing the triangle unit normal vector to vertex 
-function computeVertexNormals()
+Model.prototype.computeVertexNormals = function()
 {
 	//Clearing the new normals array
 	this.normals.length = 0;
@@ -508,7 +493,7 @@ function computeVertexNormals()
 }
 
 //Get Bouding box created from vertex data
-function getBox()
+Model.prototype.getBox = function()
 {
 	//If not available calculate box from vertex data
 	if(this.box == null)
@@ -566,7 +551,7 @@ function getBox()
 }
 
 //Create string with model info
-function toString()
+Model.prototype.toString = function()
 {
 	var s = "Model\n   VertexCount:"+this.vertex.length+"\n   NormalCount:"+this.normals.length+
 		"\n   TextureCount:"+this.texture_coords.length+"\n   Faces Count:"+this.faces.length+

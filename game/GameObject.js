@@ -13,29 +13,20 @@ function GameObject(model, body)
 	}
 }
 
-//Function prototypes
-GameObject.prototype.update = update;
-GameObject.prototype.setCollidable = setCollidable;
-GameObject.prototype.getGeometry = getGeometry;
-GameObject.prototype.setStatic = setStatic;
-GameObject.prototype.toString = toString;
-GameObject.prototype.setId = setId;
-GameObject.prototype.getId = getId;
-
 //Set ID for body
-function setId(value)
+GameObject.prototype.setId = function(value)
 {
 	this.body.setId(value);
 }
 
 //Get body ID
-function getId()
+GameObject.prototype.getId = function()
 {
 	return this.body.getId();
 }
 
 //Update game object
-function update(world)
+GameObject.prototype.update = function(world)
 {
 	this.body.update(world);
 	this.model.position.set(this.body.geometry.position.x, this.body.geometry.position.y, this.body.geometry.position.z);
@@ -43,25 +34,25 @@ function update(world)
 }
 
 //Get Body Geometry
-function getGeometry()
+GameObject.prototype.getGeometry = function()
 {
 	return this.body.geometry;
 }
 
 //Set static
-function setStatic(value)
+GameObject.prototype.setStatic = function(value)
 {
 	this.body.is_static = value;
 }
 
 //Set if it can collide
-function setCollidable(collidable)
+GameObject.prototype.setCollidable = function(collidable)
 {
 	this.body.collidable = collidable;
 }
 
 //Create info string
-function toString()
+GameObject.prototype.toString = function()
 {
 	return this.body.toString();
 }

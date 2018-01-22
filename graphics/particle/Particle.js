@@ -11,12 +11,8 @@ function Particle(model, position, speed, scale, time)
 	this.model.update();
 }
 
-//Funtion prototypes
-Particle.prototype.update = update;
-Particle.prototype.draw = draw;
-
 //Update particles
-function update()
+Particle.prototype.update = function()
 {
 	this.position.add(this.speed);
 	this.time--;
@@ -26,7 +22,7 @@ function update()
 }
 
 //Draw particles into camera
-function draw(camera, light)
+Particle.prototype.draw = function(camera, light)
 {
 	this.model.draw(camera, light);
 }

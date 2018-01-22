@@ -69,12 +69,8 @@ function Font(fname, folder)
 	}
 }
 
-//Functions prototypes
-Font.prototype.loadFont = loadFont;
-Font.prototype.toString = toString;
-
 //Load font from file
-function loadFont(fname, folder)
+Font.prototype.loadFont = function(fname, folder)
 {
 	var file = App.readFile(fname);
 	var data = file.split("\n");
@@ -300,7 +296,7 @@ function loadFont(fname, folder)
 }
 
 //Create info string
-function toString()
+Font.prototype.toString = function()
 {
 	var s = "Font " + this.face;
 	s += "\n   Size:" + this.size;

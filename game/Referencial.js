@@ -30,12 +30,9 @@ function Referencial()
 	this.referencial.addModel(this.referencial_z);
 }
 
-Referencial.prototype.draw = draw;
-Referencial.prototype.update = update;
+Referencial.prototype.update = function(){}
 
-function update(){}
-
-function draw(camera)
+Referencial.prototype.draw = function(camera)
 {
 	this.referencial.draw(camera);
 }

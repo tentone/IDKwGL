@@ -8,27 +8,22 @@ function Keyboard()
 	}
 }
 
-Keyboard.prototype.isKeyPressed = isKeyPressed;
-Keyboard.prototype.isKeyJustPressed = isKeyJustPressed;
-Keyboard.prototype.isKeyJustReleased = isKeyJustReleased;
-Keyboard.prototype.update = update;
-
-function update(key, action)
+Keyboard.prototype.update = function(key, action)
 {
 	this.keys[key].update(action);
 }
 
-function isKeyPressed(key)
+Keyboard.prototype.isKeyPressed = function(key)
 {
 	return this.keys[key].isPressed;
 }
 
-function isKeyJustPressed(key)
+Keyboard.prototype.isKeyJustPressed = function(key)
 {
 	return this.keys[key].justPressed;
 }
 
-function isKeyJustReleased(key)
+Keyboard.prototype.isKeyJustReleased = function(key)
 {
 	return this.keys[key].justReleased;
 }

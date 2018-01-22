@@ -19,13 +19,8 @@ function ParticleEmitter(model, position, speed, speed_var, scale, scale_var, ti
 	}
 }
 
-//Function prototypes
-ParticleEmitter.prototype.update = update;
-ParticleEmitter.prototype.draw = draw;
-ParticleEmitter.prototype.toString = toString;
-
 //Update Particles position
-function update()
+ParticleEmitter.prototype.update = function()
 {
 	for(var i = 0; i < this.particles.length; i++)
 	{
@@ -39,7 +34,7 @@ function update()
 }
 
 //Draw particles into camera
-function draw(camera, light)
+ParticleEmitter.prototype.draw = function(camera, light)
 {
 	for(var i = 0; i < this.particles.length; i++)
 	{
@@ -48,7 +43,7 @@ function draw(camera, light)
 }
 
 //Creates string with particle emitter info
-function toString()
+ParticleEmitter.prototype.toString = function()
 {
 	return "Particle (Count:" + this.particles.length + ")";
 }
