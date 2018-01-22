@@ -1,43 +1,43 @@
-include("math/Vector2.js");
-include("math/Vector3.js");
-include("math/Vector4.js");
-include("math/Matrix.js");
-include("math/Conversion.js");
-include("math/MathsUtils.js");
+include("core/math/Vector2.js");
+include("core/math/Vector3.js");
+include("core/math/Vector4.js");
+include("core/math/Matrix.js");
+include("core/math/Conversion.js");
+include("core/math/MathsUtils.js");
 
-include("math/geometry/Geometry.js");
-include("math/geometry/Box.js");
-include("math/geometry/Sphere.js");
+include("core/math/geometry/Geometry.js");
+include("core/math/geometry/Box.js");
+include("core/math/geometry/Sphere.js");
 
-include("input/Key.js");
-include("input/Keyboard.js");
-include("input/Mouse.js");
+include("core/input/Key.js");
+include("core/input/Keyboard.js");
+include("core/input/Mouse.js");
 
-include("graphics/Scene.js");
-include("graphics/Model.js");
-include("graphics/Texture.js");
-include("graphics/Material.js");
-include("graphics/Sprite.js");
-include("graphics/MatrixGenerator.js");
-include("graphics/Color.js");
-include("graphics/Shader.js");
-include("graphics/ModelUtils.js");
-include("graphics/Text.js");
-include("graphics/Font.js");
+include("core/Scene.js");
+include("core/Model.js");
+include("core/Texture.js");
+include("core/Material.js");
+include("core/Sprite.js");
+include("core/MatrixGenerator.js");
+include("core/Color.js");
+include("core/Shader.js");
+include("core/ModelUtils.js");
+include("core/Text.js");
+include("core/Font.js");
 
-include("graphics/light/Light.js");
-include("graphics/light/DirectionalLight.js");
-include("graphics/light/PointLight.js");
+include("core/light/Light.js");
+include("core/light/DirectionalLight.js");
+include("core/light/PointLight.js");
 
-include("graphics/particle/Particle.js");
-include("graphics/particle/ParticleEmitter.js");
+include("core/particle/Particle.js");
+include("core/particle/ParticleEmitter.js");
 
-include("graphics/camera/Camera.js");
-include("graphics/camera/OrthographicCamera.js");
-include("graphics/camera/PrespectiveCamera.js");
+include("core/camera/Camera.js");
+include("core/camera/OrthographicCamera.js");
+include("core/camera/PrespectiveCamera.js");
 
-include("physics/Body.js");
-include("physics/World.js");
+include("core/physics/Body.js");
+include("core/physics/World.js");
 
 include("data/models/house.js");
 include("data/models/tank.js");
