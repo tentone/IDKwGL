@@ -13,7 +13,8 @@ varying vec4 vPosition;
 void main(void)
 {
 	vPosition = uMVMatrix * vec4(aVertexPosition, 1.0);
-	gl_Position = uPMatrix * vPosition;
 	vTextureCoord = aTextureCoord;
 	vTransformedNormal = uNMatrix * aVertexNormal;
+	
+	gl_Position = uPMatrix * vPosition;
 }
