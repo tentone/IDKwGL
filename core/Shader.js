@@ -101,10 +101,10 @@ Shader.lightPixelRenderShader = function()
 	sp.shaderProgram.vertexNormalAttribute = gl.getAttribLocation(sp.shaderProgram, "aVertexNormal");
 	gl.enableVertexAttribArray(sp.shaderProgram.vertexNormalAttribute);
 
-	//The sampler
+	//Sampler
 	sp.shaderProgram.samplerUniform = gl.getUniformLocation(sp.shaderProgram, "uSampler");
 
-	//The matrices
+	//Transform
 	sp.shaderProgram.pMatrixUniform = gl.getUniformLocation(sp.shaderProgram, "uPMatrix");
 	sp.shaderProgram.mvMatrixUniform = gl.getUniformLocation(sp.shaderProgram, "uMVMatrix");
 	sp.shaderProgram.nMatrixUniform = gl.getUniformLocation(sp.shaderProgram, "uNMatrix");

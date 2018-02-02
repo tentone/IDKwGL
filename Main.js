@@ -2,7 +2,6 @@
 var screen;
 
 //Global Shaders
-var shaderLightPixel;
 var shaderDefault;
 
 //Test font
@@ -13,8 +12,7 @@ function Main(){}
 //Initialize
 Main.init = function(canvas)
 {
-	shaderLightPixel = Shader.lightPixelRenderShader();
-	shaderDefault = Shader.defaultShader();
+	shaderDefault = Shader.defaultShader();//Shader.lightPixelRenderShader();
 	
 	font = new Font();
 
