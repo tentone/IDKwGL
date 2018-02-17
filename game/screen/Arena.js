@@ -3,18 +3,18 @@ function Arena()
 	//Create scene and world
 	this.world = new World();
 	this.scene = new Scene();
-	this.scene_grass = new Scene();
+	this.sceneGrass = new Scene();
 
 	//Cameras
-	this.camera_static = new PrespectiveCamera(canvas, 70, 1);
-	this.hud_camera = new OrthographicCamera(canvas, 10);
+	this.cameraStatic = new PrespectiveCamera(canvas, 70, 1);
+	this.hudCamera = new OrthographicCamera(canvas, 10);
 
 	//IDK Logo
 	this.idk = new Sprite();
 	this.idk.setTexture(Texture.createTexture("data/texture/idk.png"));
-	this.idk.scale.set(this.hud_camera.size.y/2,this.hud_camera.size.y/4,1);
-	this.idk.origin.set(this.hud_camera.size.x/3,0,0);
-	this.idk.position.set(this.hud_camera.size.x-1,-this.hud_camera.size.y+1,0);
+	this.idk.scale.set(this.hudCamera.size.y/2,this.hudCamera.size.y/4,1);
+	this.idk.origin.set(this.hudCamera.size.x/3,0,0);
+	this.idk.position.set(this.hudCamera.size.x-1,-this.hudCamera.size.y+1,0);
 	this.idk.update();
 	
 	//Crosshair
@@ -30,7 +30,7 @@ function Arena()
 	this.skybox.scale.set(800,800,800);
 	this.skybox.rotation.set(-90,0,0);
 	this.skybox.update();
-	this.scene.addModel(this.skybox);
+	this.scene.add(this.skybox);
 	
 	//Tank
 	this.model = new Model();
@@ -39,7 +39,7 @@ function Arena()
 	this.model.scale.set(15, 15, 15);
 	this.model.position.set(-250,0,100);
 	this.model.update();
-	this.scene.addModel(this.model);
+	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
 	//Eyebot
@@ -49,7 +49,7 @@ function Arena()
 	this.model.position.set(0,20,-100);
 	this.model.scale.set(0.5,0.5,0.5);
 	this.model.update();
-	this.scene.addModel(this.model);
+	this.scene.add(this.model);
 
 	//Asian Girl
 	this.model = new Model();
@@ -58,7 +58,7 @@ function Arena()
 	this.model.position.set(-100,0,-100);
 	this.model.scale.set(0.15,0.15,0.15);
 	this.model.update();
-	this.scene.addModel(this.model);
+	this.scene.add(this.model);
 
 	//Bus
 	this.bus = new Model();
@@ -68,7 +68,7 @@ function Arena()
 	this.bus.position.set(100,19.8,300);
 	this.bus.rotation.set(0,180,0);
 	this.bus.update();
-	this.scene.addModel(this.bus);
+	this.scene.add(this.bus);
 	this.world.addBody(new GameObject(this.bus));
 	
 	//House
@@ -78,37 +78,37 @@ function Arena()
 	this.model.scale.set(7, 7, 7);
 	this.model.position.set(300,0,500);
 	this.model.update();
-	this.scene.addModel(this.model);
+	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
 	this.model = this.model.clone();
 	this.model.position.set(300,0,80);
 	this.model.update();
-	this.scene.addModel(this.model);
+	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
 	this.model = this.model.clone();
 	this.model.position.set(300,0,160);
 	this.model.update();
-	this.scene.addModel(this.model);
+	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
 	this.model = this.model.clone();
 	this.model.position.set(200,0,0);
 	this.model.update();
-	this.scene.addModel(this.model);
+	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
 	this.model = this.model.clone();
 	this.model.position.set(200,0,80);
 	this.model.update();
-	this.scene.addModel(this.model);
+	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
 	this.model = this.model.clone();
 	this.model.position.set(200,0,160);
 	this.model.update();
-	this.scene.addModel(this.model);
+	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
 	//Crate Pile
@@ -117,28 +117,28 @@ function Arena()
 	this.model.position.set(-200,5,0);
 	this.model.scale.set(5,5,5);
 	this.model.update();
-	this.scene.addModel(this.model);
+	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
 	this.model = this.model.clone();
 	this.model.position.set(-200,15,0);
 	this.model.scale.set(5,5,5);
 	this.model.update();
-	this.scene.addModel(this.model);
+	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
 	this.model = this.model.clone();
 	this.model.position.set(-190,5,0);
 	this.model.scale.set(5,5,5);
 	this.model.update();
-	this.scene.addModel(this.model);
+	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
 	this.model = this.model.clone();
 	this.model.position.set(-200,5,10);
 	this.model.scale.set(5,5,5);
 	this.model.update();
-	this.scene.addModel(this.model);
+	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
 	//Floor
@@ -148,7 +148,7 @@ function Arena()
 	this.model.position.set(0, -100, 0);
 	this.model.scale.set(900, 100, 900);
 	this.model.update();
-	this.scene.addModel(this.model);
+	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 	
 	//Walls
@@ -158,7 +158,7 @@ function Arena()
 	this.model.position.set(0, 0, -400);
 	this.model.scale.set(400, 50, 1);
 	this.model.update();
-	this.scene.addModel(this.model);
+	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
 	this.model = Model.cube();
@@ -167,7 +167,7 @@ function Arena()
 	this.model.position.set(0, 0, 400);
 	this.model.scale.set(400, 50, 1);
 	this.model.update();
-	this.scene.addModel(this.model);
+	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
 	this.model = Model.cube();
@@ -176,7 +176,7 @@ function Arena()
 	this.model.position.set(-400, 0, 0);
 	this.model.scale.set(1, 50, 400);
 	this.model.update();
-	this.scene.addModel(this.model);
+	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
 	this.model = Model.cube();
@@ -185,7 +185,7 @@ function Arena()
 	this.model.position.set(400, 0, 0);
 	this.model.scale.set(1, 50, 400);
 	this.model.update();
-	this.scene.addModel(this.model);
+	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 	
 	//Grass
@@ -193,12 +193,12 @@ function Arena()
 	{
 		this.model = new Sprite();
 		this.model.setTexture(Texture.createTexture("data/texture/grass_sprite_2.png"));
-		this.model.follow_camera_rotation = true;
+		this.model.followCameraRotation = true;
 		this.model.scale.set(16, 4, 1);
 		this.model.origin.set(8, 2, 0);
 		this.model.position.set(MathUtils.randomMod()*400, 2, MathUtils.randomMod()*400);
 		this.model.update();
-		this.scene_grass.addModel(this.model);
+		this.sceneGrass.add(this.model);
 	}
 
 	//Tank smoke
@@ -206,7 +206,7 @@ function Arena()
 	this.model.setTexture(Texture.createTexture("data/texture/smoke_2.png"));
 	this.model.scale.set(4, 4, 1);
 	this.model.origin.set(2, 2, 0);
-	this.model.follow_camera_rotation = true;
+	this.model.followCameraRotation = true;
 	this.model.position.set(MathUtils.randomMod()*400, 2, MathUtils.randomMod()*400);
 	this.model.update();
 	this.particle = new ParticleEmitter(this.model, new Vector3(-250,8,100), new Vector3(0,0.7,0), new Vector3(0.3,0.5,0.3), 6, 4, 150, 150, 50);
@@ -219,8 +219,8 @@ function Arena()
 	this.bullet.position.set(0,8,0);
 	this.bullet.update();
 	
-	this.bullet_particle = new Particle(this.bullet.clone(), new Vector3(0,8,0), new Vector3(0,0,0), 1, 10000);
-	this.bullet_particle_list = [];
+	this.bulletParticle = new Particle(this.bullet.clone(), new Vector3(0,8,0), new Vector3(0,0,0), 1, 10000);
+	this.bulletParticle_list = [];
 
 	//Weapon
 	this.weapon = new Model();
@@ -240,11 +240,11 @@ function Arena()
 
 	//Test Cube
 	this.cube = Model.cube();
-	this.cube.setTexture(font.page_texture[0]);
+	this.cube.setTexture(font.pageTexture[0]);
 	this.cube.position.set(0,0,0);
 	this.cube.scale.set(5,5,5);
 	this.cube.update();
-	this.scene.addModel(this.cube);
+	this.scene.add(this.cube);
 }
 
 Arena.prototype.update = function()
@@ -260,9 +260,9 @@ Arena.prototype.update = function()
 		var position = this.player.camera.position.clone();
 
 		//Add bullet to array
-		var bullet_particle = new Particle(this.bullet.clone(), position, direction, 1, 200);		
-		bullet_particle.speed.mulConst(5);
-		this.bullet_particle_list.push(bullet_particle);
+		var bulletParticle = new Particle(this.bullet.clone(), position, direction, 1, 200);		
+		bulletParticle.speed.mulConst(5);
+		this.bulletParticle_list.push(bulletParticle);
 	}
 
 	//Weapon change
@@ -286,15 +286,15 @@ Arena.prototype.update = function()
 	}
 
 	//Update bullet list
-	for(var i = 0; i < this.bullet_particle_list.length; i++)
+	for(var i = 0; i < this.bulletParticle_list.length; i++)
 	{
-		if(this.bullet_particle_list[i].time < 0)
+		if(this.bulletParticle_list[i].time < 0)
 		{
-			this.bullet_particle_list.splice(i, 1);
+			this.bulletParticle_list.splice(i, 1);
 		}
 		else
 		{
-			this.bullet_particle_list[i].update();
+			this.bulletParticle_list[i].update();
 		}
 	}
 
@@ -347,9 +347,9 @@ Arena.prototype.draw = function()
 	this.scene.draw(this.player.camera);
 
 	//Draw bullets
-	for(var i = 0; i < this.bullet_particle_list.length; i++)
+	for(var i = 0; i < this.bulletParticle_list.length; i++)
 	{
-		this.bullet_particle_list[i].draw(this.player.camera, this.scene.light);	
+		this.bulletParticle_list[i].draw(this.player.camera, this.scene.light);	
 	}
 	
 	//Enable bleding
@@ -357,30 +357,30 @@ Arena.prototype.draw = function()
 	gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
 
 	//Render Grass and particles
-	this.scene_grass.draw(this.player.camera);
+	this.sceneGrass.draw(this.player.camera);
 	this.particle.draw(this.player.camera, this.scene.light);
 	
 	//Render HUD
-	this.hud_camera.startFrame();
-	this.hud_camera.useShader(shaderDefault);
-	this.cross.draw(this.hud_camera);
+	this.hudCamera.startFrame();
+	this.hudCamera.useShader(shaderDefault);
+	this.cross.draw(this.hudCamera);
 
 	//Disable Blending
 	gl.disable(gl.BLEND);
 
 	//Draw IDK Logo
-	this.idk.draw(this.hud_camera);
+	this.idk.draw(this.hudCamera);
 
 	//Draw static camera
-	this.camera_static.startFrame();
-	this.camera_static.useShader(shaderDefault);
-	this.weapon.draw(this.camera_static, this.scene.light);
+	this.cameraStatic.startFrame();
+	this.cameraStatic.useShader(shaderDefault);
+	this.weapon.draw(this.cameraStatic, this.scene.light);
 }
 
 //Resize cameras
 Arena.prototype.resize = function(canvas)
 {
 	this.player.camera.resize(canvas.width, canvas.height);
-	this.camera_static.resize(canvas.width, canvas.height);
-	this.hud_camera.resize(canvas.width, canvas.height);
+	this.cameraStatic.resize(canvas.width, canvas.height);
+	this.hudCamera.resize(canvas.width, canvas.height);
 }

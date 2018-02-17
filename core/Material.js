@@ -4,9 +4,9 @@ function Material(name)
 	this.name = name;
 
 	this.texture = null; //Texture
-	this.bump_map = null; //Bump Map
-	this.specular_map = null; //Specular map
-	this.distance_map = null; //Distance map
+	this.bumpMap = null; //Bump Map
+	this.specularMap = null; //Specular map
+	this.distanceMap = null; //Distance map
 
 	this.ka = new Color(1,1,1); //Ambient Value
 	this.kd = new Color(1,1,1); //Diffuse Value

@@ -3,7 +3,7 @@ function Model()
 {
 	//Model Data
 	this.vertex = []; //Vertex
-	this.texture_coords = []; //Vertex Texture
+	this.uvs = []; //Vertex Texture
 	this.normals = []; //Vertex Normals
 	this.faces = []; //Face <vertex / texture / normal>
 
@@ -11,7 +11,7 @@ function Model()
 	this.box = null;
 
 	//Store relation between faces and materials 
-	this.face_material = []; //<Face Index Ini / Face Index End / Material>
+	this.faceMaterial = []; //<Face Index Ini / Face Index End / Material>
 	this.material = []; //Material Array
 
 	//Buffers
@@ -82,15 +82,15 @@ Model.prototype.draw = function(camera, light)
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.facesBuffer);
 
 	//Draw trough all texture
-	for(var i = 0; i < this.face_material.length; i += 3)
+	for(var i = 0; i < this.faceMaterial.length; i += 3)
 	{
 		//Set texture to model
 		gl.activeTexture(gl.TEXTURE0);
-		gl.bindTexture(gl.TEXTURE_2D, this.material[this.face_material[i+2]].texture);
+		gl.bindTexture(gl.TEXTURE_2D, this.material[this.faceMaterial[i+2]].texture);
 		gl.uniform1i(camera.shader.samplerUniform, 0);
 		
 		//Drawing the triangles
-		gl.drawElements(gl.TRIANGLES, this.face_material[i+1], gl.UNSIGNED_SHORT, 0);
+		gl.drawElements(gl.TRIANGLES, this.faceMaterial[i+1], gl.UNSIGNED_SHORT, 0);
 	}
 }
 
@@ -116,9 +116,9 @@ Model.prototype.updateBuffers = function()
 	//Texture
 	this.textureCoordBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.texture_coords), gl.STATIC_DRAW);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.uvs), gl.STATIC_DRAW);
 	this.textureCoordBuffer.itemSize = 2;
-	this.textureCoordBuffer.numItems = this.texture_coords.length/2;
+	this.textureCoordBuffer.numItems = this.uvs.length/2;
 
 	//Normals
 	this.normalBuffer = gl.createBuffer();
@@ -141,11 +141,11 @@ Model.prototype.clone = function()
 	var model = new Model();
 
 	model.vertex = this.vertex;
-	model.texture_coords = this.texture_coords;
+	model.uvs = this.uvs;
 	model.normals = this.normals;
 	model.faces = this.faces;
 	model.material = this.material;
-	model.face_material = this.face_material;
+	model.faceMaterial = this.faceMaterial;
 
 	model.textureCoordBuffer = this.textureCoordBuffer;
 	model.normalBuffer = this.normalBuffer;
@@ -177,10 +177,10 @@ Model.prototype.setTexture = function(texture)
 	this.material[0] = new Material("mat");
 	this.material[0].texture = texture;
 
-	this.face_material = [];
-	this.face_material[0] = 0 ;
-	this.face_material[1] = this.faces.length;
-	this.face_material[2] = 0;
+	this.faceMaterial = [];
+	this.faceMaterial[0] = 0 ;
+	this.faceMaterial[1] = this.faces.length;
+	this.faceMaterial[2] = 0;
 }
 
 //OBJ file read from string
@@ -191,9 +191,9 @@ Model.prototype.loadOBJ = function(data)
 	//Clear Data
 	this.vertex = []; //Vertex Points
 	this.normals = []; //Vertex Normals
-	this.texture_coords = []; //Vertex Texture Coords
+	this.uvs = []; //Vertex Texture Coords
 	this.faces = []; //Face
-	this.face_material = []; //Face range and material
+	this.faceMaterial = []; //Face range and material
 	this.box = null; //Bounding Box
 
 	// Check every line and store 
@@ -219,8 +219,8 @@ Model.prototype.loadOBJ = function(data)
 		//Texture coords
 		else if(tokens[0] == "vt")
 		{
-			this.texture_coords.push(parseFloat(tokens[1]));
-			this.texture_coords.push(parseFloat(tokens[2]));
+			this.uvs.push(parseFloat(tokens[1]));
+			this.uvs.push(parseFloat(tokens[2]));
 		}
 		//Faces <vertex>/<texture>/<normal>
 		else if(tokens[0] == "f")
@@ -295,33 +295,33 @@ Model.prototype.loadOBJ = function(data)
 			if(j != this.material.length)
 			{
 				//If faces material has elements add last index
-				if(this.face_material.length != 0)
+				if(this.faceMaterial.length != 0)
 				{
-					this.face_material[this.face_material.length-2] = this.faces.length/3;
+					this.faceMaterial[this.faceMaterial.length-2] = this.faces.length/3;
 				}
 
 				//Add new material
-				this.face_material.push(this.faces.length/3); //Ini Position
-				this.face_material.push(this.faces.length/3); //End Position (temporary)
-				this.face_material.push(j); //Material Index
+				this.faceMaterial.push(this.faces.length/3); //Ini Position
+				this.faceMaterial.push(this.faces.length/3); //End Position (temporary)
+				this.faceMaterial.push(j); //Material Index
 			}
 		}
 	}
 	
-	if(this.face_material.length > 0)
+	if(this.faceMaterial.length > 0)
 	{
-		this.face_material[this.face_material.length-2] = this.faces.length/3;
+		this.faceMaterial[this.faceMaterial.length-2] = this.faces.length/3;
 	}
 
 	//If no coord found complete with data
-	if(this.texture_coords.length == 0)
+	if(this.uvs.length == 0)
 	{
 		//Full texture to all triangles
-		this.texture_coords.push(0.0);
-		this.texture_coords.push(0.0);
+		this.uvs.push(0.0);
+		this.uvs.push(0.0);
 
-		this.texture_coords.push(1.0);
-		this.texture_coords.push(1.0);
+		this.uvs.push(1.0);
+		this.uvs.push(1.0);
 
 		//Add Texture Component to all faces
 		for(i = 1; i < this.faces.length; i+=3)
@@ -368,8 +368,8 @@ Model.prototype.transformOBJData = function()
 		vertex.push(this.vertex[(this.faces[i]-1)*3+1]);
 		vertex.push(this.vertex[(this.faces[i]-1)*3+2]);
 
-		texture.push(this.texture_coords[(this.faces[i+1]-1)*2]);
-		texture.push(this.texture_coords[(this.faces[i+1]-1)*2+1]);
+		texture.push(this.uvs[(this.faces[i+1]-1)*2]);
+		texture.push(this.uvs[(this.faces[i+1]-1)*2+1]);
 
 		normals.push(this.normals[(this.faces[i+2]-1)*3]);
 		normals.push(this.normals[(this.faces[i+2]-1)*3+1]);
@@ -379,7 +379,7 @@ Model.prototype.transformOBJData = function()
 	//Copy array pointer into main data and update bufffers
 	this.faces = faces;
 	this.vertex = vertex;
-	this.texture_coords = texture;
+	this.uvs = texture;
 	this.normals = normals;
 
 	//Update Buffers
@@ -387,7 +387,7 @@ Model.prototype.transformOBJData = function()
 }
 
 //Read MTL data from String
-Model.prototype.loadMTL = function(data, texture_folder)
+Model.prototype.loadMTL = function(data, textureFolder)
 {
 	var lines = data.split("\n");
 	var index = -1;
@@ -419,12 +419,12 @@ Model.prototype.loadMTL = function(data, texture_folder)
 			//Texture
 			if(tokens[offset] == "map_Kd" || tokens[offset] == "map_Ka")
 			{
-				this.material[index].texture = Texture.createTexture(texture_folder + "/" + tokens[1+offset]);
+				this.material[index].texture = Texture.createTexture(textureFolder + "/" + tokens[1+offset]);
 			}
 			//Bump map
-			else if(tokens[offset] == "map_bump" || tokens[offset] == "bump")
+			else if(tokens[offset] == "mapBump" || tokens[offset] == "bump")
 			{
-				this.material[index].bump_map = Texture.createTexture(texture_folder + "/" + tokens[1+offset]);
+				this.material[index].bumpMap = Texture.createTexture(textureFolder + "/" + tokens[1+offset]);
 			}
 			//Ambient color
 			else if(tokens[offset] == "Ka")
@@ -459,10 +459,10 @@ Model.prototype.loadMTL = function(data, texture_folder)
 //Mult values by texture coords
 Model.prototype.mulTextureCoords = function(x, y)
 {
-	for(var i = 0; i < this.texture_coords.length; i += 2)
+	for(var i = 0; i < this.uvs.length; i += 2)
 	{
-		this.texture_coords[i] *= x;
-		this.texture_coords[i+1] *= y;
+		this.uvs[i] *= x;
+		this.uvs[i+1] *= y;
 	}
 	this.updateBuffers();
 }
@@ -554,7 +554,7 @@ Model.prototype.getBox = function()
 Model.prototype.toString = function()
 {
 	var s = "Model\n   VertexCount:"+this.vertex.length+"\n   NormalCount:"+this.normals.length+
-		"\n   TextureCount:"+this.texture_coords.length+"\n   Faces Count:"+this.faces.length+
+		"\n   TextureCount:"+this.uvs.length+"\n   Faces Count:"+this.faces.length+
 		"\n\n   FaceList:\n[";
 	
 	for(var i = 0; i < this.faces.length; i+=9)
@@ -573,9 +573,9 @@ Model.prototype.toString = function()
 
 	s+="\n]\n\nTexture Coords List:\n["
 
-	for(i = 0; i < this.texture_coords.length; i+=2)
+	for(i = 0; i < this.uvs.length; i+=2)
 	{
-		s+= "\n   ("+this.texture_coords[i]+", "+this.texture_coords[i+1]+")";
+		s+= "\n   ("+this.uvs[i]+", "+this.uvs[i+1]+")";
 	}
 
 	s+="\n]\n\nNormal List:\n[";
@@ -594,9 +594,9 @@ Model.prototype.toString = function()
 
 	s+="\n]\n\nFace Material List:\n[";
 
-	for(i = 0; i < this.face_material.length; i+=3)
+	for(i = 0; i < this.faceMaterial.length; i+=3)
 	{
-		s+= "\n   ("+this.face_material[i]+", "+this.face_material[i+1]+", "+this.face_material[i+2]+")";
+		s+= "\n   ("+this.faceMaterial[i]+", "+this.faceMaterial[i+1]+", "+this.faceMaterial[i+2]+")";
 	}
 	s+="\n]";
 	return s;
@@ -643,7 +643,7 @@ Model.cube = function()
 		-1.0,  1.0, -1.0
 	];
 
-	model.texture_coords =
+	model.uvs =
 	[
 		// Front face
 		0.0, 0.0,
@@ -748,7 +748,7 @@ Model.plane = function()
 		-1.0,  1.0,  0.0
 	];
 
-	model.texture_coords =
+	model.uvs =
 	[
 		0.0, 0.0,
 		1.0, 0.0,

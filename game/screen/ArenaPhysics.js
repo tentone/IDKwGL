@@ -12,7 +12,7 @@ function ArenaPhysics()
 	//Create scene and world
 	this.world = new World(new Vector3(0, -20.8, 0));
 	this.scene = new Scene();
-	this.scene_grass = new Scene();
+	this.sceneGrass = new Scene();
 
 	//Skybox
 	this.skybox = new Model();
@@ -21,7 +21,7 @@ function ArenaPhysics()
 	this.skybox.scale.set(800,800,800);
 	this.skybox.rotation.set(-90,0,0);
 	this.skybox.update();
-	this.scene.addModel(this.skybox);
+	this.scene.add(this.skybox);
 
 	//Floor
 	this.model = Model.cube();
@@ -30,7 +30,7 @@ function ArenaPhysics()
 	this.model.position.set(0, -100, 0);
 	this.model.scale.set(900, 100, 900);
 	this.model.update();
-	this.scene.addModel(this.model);
+	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 	
 	//Walls
@@ -40,7 +40,7 @@ function ArenaPhysics()
 	this.model.position.set(0, 0, -400);
 	this.model.scale.set(400, 50, 1);
 	this.model.update();
-	this.scene.addModel(this.model);
+	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
 	this.model = Model.cube();
@@ -49,7 +49,7 @@ function ArenaPhysics()
 	this.model.position.set(0, 0, 400);
 	this.model.scale.set(400, 50, 1);
 	this.model.update();
-	this.scene.addModel(this.model);
+	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
 	this.model = Model.cube();
@@ -58,7 +58,7 @@ function ArenaPhysics()
 	this.model.position.set(-400, 0, 0);
 	this.model.scale.set(1, 50, 400);
 	this.model.update();
-	this.scene.addModel(this.model);
+	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
 	this.model = Model.cube();
@@ -67,7 +67,7 @@ function ArenaPhysics()
 	this.model.position.set(400, 0, 0);
 	this.model.scale.set(1, 50, 400);
 	this.model.update();
-	this.scene.addModel(this.model);
+	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
 	//Player
@@ -84,11 +84,11 @@ ArenaPhysics.prototype.update = function()
 	if(time % 5 == 0)
 	{
 		this.model = Model.cube();
-		this.model.setTexture(Texture.createTexture("data/texture/wood_box.jpg"));
+		this.model.setTexture(Texture.createTexture("data/texture/woodBox.jpg"));
 		this.model.position.set(MathUtils.randomMod()*400,  MathUtils.randomMod()*300, MathUtils.randomMod()*400);
 		this.model.scale.set(5,5,5);
 		this.model.update();
-		this.scene.addModel(this.model);
+		this.scene.add(this.model);
 		this.world.addBody(new GameObject(this.model));
 		this.world.body[this.world.body.length-1].setStatic(false);
 	}

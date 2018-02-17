@@ -9,21 +9,21 @@ function OrthographicCamera(canvas, size_y, size_x)
 	{
 		if(size_y === undefined)
 		{
-			this.aspect_ratio = 1;
-			this.screen_size = new Vector2(1, 1);
+			this.aspectRatio = 1;
+			this.screenSize = new Vector2(1, 1);
 			this.size = new Vector2(1, 1);
 		}
 		else
 		{
-			this.aspect_ratio = canvas.width/canvas.height; //x/y
-			this.screen_size = new Vector2(canvas.width, canvas.height);
-			this.size = new Vector2(size_y*this.aspect_ratio, size_y);
+			this.aspectRatio = canvas.width/canvas.height; //x/y
+			this.screenSize = new Vector2(canvas.width, canvas.height);
+			this.size = new Vector2(size_y*this.aspectRatio, size_y);
 		}
 	}
 	else
 	{
-		this.aspect_ratio = size_x/size_y; //x/y
-		this.screen_size = new Vector2(size_x, size_y);
+		this.aspectRatio = size_x/size_y; //x/y
+		this.screenSize = new Vector2(size_x, size_y);
 		this.size = new Vector2(size_x, size_y);
 	}
 
@@ -59,9 +59,9 @@ OrthographicCamera.prototype.useShader = function(shader)
 OrthographicCamera.prototype.resize = function(x, y)
 {
 	//Set new Values
-	this.aspect_ratio = x/y;
-	this.screen_size = new Vector2(x, y);
-	this.size = new Vector2(this.size.y*this.aspect_ratio, this.size.y);
+	this.aspectRatio = x/y;
+	this.screenSize = new Vector2(x, y);
+	this.size = new Vector2(this.size.y*this.aspectRatio, this.size.y);
 
 	//Calculate Projection Matrix
 	this.projectionMatrix = OrthographicCamera.orthogonalProjectionMatrix(-this.size.x, this.size.x, -this.size.y, this.size.y, -this.size.y, this.size.y);
@@ -76,7 +76,7 @@ OrthographicCamera.prototype.setProjectionMatrix = function(matrix)
 //Create string with camera info
 OrthographicCamera.prototype.toString = function()
 {
-	return "OrthographicCamera (ScreenSize:"+this.screen_size.toString()+" VirtualSize:"+this.size.toString()+" AspectRatio:"+this.aspect_ratio+")";
+	return "OrthographicCamera (ScreenSize:"+this.screenSize.toString()+" VirtualSize:"+this.size.toString()+" AspectRatio:"+this.aspectRatio+")";
 }
 
 //Orthogonal Projection Matrix Generator (Angel / Shreiner)

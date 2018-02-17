@@ -42,7 +42,7 @@ GameObject.prototype.getGeometry = function()
 //Set static
 GameObject.prototype.setStatic = function(value)
 {
-	this.body.is_static = value;
+	this.body.isStatic = value;
 }
 
 //Set if it can collide

@@ -5,13 +5,13 @@ function Body(geometry)
 	this.geometry = geometry;
 
 	this.collidable = true;
-	this.is_static = true;
+	this.isStatic = true;
 
 	this.acceleration = new Vector3(0,0,0);
 	this.position = new Vector3(0,0,0);
 	this.speed = new Vector3(0,0,0);
 
-	this.is_colliding = new Vector3(0,0,0);
+	this.isColliding = new Vector3(0,0,0);
 }
 
 //Set ID
@@ -34,7 +34,7 @@ Body.prototype.update = function(world)
 		return;
 	}
 
-	if(!this.is_static)
+	if(!this.isStatic)
 	{
 		this.speed.add(world.acceleration);
 		this.speed.add(this.acceleration);
@@ -43,7 +43,7 @@ Body.prototype.update = function(world)
 		this.speed.mul(world.friction);
 
 		this.speed.roundCloseToZero();
-		this.is_colliding.set(0, 0, 0);
+		this.isColliding.set(0, 0, 0);
 
 		//Collision on X axis
 		for(var i = 0; i < world.body.length; i++)
@@ -52,7 +52,7 @@ Body.prototype.update = function(world)
 			{
 				if(this.geometry.willCollide(new Vector3(this.speed.x,0,0), world.body[i].getGeometry()))
 				{
-					this.is_colliding.x = 1;
+					this.isColliding.x = 1;
 					if(this.speed.x < 0)
 					{
 						this.geometry.position.x = (world.body[i].getGeometry().position.x - world.body[i].getGeometry().ori.x + world.body[i].getGeometry().size.x) + this.geometry.ori.x;
@@ -73,7 +73,7 @@ Body.prototype.update = function(world)
 			{
 				if(this.geometry.willCollide(new Vector3(0,this.speed.y,0), world.body[i].getGeometry()))
 				{
-					this.is_colliding.y = 1;
+					this.isColliding.y = 1;
 					if(this.speed.y < 0)
 					{
 						this.geometry.position.y = (world.body[i].getGeometry().position.y - world.body[i].getGeometry().ori.y + world.body[i].getGeometry().size.y) + this.geometry.ori.y;
@@ -94,7 +94,7 @@ Body.prototype.update = function(world)
 			{
 				if(this.geometry.willCollide(new Vector3(0,0,this.speed.z), world.body[i].getGeometry()))
 				{
-					this.is_colliding.z = 1;
+					this.isColliding.z = 1;
 					if(this.speed.z < 0)
 					{
 						this.geometry.position.z = (world.body[i].getGeometry().position.z - world.body[i].getGeometry().ori.z + world.body[i].getGeometry().size.z) + this.geometry.ori.z;
@@ -116,7 +116,7 @@ Body.prototype.update = function(world)
 //Set static
 Body.prototype.setStatic = function(value)
 {
-	this.body.is_static = value;
+	this.body.isStatic = value;
 }
 
 //Get Body Geometry

@@ -24,10 +24,10 @@ function Referencial()
 	this.referencial_z.update();
 	this.referencial_z.setTexture(Texture.generateSolidColorTexture(Color.BLUE));
 	
-	this.referencial.addModel(this.referencial_o);
-	this.referencial.addModel(this.referencial_x);
-	this.referencial.addModel(this.referencial_y);
-	this.referencial.addModel(this.referencial_z);
+	this.referencial.add(this.referencial_o);
+	this.referencial.add(this.referencial_x);
+	this.referencial.add(this.referencial_y);
+	this.referencial.add(this.referencial_z);
 }
 
 Referencial.prototype.update = function(){}

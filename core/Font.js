@@ -25,38 +25,38 @@ function Font(fname, folder)
 	this.greenChnl = 0;
 
 	//Pages info (Indexed by id)
-	this.page_id = [];
-	this.page_file = [];
-	this.page_texture = [];
+	this.pageId = [];
+	this.pageFile = [];
+	this.pageTexture = [];
 
 	//Char info
-	this.char_count = 0;
-	this.char_id = [];
+	this.charCount = 0;
+	this.charId = [];
 
 	//Char details (Indexed by id)
-	this.char_pos = [];
-	this.char_size = [];
-	this.char_offset = [];
-	this.char_xadvance = [];
-	this.char_page = [];
-	this.char_chnl = [];
+	this.charPos = [];
+	this.charSize = [];
+	this.charOffset = [];
+	this.charXadvance = [];
+	this.charPage = [];
+	this.charChnl = [];
 
 	//Fill char info
 	for(i = 0; i < 256; i++)
 	{
-		this.char_pos.push(null);
-		this.char_size.push(null);
-		this.char_offset.push(null);
-		this.char_xadvance.push(null);
-		this.char_page.push(null);
-		this.char_chnl.push(null);
+		this.charPos.push(null);
+		this.charSize.push(null);
+		this.charOffset.push(null);
+		this.charXadvance.push(null);
+		this.charPage.push(null);
+		this.charChnl.push(null);
 	}
 
 	//Kerning info
-	this.kerning_count = 0;
-	this.kerning_first = [];
-	this.kerning_second = [];
-	this.kerning_amount = [];
+	this.kerningCount = 0;
+	this.kerningFirst = [];
+	this.kerningSecond = [];
+	this.kerningAmount = [];
 
 	//Load Font
 	if(fname === undefined || folder === undefined)
@@ -193,12 +193,12 @@ Font.prototype.loadFont = function(fname, folder)
 				if(field[0] == "id")
 				{
 					id = parseInt(field[1]);
-					this.page_id.push(id);
+					this.pageId.push(id);
 				}
 				else if(field[0] == "file")
 				{
-					this.page_file[id] = field[1].replace(new RegExp("\"", 'g'), "");
-					this.page_texture[id] = Texture.createTexture(folder + this.page_file[id]);
+					this.pageFile[id] = field[1].replace(new RegExp("\"", 'g'), "");
+					this.pageTexture[id] = Texture.createTexture(folder + this.pageFile[id]);
 				}
 			}
 		}
@@ -209,7 +209,7 @@ Font.prototype.loadFont = function(fname, folder)
 				var field = content[j].split("=");
 				if(field[0] == "count")
 				{
-					this.char_count = parseInt(field[1]);
+					this.charCount = parseInt(field[1]);
 				} 
 			}
 		}
@@ -222,43 +222,43 @@ Font.prototype.loadFont = function(fname, folder)
 				if(field[0] == "id")
 				{
 					id = parseInt(field[1]);
-					this.char_id.push(id);
+					this.charId.push(id);
 				}
 				else if(field[0] == "x")
 				{
-					this.char_pos[id] = new Vector2(parseInt(field[1]), 0);
+					this.charPos[id] = new Vector2(parseInt(field[1]), 0);
 				}
 				else if(field[0] == "y")
 				{
-					this.char_pos[id].y = parseInt(field[1]);
+					this.charPos[id].y = parseInt(field[1]);
 				}
 				else if(field[0] == "width")
 				{
-					this.char_size[id] = new Vector2(parseInt(field[1]), 0);
+					this.charSize[id] = new Vector2(parseInt(field[1]), 0);
 				}
 				else if(field[0] == "height")
 				{
-					this.char_size[id].y = parseInt(field[1]);
+					this.charSize[id].y = parseInt(field[1]);
 				}
 				else if(field[0] == "xoffset")
 				{
-					this.char_offset[id] = new Vector2(parseInt(field[1]), 0);
+					this.charOffset[id] = new Vector2(parseInt(field[1]), 0);
 				}
 				else if(field[0] == "yoffset")
 				{
-					this.char_offset[id].y = parseInt(field[1]);
+					this.charOffset[id].y = parseInt(field[1]);
 				}
 				else if(field[0] == "xadvance")
 				{
-					this.char_xadvance[id] = parseInt(field[1]);
+					this.charXadvance[id] = parseInt(field[1]);
 				}
 				else if(field[0] == "page")
 				{
-					this.char_page[id] = parseInt(field[1]);
+					this.charPage[id] = parseInt(field[1]);
 				}
 				else if(field[0] == "chnl")
 				{
-					this.char_chnl[id] = parseInt(field[1]);
+					this.charChnl[id] = parseInt(field[1]);
 				}
 			}
 		}
@@ -269,7 +269,7 @@ Font.prototype.loadFont = function(fname, folder)
 				var field = content[j].split("=");
 				if(field[0] == "count")
 				{
-					this.kerning_count = parseInt(field[1]);
+					this.kerningCount = parseInt(field[1]);
 				}
 			}
 		}
@@ -280,15 +280,15 @@ Font.prototype.loadFont = function(fname, folder)
 				var field = content[j].split("=");
 				if(field[0] == "first")
 				{
-					this.kerning_first.push(parseInt(field[1]));
+					this.kerningFirst.push(parseInt(field[1]));
 				}
 				else if(field[0] == "second")
 				{
-					this.kerning_second.push(parseInt(field[1]));
+					this.kerningSecond.push(parseInt(field[1]));
 				}
 				else if(field[0] == "amount")
 				{
-					this.kerning_amount.push(parseInt(field[1]));
+					this.kerningAmount.push(parseInt(field[1]));
 				}
 			}
 		}
@@ -304,10 +304,10 @@ Font.prototype.toString = function()
 	s += "\n   Italic:" + this.italic;
 	s += "\n   Smooth:" + this.smooth;
 	s += "\n   CharList:";
-	for(var i = 0; i < this.char_id.length; i++)
+	for(var i = 0; i < this.charId.length; i++)
 	{
-		var id = this.char_id[i];
-		s += "\n      " + id + " Pos" + this.char_pos[id].toString() + " Size" + this.char_size[id].toString();
+		var id = this.charId[i];
+		s += "\n      " + id + " Pos" + this.charPos[id].toString() + " Size" + this.charSize[id].toString();
 	}
 
 	return s;

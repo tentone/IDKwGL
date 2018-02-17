@@ -11,8 +11,6 @@ function Player(canvas)
 	this.box.position.set(0,12,0);
 
 	this.body = new Body(this.box);
-
-	this.can_jump = true;
 }
 
 //Update player
@@ -20,48 +18,48 @@ Player.prototype.update = function(world)
 {
 	var angle = Conversion.degreesToRadians(this.rotation.x);
 
-	var speed_walk = 0.5;
-	var speed_jump = 1.4;
+	var speedWalk = 0.5;
+	var speedJump = 1.4;
 
 	//Keyboard input
 	if(App.keyboard.isKeyPressed(Keyboard.SHIFT))
 	{
-		speed_walk = 0.8;
+		speedWalk = 0.8;
 	}
 
 	//Move WASD
 	if(App.keyboard.isKeyPressed(Keyboard.W))
 	{
-		this.body.speed.z += speed_walk * Math.cos(angle);
-		this.body.speed.x -= speed_walk * Math.sin(angle);
+		this.body.speed.z += speedWalk * Math.cos(angle);
+		this.body.speed.x -= speedWalk * Math.sin(angle);
 	}
 	if(App.keyboard.isKeyPressed(Keyboard.S))
 	{
-		this.body.speed.z -= speed_walk * Math.cos(angle);
-		this.body.speed.x += speed_walk * Math.sin(angle);
+		this.body.speed.z -= speedWalk * Math.cos(angle);
+		this.body.speed.x += speedWalk * Math.sin(angle);
 	}
 
 	angle += MathUtils.PID2;
 	if(App.keyboard.isKeyPressed(Keyboard.A))
 	{
-		this.body.speed.z -= speed_walk * Math.cos(angle);
-		this.body.speed.x += speed_walk * Math.sin(angle);
+		this.body.speed.z -= speedWalk * Math.cos(angle);
+		this.body.speed.x += speedWalk * Math.sin(angle);
 	}
 	if(App.keyboard.isKeyPressed(Keyboard.D))
 	{
-		this.body.speed.z += speed_walk * Math.cos(angle);
-		this.body.speed.x -= speed_walk * Math.sin(angle);
+		this.body.speed.z += speedWalk * Math.cos(angle);
+		this.body.speed.x -= speedWalk * Math.sin(angle);
 	}
 
 	//Jump
-	if(this.body.is_colliding.y == 1 && App.keyboard.isKeyJustPressed(Keyboard.SPACEBAR))
+	if(this.body.isColliding.y == 1 && App.keyboard.isKeyJustPressed(Keyboard.SPACEBAR))
 	{
-		this.body.acceleration.y += speed_jump;
+		this.body.acceleration.y += speedJump;
 	}
 
 	//Camera Mouse Movement
-	this.rotation.x += Mouse.SENSITIVITY * App.mouse.pos_diff.x;
-	this.rotation.y += Mouse.SENSITIVITY * App.mouse.pos_diff.y;
+	this.rotation.x += Mouse.SENSITIVITY * App.mouse.posDiff.x;
+	this.rotation.y += Mouse.SENSITIVITY * App.mouse.posDiff.y;
 
 	//Limit Vertical Rotation
 	if(this.rotation.y < -90)
@@ -102,7 +100,7 @@ Player.prototype.getGeometry = function()
 //Set static
 Player.prototype.setStatic = function(value)
 {
-	this.body.is_static = value;
+	this.body.isStatic = value;
 }
 
 //Set if it can collide

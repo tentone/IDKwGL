@@ -53,11 +53,11 @@ Key.prototype.justReleased = function()
 }
 
 //Set key values
-Key.prototype.set = function(just_pressed, is_pressed, just_released)
+Key.prototype.set = function(justPressed, isPressed, justReleased)
 {
-	this.justPressed = just_pressed;
-	this.isPressed = is_pressed;
-	this.justReleased = just_released;
+	this.justPressed = justPressed;
+	this.isPressed = isPressed;
+	this.justReleased = justReleased;
 }
 
 //Print Key

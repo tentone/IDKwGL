@@ -2,12 +2,12 @@ function Sprite()
 {
 	//Square single sided sprite data
 	this.vertex = [0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0,  0.0];
-	this.texture_coords = [0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0];
-	this.normals = [0.0,  0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0];
+	this.uvs = [0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0];
+	this.normals = [0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0];
 	this.faces = [0, 1, 2, 0, 2, 3]; //Face <vertex / texture / normal>
 
 	//Auto Rotate Flags
-	this.follow_camera_rotation = false;
+	this.followCameraRotation = false;
 
 	//Buffers
 	this.normalBuffer = null;
@@ -34,7 +34,7 @@ function Sprite()
 //Draw sprite to camera
 Sprite.prototype.draw = function(camera, light)
 {
-	if(this.follow_camera_rotation && camera.type == Camera.PRESPECTIVE)
+	if(this.followCameraRotation && camera.type == Camera.PRESPECTIVE)
 	{
 		this.rotation.y = -camera.rotation.y;
 		this.update();
@@ -50,22 +50,6 @@ Sprite.prototype.draw = function(camera, light)
 	gl.uniformMatrix4fv(gl.getUniformLocation(camera.shader, "uMVMatrix"), false, camTransformationMatrix.flatten());
 	gl.uniformMatrix3fv(gl.getUniformLocation(camera.shader, "uNMatrix"), false, normalMatrix.flatten());
 	
-	//Light render
-	/*if(light == null || light === undefined)
-	{
-		gl.uniform1i(camera.shader.useLightingUniform, false);
-	}
-	else
-	{
-		//Light position
-		gl.uniform3f(camera.shader.pointLightingLocationUniform, light.position.x, light.position.y, light.position.z);
-
-		//Light options
-		gl.uniform1i(camera.shader.useLightingUniform, light.enabled);
-		gl.uniform3f(camera.shader.ambientColorUniform, light.ambient.r, light.ambient.g, light.ambient.b);
-		gl.uniform3f(camera.shader.pointLightingColorUniform, light.color.r, light.color.g, light.color.b);
-	}*/
-
 	//Vertex buffer
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
 	gl.vertexAttribPointer(camera.shader.vertexPositionAttribute, this.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
@@ -112,9 +96,9 @@ Sprite.prototype.updateBuffers = function()
 	//Texture
 	this.textureCoordBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.texture_coords), gl.STATIC_DRAW);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.uvs), gl.STATIC_DRAW);
 	this.textureCoordBuffer.itemSize = 2;
-	this.textureCoordBuffer.numItems = this.texture_coords.length/2;
+	this.textureCoordBuffer.numItems = this.uvs.length/2;
 
 	//Normals
 	this.normalBuffer = gl.createBuffer();
@@ -137,9 +121,7 @@ Sprite.prototype.clone = function()
 	var sprite = new Sprite();
 
 	sprite.texture = this.texture;
-
-	sprite.follow_camera_rotation = this.follow_camera_rotation;
-
+	sprite.followCameraRotation = this.followCameraRotation;
 	sprite.position.set(this.position.x, this.position.y, this.position.z);
 	sprite.rotation.set(this.rotation.x, this.rotation.y, this.rotation.z);
 	sprite.scale.set(this.scale.x, this.scale.y, this.scale.z);
@@ -152,10 +134,10 @@ Sprite.prototype.clone = function()
 Sprite.prototype.setSize = function(x, y)
 {
 	this.scale.set(x, y, 1);
-}
+};
 
 //Attach texture image to this sprite
 Sprite.prototype.setTexture = function(texture)
 {
 	this.texture = texture;
-}
+};

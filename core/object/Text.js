@@ -6,7 +6,7 @@ function Text(text, font)
 
 	//Square single sided text data
 	this.vertex = [];
-	this.texture_coords = [];
+	this.uvs = [];
 	this.normals = [];
 	this.faces = [];
 
@@ -17,7 +17,7 @@ function Text(text, font)
 	this.facesBuffer = null;
 
 	//Texture
-	this.texture = font.page_texture[0];
+	this.texture = font.pageTexture[0];
 
 	//Tranformations Control
 	this.origin = new Vector3(0,0,0);
@@ -37,7 +37,7 @@ Text.prototype.setText = function(text)
 {
 	//Clear old data
 	this.vertex = [];
-	this.texture_coords = [];
+	this.uvs = [];
 	this.normals = [];
 	this.faces = [];
 
@@ -58,25 +58,25 @@ Text.prototype.setText = function(text)
 		this.vertex.push(0.0);
 
 		var char = text.charCodeAt(i);
-		var pos =  new Vector2(font.char_pos[char].x, font.char_pos[char].y);
-		pos.sub(font.char_offset[char]);
+		var pos =  new Vector2(font.charPos[char].x, font.charPos[char].y);
+		pos.sub(font.charOffset[char]);
 		pos.y += font.lineHeight;
 		pos.div(font.scale);
 		
 		pos.y =  font.scale.y - pos.y;
 
-		var size = new Vector2(font.char_size[char].x, font.char_size[char].y);
+		var size = new Vector2(font.charSize[char].x, font.charSize[char].y);
 		size.div(font.scale);
 
 		//Add texture coords
-		this.texture_coords.push(pos.x);
-		this.texture_coords.push(pos.y);
-		this.texture_coords.push(pos.x + size.x);
-		this.texture_coords.push(pos.y);
-		this.texture_coords.push(pos.x + size.x);
-		this.texture_coords.push(pos.y + size.y);
-		this.texture_coords.push(pos.x);
-		this.texture_coords.push(pos.y + size.y);
+		this.uvs.push(pos.x);
+		this.uvs.push(pos.y);
+		this.uvs.push(pos.x + size.x);
+		this.uvs.push(pos.y);
+		this.uvs.push(pos.x + size.x);
+		this.uvs.push(pos.y + size.y);
+		this.uvs.push(pos.x);
+		this.uvs.push(pos.y + size.y);
 		
 		//Normal coords
 		this.normals.push(0.0);
@@ -165,9 +165,9 @@ Text.prototype.updateBuffers = function()
 	//Texture
     this.textureCoordBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
- 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.texture_coords), gl.STATIC_DRAW);
+ 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.uvs), gl.STATIC_DRAW);
     this.textureCoordBuffer.itemSize = 2;
-    this.textureCoordBuffer.numItems = this.texture_coords.length/2;
+    this.textureCoordBuffer.numItems = this.uvs.length/2;
 
     //Normals
 	this.normalBuffer = gl.createBuffer();

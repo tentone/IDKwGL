@@ -45,8 +45,8 @@ Spectator.prototype.update = function()
 	}
 
 	//Camera Mouse Movement
-	this.rotation.x += Mouse.SENSITIVITY * App.mouse.pos_diff.x;
-	this.rotation.y += Mouse.SENSITIVITY * App.mouse.pos_diff.y;
+	this.rotation.x += Mouse.SENSITIVITY * App.mouse.posDiff.x;
+	this.rotation.y += Mouse.SENSITIVITY * App.mouse.posDiff.y;
 
 	//Camera Move UP/DOWN
 	if(App.keyboard.isKeyPressed(Keyboard.SPACEBAR))

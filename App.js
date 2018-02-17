@@ -1,9 +1,23 @@
+"use strict";
+
+include("core/Texture.js");
+include("core/Material.js");
+include("core/MatrixGenerator.js");
+include("core/Shader.js");
+include("core/Font.js");
+
+include("core/object/Sprite.js");
+include("core/object/Scene.js");
+include("core/object/Model.js");
+include("core/object/Text.js");
+
 include("core/math/Vector2.js");
 include("core/math/Vector3.js");
 include("core/math/Vector4.js");
 include("core/math/Matrix.js");
 include("core/math/Conversion.js");
 include("core/math/MathsUtils.js");
+include("core/math/Color.js");
 
 include("core/math/geometry/Geometry.js");
 include("core/math/geometry/Box.js");
@@ -13,17 +27,7 @@ include("core/input/Key.js");
 include("core/input/Keyboard.js");
 include("core/input/Mouse.js");
 
-include("core/Scene.js");
-include("core/Model.js");
-include("core/Texture.js");
-include("core/Material.js");
-include("core/Sprite.js");
-include("core/MatrixGenerator.js");
-include("core/Color.js");
-include("core/Shader.js");
-include("core/ModelUtils.js");
-include("core/Text.js");
-include("core/Font.js");
+include("core/utils/ModelUtils.js");
 
 include("core/light/Light.js");
 include("core/light/DirectionalLight.js");
@@ -46,7 +50,6 @@ include("game/Spectator.js");
 include("game/Player.js");
 include("game/GameObject.js");
 include("game/Referencial.js");
-
 include("game/screen/Arena.js");
 include("game/screen/Test2D.js");
 include("game/screen/ArenaPhysics.js");
@@ -60,7 +63,7 @@ var gl = null;
 function App(){}
 
 //Time control
-App.delta_time = 0;
+App.deltaTime = 0;
 App.time = 0;
 
 //Input Input
@@ -130,7 +133,7 @@ App.initGL = function()
 {
 	try
 	{
-		gl = canvas.getContext("webgl", {alpha: false}) || canvas.getContext("experimental-webgl", {alpha: false});
+		gl = canvas.getContext("webgl", {alpha: false});
 		gl.viewport(0, 0, canvas.width, canvas.height);
 	}
 	catch(e){}
@@ -152,8 +155,8 @@ App.loop = function()
 	Main.draw();
 
 	//Update time values
-	App.delta_time = new Date - App.time;
-	App.time += App.delta_time;
+	App.deltaTime = new Date - App.time;
+	App.time += App.deltaTime;
 
 	//Call loop again
 	setTimeout(App.loop, 0);
