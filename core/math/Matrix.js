@@ -15,7 +15,7 @@ function Matrix(sizeX, sizeY)
 		}
 	}
 
-	if(this.size.x == this.size.y)
+	if(this.size.x === this.size.y)
 	{
 		for(i = 0; i < this.size.x; i++)
 		{
@@ -36,7 +36,7 @@ Matrix.prototype.clear = function()
 		}
 	}
 
-	if(this.size.x == this.size.y)
+	if(this.size.x === this.size.y)
 	{
 		for(i = 0; i < this.size.x; i++)
 		{

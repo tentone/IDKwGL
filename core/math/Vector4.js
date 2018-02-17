@@ -38,7 +38,7 @@ Vector4.prototype.equals = function(val)
 	{
 		return false;
 	}
-	else if(this.x == val.x && this.y == val.y && this.z == val.z && this.w == val.w)
+	else if(this.x === val.x && this.y === val.y && this.z === val.z && this.w === val.w)
 	{
 		return true;
 	}

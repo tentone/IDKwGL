@@ -23,7 +23,7 @@ function Model()
 	this.facesBuffer = null;
 
 	//Texture
-	this.texture = Texture.generateSolidColorTexture(Color.RED);
+	this.texture = Texture.generateSolidColorTexture(gl, Color.RED);
 
 	//Tranformations Control
 	this.origin = new Vector3(0,0,0);
@@ -48,15 +48,12 @@ function Model()
 	\
 	void main(void)\
 	{\
-		vec3 direction = vec3(0, 1, 0);\
-		vec3 directionalColor = vec3(0.0, 0.0, 0.0);\
-		vec3 ambientColor = vec3(1.0, 1.0, 1.0);\
-	\
-		vec3 lightWeighting = ambientColor + directionalColor * max(dot(normalize(vTransformedNormal), direction), 0.0);\
-	\
-		vec4 fragmentColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));\
-	\
-		gl_FragColor = vec4(fragmentColor.rgb * lightWeighting, fragmentColor.a);\
+		gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));\
+		\
+		if(gl_FragColor.a < 0.3)\
+		{\
+			discard;\
+		}\
 	}";
 
 	var vertex = "attribute vec3 aVertexPosition;\
@@ -255,31 +252,31 @@ Model.prototype.loadOBJ = function(data)
 		var tokens = lines[i].split(/\s\s*/);
 
 		//Vertices
-		if(tokens[0] == "v")
+		if(tokens[0] === "v")
 		{
 			this.vertex.push(parseFloat(tokens[1]));
 			this.vertex.push(parseFloat(tokens[2]));
 			this.vertex.push(parseFloat(tokens[3]));
 		}
 		//Normals
-		else if(tokens[0] == "vn")
+		else if(tokens[0] === "vn")
 		{
 			this.normals.push(parseFloat(tokens[1]));
 			this.normals.push(parseFloat(tokens[2]));
 			this.normals.push(parseFloat(tokens[3]));
 		}
 		//Texture coords
-		else if(tokens[0] == "vt")
+		else if(tokens[0] === "vt")
 		{
 			this.uvs.push(parseFloat(tokens[1]));
 			this.uvs.push(parseFloat(tokens[2]));
 		}
 		//Faces <vertex>/<texture>/<normal>
-		else if(tokens[0] == "f")
+		else if(tokens[0] === "f")
 		{
 			//3 vertex face
 			//f 16/92/11 14/101/22 1/69/1
-			if(tokens.length == 4)
+			if(tokens.length === 4)
 			{
 				var val = tokens[1].split("/");
 				this.faces.push(parseInt(val[0])); //Vertex
@@ -298,7 +295,7 @@ Model.prototype.loadOBJ = function(data)
 			}
 			//4 vertex face (Quad)
 			//f 16/92/11 40/109/40 38/114/38 14/101/22
-			else if(tokens.length == 5)
+			else if(tokens.length === 5)
 			{
 				var val = tokens[1].split("/");
 				this.faces.push(val[0]); //Vertex
@@ -332,12 +329,12 @@ Model.prototype.loadOBJ = function(data)
 			}
 		}
 		//Material
-		else if(tokens[0] == "usemtl")
+		else if(tokens[0] === "usemtl")
 		{
 			//Search MTL index
 			for(var j = 0; j < this.material.length; j++)
 			{
-				if(this.material[j].name == tokens[1])
+				if(this.material[j].name === tokens[1])
 				{
 					break;
 				}
@@ -366,7 +363,7 @@ Model.prototype.loadOBJ = function(data)
 	}
 
 	//If no coord found complete with data
-	if(this.uvs.length == 0)
+	if(this.uvs.length === 0)
 	{
 		//Full texture to all triangles
 		this.uvs.push(0.0);
@@ -380,7 +377,7 @@ Model.prototype.loadOBJ = function(data)
 		{
 			if(isNaN(this.faces[i]))
 			{
-				if(i%2 == 0)
+				if(i%2 === 0)
 				{
 					this.faces[i] = 1;
 				}
@@ -393,7 +390,7 @@ Model.prototype.loadOBJ = function(data)
 	}
 
 	// Checking to see if the normals are defined on the file
-	if(this.normals.length == 0)
+	if(this.normals.length === 0)
 	{
 		this.computeVertexNormals();
 	}
@@ -453,7 +450,7 @@ Model.prototype.loadMTL = function(data, textureFolder)
 		var tokens = lines[i].split(/\s\s*/);
 
 		//New Material
-		if(tokens[0] == "newmtl")
+		if(tokens[0] === "newmtl")
 		{
 			index++;
 			this.material[index] = new Material(tokens[1]);
@@ -463,44 +460,44 @@ Model.prototype.loadMTL = function(data, textureFolder)
 		if(index >= 0)
 		{
 			var offset = 0
-			while(offset < tokens.length && tokens[offset] == "")
+			while(offset < tokens.length && tokens[offset] === "")
 			{
 				offset++;
 			}
 
 			//Texture
-			if(tokens[offset] == "map_Kd" || tokens[offset] == "map_Ka")
+			if(tokens[offset] === "map_Kd" || tokens[offset] === "map_Ka")
 			{
-				this.material[index].texture = Texture.createTexture(textureFolder + "/" + tokens[1+offset]);
+				this.material[index].texture = Texture.createTexture(gl, textureFolder + "/" + tokens[1+offset]);
 			}
 			//Bump map
-			else if(tokens[offset] == "mapBump" || tokens[offset] == "bump")
+			else if(tokens[offset] === "mapBump" || tokens[offset] === "bump")
 			{
-				this.material[index].bumpMap = Texture.createTexture(textureFolder + "/" + tokens[1+offset]);
+				this.material[index].bumpMap = Texture.createTexture(gl, textureFolder + "/" + tokens[1+offset]);
 			}
 			//Ambient color
-			else if(tokens[offset] == "Ka")
+			else if(tokens[offset] === "Ka")
 			{
 				this.material[index].ka.r = parseFloat(tokens[offset+1]);
 				this.material[index].ka.g = parseFloat(tokens[offset+2]);
 				this.material[index].ka.b = parseFloat(tokens[offset+3]);
 			}
 			//Diffuse color
-			else if(tokens[offset] == "Kd")
+			else if(tokens[offset] === "Kd")
 			{
 				this.material[index].kd.r = parseFloat(tokens[offset+1]);
 				this.material[index].kd.g = parseFloat(tokens[offset+2]);
 				this.material[index].kd.b = parseFloat(tokens[offset+3]);
 			}
 			//Specular color
-			else if(tokens[offset] == "Ks")
+			else if(tokens[offset] === "Ks")
 			{
 				this.material[index].ks.r = parseFloat(tokens[offset+1]);
 				this.material[index].ks.g = parseFloat(tokens[offset+2]);
 				this.material[index].ks.b = parseFloat(tokens[offset+3]);
 			}
 			//Specular intensity
-			else if(tokens[offset] == "Ns")
+			else if(tokens[offset] === "Ns")
 			{
 				this.material[index].ns = parseFloat(tokens[offset+1]);
 			}
@@ -548,7 +545,7 @@ Model.prototype.computeVertexNormals = function()
 Model.prototype.getBox = function()
 {
 	//If not available calculate box from vertex data
-	if(this.box == null)
+	if(this.box === null)
 	{
 		var min = new Vector3(this.vertex[0], this.vertex[1], this.vertex[2]);
 		var max = new Vector3(this.vertex[0], this.vertex[1], this.vertex[2]);
@@ -659,7 +656,7 @@ Model.cube = function()
 {
 	var model = new Model();
 
-	model.texture = Texture.generateSolidColorTexture(Color.GREEN);
+	model.texture = Texture.generateSolidColorTexture(gl, Color.GREEN);
 
 	model.vertex =
 	[
@@ -790,7 +787,7 @@ Model.plane = function()
 {
 	var model = new Model();
 
-	model.texture = Texture.generateSolidColorTexture(Color.GREEN);
+	model.texture = Texture.generateSolidColorTexture(gl, Color.GREEN);
 
 	model.vertex =
 	[

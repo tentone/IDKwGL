@@ -82,48 +82,48 @@ Font.prototype.loadFont = function(fname, folder)
 	{
 		var content = data[i].split(/\s\s*/);
 
-		if(content[0] == "info")
+		if(content[0] === "info")
 		{
 			for(var j = 1; j < content.length; j++)
 			{
 				var field = content[j].split("=");
-				if(field[0] == "face")
+				if(field[0] === "face")
 				{
 					this.face = field[1].replace(new RegExp("\"", 'g'), "");
 				}
-				else if(field[0] == "size")
+				else if(field[0] === "size")
 				{
 					this.size = parseInt(field[1]);
 				}
-				else if(field[0] == "bold")
+				else if(field[0] === "bold")
 				{
-					this.bold = (field[1] == "1");
+					this.bold = (field[1] === "1");
 				}
-				else if(field[0] == "italic")
+				else if(field[0] === "italic")
 				{
-					this.italic = (field[1] == "1");
+					this.italic = (field[1] === "1");
 				}
-				else if(field[0] == "charset")
+				else if(field[0] === "charset")
 				{
 					this.charset = field[1].replace(new RegExp("\"", 'g'), "");
 				}
-				else if(field[0] == "unicode")
+				else if(field[0] === "unicode")
 				{
-					this.unicode = (field[1] == "1");
+					this.unicode = (field[1] === "1");
 				}
-				else if(field[0] == "stretchH")
+				else if(field[0] === "stretchH")
 				{
 					this.stretchH = parseInt(field[1]);
 				}
-				else if(field[0] == "smooth")
+				else if(field[0] === "smooth")
 				{
-					this.smooth = (field[1] == "1");
+					this.smooth = (field[1] === "1");
 				}
-				else if(field[0] == "aa")
+				else if(field[0] === "aa")
 				{
-					this.aa = (field[1] == "1");
+					this.aa = (field[1] === "1");
 				}
-				else if(field[0] == "padding")
+				else if(field[0] === "padding")
 				{
 					var values = field[1].split(",");
 					this.padding[0] = parseInt(values[0]);
@@ -131,7 +131,7 @@ Font.prototype.loadFont = function(fname, folder)
 					this.padding[2] = parseInt(values[2]);
 					this.padding[3] = parseInt(values[3]);
 				}
-				else if(field[0] == "spacing")
+				else if(field[0] === "spacing")
 				{
 					var values = field[1].split(",");
 					this.spacing[0] = parseInt(values[0]);
@@ -139,156 +139,156 @@ Font.prototype.loadFont = function(fname, folder)
 				}
 			}	
 		}
-		else if(content[0] == "common")
+		else if(content[0] === "common")
 		{
 			for(var j = 1; j < content.length; j++)
 			{
 				var field = content[j].split("=");
-				if(field[0] == "lineHeight")
+				if(field[0] === "lineHeight")
 				{
 					this.lineHeight = parseInt(field[1]);
 				}
-				else if(field[0] == "base")
+				else if(field[0] === "base")
 				{
 					this.base = parseInt(field[1]);
 				}
-				else if(field[0] == "scaleW")
+				else if(field[0] === "scaleW")
 				{
 					this.scale.x = parseInt(field[1]);
 				}
-				else if(field[0] == "scaleH")
+				else if(field[0] === "scaleH")
 				{
 					this.scale.y = parseInt(field[1]);
 				}
-				else if(field[0] == "pages")
+				else if(field[0] === "pages")
 				{
 					this.pages = parseInt(field[1]);
 				}
-				else if(field[0] == "packed")
+				else if(field[0] === "packed")
 				{
-					this.aa = (field[1] == "1");
+					this.aa = (field[1] === "1");
 				}
-				else if(field[0] == "alphaChnl")
+				else if(field[0] === "alphaChnl")
 				{
 					this.alphaChnl = parseInt(field[1]);
 				}
-				else if(field[0] == "redChnl")
+				else if(field[0] === "redChnl")
 				{
 					this.redChnl = parseInt(field[1]);
 				}
-				else if(field[0] == "blueChnl")
+				else if(field[0] === "blueChnl")
 				{
 					this.blueChnl = parseInt(field[1]);
 				}
-				else if(field[0] == "greenChnl")
+				else if(field[0] === "greenChnl")
 				{
 					this.greenChnl = parseInt(field[1]);
 				}
 
 			}
 		}
-		else if(content[0] == "page")
+		else if(content[0] === "page")
 		{
 			for(var j = 1; j < content.length; j++)
 			{
 				var field = content[j].split("=");
-				if(field[0] == "id")
+				if(field[0] === "id")
 				{
 					id = parseInt(field[1]);
 					this.pageId.push(id);
 				}
-				else if(field[0] == "file")
+				else if(field[0] === "file")
 				{
 					this.pageFile[id] = field[1].replace(new RegExp("\"", 'g'), "");
-					this.pageTexture[id] = Texture.createTexture(folder + this.pageFile[id]);
+					this.pageTexture[id] = Texture.createTexture(gl, folder + this.pageFile[id]);
 				}
 			}
 		}
-		else if(content[0] == "chars")
+		else if(content[0] === "chars")
 		{
 			for(var j = 1; j < content.length; j++)
 			{
 				var field = content[j].split("=");
-				if(field[0] == "count")
+				if(field[0] === "count")
 				{
 					this.charCount = parseInt(field[1]);
 				} 
 			}
 		}
-		else if(content[0] == "char")
+		else if(content[0] === "char")
 		{
 			for(var j = 1; j < content.length; j++)
 			{
 				var field = content[j].split("=");
 
-				if(field[0] == "id")
+				if(field[0] === "id")
 				{
 					id = parseInt(field[1]);
 					this.charId.push(id);
 				}
-				else if(field[0] == "x")
+				else if(field[0] === "x")
 				{
 					this.charPos[id] = new Vector2(parseInt(field[1]), 0);
 				}
-				else if(field[0] == "y")
+				else if(field[0] === "y")
 				{
 					this.charPos[id].y = parseInt(field[1]);
 				}
-				else if(field[0] == "width")
+				else if(field[0] === "width")
 				{
 					this.charSize[id] = new Vector2(parseInt(field[1]), 0);
 				}
-				else if(field[0] == "height")
+				else if(field[0] === "height")
 				{
 					this.charSize[id].y = parseInt(field[1]);
 				}
-				else if(field[0] == "xoffset")
+				else if(field[0] === "xoffset")
 				{
 					this.charOffset[id] = new Vector2(parseInt(field[1]), 0);
 				}
-				else if(field[0] == "yoffset")
+				else if(field[0] === "yoffset")
 				{
 					this.charOffset[id].y = parseInt(field[1]);
 				}
-				else if(field[0] == "xadvance")
+				else if(field[0] === "xadvance")
 				{
 					this.charXadvance[id] = parseInt(field[1]);
 				}
-				else if(field[0] == "page")
+				else if(field[0] === "page")
 				{
 					this.charPage[id] = parseInt(field[1]);
 				}
-				else if(field[0] == "chnl")
+				else if(field[0] === "chnl")
 				{
 					this.charChnl[id] = parseInt(field[1]);
 				}
 			}
 		}
-		else if(content[0] == "kernings")
+		else if(content[0] === "kernings")
 		{
 			for(var j = 1; j < content.length; j++)
 			{
 				var field = content[j].split("=");
-				if(field[0] == "count")
+				if(field[0] === "count")
 				{
 					this.kerningCount = parseInt(field[1]);
 				}
 			}
 		}
-		else if(content[0] == "kerning")
+		else if(content[0] === "kerning")
 		{
 			for(var j = 1; j < content.length; j++)
 			{
 				var field = content[j].split("=");
-				if(field[0] == "first")
+				if(field[0] === "first")
 				{
 					this.kerningFirst.push(parseInt(field[1]));
 				}
-				else if(field[0] == "second")
+				else if(field[0] === "second")
 				{
 					this.kerningSecond.push(parseInt(field[1]));
 				}
-				else if(field[0] == "amount")
+				else if(field[0] === "amount")
 				{
 					this.kerningAmount.push(parseInt(field[1]));
 				}

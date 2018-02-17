@@ -18,7 +18,7 @@ Vector2.prototype.equals = function(val)
 	{
 		return false;
 	}
-	else if(this.x == val.x && this.y == val.y)
+	else if(this.x === val.x && this.y === val.y)
 	{
 		return true;
 	}

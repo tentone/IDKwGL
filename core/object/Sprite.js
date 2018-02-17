@@ -18,7 +18,7 @@ function Sprite()
 	this.facesBuffer = null;
 
 	//Texture
-	this.texture = Texture.generateSolidColorTexture(Color.RED);
+	this.texture = Texture.generateSolidColorTexture(gl, Color.RED);
 
 	//Tranformations Control
 	this.origin = new Vector3(0,0,0);
@@ -42,16 +42,8 @@ function Sprite()
 	\
 	void main(void)\
 	{\
-		vec3 direction = vec3(0, 1, 0);\
-		vec3 directionalColor = vec3(0.0, 0.0, 0.0);\
-		vec3 ambientColor = vec3(1.0, 1.0, 1.0);\
-	\
-		vec3 lightWeighting = ambientColor + directionalColor * max(dot(normalize(vTransformedNormal), direction), 0.0);\
-	\
-		vec4 fragmentColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));\
-	\
-		gl_FragColor = vec4(fragmentColor.rgb * lightWeighting, fragmentColor.a);\
-	\
+		gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));\
+		\
 		if(gl_FragColor.a < 0.3)\
 		{\
 			discard;\
@@ -77,7 +69,6 @@ function Sprite()
 		vTransformedNormal = uNMatrix * aVertexNormal;\
 		gl_Position = uPMatrix * vPosition;\
 	}";
-
 	//Shader
 	this.shader = new Shader(fragment, vertex);
 
@@ -106,7 +97,7 @@ Sprite.prototype.draw = function(camera, scene)
 	gl.enable(gl.BLEND);
 	gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-	if(this.followCameraRotation && camera.type == Camera.PRESPECTIVE)
+	if(this.followCameraRotation && camera.type === Camera.PRESPECTIVE)
 	{
 		this.rotation.y = -camera.rotation.y;
 		this.update();

@@ -105,5 +105,5 @@ MathUtils.multiplyVectorByMatrix = function(m, p)
 //Checks is a number is a power of 2
 MathUtils.isPower2 = function(v)
 {
-	return (v & (v-1)) == 0;
+	return (v & (v-1)) === 0;
 }

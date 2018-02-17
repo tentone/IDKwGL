@@ -1,5 +1,6 @@
 "use strict";
 
+//Core
 include("core/Font.js");
 
 include("core/Texture.js");
@@ -7,9 +8,12 @@ include("core/Material.js");
 include("core/Shader.js");
 
 include("core/object/Sprite.js");
-include("core/object/Scene.js");
 include("core/object/Model.js");
 include("core/object/Text.js");
+include("core/object/particle/Particle.js");
+include("core/object/particle/ParticleEmitter.js");
+
+include("core/renderer/Scene.js");
 
 include("core/math/MatrixGenerator.js");
 include("core/math/Vector2.js");
@@ -34,9 +38,6 @@ include("core/light/Light.js");
 include("core/light/DirectionalLight.js");
 include("core/light/PointLight.js");
 
-include("core/particle/Particle.js");
-include("core/particle/ParticleEmitter.js");
-
 include("core/camera/Camera.js");
 include("core/camera/OrthographicCamera.js");
 include("core/camera/PrespectiveCamera.js");
@@ -44,9 +45,11 @@ include("core/camera/PrespectiveCamera.js");
 include("core/physics/Body.js");
 include("core/physics/World.js");
 
+//Data
 include("data/models/house.js");
 include("data/models/tank.js");
 
+//Game
 include("game/Spectator.js");
 include("game/Player.js");
 include("game/GameObject.js");
@@ -178,7 +181,7 @@ App.resize = function()
 App.setFullscreen = function(event)
 {
 	//Key P Pressed
-	if(event.keyCode == 112)
+	if(event.keyCode === 112)
 	{
 		var canvas = document.getElementById("canvas");
 		canvas.webkitRequestFullScreen();

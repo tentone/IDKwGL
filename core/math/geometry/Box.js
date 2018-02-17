@@ -12,7 +12,7 @@ function Box()
 //Checks if body is colliding
 Box.prototype.isColliding = function(obj)
 {
-	if(obj.type == Geometry.BOX)
+	if(obj.type === Geometry.BOX)
 	{
 		var t = new Vector3(this.position.x-this.ori.x, this.position.y-this.ori.y, this.position.z-this.ori.z);
 		var o = new Vector3(obj.position.x-obj.ori.x, obj.position.y-obj.ori.y, obj.position.z-obj.ori.z);
@@ -25,7 +25,7 @@ Box.prototype.isColliding = function(obj)
 //Check if box will collide after apllying a descolation
 Box.prototype.willCollide = function(speed, obj)
 {
-	if(obj.type == Geometry.BOX)
+	if(obj.type === Geometry.BOX)
 	{
 		var t = new Vector3(this.position.x + speed.x -this.ori.x, this.position.y + speed.y -this.ori.y, this.position.z + speed.z -this.ori.z);
 		var o = new Vector3(obj.position.x-obj.ori.x, obj.position.y-obj.ori.y, obj.position.z-obj.ori.z);

@@ -46,7 +46,7 @@ ModelUtils.midPointRefinement = function(model, recursionDepth)
 ModelUtils.recSubdivisionMidPoint = function(v1, v2, v3, c1, c2, c3, model, recursionDepth)
 {
 	// Recursive midpoint subdivision of one triangle
-	if(recursionDepth == 0)
+	if(recursionDepth === 0)
 	{
 		// Storing coordinates and colors in the destination arrays
 		model.vertex.push(v1.x, v1.y, v1.z);

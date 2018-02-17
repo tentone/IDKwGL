@@ -54,7 +54,7 @@ Player.prototype.update = function(world)
 	}
 
 	//Jump
-	if(this.body.isColliding.y == 1 && App.keyboard.isKeyJustPressed(Keyboard.SPACEBAR))
+	if(this.body.isColliding.y === 1 && App.keyboard.isKeyJustPressed(Keyboard.SPACEBAR))
 	{
 		this.body.acceleration.y += speedJump;
 	}

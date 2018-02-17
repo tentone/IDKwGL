@@ -3,45 +3,45 @@
 function Texture(){}
 
 //Texture Constructor from file name
-Texture.createTextureRepeat = function(file)
+Texture.createTextureRepeat = function(gl, file)
 {
 	if(file === undefined)
 	{
-		return Texture.generateSolidColorTexture(Color.RED);
+		return Texture.generateSolidColorTexture(gl, Color.RED);
 	}
 
-   	var texture = gl.createTexture();
+	var texture = gl.createTexture();
 	texture.image = new Image();
 	texture.image.onload = function ()
 	{
-		Texture.handleTextureRepeatLoaded(texture);
+		Texture.handleTextureRepeatLoaded(gl, texture);
 	}
 
 	texture.image.src = file;
-    return texture;
+	return texture;
 }
 
 //Texture Constructor from file name
-Texture.createTexture = function(file)
+Texture.createTexture = function(gl, file)
 {
 	if(file === undefined)
 	{
-		return Texture.generateSolidColorTexture(Color.RED);
+		return Texture.generateSolidColorTexture(gl, Color.RED);
 	}
 
-   	var texture = gl.createTexture();
+	var texture = gl.createTexture();
 	texture.image = new Image();
 	texture.image.onload = function ()
 	{
-		Texture.handleTextureLoaded(texture);
+		Texture.handleTextureLoaded(gl, texture);
 	}
 
 	texture.image.src = file;
-    return texture;
+	return texture;
 }
 
 //Creates a solid color texture
-Texture.generateSolidColorTexture = function(color)
+Texture.generateSolidColorTexture = function(gl, color)
 {
 	var texture = gl.createTexture();
 	gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -54,7 +54,7 @@ Texture.generateSolidColorTexture = function(color)
 }
 
 //Create a texture from array (elements by line)
-Texture.createFromDataArray = function(size, colorList)
+Texture.createFromDataArray = function(gl, size, colorList)
 {
 	colorArray = [] 
 	for(var i = 0; i < colorList.length; i++)
@@ -76,7 +76,7 @@ Texture.createFromDataArray = function(size, colorList)
 }
 
 //Handle Texture initialization after image loaded for repeating textures
-Texture.handleTextureRepeatLoaded = function(texture)
+Texture.handleTextureRepeatLoaded = function(gl, texture)
 {
 	gl.bindTexture(gl.TEXTURE_2D, texture);
 	gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
@@ -85,16 +85,16 @@ Texture.handleTextureRepeatLoaded = function(texture)
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-    gl.generateMipmap(gl.TEXTURE_2D);
+	gl.generateMipmap(gl.TEXTURE_2D);
 }
 
 //Handle Texture initialization after image loaded
-Texture.handleTextureLoaded = function(texture)
+Texture.handleTextureLoaded = function(gl, texture)
 {
 	gl.bindTexture(gl.TEXTURE_2D, texture);
 	gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.image);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-    gl.generateMipmap(gl.TEXTURE_2D);
+	gl.generateMipmap(gl.TEXTURE_2D);
 }

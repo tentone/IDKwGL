@@ -5,7 +5,6 @@ function Arena()
 	//Create scene and world
 	this.world = new World();
 	this.scene = new Scene();
-	this.sceneGrass = new Scene();
 
 	//Cameras
 	this.cameraStatic = new PrespectiveCamera(canvas, 70, 1);
@@ -13,7 +12,7 @@ function Arena()
 
 	//IDK Logo
 	this.idk = new Sprite();
-	this.idk.setTexture(Texture.createTexture("data/texture/idk.png"));
+	this.idk.setTexture(Texture.createTexture(gl, "data/texture/idk.png"));
 	this.idk.scale.set(this.hudCamera.size.y/2,this.hudCamera.size.y/4,1);
 	this.idk.origin.set(this.hudCamera.size.x/3,0,0);
 	this.idk.position.set(this.hudCamera.size.x-1,-this.hudCamera.size.y+1,0);
@@ -21,7 +20,7 @@ function Arena()
 	
 	//Crosshair
 	this.cross = new Sprite();
-	this.cross.setTexture(Texture.createTexture("data/texture/cross.png"));
+	this.cross.setTexture(Texture.createTexture(gl, "data/texture/cross.png"));
 	this.cross.position.set(-0.5, -0.5, 0);
 	this.cross.update();
 
@@ -37,7 +36,7 @@ function Arena()
 	//Tank
 	this.model = new Model();
 	this.model.loadOBJ(tank);
-	this.model.setTexture(Texture.createTexture("data/texture/tank.jpg"));
+	this.model.setTexture(Texture.createTexture(gl, "data/texture/tank.jpg"));
 	this.model.scale.set(15, 15, 15);
 	this.model.position.set(-250,0,100);
 	this.model.update();
@@ -76,7 +75,7 @@ function Arena()
 	//House
 	this.model = new Model();
 	this.model.loadOBJ(house);
-	this.model.setTexture(Texture.createTexture("data/texture/house.jpg"));
+	this.model.setTexture(Texture.createTexture(gl, "data/texture/house.jpg"));
 	this.model.scale.set(7, 7, 7);
 	this.model.position.set(300,0,500);
 	this.model.update();
@@ -115,7 +114,7 @@ function Arena()
 
 	//Crate Pile
 	this.model = Model.cube();
-	this.model.setTexture(Texture.createTexture("data/texture/wood_box.jpg"));
+	this.model.setTexture(Texture.createTexture(gl, "data/texture/wood_box.jpg"));
 	this.model.position.set(-200,5,0);
 	this.model.scale.set(5,5,5);
 	this.model.update();
@@ -145,7 +144,7 @@ function Arena()
 
 	//Floor
 	this.model = Model.cube();
-	this.model.setTexture(Texture.createTextureRepeat("data/texture/grass.jpg"));
+	this.model.setTexture(Texture.createTextureRepeat(gl, "data/texture/grass.jpg"));
 	this.model.mulTextureCoords(10, 10);
 	this.model.position.set(0, -100, 0);
 	this.model.scale.set(900, 100, 900);
@@ -155,7 +154,7 @@ function Arena()
 	
 	//Walls
 	this.model = Model.cube();
-	this.model.setTexture(Texture.createTextureRepeat("data/texture/wall.png"));
+	this.model.setTexture(Texture.createTextureRepeat(gl, "data/texture/wall.png"));
 	this.model.mulTextureCoords(20, 1);
 	this.model.position.set(0, 0, -400);
 	this.model.scale.set(400, 50, 1);
@@ -164,7 +163,7 @@ function Arena()
 	this.world.addBody(new GameObject(this.model));
 
 	this.model = Model.cube();
-	this.model.setTexture(Texture.createTexture("data/texture/wall.png"));
+	this.model.setTexture(Texture.createTexture(gl, "data/texture/wall.png"));
 	this.model.mulTextureCoords(20, 1);
 	this.model.position.set(0, 0, 400);
 	this.model.scale.set(400, 50, 1);
@@ -173,7 +172,7 @@ function Arena()
 	this.world.addBody(new GameObject(this.model));
 
 	this.model = Model.cube();
-	this.model.setTexture(Texture.createTexture("data/texture/wall.png"));
+	this.model.setTexture(Texture.createTexture(gl, "data/texture/wall.png"));
 	this.model.mulTextureCoords(20, 1);
 	this.model.position.set(-400, 0, 0);
 	this.model.scale.set(1, 50, 400);
@@ -182,7 +181,7 @@ function Arena()
 	this.world.addBody(new GameObject(this.model));
 
 	this.model = Model.cube();
-	this.model.setTexture(Texture.createTexture("data/texture/wall.png"));
+	this.model.setTexture(Texture.createTexture(gl, "data/texture/wall.png"));
 	this.model.mulTextureCoords(20, 1);
 	this.model.position.set(400, 0, 0);
 	this.model.scale.set(1, 50, 400);
@@ -194,29 +193,30 @@ function Arena()
 	for(var i = 0; i < 200; i++)
 	{
 		this.model = new Sprite();
-		this.model.setTexture(Texture.createTexture("data/texture/grass_sprite_2.png"));
+		this.model.setTexture(Texture.createTexture(gl, "data/texture/grass_sprite_2.png"));
 		this.model.followCameraRotation = true;
 		this.model.scale.set(16, 4, 1);
 		this.model.origin.set(8, 2, 0);
 		this.model.position.set(MathUtils.randomMod()*400, 2, MathUtils.randomMod()*400);
 		this.model.update();
-		this.sceneGrass.add(this.model);
+		this.scene.add(this.model);
 	}
 
 	//Tank smoke
 	this.model = new Sprite();
-	this.model.setTexture(Texture.createTexture("data/texture/smoke_2.png"));
+	this.model.setTexture(Texture.createTexture(gl, "data/texture/smoke_2.png"));
 	this.model.scale.set(4, 4, 1);
 	this.model.origin.set(2, 2, 0);
 	this.model.followCameraRotation = true;
 	this.model.position.set(MathUtils.randomMod()*400, 2, MathUtils.randomMod()*400);
 	this.model.update();
 	this.particle = new ParticleEmitter(this.model, new Vector3(-250,8,100), new Vector3(0,0.7,0), new Vector3(0.3,0.5,0.3), 6, 4, 150, 150, 50);
-
+	
+	
 	//Bullet
 	this.bullet = new Model();
 	this.bullet.loadOBJ(App.readFile("data/models/skybox/skybox.obj"));
-	this.bullet.setTexture(Texture.generateSolidColorTexture(Color.WHITE));
+	this.bullet.setTexture(Texture.generateSolidColorTexture(gl, Color.WHITE));
 	this.bullet.scale.set(0.2,0.2,0.2);
 	this.bullet.position.set(0,8,0);
 	this.bullet.update();
@@ -227,7 +227,7 @@ function Arena()
 	//Weapon
 	this.weapon = new Model();
 	this.weapon.loadOBJ(App.readFile("data/models/pulserifle/pulserifle.obj"));
-	this.weapon.setTexture(Texture.createTexture("data/models/pulserifle/tex1.jpg"));
+	this.weapon.setTexture(Texture.createTexture(gl, "data/models/pulserifle/tex1.jpg"));
 	this.weapon.scale.set(2, 2, 2);
 	this.weapon.position.set(-0.3,-0.3,0.5);
 	this.weapon.update();
@@ -272,7 +272,7 @@ Arena.prototype.update = function()
 	{
 		this.weapon = new Model();
 		this.weapon.loadOBJ(App.readFile("data/models/pulserifle/pulserifle.obj"));
-		this.weapon.setTexture(Texture.createTexture("data/models/pulserifle/tex1.jpg"));
+		this.weapon.setTexture(Texture.createTexture(gl, "data/models/pulserifle/tex1.jpg"));
 		this.weapon.scale.set(2, 2, 2);
 		this.weapon.position.set(-0.3,-0.3,0.5);
 		this.weapon.update();
@@ -281,7 +281,7 @@ Arena.prototype.update = function()
 	{
 		this.weapon = new Model();
 		this.weapon.loadOBJ(App.readFile("data/models/scopedrifle/scopedrifle.obj"));
-		this.weapon.setTexture(Texture.createTexture("data/models/scopedrifle/tex1.jpg"));
+		this.weapon.setTexture(Texture.createTexture(gl, "data/models/scopedrifle/tex1.jpg"));
 		this.weapon.scale.set(2, 2, 2);
 		this.weapon.position.set(-0.3,-0.3,0.5);
 		this.weapon.update();
@@ -330,14 +330,6 @@ Arena.prototype.update = function()
 
 Arena.prototype.draw = function()
 {
-	//Clearing the frame-buffer and the depth-buffer
-	gl.clearColor(0, 0, 0, 0);
-	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-	//Enable depth test
-	gl.enable(gl.DEPTH_TEST);
-	gl.depthFunc(gl.LESS);
-
 	//Prepare player camera
 	this.player.camera.startFrame();
 
@@ -353,20 +345,12 @@ Arena.prototype.draw = function()
 		this.bulletParticleList[i].draw(this.player.camera, this.scene.light);	
 	}
 	
-	//Enable bleding
-	gl.enable(gl.BLEND);
-	gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
-
 	//Render Grass and particles
-	this.sceneGrass.draw(this.player.camera);
 	this.particle.draw(this.player.camera, this.scene.light);
 	
 	//Render HUD
 	this.hudCamera.startFrame();
 	this.cross.draw(this.hudCamera);
-
-	//Disable Blending
-	gl.disable(gl.BLEND);
 
 	//Draw IDK Logo
 	this.idk.draw(this.hudCamera);

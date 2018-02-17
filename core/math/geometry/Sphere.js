@@ -12,7 +12,7 @@ function Sphere()
 //Check if its colliding
 Sphere.prototype.isColliding = function(obj)
 {
-	if(obj.type == Geometry.SPHERE)
+	if(obj.type === Geometry.SPHERE)
 	{
 		return MathUtils.pointDistance(this.position, obj.position) > this.radius + obj.radius;
 	}
