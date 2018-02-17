@@ -1,3 +1,5 @@
+"use strict";
+
 function Referencial()
 {
 	this.referencial = new Scene();

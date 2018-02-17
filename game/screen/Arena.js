@@ -1,3 +1,5 @@
+"use strict";
+
 function Arena()
 {
 	//Create scene and world

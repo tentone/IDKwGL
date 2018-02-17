@@ -1,3 +1,5 @@
+"use strict";
+
 function ArenaPhysics()
 {
 	//IDK Logo
@@ -102,14 +104,6 @@ ArenaPhysics.prototype.update = function()
 
 ArenaPhysics.prototype.draw = function()
 {
-	//Clearing the frame-buffer and the depth-buffer
-	gl.clearColor(0, 0, 0, 1);
-	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-	//Configure depth test
-	gl.enable(gl.DEPTH_TEST);
-	gl.depthFunc(gl.LESS);
-
 	//Draw scene to player camera
 	this.player.camera.startFrame();
 	this.scene.draw(this.player.camera);

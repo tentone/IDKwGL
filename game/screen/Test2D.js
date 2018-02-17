@@ -1,3 +1,5 @@
+"use strict";
+
 function Test2D()
 {
 	this.camera = new OrthographicCamera(canvas, 20);
@@ -39,23 +41,9 @@ Test2D.prototype.update = function(){}
 
 Test2D.prototype.draw = function()
 {
-	//Clear screen
-	gl.clearColor(0.5, 0.5, 0.5, 1);
-	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-	//Disable depth test and enable alpha blend
-	gl.disable(gl.DEPTH_TEST);
-	gl.enable(gl.BLEND);
-	gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-
-	//Draw stuff
 	this.camera.startFrame();
 	this.camera.useShader(shaderDefault);
-	/*this.wall.draw(this.camera);
-	this.wall2.draw(this.camera);
-	this.wall3.draw(this.camera);
-	this.fence.draw(this.camera);*/
-	
+
 	this.text.draw(this.camera);
 	this.idk.draw(this.camera);
 }

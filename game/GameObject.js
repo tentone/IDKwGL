@@ -1,3 +1,5 @@
+"use strict";
+
 //Game object constructor
 function GameObject(model, body)
 {

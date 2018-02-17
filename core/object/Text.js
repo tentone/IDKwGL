@@ -178,6 +178,9 @@ Text.prototype.setText = function(text)
 //Draw text to camera
 Text.prototype.draw = function(camera, scene)
 {
+	gl.enable(gl.BLEND);
+	gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+	
 	//Clone Camera Global transformation Matrix and multiply
 	var camTransformationMatrix = Matrix.mulTranspose(this.transformationMatrix, camera.transformationMatrix);
 
@@ -213,6 +216,8 @@ Text.prototype.draw = function(camera, scene)
 
 	//Drawing the triangles
 	gl.drawElements(gl.TRIANGLES, 18, gl.UNSIGNED_SHORT, 0);
+
+	gl.disable(gl.BLEND);
 }
 
 //Recalculate Tranformation Matrix (Should be called after changing position)

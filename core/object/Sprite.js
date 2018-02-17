@@ -103,6 +103,9 @@ function Sprite()
 //Draw sprite to camera
 Sprite.prototype.draw = function(camera, scene)
 {
+	gl.enable(gl.BLEND);
+	gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
 	if(this.followCameraRotation && camera.type == Camera.PRESPECTIVE)
 	{
 		this.rotation.y = -camera.rotation.y;
@@ -144,6 +147,8 @@ Sprite.prototype.draw = function(camera, scene)
 	
 	//Drawing the triangles
 	gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
+
+	gl.disable(gl.BLEND);
 };
 
 //Recalculate Tranformation Matrix (Should be called after changing position)

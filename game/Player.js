@@ -1,3 +1,5 @@
+"use strict";
+
 function Player(canvas)
 {
 	//Player Camera and rotation

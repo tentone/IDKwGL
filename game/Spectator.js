@@ -1,3 +1,5 @@
+"use strict";
+
 function Spectator(canvas)
 {
 	this.camera = new PrespectiveCamera(canvas, 70, 1);
