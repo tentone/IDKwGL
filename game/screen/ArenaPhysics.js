@@ -112,12 +112,10 @@ ArenaPhysics.prototype.draw = function()
 
 	//Draw scene to player camera
 	this.player.camera.startFrame();
-	this.player.camera.useShader(shaderDefault);
 	this.scene.draw(this.player.camera);
 
 	//Draw idk logo
 	this.camera.startFrame();
-	this.camera.useShader(shaderDefault);
 	this.idk.draw(this.camera);
 }
 

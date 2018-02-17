@@ -1,13 +1,15 @@
+"use strict";
+
 //Constructor from y size or x and y size and canvas
-function OrthographicCamera(canvas, size_y, size_x)
+function OrthographicCamera(canvas, height, width)
 {
 	//Set camera type
 	this.type = Camera.ORTHOGRAPHIC;
 
 	//Collect size arguments
-	if(size_x === undefined)
+	if(width === undefined)
 	{
-		if(size_y === undefined)
+		if(height === undefined)
 		{
 			this.aspectRatio = 1;
 			this.screenSize = new Vector2(1, 1);
@@ -17,14 +19,14 @@ function OrthographicCamera(canvas, size_y, size_x)
 		{
 			this.aspectRatio = canvas.width/canvas.height; //x/y
 			this.screenSize = new Vector2(canvas.width, canvas.height);
-			this.size = new Vector2(size_y*this.aspectRatio, size_y);
+			this.size = new Vector2(height*this.aspectRatio, height);
 		}
 	}
 	else
 	{
-		this.aspectRatio = size_x/size_y; //x/y
-		this.screenSize = new Vector2(size_x, size_y);
-		this.size = new Vector2(size_x, size_y);
+		this.aspectRatio = width/height; //x/y
+		this.screenSize = new Vector2(width, height);
+		this.size = new Vector2(width, height);
 	}
 
 	//Camera Movement
@@ -50,17 +52,16 @@ OrthographicCamera.prototype.startFrame = function()
 //Set shader to be used by camera
 OrthographicCamera.prototype.useShader = function(shader)
 {
-	this.shader = shader.get();
-	gl.useProgram(this.shader);
-	gl.uniformMatrix4fv(gl.getUniformLocation(this.shader, "uPMatrix"), false, this.projectionMatrix.flatten());
+	var program = shader.get();
+	gl.useProgram(program);
+	gl.uniformMatrix4fv(gl.getUniformLocation(program, "uPMatrix"), false, this.projectionMatrix.flatten());
 }
 
 //Call every time the canvas is resized
 OrthographicCamera.prototype.resize = function(x, y)
 {
-	//Set new Values
-	this.aspectRatio = x/y;
-	this.screenSize = new Vector2(x, y);
+	this.aspectRatio = x / y;
+	this.screenSize.set(x, y);
 	this.size = new Vector2(this.size.y*this.aspectRatio, this.size.y);
 
 	//Calculate Projection Matrix

@@ -1,3 +1,5 @@
+"use strict";
+
 function Box()
 {
 	this.position = new Vector3(0,0,0);

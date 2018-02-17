@@ -1,10 +1,12 @@
+"use strict";
+
 //Mouse Atached to camera
 function Mouse()
 {
 	//Mouse Position Relative to camera
-	this.rawMouse_pos = new Vector2(0,0);
-	this.rawMouse_movement = new Vector2(0,0);
-	this.rawMouse_posUpdated = false;
+	this.rawMousePos = new Vector2(0,0);
+	this.rawMouseMovement = new Vector2(0,0);
+	this.rawMousePosUpdated = false;
 
 	this.pos = new Vector2(0,0);
 	this.posDiff = new Vector2(0,0);
@@ -51,10 +53,10 @@ Mouse.prototype.buttonJustReleased = function(button)
 //Update Mouse Position
 Mouse.prototype.updatePosition = function(x, y, xDiff, yDiff)
 {
-	this.rawMouse_pos.set(x, y);
-	this.rawMouse_movement.x += xDiff;
-	this.rawMouse_movement.y += yDiff;
-	this.rawMouse_posUpdated = true;
+	this.rawMousePos.set(x, y);
+	this.rawMouseMovement.x += xDiff;
+	this.rawMouseMovement.y += yDiff;
+	this.rawMousePosUpdated = true;
 }
 
 //Update Mouse Key
@@ -81,15 +83,15 @@ Mouse.prototype.update = function()
 	}
 
 	//Update Mouse Position if needed
-	if(this.rawMouse_posUpdated)
+	if(this.rawMousePosUpdated)
 	{
-		this.posDiff.x = this.rawMouse_movement.x;
-		this.posDiff.y = this.rawMouse_movement.y;
-		this.rawMouse_movement.set(0,0);
+		this.posDiff.x = this.rawMouseMovement.x;
+		this.posDiff.y = this.rawMouseMovement.y;
+		this.rawMouseMovement.set(0,0);
 
-		this.pos.x = this.rawMouse_pos.x;
-		this.pos.y = this.rawMouse_pos.y;
-		this.rawMouse_posUpdated = false;
+		this.pos.x = this.rawMousePos.x;
+		this.pos.y = this.rawMousePos.y;
+		this.rawMousePosUpdated = false;
 	}
 	else
 	{

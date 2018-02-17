@@ -1,13 +1,15 @@
+"use strict";
+
 function MatrixGenerator(){}
 
 //Generate Translation Matrix
-MatrixGenerator.translation = function(translate_x, translate_y, translate_z)
+MatrixGenerator.translation = function(translateX, translateY, translateZ)
 {
 	var mat = new Matrix(4,4);
 	
-	mat.matrix[0][3] = translate_x;
-	mat.matrix[1][3] = translate_y;
-	mat.matrix[2][3] = translate_z;	
+	mat.matrix[0][3] = translateX;
+	mat.matrix[1][3] = translateY;
+	mat.matrix[2][3] = translateZ;	
 	
 	return mat;
 }
@@ -41,15 +43,15 @@ MatrixGenerator.directionMatrix = function(direction)
 }
 
 //Generate Rotation Matrix
-MatrixGenerator.rotationMatrix = function(degrees_x, degrees_y, degrees_z)
+MatrixGenerator.rotationMatrix = function(degreesX, degreesY, degreesZ)
 {
 	var mat = new Matrix(4,4);
 
 	//Individual components
-	if(degrees_z != 0)
+	if(degreesZ != 0)
 	{
 		var temp = new Matrix(4,4);
-		var radians = Conversion.degreesToRadians(degrees_z);
+		var radians = Conversion.degreesToRadians(degreesZ);
 
 		temp.matrix[0][0] = Math.cos(radians);
 		temp.matrix[1][0] = Math.sin(radians);
@@ -58,10 +60,10 @@ MatrixGenerator.rotationMatrix = function(degrees_x, degrees_y, degrees_z)
 
 		mat.mul(temp);
 	}
-	if(degrees_y != 0)
+	if(degreesY != 0)
 	{
 		var temp = new Matrix(4,4);
-		var radians = Conversion.degreesToRadians(degrees_y);
+		var radians = Conversion.degreesToRadians(degreesY);
 
 		temp.matrix[0][0] = Math.cos(radians);
 		temp.matrix[0][2] = Math.sin(radians);
@@ -70,10 +72,10 @@ MatrixGenerator.rotationMatrix = function(degrees_x, degrees_y, degrees_z)
 
 		mat.mul(temp);
 	}
-	if(degrees_x != 0)
+	if(degreesX != 0)
 	{
 		var temp = new Matrix(4,4);
-		var radians = Conversion.degreesToRadians(degrees_x);
+		var radians = Conversion.degreesToRadians(degreesX);
 
 		temp.matrix[1][1] = Math.cos(radians);
 		temp.matrix[2][1] = Math.sin(radians);
@@ -87,13 +89,13 @@ MatrixGenerator.rotationMatrix = function(degrees_x, degrees_y, degrees_z)
 }
 
 //Generate Scalling Matrix
-MatrixGenerator.scalingMatrix = function(scale_x, scale_y, scale_z)
+MatrixGenerator.scalingMatrix = function(scaleX, scaleY, scaleZ)
 {
 	var mat = new Matrix(4,4);
 
-	mat.matrix[0][0] = scale_x;
-	mat.matrix[1][1] = scale_y;
-	mat.matrix[2][2] = scale_z;
+	mat.matrix[0][0] = scaleX;
+	mat.matrix[1][1] = scaleY;
+	mat.matrix[2][2] = scaleZ;
 
 	return mat;	
 }

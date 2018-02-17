@@ -1,3 +1,5 @@
+"use strict";
+
 function Body(geometry)
 {
 	//Random ID to identify body

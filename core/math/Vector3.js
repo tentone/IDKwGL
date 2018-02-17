@@ -1,3 +1,5 @@
+"use strict";
+
 function Vector3(x, y, z)
 {
 	this.x = x;

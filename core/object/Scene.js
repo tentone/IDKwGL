@@ -1,3 +1,5 @@
+"use strict";
+
 //Constructor creates empty scene
 function Scene()
 {
@@ -10,13 +12,11 @@ Scene.prototype.add = function(object)
 	this.objects.push(object);
 }
 
-//Render
+//Render all objects
 Scene.prototype.draw = function(camera)
 {
-	
-
 	for(var i = 0; i < this.objects.length; i++)
 	{
-		this.objects[i].draw(camera, this.light);
+		this.objects[i].draw(camera, this);
 	}
 }

@@ -1,3 +1,5 @@
+"use strict";
+
 //Prespective camera constructor from canvas fov and zoom values
 function PrespectiveCamera(canvas, fov, zoom)
 {
@@ -30,8 +32,8 @@ PrespectiveCamera.prototype.setRotation = function(horizontalRotation, verticalR
 	//Calculate Direction Vector
 	var angleHorizontal = Conversion.degreesToRadians(-horizontalRotation);
 	var angleVertical = Conversion.degreesToRadians(-verticalRotation);
-	var cosAngle_vertical = Math.cos(angleVertical);
-	this.direction = new Vector3(Math.sin(angleHorizontal)*cosAngle_vertical, Math.sin(angleVertical), Math.cos(angleHorizontal)*cosAngle_vertical);
+	var cosAngleVertical = Math.cos(angleVertical);
+	this.direction = new Vector3(Math.sin(angleHorizontal)*cosAngleVertical, Math.sin(angleVertical), Math.cos(angleHorizontal)*cosAngleVertical);
 
 	//Set camera rotation
 	this.rotation.y = horizontalRotation;
@@ -42,17 +44,8 @@ PrespectiveCamera.prototype.startFrame = function()
 {
 	//Calculate Camera Transformation Matrix
 	this.transformationMatrix = MatrixGenerator.translation(-this.position.x, -this.position.y, -this.position.z);
-	//this.transformationMatrix.mul(MatrixGenerator.rotationMatrix(this.rotation.x, this.rotation.y, this.rotation.z));
 	this.transformationMatrix.mul(MatrixGenerator.directionMatrix(this.direction));
 	this.transformationMatrix.mul(MatrixGenerator.scalingMatrix(this.zoom, this.zoom, this.zoom));
-}
-
-//Set shader to be used by camera
-PrespectiveCamera.prototype.useShader = function(shader)
-{
-	this.shader = shader.get();
-	gl.useProgram(this.shader);
-	gl.uniformMatrix4fv(gl.getUniformLocation(this.shader, "uPMatrix"), false, this.projectionMatrix.flatten());
 }
 
 //Change Camera Field of View
@@ -66,8 +59,8 @@ PrespectiveCamera.prototype.setFov = function(fov)
 PrespectiveCamera.prototype.resize = function(x, y)
 {
 	//Set new Values
-	this.aspectRatio = x/y;
-	this.screenSize = new Vector2(x, y);
+	this.aspectRatio = x / y;
+	this.screenSize.set(x, y);
 	this.updateProjectionMatrix();
 }
 

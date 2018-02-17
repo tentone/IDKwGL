@@ -1,10 +1,5 @@
-//Global variables
+
 var screen;
-
-//Global Shaders
-var shaderDefault;
-
-//Test font
 var font;
 
 function Main(){}
@@ -12,10 +7,7 @@ function Main(){}
 //Initialize
 Main.init = function(canvas)
 {
-	shaderDefault = Shader.defaultShader();//Shader.lightPixelRenderShader();
-	
 	font = new Font();
-
 	screen = new Arena();
 }
 

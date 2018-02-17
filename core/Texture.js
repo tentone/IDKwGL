@@ -1,4 +1,5 @@
-//Texture class placeholder
+"use strict";
+
 function Texture(){}
 
 //Texture Constructor from file name

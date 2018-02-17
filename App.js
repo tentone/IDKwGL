@@ -1,16 +1,17 @@
 "use strict";
 
+include("core/Font.js");
+
 include("core/Texture.js");
 include("core/Material.js");
-include("core/MatrixGenerator.js");
 include("core/Shader.js");
-include("core/Font.js");
 
 include("core/object/Sprite.js");
 include("core/object/Scene.js");
 include("core/object/Model.js");
 include("core/object/Text.js");
 
+include("core/math/MatrixGenerator.js");
 include("core/math/Vector2.js");
 include("core/math/Vector3.js");
 include("core/math/Vector4.js");

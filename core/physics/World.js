@@ -1,3 +1,5 @@
+"use strict";
+
 function World(acceleration)
 {
 	if(acceleration === undefined)
@@ -12,10 +14,8 @@ function World(acceleration)
 	this.friction = new Vector3(0.80, 0.80, 0.80);
 	this.body = [];
 
-	this.acceleration.mulConst(World.DELTA);
+	this.acceleration.mulConst(0.016);
 }
-
-World.DELTA = 1/60;
 
 //Update all bodys in world
 World.prototype.update = function()

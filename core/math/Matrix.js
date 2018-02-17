@@ -1,8 +1,10 @@
-//Constructor creates indentity matrix if size_x equals size_y
-function Matrix(size_x, size_y)
+"use strict";
+
+//Constructor creates indentity matrix if sizeX equals sizeY
+function Matrix(sizeX, sizeY)
 {
 	this.matrix = [];
-	this.size = new Vector2(size_x, size_y);
+	this.size = new Vector2(sizeX, sizeY);
 
 	for(var i = 0; i < this.size.x; i++)
 	{

@@ -220,7 +220,7 @@ function Arena()
 	this.bullet.update();
 	
 	this.bulletParticle = new Particle(this.bullet.clone(), new Vector3(0,8,0), new Vector3(0,0,0), 1, 10000);
-	this.bulletParticle_list = [];
+	this.bulletParticleList = [];
 
 	//Weapon
 	this.weapon = new Model();
@@ -262,7 +262,7 @@ Arena.prototype.update = function()
 		//Add bullet to array
 		var bulletParticle = new Particle(this.bullet.clone(), position, direction, 1, 200);		
 		bulletParticle.speed.mulConst(5);
-		this.bulletParticle_list.push(bulletParticle);
+		this.bulletParticleList.push(bulletParticle);
 	}
 
 	//Weapon change
@@ -286,15 +286,15 @@ Arena.prototype.update = function()
 	}
 
 	//Update bullet list
-	for(var i = 0; i < this.bulletParticle_list.length; i++)
+	for(var i = 0; i < this.bulletParticleList.length; i++)
 	{
-		if(this.bulletParticle_list[i].time < 0)
+		if(this.bulletParticleList[i].time < 0)
 		{
-			this.bulletParticle_list.splice(i, 1);
+			this.bulletParticleList.splice(i, 1);
 		}
 		else
 		{
-			this.bulletParticle_list[i].update();
+			this.bulletParticleList[i].update();
 		}
 	}
 
@@ -338,7 +338,6 @@ Arena.prototype.draw = function()
 
 	//Prepare player camera
 	this.player.camera.startFrame();
-	this.player.camera.useShader(shaderDefault);
 
 	//Draw referencial
 	this.referencial.draw(this.player.camera);
@@ -347,9 +346,9 @@ Arena.prototype.draw = function()
 	this.scene.draw(this.player.camera);
 
 	//Draw bullets
-	for(var i = 0; i < this.bulletParticle_list.length; i++)
+	for(var i = 0; i < this.bulletParticleList.length; i++)
 	{
-		this.bulletParticle_list[i].draw(this.player.camera, this.scene.light);	
+		this.bulletParticleList[i].draw(this.player.camera, this.scene.light);	
 	}
 	
 	//Enable bleding
@@ -362,7 +361,6 @@ Arena.prototype.draw = function()
 	
 	//Render HUD
 	this.hudCamera.startFrame();
-	this.hudCamera.useShader(shaderDefault);
 	this.cross.draw(this.hudCamera);
 
 	//Disable Blending
@@ -373,7 +371,6 @@ Arena.prototype.draw = function()
 
 	//Draw static camera
 	this.cameraStatic.startFrame();
-	this.cameraStatic.useShader(shaderDefault);
 	this.weapon.draw(this.cameraStatic, this.scene.light);
 }
 

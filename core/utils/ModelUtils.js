@@ -1,3 +1,5 @@
+"use strict";
+
 function ModelUtils(){}
 
 //Moving vertices to the spherical surface of radius 1

@@ -1,3 +1,5 @@
+"use strict";
+
 //Material Constructor
 function Material(name)
 {
@@ -6,7 +8,6 @@ function Material(name)
 	this.texture = null; //Texture
 	this.bumpMap = null; //Bump Map
 	this.specularMap = null; //Specular map
-	this.distanceMap = null; //Distance map
 
 	this.ka = new Color(1,1,1); //Ambient Value
 	this.kd = new Color(1,1,1); //Diffuse Value
@@ -16,7 +17,7 @@ function Material(name)
 	this.alpha = 1; //Alpha Value
 }
 
-//Material info to String
+//Material info to string
 Material.prototype.toString = function()
 {
 	return "Material\n   Name:"+this.name+"\n   Texture:"+this.texture;

@@ -1,27 +1,32 @@
-function Shader(gl, fragment, vertex)
-{
-	this.fragmentShader = Shader.createFragmentShader(gl, fragment);
-	this.vertexShader = Shader.createVertexShader(gl, vertex);
-	this.shaderProgram = gl.createProgram();
-	
-	gl.attachShader(this.shaderProgram, this.vertexShader);
-	gl.attachShader(this.shaderProgram, this.fragmentShader);
-	gl.linkProgram(this.shaderProgram);
+"use strict";
 
-	if(!gl.getProgramParameter(this.shaderProgram, gl.LINK_STATUS))
+function Shader(fragmentShader, vertexShader)
+{
+	this.fragmentShader = fragmentShader;
+	this.vertexShader = vertexShader; 
+
+	this.compile();
+}
+
+//Compiles fragment and vertex shader and links them into a program
+Shader.prototype.compile = function()
+{
+	this.fragmentProgram = Shader.compileFragmentShader(gl, this.fragmentShader);
+	this.vertexProgram = Shader.compileVertexShader(gl, this.vertexShader);
+	this.program = gl.createProgram();
+
+	gl.attachShader(this.program, this.vertexProgram);
+	gl.attachShader(this.program, this.fragmentProgram);
+	gl.linkProgram(this.program);
+
+	if(!gl.getProgramParameter(this.program, gl.LINK_STATUS))
 	{
 		throw "Could not initialise shader";
 	}
-}
-
-//Get shader program pointer
-Shader.prototype.get = function()
-{
-	return this.shaderProgram;
-}
+};
 
 //Create vertex shader from string
-Shader.createVertexShader = function(gl, str)
+Shader.compileVertexShader = function(gl, str)
 {
 	//Create Shader object
 	var shader = gl.createShader(gl.VERTEX_SHADER);
@@ -36,11 +41,11 @@ Shader.createVertexShader = function(gl, str)
 	}
 
 	return shader;
-}
+};
 
 
 //Create fragment shader from string
-Shader.createFragmentShader = function(gl, str)
+Shader.compileFragmentShader = function(gl, str)
 {
 	//Create Shader object
 	var shader = gl.createShader(gl.FRAGMENT_SHADER);;
@@ -55,30 +60,4 @@ Shader.createFragmentShader = function(gl, str)
 	}
 
 	return shader;
-}
-
-//Defaul shader with no surface shading
-Shader.defaultShader = function()
-{
-	var sp = new Shader(gl, App.readFile("data/shaders/default-fragment.glsl"), App.readFile("data/shaders/default-vertex.glsl"));
-
-	//Vertex Coordinates 
-	sp.shaderProgram.vertexPositionAttribute = gl.getAttribLocation(sp.shaderProgram, "aVertexPosition");
-	gl.enableVertexAttribArray(sp.shaderProgram.vertexPositionAttribute);
-
-	//Texture coordinates
-	sp.shaderProgram.textureCoordAttribute = gl.getAttribLocation(sp.shaderProgram, "aTextureCoord");
-	gl.enableVertexAttribArray(sp.shaderProgram.textureCoordAttribute);
-
-	//Normals
-	sp.shaderProgram.vertexNormalAttribute = gl.getAttribLocation(sp.shaderProgram, "aVertexNormal");
-	gl.enableVertexAttribArray(sp.shaderProgram.vertexNormalAttribute);
-
-	//The sampler
-	sp.shaderProgram.samplerUniform = gl.getUniformLocation(sp.shaderProgram, "uSampler");
-	sp.shaderProgram.pMatrixUniform = gl.getUniformLocation(sp.shaderProgram, "uPMatrix");
-	sp.shaderProgram.mvMatrixUniform = gl.getUniformLocation(sp.shaderProgram, "uMVMatrix");
-	sp.shaderProgram.nMatrixUniform = gl.getUniformLocation(sp.shaderProgram, "uNMatrix");
-	
-	return sp;
 };

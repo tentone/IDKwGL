@@ -1,3 +1,5 @@
+"use strict";
+
 function ParticleEmitter(model, position, speed, speedVar, scale, scaleVar, time, timeVar, particleCount)
 {
 	this.particles = [];

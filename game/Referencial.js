@@ -1,33 +1,33 @@
 function Referencial()
 {
 	this.referencial = new Scene();
-	this.referencial_o = Model.cube();
-	this.referencial_o.scale.set(1.0, 1.0, 1.0);
-	this.referencial_o.update();
-	this.referencial_o.setTexture(Texture.generateSolidColorTexture(Color.WHITE));
+	this.referencialO = Model.cube();
+	this.referencialO.scale.set(1.0, 1.0, 1.0);
+	this.referencialO.update();
+	this.referencialO.setTexture(Texture.generateSolidColorTexture(Color.WHITE));
 	
-	this.referencial_x = Model.cube();
-	this.referencial_x.position.set(30.0, 0.0, 0.0);
-	this.referencial_x.scale.set(30.0, 0.5, 0.5);
-	this.referencial_x.update();
-	this.referencial_x.setTexture(Texture.generateSolidColorTexture(Color.RED));
+	this.referencialX = Model.cube();
+	this.referencialX.position.set(30.0, 0.0, 0.0);
+	this.referencialX.scale.set(30.0, 0.5, 0.5);
+	this.referencialX.update();
+	this.referencialX.setTexture(Texture.generateSolidColorTexture(Color.RED));
 	
-	this.referencial_y = Model.cube();
-	this.referencial_y.scale.set(0.5, 30.0, 0.5);
-	this.referencial_y.position.set(0.0, 30.0, 0.0);
-	this.referencial_y.update();
-	this.referencial_y.setTexture(Texture.generateSolidColorTexture(Color.GREEN));
+	this.referencialY = Model.cube();
+	this.referencialY.scale.set(0.5, 30.0, 0.5);
+	this.referencialY.position.set(0.0, 30.0, 0.0);
+	this.referencialY.update();
+	this.referencialY.setTexture(Texture.generateSolidColorTexture(Color.GREEN));
 
-	this.referencial_z = Model.cube();
-	this.referencial_z.scale.set(0.5, 0.5, 30.0);
-	this.referencial_z.position.set(0.0, 0.0, 30.0);
-	this.referencial_z.update();
-	this.referencial_z.setTexture(Texture.generateSolidColorTexture(Color.BLUE));
+	this.referencialZ = Model.cube();
+	this.referencialZ.scale.set(0.5, 0.5, 30.0);
+	this.referencialZ.position.set(0.0, 0.0, 30.0);
+	this.referencialZ.update();
+	this.referencialZ.setTexture(Texture.generateSolidColorTexture(Color.BLUE));
 	
-	this.referencial.add(this.referencial_o);
-	this.referencial.add(this.referencial_x);
-	this.referencial.add(this.referencial_y);
-	this.referencial.add(this.referencial_z);
+	this.referencial.add(this.referencialO);
+	this.referencial.add(this.referencialX);
+	this.referencial.add(this.referencialY);
+	this.referencial.add(this.referencialZ);
 }
 
 Referencial.prototype.update = function(){}

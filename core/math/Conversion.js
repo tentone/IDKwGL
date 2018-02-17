@@ -1,3 +1,5 @@
+"use strict";
+
 function Conversion(){}
 
 Conversion.radToDegRat = 180.0 / Math.PI;

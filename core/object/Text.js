@@ -1,3 +1,5 @@
+"use strict";
+
 function Text(text, font)
 {
 	//Text 
@@ -30,6 +32,73 @@ function Text(text, font)
 
 	//Set text
 	this.setText(text);
+
+	var fragment = "precision mediump float;\
+	\
+	varying vec2 vTextureCoord;\
+	varying vec3 vTransformedNormal;\
+	varying vec4 vPosition;\
+	\
+	uniform sampler2D uSampler;\
+	\
+	void main(void)\
+	{\
+		vec3 direction = vec3(0, 1, 0);\
+		vec3 directionalColor = vec3(0.0, 0.0, 0.0);\
+		vec3 ambientColor = vec3(1.0, 1.0, 1.0);\
+	\
+		vec3 lightWeighting = ambientColor + directionalColor * max(dot(normalize(vTransformedNormal), direction), 0.0);\
+	\
+		vec4 fragmentColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));\
+	\
+		gl_FragColor = vec4(fragmentColor.rgb * lightWeighting, fragmentColor.a);\
+	\
+		if(gl_FragColor.a < 0.3)\
+		{\
+			discard;\
+		}\
+	}";
+
+	var vertex = "attribute vec3 aVertexPosition;\
+	attribute vec3 aVertexNormal;\
+	attribute vec2 aTextureCoord;\
+	\
+	uniform mat4 uMVMatrix;\
+	uniform mat4 uPMatrix;\
+	uniform mat3 uNMatrix;\
+	\
+	varying vec2 vTextureCoord;\
+	varying vec3 vTransformedNormal;\
+	varying vec4 vPosition;\
+	\
+	void main(void)\
+	{\
+		vPosition = uMVMatrix * vec4(aVertexPosition, 1.0);\
+		vTextureCoord = aTextureCoord;\
+		vTransformedNormal = uNMatrix * aVertexNormal;\
+		gl_Position = uPMatrix * vPosition;\
+	}";
+
+	//Shader
+	this.shader = new Shader(fragment, vertex);
+
+	//Vertex Coordinates 
+	this.shader.program.vertexPositionAttribute = gl.getAttribLocation(this.shader.program, "aVertexPosition");
+	gl.enableVertexAttribArray(this.shader.program.vertexPositionAttribute);
+
+	//Texture coordinates
+	this.shader.program.textureCoordAttribute = gl.getAttribLocation(this.shader.program, "aTextureCoord");
+	gl.enableVertexAttribArray(this.shader.program.textureCoordAttribute);
+
+	//Normals
+	this.shader.program.vertexNormalAttribute = gl.getAttribLocation(this.shader.program, "aVertexNormal");
+	gl.enableVertexAttribArray(this.shader.program.vertexNormalAttribute);
+
+	//The sampler
+	this.shader.program.samplerUniform = gl.getUniformLocation(this.shader.program, "uSampler");
+	this.shader.program.pMatrixUniform = gl.getUniformLocation(this.shader.program, "uPMatrix");
+	this.shader.program.mvMatrixUniform = gl.getUniformLocation(this.shader.program, "uMVMatrix");
+	this.shader.program.nMatrixUniform = gl.getUniformLocation(this.shader.program, "uNMatrix");
 }
 
 //Set text
@@ -107,7 +176,7 @@ Text.prototype.setText = function(text)
 }
 
 //Draw text to camera
-Text.prototype.draw = function(camera, light)
+Text.prototype.draw = function(camera, scene)
 {
 	//Clone Camera Global transformation Matrix and multiply
 	var camTransformationMatrix = Matrix.mulTranspose(this.transformationMatrix, camera.transformationMatrix);
@@ -115,21 +184,24 @@ Text.prototype.draw = function(camera, light)
 	//Normal matrix
 	var normalMatrix = MathUtils.matrix3Invert(camTransformationMatrix);
 
+	gl.useProgram(this.shader.program);
+	gl.uniformMatrix4fv(gl.getUniformLocation(this.shader.program, "uPMatrix"), false, camera.projectionMatrix.flatten());
+
 	// Passing the text View Matrix to apply the current transformation
-	gl.uniformMatrix4fv(gl.getUniformLocation(camera.shader, "uMVMatrix"), false, camTransformationMatrix.flatten());
-	gl.uniformMatrix3fv(gl.getUniformLocation(camera.shader, "uNMatrix"), false, normalMatrix.flatten());
+	gl.uniformMatrix4fv(gl.getUniformLocation(this.shader.program, "uMVMatrix"), false, camTransformationMatrix.flatten());
+	gl.uniformMatrix3fv(gl.getUniformLocation(this.shader.program, "uNMatrix"), false, normalMatrix.flatten());
 
 	//Vertex buffer
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
-	gl.vertexAttribPointer(camera.shader.vertexPositionAttribute, this.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	gl.vertexAttribPointer(this.shader.program.vertexPositionAttribute, this.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
 	//Texture Coords buffer
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
-	gl.vertexAttribPointer(camera.shader.textureCoordAttribute, this.textureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	gl.vertexAttribPointer(this.shader.program.textureCoordAttribute, this.textureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
 	//Normal Coords buffer
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
-	gl.vertexAttribPointer(camera.shader.vertexNormalAttribute, this.normalBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	gl.vertexAttribPointer(this.shader.program.vertexNormalAttribute, this.normalBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
 	//Faces buffer
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.facesBuffer);
@@ -137,7 +209,7 @@ Text.prototype.draw = function(camera, light)
 	//Set texture
 	gl.activeTexture(gl.TEXTURE0);
 	gl.bindTexture(gl.TEXTURE_2D, this.texture);
-	gl.uniform1i(camera.shader.samplerUniform, 0);
+	gl.uniform1i(this.shader.program.samplerUniform, 0);
 
 	//Drawing the triangles
 	gl.drawElements(gl.TRIANGLES, 18, gl.UNSIGNED_SHORT, 0);

@@ -1,3 +1,5 @@
+"use strict";
+
 function Font(fname, folder)
 {
 	//Info variables
@@ -42,7 +44,7 @@ function Font(fname, folder)
 	this.charChnl = [];
 
 	//Fill char info
-	for(i = 0; i < 256; i++)
+	for(var i = 0; i < 256; i++)
 	{
 		this.charPos.push(null);
 		this.charSize.push(null);

@@ -1,3 +1,5 @@
+"use strict";
+
 //Light Constructor
 function PointLight()
 {

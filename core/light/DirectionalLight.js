@@ -1,3 +1,5 @@
+"use strict";
+
 //Ambient Light Constructor
 function DirectionalLight()
 {

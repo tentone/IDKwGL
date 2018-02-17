@@ -1,3 +1,5 @@
+"use strict";
+
 function Geometry(){}
 
 Geometry.BOX = 0;

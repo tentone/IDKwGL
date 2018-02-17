@@ -1,3 +1,5 @@
+"use strict";
+
 function Particle(model, position, speed, scale, time)
 {
 	this.position = position;
