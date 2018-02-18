@@ -13,6 +13,13 @@ Vector3.cross = function(a, b)
     return new Vector3(a.y*b.z - a.z*b.y, a.z*b.x - a.x*b.z, a.x*b.y - a.y*b.x);
 }
 
+Vector3.prototype.copy = function(vector)
+{
+	this.x = vector.x;
+	this.y = vector.y;
+	this.z = vector.z;
+}
+
 //Change all values at once
 Vector3.prototype.set = function(x, y, z)
 {
@@ -39,74 +46,39 @@ Vector3.prototype.normalize = function()
 //Compare values
 Vector3.prototype.equals = function(val)
 {
-	if(typeof val != typeof this)
-	{
-		return false;
-	}
-	else if(this.x === val.x && this.y === val.y && this.z === val.z)
-	{
-		return true;
-	}
+	return (this.x === val.x && this.y === val.y && this.z === val.z)
 }
 
 //Add
 Vector3.prototype.add = function(val)
 {
-	if(typeof val != typeof this)
-	{
-		throw "Incompatible types";
-	}
-	else
-	{
-		this.x += val.x;
-		this.y += val.y;
-		this.z += val.z;
-	}
+	this.x += val.x;
+	this.y += val.y;
+	this.z += val.z;
 }
 
 //Sub
 Vector3.prototype.sub = function(val)
 {
-	if(typeof val != typeof this)
-	{
-		throw "Incompatible types";
-	}
-	else
-	{
-		this.x -= val.x;
-		this.y -= val.y;
-		this.z -= val.z;
-	}
+	this.x -= val.x;
+	this.y -= val.y;
+	this.z -= val.z
 }
 
 //Mult
 Vector3.prototype.mul = function(val)
 {
-	if(typeof val != typeof this)
-	{
-		throw "Incompatible types";
-	}
-	else
-	{
-		this.x *= val.x;
-		this.y *= val.y;
-		this.z *= val.z;
-	}
+	this.x *= val.x;
+	this.y *= val.y;
+	this.z *= val.z;
 }
 
 //Div
 Vector3.prototype.div = function(val)
 {
-	if(typeof val != typeof this)
-	{
-		throw "Incompatible types";
-	}
-	else
-	{
-		this.x /= val.x;
-		this.y /= val.y;
-		this.z /= val.z;
-	}
+	this.x /= val.x;
+	this.y /= val.y;
+	this.z /= val.z;
 }
 
 //Mult by const

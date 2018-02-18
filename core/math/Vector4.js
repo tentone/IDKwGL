@@ -15,6 +15,14 @@ Vector4.prototype.toVector3 = function()
 	return new Vector3(this.x, this.y, this.z);
 }
 
+Vector4.prototype.copy = function(vector)
+{
+	this.x = vector.x;
+	this.y = vector.y;
+	this.z = vector.z;
+	this.w = vector.w;
+}
+
 Vector4.prototype.set = function(x, y, z, w)
 {
 	this.x = x;
@@ -34,64 +42,44 @@ Vector4.prototype.normalize = function()
 
 Vector4.prototype.equals = function(val)
 {
-	if(typeof val != typeof this)
-	{
-		return false;
-	}
-	else if(this.x === val.x && this.y === val.y && this.z === val.z && this.w === val.w)
-	{
-		return true;
-	}
+	return (this.x === val.x && this.y === val.y && this.z === val.z && this.w === val.w)
 }
 
-Vector4.prototype.add = function(val)
+Vector4.prototype.add = function(vector)
 {
-	if(typeof val != typeof this)
-	{
-		throw "Incompatible types";
-	}
-	else
-	{
-		this.x += val.x;
-		this.y += val.y;
-		this.z += val.z;
-		this.w += val.w;
-	}
+	this.x += vector.x;
+	this.y += vector.y;
+	this.z += vector.z;
+	this.w += vector.w;
 }
 
 //Subtract Vector
-Vector4.prototype.sub = function(val)
+Vector4.prototype.sub = function(vector)
 {
-	//Check type of val
-	if(typeof val != typeof this)
-	{
-		throw "Incompatible types";
-	}
-	else
-	{
-		this.x -= val.x;
-		this.y -= val.y;
-		this.z -= val.z;
-		this.w -= val.w;
-	}
+	this.x -= vector.x;
+	this.y -= vector.y;
+	this.z -= vector.z;
+	this.w -= vector.w;
 }
 
 //Multiply Vector
-Vector4.prototype.mul = function(val)
+Vector4.prototype.mul = function(vector)
 {
-	//Check type of val
-	if(typeof val != typeof this)
-	{
-		throw "Incompatible types";
-	}
-	else
-	{
-		this.x *= val.x;
-		this.y *= val.y;
-		this.z *= val.z;
-		this.w -= val.w;
-	}
+	this.x *= vector.x;
+	this.y *= vector.y;
+	this.z *= vector.z;
+	this.w *= vector.w;
 }
+
+//Multiply Vector
+Vector4.prototype.mulScalar = function(scalar)
+{
+	this.x *= scalar;
+	this.y *= scalar;
+	this.z *= scalar;
+	this.w *= scalar;
+}
+
 
 //toString Vector Values
 Vector4.prototype.toString = function()

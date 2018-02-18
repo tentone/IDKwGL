@@ -48,11 +48,6 @@ Matrix.prototype.clear = function()
 //Checks if matri is equals to another
 Matrix.prototype.equals = function(val)
 {
-	if(typeof val != typeof this)
-	{
-		return false;
-	}
-	
 	for(var i = 0; i < this.size.x; i++)
 	{
 		for(var j = 0; j < this.size.y; j++)
@@ -128,91 +123,70 @@ Matrix.prototype.transpose = function()
 //Multiply Matrix
 Matrix.prototype.mul = function(val)
 {
-	if(typeof val != typeof this)
+	if(this.size.x != val.size.y)
 	{
-		throw "Incompatible types";
+		throw "Matrix cant be multiplied  (check matrix size)";
 	}
-	else
-	{
-		if(this.size.x != val.size.y)
-		{
-			throw "Matrix cant be multiplied  (check matrix size)";
-		}
 
-		var mat = new Matrix(this.size.y, val.size.x);
-		for(var j = 0; j < val.size.x; j++)
+	var mat = new Matrix(this.size.y, val.size.x);
+	for(var j = 0; j < val.size.x; j++)
+	{
+		for(var i = 0; i < this.size.y; i++)
 		{
-			for(var i = 0; i < this.size.y; i++)
+			var sum = 0;
+			for(var k = 0; k < this.size.x; k++)
 			{
-				var sum = 0;
-				for(var k = 0; k < this.size.x; k++)
-				{
-					sum += this.matrix[k][i] * val.matrix[j][k];
-				}
-				mat.matrix[j][i] = sum;
+				sum += this.matrix[k][i] * val.matrix[j][k];
 			}
+			mat.matrix[j][i] = sum;
 		}
-
-		this.matrix = mat.matrix;
-		this.size.x = mat.size.x;
-		this.size.y = mat.size.y;
 	}
+
+	this.matrix = mat.matrix;
+	this.size.x = mat.size.x;
+	this.size.y = mat.size.y;
 }
 
 //Multiply Matrix and transpose after multiplication
 Matrix.prototype.mulTranspose = function(val)
 {
-	if(typeof val != typeof this)
+	if(this.size.x != val.size.y)
 	{
-		throw "Incompatible types";
+		throw "Matrix cant be multiplied  (check matrix size)";
 	}
-	else
-	{
-		if(this.size.x != val.size.y)
-		{
-			throw "Matrix cant be multiplied  (check matrix size)";
-		}
 
-		var mat = new Matrix(this.size.y, val.size.x);
-		for(var i = 0; i < this.size.y; i++)
+	var mat = new Matrix(this.size.y, val.size.x);
+	for(var i = 0; i < this.size.y; i++)
+	{
+		for(var j = 0; j < val.size.x; j++)
 		{
-			for(var j = 0; j < val.size.x; j++)
+			var sum = 0;
+			for(var k = 0; k < this.size.x; k++)
 			{
-				var sum = 0;
-				for(var k = 0; k < this.size.x; k++)
-				{
-					sum += this.matrix[k][i] * val.matrix[j][k];
-				}
-				mat.matrix[i][j] = sum;
+				sum += this.matrix[k][i] * val.matrix[j][k];
 			}
+			mat.matrix[i][j] = sum;
 		}
-
-		this.matrix = mat.matrix;
-		this.size.x = mat.size.x;
-		this.size.y = mat.size.y;
 	}
+
+	this.matrix = mat.matrix;
+	this.size.x = mat.size.x;
+	this.size.y = mat.size.y;
 }
 
 //Add to matrix (have to be same size)
 Matrix.prototype.add = function(val)
 {
-	if(typeof val != typeof this)
+	if(val.size.x != this.size.x || val.size.y != this.size.y)
 	{
-		throw "Incompatible types";
+		throw "Matrix has different size";
 	}
-	else
-	{
-		if(val.size.x != this.size.x || val.size.y != this.size.y)
-		{
-			throw "Matrix has different size";
-		}
 
-		for(var i = 0; i < this.size.x; i++)
+	for(var i = 0; i < this.size.x; i++)
+	{
+		for(var j = 0; j < this.size.y; j++)
 		{
-			for(var j = 0; j < this.size.y; j++)
-			{
-				this.matrix[i][j] += val.matrix[i][j];
-			}
+			this.matrix[i][j] += val.matrix[i][j];
 		}
 	}
 }
@@ -220,23 +194,16 @@ Matrix.prototype.add = function(val)
 //Sub from matrix (have to be same size)
 Matrix.prototype.sub = function(val)
 {
-	if(typeof val != typeof this)
+	if(val.size.x != this.size.x || val.size.y != this.size.y)
 	{
-		throw "Incompatible types";
+		throw "Matrix has different size";
 	}
-	else
-	{
-		if(val.size.x != this.size.x || val.size.y != this.size.y)
-		{
-			throw "Matrix has different size";
-		}
 
-		for(var i = 0; i < this.size.x; i++)
+	for(var i = 0; i < this.size.x; i++)
+	{
+		for(var j = 0; j < this.size.y; j++)
 		{
-			for(var j = 0; j < this.size.y; j++)
-			{
-				this.matrix[i][j] -= val.matrix[i][j];
-			}
+			this.matrix[i][j] -= val.matrix[i][j];
 		}
 	}
 }
@@ -274,71 +241,53 @@ Matrix.prototype.toString = function()
 //Multiply Matrix and store retult in a new one
 Matrix.mul = function(a, b)
 {
-	if(typeof b != typeof a)
+	if(a.size.x != b.size.y)
 	{
-		throw "Incompatible types";
+		throw "Matrix cant be multiplied (check matrix size)";
 		return null;
 	}
-	else
+
+	var mat = new Matrix(a.size.y, b.size.x);
+	for(var j = 0; j < b.size.x; j++)
 	{
-		if(a.size.x != b.size.y)
+		for(var i = 0; i < a.size.y; i++)
 		{
-			throw "Matrix cant be multiplied (check matrix size)";
-			return null;
-		}
-
-		var mat = new Matrix(a.size.y, b.size.x);
-		for(var j = 0; j < b.size.x; j++)
-		{
-			for(var i = 0; i < a.size.y; i++)
+			var sum = 0;
+			for(var k = 0; k < a.size.x; k++)
 			{
-				var sum = 0;
-				for(var k = 0; k < a.size.x; k++)
-				{
-					sum += a.matrix[k][i] * b.matrix[j][k];
-				}
-				mat.matrix[j][i] = sum;
+				sum += a.matrix[k][i] * b.matrix[j][k];
 			}
+			mat.matrix[j][i] = sum;
 		}
-
-		return mat;
 	}
-	return null;
+
+	return mat;
 }
 
 //Multiply Matrix and transpose after multiplication
 Matrix.mulTranspose = function(a, b)
 {
-	if(typeof b != typeof a)
+	if(a.size.x != b.size.y)
 	{
-		throw "Incompatible types";
+		throw "Matrix cant be multiplied (check matrix size)";
 		return null;
 	}
-	else
+
+	var mat = new Matrix(a.size.y, b.size.x);
+	for(var i = 0; i < a.size.y; i++)
 	{
-		if(a.size.x != b.size.y)
+		for(var j = 0; j < b.size.x; j++)
 		{
-			throw "Matrix cant be multiplied (check matrix size)";
-			return null;
-		}
-
-		var mat = new Matrix(a.size.y, b.size.x);
-		for(var i = 0; i < a.size.y; i++)
-		{
-			for(var j = 0; j < b.size.x; j++)
+			var sum = 0;
+			for(var k = 0; k < a.size.x; k++)
 			{
-				var sum = 0;
-				for(var k = 0; k < a.size.x; k++)
-				{
-					sum += a.matrix[k][i] * b.matrix[j][k];
-				}
-				mat.matrix[i][j] = sum;
+				sum += a.matrix[k][i] * b.matrix[j][k];
 			}
+			mat.matrix[i][j] = sum;
 		}
-
-		return mat;
 	}
-	return null;
+
+	return mat;
 }
 	
 //Self testing function 
@@ -434,11 +383,6 @@ Matrix.test = function()
 	console.log("\nI = A * B");
 	console.log(i.toString());
 
-	//I (Old method)
-	//var i = Matrix.mulOld(a, b);
-	//console.log("\nI = A * B OLD METHOD");
-	//console.log(i.toString());
-
 	//J = B * A
 	var j = Matrix.mul(b, a);
 	console.log("\nI = B * A");
@@ -448,9 +392,4 @@ Matrix.test = function()
 	var k = Matrix.mul(g, c);
 	console.log("\nK = G * ID(4x4)");
 	console.log(k.toString());
-
-	//K (Old method)
-	//var k = Matrix.mulOld(g, c);
-	//console.log("\nK = G * ID(4x4) OLD METHOD");
-	//console.log(k.toString());
 }
