@@ -39,13 +39,18 @@ PerspectiveCamera.prototype.setRotation = function(horizontalRotation, verticalR
 	this.rotation.y = horizontalRotation;
 }
 
-//Call before start a frame on this camera
+//Calculate Camera Transformation Matrix
 PerspectiveCamera.prototype.updateMatrix = function()
 {
-	//Calculate Camera Transformation Matrix
-	this.transformationMatrix = MatrixGenerator.translation(-this.position.x, -this.position.y, -this.position.z);
+	this.transformationMatrix = MatrixGenerator.translation(this.position.x, this.position.y, this.position.z);
 	this.transformationMatrix.mul(MatrixGenerator.directionMatrix(this.direction));
 	this.transformationMatrix.mul(MatrixGenerator.scalingMatrix(this.zoom, this.zoom, this.zoom));
+}
+
+//Calculate Camera Projection Matrix
+PerspectiveCamera.prototype.updateProjectionMatrix = function()
+{
+	this.projectionMatrix = PerspectiveCamera.perspectiveProjectionMatrix(this.fov, this.aspectRatio, 0.1, 200);
 }
 
 //Change Camera Field of View
@@ -58,16 +63,9 @@ PerspectiveCamera.prototype.setFov = function(fov)
 //Call every time the canvas is resized
 PerspectiveCamera.prototype.resize = function(x, y)
 {
-	//Set new Values
 	this.aspectRatio = x / y;
 	this.screenSize.set(x, y);
 	this.updateProjectionMatrix();
-}
-
-//Calculate Camera Projection Matrix
-PerspectiveCamera.prototype.updateProjectionMatrix = function()
-{
-	this.projectionMatrix = PerspectiveCamera.perspectiveProjectionMatrix(this.fov, this.aspectRatio, 0.1, 3000);
 }
 
 //Create Info String
@@ -79,15 +77,16 @@ PerspectiveCamera.prototype.toString = function()
 //Prespective Projection Matrix
 PerspectiveCamera.perspectiveProjectionMatrix = function(fov, aspect, near, far)
 {
-	var depth = far - near;
-	var depthInvert = 1 / depth;
 	var result = new Matrix(4,4);
 
-	result.matrix[1][1] = 1 / Math.tan(0.5 * Conversion.degreesToRadians(fov));
-	result.matrix[0][0] = -1 * result.matrix[1][1] / aspect*1.2;
-	result.matrix[2][2] = far * depthInvert;
-	result.matrix[3][2] = (-far * near) * depthInvert;
-	result.matrix[2][3] = 1;
+	var depth = far - near;
+	var scale = 1 / Math.tan(Conversion.degreesToRadians(fov)/2);
+
+	result.matrix[0][0] = scale;
+	result.matrix[1][1] = scale;
+	result.matrix[2][2] = -far/depth;
+	result.matrix[2][3] = -1;
+	result.matrix[3][2] = -(far * near) / depth;
 	result.matrix[3][3] = 0;
 
 	return result;

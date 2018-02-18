@@ -16,7 +16,7 @@ function Model()
 	this.faceMaterial = []; //<Face Index Ini / Face Index End / Material>
 	this.material = []; //Material Array
 
-	//Buffers
+	//GL Buffers
 	this.normalBuffer = null;
 	this.vertexBuffer = null;
 	this.textureCoordBuffer = null;
@@ -25,7 +25,7 @@ function Model()
 	//Texture
 	this.texture = Texture.generateSolidColorTexture(gl, Color.RED);
 
-	//Tranformations Control
+	//Transformation
 	this.origin = new Vector3(0,0,0);
 	this.position = new Vector3(0,0,0);
 	this.rotation = new Vector3(0,0,0);
@@ -38,17 +38,29 @@ function Model()
 	this.transformationMatrix = new Matrix(4,4);
 
 	//Shader
+	var vertex = "attribute vec3 vertexPosition;\
+	attribute vec2 vertexUV;\
+	\
+	uniform mat4 projection, view;\
+	uniform mat4 model;\
+	\
+	varying vec2 pixelUV;\
+	\
+	void main(void)\
+	{\
+		pixelUV = vertexUV;\
+		gl_Position = projection * view * model * vec4(vertexPosition, 1.0);\
+	}";
+
 	var fragment = "precision mediump float;\
 	\
-	varying vec2 vTextureCoord;\
-	varying vec3 vTransformedNormal;\
-	varying vec4 vPosition;\
+	varying vec2 pixelUV;\
 	\
 	uniform sampler2D uSampler;\
 	\
 	void main(void)\
 	{\
-		gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));\
+		gl_FragColor = texture2D(uSampler, vec2(pixelUV.s, pixelUV.t));\
 		\
 		if(gl_FragColor.a < 0.3)\
 		{\
@@ -56,94 +68,65 @@ function Model()
 		}\
 	}";
 
-	var vertex = "attribute vec3 aVertexPosition;\
-	attribute vec3 aVertexNormal;\
-	attribute vec2 aTextureCoord;\
-	\
-	uniform mat4 uMVMatrix;\
-	uniform mat4 uPMatrix;\
-	uniform mat3 uNMatrix;\
-	\
-	varying vec2 vTextureCoord;\
-	varying vec3 vTransformedNormal;\
-	varying vec4 vPosition;\
-	\
-	void main(void)\
-	{\
-		vPosition = uMVMatrix * vec4(aVertexPosition, 1.0);\
-		vTextureCoord = aTextureCoord;\
-		vTransformedNormal = uNMatrix * aVertexNormal;\
-		gl_Position = uPMatrix * vPosition;\
-	}";
-
 	//Shader
 	this.shader = new Shader(fragment, vertex);
 
 	//Vertex Coordinates 
-	this.shader.program.vertexPositionAttribute = gl.getAttribLocation(this.shader.program, "aVertexPosition");
+	this.shader.program.vertexPositionAttribute = gl.getAttribLocation(this.shader.program, "vertexPosition");
 	gl.enableVertexAttribArray(this.shader.program.vertexPositionAttribute);
 
 	//Texture coordinates
-	this.shader.program.textureCoordAttribute = gl.getAttribLocation(this.shader.program, "aTextureCoord");
-	gl.enableVertexAttribArray(this.shader.program.textureCoordAttribute);
-
-	//Normals
-	this.shader.program.vertexNormalAttribute = gl.getAttribLocation(this.shader.program, "aVertexNormal");
-	gl.enableVertexAttribArray(this.shader.program.vertexNormalAttribute);
+	this.shader.program.vertexUVAttribute = gl.getAttribLocation(this.shader.program, "vertexUV");
+	gl.enableVertexAttribArray(this.shader.program.vertexUVAttribute);
 
 	//The sampler
 	this.shader.program.samplerUniform = gl.getUniformLocation(this.shader.program, "uSampler");
-	this.shader.program.pMatrixUniform = gl.getUniformLocation(this.shader.program, "uPMatrix");
-	this.shader.program.mvMatrixUniform = gl.getUniformLocation(this.shader.program, "uMVMatrix");
-	this.shader.program.nMatrixUniform = gl.getUniformLocation(this.shader.program, "uNMatrix");
+	this.shader.program.viewMatrixUniform = gl.getUniformLocation(this.shader.program, "view");
+	this.shader.program.projectionMatrixUniform = gl.getUniformLocation(this.shader.program, "projection");
+	this.shader.program.modelMatrixUniform = gl.getUniformLocation(this.shader.program, "model");
 }
 
 //Draw Model to camera
 Model.prototype.draw = function(camera, scene)
 {
 	gl.useProgram(this.shader.program);
-	gl.uniformMatrix4fv(gl.getUniformLocation(this.shader.program, "uPMatrix"), false, camera.projectionMatrix.flatten());
 
-	//Clone Camera Global transformation Matrix and multiply
-	var camTransformationMatrix = Matrix.mulTranspose(this.transformationMatrix, camera.transformationMatrix);
+	//Update matrices
+	camera.updateMatrix();
+	camera.updateProjectionMatrix();
+	this.updateMatrix();
 
-	//Normal matrix
-	var normalMatrix = MathUtils.matrix3Invert(camTransformationMatrix);
+	//Transformation matrices
+	gl.uniformMatrix4fv(gl.getUniformLocation(this.shader.program, "projection"), false, camera.projectionMatrix.flatten());
+	gl.uniformMatrix4fv(gl.getUniformLocation(this.shader.program, "view"), false, camera.transformationMatrix.flatten());
+	gl.uniformMatrix4fv(gl.getUniformLocation(this.shader.program, "model"), false, this.transformationMatrix.flatten());
 
-	// Passing the Model View Matrix to apply the current transformation
-	gl.uniformMatrix4fv(gl.getUniformLocation(this.shader.program, "uMVMatrix"), false, camTransformationMatrix.flatten());
-	gl.uniformMatrix3fv(gl.getUniformLocation(this.shader.program, "uNMatrix"), false, normalMatrix.flatten());
-
-	//Vertex buffer
+	//Vertex position
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
 	gl.vertexAttribPointer(this.shader.program.vertexPositionAttribute, this.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
-	//Texture Coords buffer
+	//Texture UV
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
-	gl.vertexAttribPointer(this.shader.program.textureCoordAttribute, this.textureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	gl.vertexAttribPointer(this.shader.program.vertexUVAttribute, this.textureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
-	//Normal Coords buffer
-	gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
-	gl.vertexAttribPointer(this.shader.program.vertexNormalAttribute, this.normalBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-	//Faces buffer
+	//Faces
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.facesBuffer);
 
-	//Draw trough all texture
+	//Draw all faces w/ correspondent material
 	for(var i = 0; i < this.faceMaterial.length; i += 3)
 	{
-		//Set texture to model
+		//Set texture
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, this.material[this.faceMaterial[i+2]].texture);
 		gl.uniform1i(this.shader.program.samplerUniform, 0);
 		
-		//Drawing the triangles
+		//Draw the triangles
 		gl.drawElements(gl.TRIANGLES, this.faceMaterial[i+1], gl.UNSIGNED_SHORT, 0);
 	}
 }
 
 //Recalculate Tranformation Matrix (Should be called after changing position)
-Model.prototype.update = function()
+Model.prototype.updateMatrix = function()
 {
 	this.transformationMatrix = MatrixGenerator.scalingMatrix(this.scale.x, this.scale.y, this.scale.z);
 	this.transformationMatrix.mul(MatrixGenerator.translation(-this.origin.x, -this.origin.y, -this.origin.z));
@@ -164,7 +147,7 @@ Model.prototype.updateBuffers = function()
 	//Texture
 	this.textureCoordBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.uvs), gl.STATIC_DRAW);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.uvs), gl.STATIC_DRAW);
 	this.textureCoordBuffer.itemSize = 2;
 	this.textureCoordBuffer.numItems = this.uvs.length/2;
 
@@ -395,11 +378,11 @@ Model.prototype.loadOBJ = function(data)
 	}
 
 	//Covert collected data
-	this.transformOBJData();
+	this.modelOBJData();
 }
 
 //Tranform OBJ file to single hash level as used in classes
-Model.prototype.transformOBJData = function()
+Model.prototype.modelOBJData = function()
 {
 	//Create temporary arrays to store all model data
 	var vertex = [];

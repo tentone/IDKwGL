@@ -212,7 +212,7 @@ Text.prototype.draw = function(camera, scene)
 }
 
 //Recalculate Tranformation Matrix (Should be called after changing position)
-Text.prototype.update = function()
+Text.prototype.updateMatrix = function()
 {
 	this.transformationMatrix = MatrixGenerator.scalingMatrix(this.scale.x, this.scale.y, this.scale.z);
 	this.transformationMatrix.mul(MatrixGenerator.translation(-this.origin.x, -this.origin.y, -this.origin.z));

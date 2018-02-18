@@ -92,7 +92,7 @@ Sprite.prototype.draw = function(camera, scene)
 	if(this.followCameraRotation && camera.type === Camera.PERSPECTIVE)
 	{
 		this.rotation.y = -camera.rotation.y;
-		this.update();
+		this.updateMatrix();
 	}
 
 	//Clone Camera Global transformation Matrix and multiply
@@ -129,7 +129,7 @@ Sprite.prototype.draw = function(camera, scene)
 };
 
 //Recalculate Tranformation Matrix (Should be called after changing position)
-Sprite.prototype.update = function()
+Sprite.prototype.updateMatrix = function()
 {
 	this.transformationMatrix = MatrixGenerator.scalingMatrix(this.scale.x, this.scale.y, this.scale.z);
 	this.transformationMatrix.mul(MatrixGenerator.translation(-this.origin.x, -this.origin.y, -this.origin.z));

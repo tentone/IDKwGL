@@ -125,7 +125,7 @@ Matrix.prototype.mul = function(val)
 {
 	if(this.size.x != val.size.y)
 	{
-		throw "Matrix cant be multiplied  (check matrix size)";
+		throw "Matrix cant be multiplied (check matrix size)";
 	}
 
 	var mat = new Matrix(this.size.y, val.size.x);
@@ -152,7 +152,7 @@ Matrix.prototype.mulTranspose = function(val)
 {
 	if(this.size.x != val.size.y)
 	{
-		throw "Matrix cant be multiplied  (check matrix size)";
+		throw "Matrix cant be multiplied (check matrix size)";
 	}
 
 	var mat = new Matrix(this.size.y, val.size.x);
