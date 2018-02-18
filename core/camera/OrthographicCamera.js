@@ -42,19 +42,11 @@ function OrthographicCamera(canvas, height, width)
 }
 
 //Call before start a frame on this camera
-OrthographicCamera.prototype.startFrame = function()
+OrthographicCamera.prototype.updateMatrix = function()
 {
 	//Calculate Camera Transformation Matrix
 	this.transformationMatrix = MatrixGenerator.translation(this.position.x, this.position.y, this.position.z);
 	this.transformationMatrix.mul(MatrixGenerator.rotationMatrix(0, 0, this.rotation));
-}
-
-//Set shader to be used by camera
-OrthographicCamera.prototype.useShader = function(shader)
-{
-	var program = shader.get();
-	gl.useProgram(program);
-	gl.uniformMatrix4fv(gl.getUniformLocation(program, "uPMatrix"), false, this.projectionMatrix.flatten());
 }
 
 //Call every time the canvas is resized

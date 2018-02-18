@@ -96,7 +96,6 @@ function Model()
 	this.shader.program.pMatrixUniform = gl.getUniformLocation(this.shader.program, "uPMatrix");
 	this.shader.program.mvMatrixUniform = gl.getUniformLocation(this.shader.program, "uMVMatrix");
 	this.shader.program.nMatrixUniform = gl.getUniformLocation(this.shader.program, "uNMatrix");
-	
 }
 
 //Draw Model to camera

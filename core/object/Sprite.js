@@ -5,7 +5,6 @@ function Sprite()
 	//Square single sided sprite data
 	this.vertex = [0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0,  0.0];
 	this.uvs = [0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0];
-	this.normals = [0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0];
 	this.faces = [0, 1, 2, 0, 2, 3]; //Face <vertex / texture / normal>
 
 	//Auto Rotate Flags
@@ -35,7 +34,6 @@ function Sprite()
 	var fragment = "precision mediump float;\
 	\
 	varying vec2 vTextureCoord;\
-	varying vec3 vTransformedNormal;\
 	varying vec4 vPosition;\
 	\
 	uniform sampler2D uSampler;\
@@ -51,7 +49,6 @@ function Sprite()
 	}";
 
 	var vertex = "attribute vec3 aVertexPosition;\
-	attribute vec3 aVertexNormal;\
 	attribute vec2 aTextureCoord;\
 	\
 	uniform mat4 uMVMatrix;\
@@ -59,30 +56,24 @@ function Sprite()
 	uniform mat3 uNMatrix;\
 	\
 	varying vec2 vTextureCoord;\
-	varying vec3 vTransformedNormal;\
 	varying vec4 vPosition;\
 	\
 	void main(void)\
 	{\
 		vPosition = uMVMatrix * vec4(aVertexPosition, 1.0);\
 		vTextureCoord = aTextureCoord;\
-		vTransformedNormal = uNMatrix * aVertexNormal;\
 		gl_Position = uPMatrix * vPosition;\
 	}";
 	//Shader
 	this.shader = new Shader(fragment, vertex);
 
-	//Vertex Coordinates 
+	//Vertex Coordinates
 	this.shader.program.vertexPositionAttribute = gl.getAttribLocation(this.shader.program, "aVertexPosition");
 	gl.enableVertexAttribArray(this.shader.program.vertexPositionAttribute);
 
 	//Texture coordinates
 	this.shader.program.textureCoordAttribute = gl.getAttribLocation(this.shader.program, "aTextureCoord");
 	gl.enableVertexAttribArray(this.shader.program.textureCoordAttribute);
-
-	//Normals
-	this.shader.program.vertexNormalAttribute = gl.getAttribLocation(this.shader.program, "aVertexNormal");
-	gl.enableVertexAttribArray(this.shader.program.vertexNormalAttribute);
 
 	//The sampler
 	this.shader.program.samplerUniform = gl.getUniformLocation(this.shader.program, "uSampler");
@@ -94,10 +85,11 @@ function Sprite()
 //Draw sprite to camera
 Sprite.prototype.draw = function(camera, scene)
 {
+	//gl.enable(gl.SAMPLE_ALPHA_TO_COVERAGE);
 	gl.enable(gl.BLEND);
 	gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-	if(this.followCameraRotation && camera.type === Camera.PRESPECTIVE)
+	if(this.followCameraRotation && camera.type === Camera.PERSPECTIVE)
 	{
 		this.rotation.y = -camera.rotation.y;
 		this.update();
@@ -111,8 +103,6 @@ Sprite.prototype.draw = function(camera, scene)
 
 	gl.useProgram(this.shader.program);
 	gl.uniformMatrix4fv(gl.getUniformLocation(this.shader.program, "uPMatrix"), false, camera.projectionMatrix.flatten());
-
-	// Passing the sprite View Matrix to apply the current transformation
 	gl.uniformMatrix4fv(gl.getUniformLocation(this.shader.program, "uMVMatrix"), false, camTransformationMatrix.flatten());
 	gl.uniformMatrix3fv(gl.getUniformLocation(this.shader.program, "uNMatrix"), false, normalMatrix.flatten());
 	
@@ -123,10 +113,6 @@ Sprite.prototype.draw = function(camera, scene)
 	//Texture Coords buffer
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
 	gl.vertexAttribPointer(this.shader.program.textureCoordAttribute, this.textureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-	//Normal Coords buffer
-	gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
-	gl.vertexAttribPointer(this.shader.program.vertexNormalAttribute, this.normalBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
 	//Faces buffer
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.facesBuffer);
@@ -167,13 +153,6 @@ Sprite.prototype.updateBuffers = function()
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.uvs), gl.STATIC_DRAW);
 	this.textureCoordBuffer.itemSize = 2;
 	this.textureCoordBuffer.numItems = this.uvs.length/2;
-
-	//Normals
-	this.normalBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normals), gl.STATIC_DRAW);
-	this.normalBuffer.itemSize = 3;
-	this.normalBuffer.numItems = this.normals.length/3;			
 
 	//Vertex indices
 	this.facesBuffer = gl.createBuffer();

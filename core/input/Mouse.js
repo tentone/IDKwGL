@@ -22,6 +22,23 @@ function Mouse()
 	this.keys[0] = new Key();
 	this.keys[1] = new Key();
 	this.keys[2] = new Key();
+
+	var self = this;
+
+	document.onmousemove = function(event)
+	{
+		self.updatePosition(event.clientX, event.clientY, event.movementX, event.movementY);
+	}
+	
+	document.onmousedown = function(event)
+	{
+		self.updateKey(event.which-1, Key.KEY_DOWN);
+	}
+
+	document.onmouseup = function(event)
+	{
+		self.updateKey(event.which-1, Key.KEY_UP);
+	}
 }
 
 //Mouse Buttons

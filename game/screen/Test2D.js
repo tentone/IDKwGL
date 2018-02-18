@@ -41,7 +41,7 @@ Test2D.prototype.update = function(){}
 
 Test2D.prototype.draw = function()
 {
-	this.camera.startFrame();
+	this.camera.updateMatrix();
 	this.camera.useShader(shaderDefault);
 
 	this.text.draw(this.camera);

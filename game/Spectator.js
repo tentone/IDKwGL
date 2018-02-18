@@ -2,7 +2,7 @@
 
 function Spectator(canvas)
 {
-	this.camera = new PrespectiveCamera(canvas, 70, 1);
+	this.camera = new PerspectiveCamera(canvas, 70, 1);
 	this.rotation = new Vector2(0.0, 0.0); //Horizontal / Vertical
 }
 

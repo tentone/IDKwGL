@@ -13,10 +13,14 @@ Scene.prototype.add = function(object)
 }
 
 //Render all objects
-Scene.prototype.draw = function(camera)
+Scene.prototype.draw = function(camera, clear)
 {
-	gl.clearColor(0, 0, 0, 1);
-	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+	if(clear)
+	{
+		gl.clearColor(0, 0, 0, 1);
+		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+	}
+	
 	gl.enable(gl.DEPTH_TEST);
 	gl.depthFunc(gl.LESS);
 

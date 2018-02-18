@@ -180,9 +180,8 @@ Text.prototype.draw = function(camera, scene)
 	var normalMatrix = MathUtils.matrix3Invert(camTransformationMatrix);
 
 	gl.useProgram(this.shader.program);
+	
 	gl.uniformMatrix4fv(gl.getUniformLocation(this.shader.program, "uPMatrix"), false, camera.projectionMatrix.flatten());
-
-	// Passing the text View Matrix to apply the current transformation
 	gl.uniformMatrix4fv(gl.getUniformLocation(this.shader.program, "uMVMatrix"), false, camTransformationMatrix.flatten());
 	gl.uniformMatrix3fv(gl.getUniformLocation(this.shader.program, "uNMatrix"), false, normalMatrix.flatten());
 

@@ -105,11 +105,11 @@ ArenaPhysics.prototype.update = function()
 ArenaPhysics.prototype.draw = function()
 {
 	//Draw scene to player camera
-	this.player.camera.startFrame();
+	this.player.camera.updateMatrix();
 	this.scene.draw(this.player.camera);
 
 	//Draw idk logo
-	this.camera.startFrame();
+	this.camera.updateMatrix();
 	this.idk.draw(this.camera);
 }
 

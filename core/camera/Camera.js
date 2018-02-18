@@ -1,9 +1,6 @@
 "use strict";
 
-function Camera()
-{
+function Camera(){}
 
-}
-
-Camera.PRESPECTIVE = 0;
+Camera.PERSPECTIVE = 0;
 Camera.ORTHOGRAPHIC = 1;

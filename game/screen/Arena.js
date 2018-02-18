@@ -7,7 +7,7 @@ function Arena()
 	this.scene = new Scene();
 
 	//Cameras
-	this.cameraStatic = new PrespectiveCamera(canvas, 70, 1);
+	this.cameraStatic = new PerspectiveCamera(canvas, 70, 1);
 	this.hudCamera = new OrthographicCamera(canvas, 10);
 
 	//IDK Logo
@@ -190,13 +190,14 @@ function Arena()
 	this.world.addBody(new GameObject(this.model));
 	
 	//Grass
-	for(var i = 0; i < 200; i++)
+	for(var i = 0; i < 100; i++)
 	{
 		this.model = new Sprite();
 		this.model.setTexture(Texture.createTexture(gl, "data/texture/grass_sprite_2.png"));
 		this.model.followCameraRotation = true;
-		this.model.scale.set(16, 4, 1);
-		this.model.origin.set(8, 2, 0);
+		this.model.scale.set(32, 8, 1);
+		this.model.origin.set(16, 4, 0);
+		//this.model.rotation.set(0, Math.random()*Math.PI, 0);
 		this.model.position.set(MathUtils.randomMod()*400, 2, MathUtils.randomMod()*400);
 		this.model.update();
 		this.scene.add(this.model);
@@ -211,7 +212,6 @@ function Arena()
 	this.model.position.set(MathUtils.randomMod()*400, 2, MathUtils.randomMod()*400);
 	this.model.update();
 	this.particle = new ParticleEmitter(this.model, new Vector3(-250,8,100), new Vector3(0,0.7,0), new Vector3(0.3,0.5,0.3), 6, 4, 150, 150, 50);
-	
 	
 	//Bullet
 	this.bullet = new Model();
@@ -331,13 +331,13 @@ Arena.prototype.update = function()
 Arena.prototype.draw = function()
 {
 	//Prepare player camera
-	this.player.camera.startFrame();
-
-	//Draw referencial
-	this.referencial.draw(this.player.camera);
+	this.player.camera.updateMatrix();
 
 	//Draw main scene
 	this.scene.draw(this.player.camera);
+
+	//Draw referencial
+	this.referencial.draw(this.player.camera);
 
 	//Draw bullets
 	for(var i = 0; i < this.bulletParticleList.length; i++)
@@ -349,14 +349,14 @@ Arena.prototype.draw = function()
 	this.particle.draw(this.player.camera, this.scene.light);
 	
 	//Render HUD
-	this.hudCamera.startFrame();
+	this.hudCamera.updateMatrix();
 	this.cross.draw(this.hudCamera);
 
 	//Draw IDK Logo
 	this.idk.draw(this.hudCamera);
 
 	//Draw static camera
-	this.cameraStatic.startFrame();
+	this.cameraStatic.updateMatrix();
 	this.weapon.draw(this.cameraStatic, this.scene.light);
 }
 

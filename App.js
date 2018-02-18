@@ -2,10 +2,10 @@
 
 //Core
 include("core/Font.js");
-
 include("core/Texture.js");
-include("core/Material.js");
 include("core/Shader.js");
+
+include("core/materials/Material.js");
 
 include("core/object/Sprite.js");
 include("core/object/Model.js");
@@ -40,7 +40,7 @@ include("core/light/PointLight.js");
 
 include("core/camera/Camera.js");
 include("core/camera/OrthographicCamera.js");
-include("core/camera/PrespectiveCamera.js");
+include("core/camera/PerspectiveCamera.js");
 
 include("core/physics/Body.js");
 include("core/physics/World.js");
@@ -84,36 +84,6 @@ App.initialize = function()
 	//Initialize Input
 	App.keyboard = new Keyboard();
 	App.mouse = new Mouse();
-
-	//Keyboard OnKeyDown Event
-	document.onkeydown = function(event)
-	{
-		App.keyboard.update(event.keyCode, Key.KEY_DOWN);
-	}
-
-	//Keyboard OnKeyUp Event
-	document.onkeyup = function(event)
-	{
-		App.keyboard.update(event.keyCode, Key.KEY_UP);
-	}
-
-	//Mouse Move Position
-	document.onmousemove = function(event)
-	{
-		App.mouse.updatePosition(event.clientX, event.clientY, event.movementX, event.movementY);
-	}
-
-	//Mouse Button Down
-	document.onmousedown = function(event)
-	{
-		App.mouse.updateKey(event.which-1, Key.KEY_DOWN);
-	}
-
-	//Mouse Button Up
-	document.onmouseup = function(event)
-	{
-		App.mouse.updateKey(event.which-1, Key.KEY_UP);
-	}
 
 	//Request to lock mouse if canvas is clicked (cross-browser)
 	canvas.onclick = function()

@@ -8,6 +8,18 @@ function Keyboard()
 	{
 		this.keys.push(new Key());
 	}
+
+	var self = this;
+
+	document.onkeydown = function(event)
+	{
+		self.update(event.keyCode, Key.KEY_DOWN);
+	}
+
+	document.onkeyup = function(event)
+	{
+		self.update(event.keyCode, Key.KEY_UP);
+	}
 }
 
 Keyboard.prototype.update = function(key, action)
