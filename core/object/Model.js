@@ -56,11 +56,11 @@ function Model()
 	\
 	varying vec2 pixelUV;\
 	\
-	uniform sampler2D uSampler;\
+	uniform sampler2D texture;\
 	\
 	void main(void)\
 	{\
-		gl_FragColor = texture2D(uSampler, vec2(pixelUV.s, pixelUV.t));\
+		gl_FragColor = texture2D(texture, vec2(pixelUV.s, pixelUV.t));\
 		\
 		if(gl_FragColor.a < 0.3)\
 		{\
@@ -80,7 +80,7 @@ function Model()
 	gl.enableVertexAttribArray(this.shader.program.vertexUVAttribute);
 
 	//The sampler
-	this.shader.program.samplerUniform = gl.getUniformLocation(this.shader.program, "uSampler");
+	this.shader.program.textureSampler = gl.getUniformLocation(this.shader.program, "texture");
 	this.shader.program.viewMatrixUniform = gl.getUniformLocation(this.shader.program, "view");
 	this.shader.program.projectionMatrixUniform = gl.getUniformLocation(this.shader.program, "projection");
 	this.shader.program.modelMatrixUniform = gl.getUniformLocation(this.shader.program, "model");
@@ -118,7 +118,7 @@ Model.prototype.draw = function(camera, scene)
 		//Set texture
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, this.material[this.faceMaterial[i+2]].texture);
-		gl.uniform1i(this.shader.program.samplerUniform, 0);
+		gl.uniform1i(this.shader.program.textureSampler, 0);
 		
 		//Draw the triangles
 		gl.drawElements(gl.TRIANGLES, this.faceMaterial[i+1], gl.UNSIGNED_SHORT, 0);
