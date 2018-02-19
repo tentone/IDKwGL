@@ -8,13 +8,6 @@ function Vector4(x, y, z, w)
 	this.w = w;
 }
 
-
-//Returns a new vector3 with values without w
-Vector4.prototype.toVector3 = function()
-{
-	return new Vector3(this.x, this.y, this.z);
-}
-
 Vector4.prototype.copy = function(vector)
 {
 	this.x = vector.x;

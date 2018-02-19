@@ -21,6 +21,7 @@ function PerspectiveCamera(canvas, fov, zoom)
 
 	//Camera Transformation Matrix
 	this.projectionMatrix = new Matrix4();
+	this.inverseTransformationMatrix = new Matrix4();
 	this.transformationMatrix = new Matrix4();
 
 	this.updateProjectionMatrix();
@@ -31,11 +32,11 @@ PerspectiveCamera.UP = new Vector3(0, 1, 0);
 //Calculate camera transformation Matrix
 PerspectiveCamera.prototype.updateMatrix = function()
 {
-	//var temp = new Matrix4();
-	//temp.makeRotationFromEuler(this.rotation, "YZX");
+	this.inverseTransformationMatrix.makeRotationFromEuler(this.rotation, "YZX");
+	this.inverseTransformationMatrix.scale(this.scale);
+	this.inverseTransformationMatrix.setPosition(this.position);
 	
-	this.transformationMatrix.setPosition(this.position);
-	this.transformationMatrix.getInverse(this.transformationMatrix);
+	this.transformationMatrix.getInverse(this.inverseTransformationMatrix);
 }
 
 //Calculate camera projection Matrix

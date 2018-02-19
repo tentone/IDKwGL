@@ -46,9 +46,6 @@ Mouse.LEFT = 0;
 Mouse.MIDDLE = 1;
 Mouse.RIGHT = 2;
 
-//Mouse Configuration Values
-Mouse.SENSITIVITY = 0.2;
-
 //Check if Mouse button is pressed
 Mouse.prototype.buttonPressed = function(button)
 {

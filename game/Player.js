@@ -5,7 +5,7 @@ function Player(canvas)
 	//Player Camera and rotation
 	this.camera = new PerspectiveCamera(canvas, 70, 1);
 	this.camera.position.set(0, 2, 0);
-	this.rotation = new Vector2(0.0, 0.0); //Horizontal / Vertical
+	this.rotation = new Vector2(0, 0); //Horizontal / Vertical
 	
 	//Player Body
 	this.box = new Box();
@@ -19,9 +19,7 @@ function Player(canvas)
 //Update player
 Player.prototype.update = function(world)
 {
-	var angle = Conversion.degreesToRadians(this.rotation.x);
-
-	var speedWalk = 0.5;
+	var speedWalk = 0.4;
 	var speedJump = 1.4;
 
 	//Keyboard input
@@ -33,25 +31,26 @@ Player.prototype.update = function(world)
 	//Move WASD
 	if(App.keyboard.isKeyPressed(Keyboard.W))
 	{
-		this.body.speed.z -= speedWalk * Math.cos(angle);
-		this.body.speed.x += speedWalk * Math.sin(angle);
+		this.body.speed.z -= speedWalk * Math.cos(this.rotation.x);
+		this.body.speed.x -= speedWalk * Math.sin(this.rotation.x);
 	}
 	if(App.keyboard.isKeyPressed(Keyboard.S))
 	{
-		this.body.speed.z += speedWalk * Math.cos(angle);
-		this.body.speed.x -= speedWalk * Math.sin(angle);
+		this.body.speed.z += speedWalk * Math.cos(this.rotation.x);
+		this.body.speed.x += speedWalk * Math.sin(this.rotation.x);
 	}
 
-	angle += MathUtils.PID2;
-	if(App.keyboard.isKeyPressed(Keyboard.A))
-	{
-		this.body.speed.z += speedWalk * Math.cos(angle);
-		this.body.speed.x -= speedWalk * Math.sin(angle);
-	}
+	var rotation = this.rotation.x + MathUtils.PID2;
+
 	if(App.keyboard.isKeyPressed(Keyboard.D))
 	{
-		this.body.speed.z -= speedWalk * Math.cos(angle);
-		this.body.speed.x += speedWalk * Math.sin(angle);
+		this.body.speed.z += speedWalk * Math.cos(rotation);
+		this.body.speed.x += speedWalk * Math.sin(rotation);
+	}
+	if(App.keyboard.isKeyPressed(Keyboard.A))
+	{
+		this.body.speed.z -= speedWalk * Math.cos(rotation);
+		this.body.speed.x -= speedWalk * Math.sin(rotation);
 	}
 
 	//Jump
@@ -61,21 +60,22 @@ Player.prototype.update = function(world)
 	}
 
 	//Camera Mouse Movement
-	this.rotation.x += Mouse.SENSITIVITY * App.mouse.posDiff.x;
-	this.rotation.y += Mouse.SENSITIVITY * App.mouse.posDiff.y;
+	this.rotation.x -= 0.001 * App.mouse.posDiff.x;
+	
+	/*this.rotation.y -= 0.001 * App.mouse.posDiff.y;
 
 	//Limit Vertical Rotation
-	if(this.rotation.y < -90)
+	if(this.rotation.y < -1.57)
 	{
-		this.rotation.y = -90;
+		this.rotation.y = -1.57;
 	}
-	else if(this.rotation.y > 90)
+	else if(this.rotation.y > 1.57)
 	{
-		this.rotation.y = 90;
-	}
+		this.rotation.y = 1.57;
+	}*/
 	
 	//Set camera rotation
-	this.camera.rotation.y = this.rotation.x;//, this.rotation.y);
+	this.camera.rotation.y = this.rotation.x;
 	
 	//Update player as a body
 	this.body.update(world);

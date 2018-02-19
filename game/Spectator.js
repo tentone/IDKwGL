@@ -47,8 +47,8 @@ Spectator.prototype.update = function()
 	}
 
 	//Camera Mouse Movement
-	this.rotation.x += Mouse.SENSITIVITY * App.mouse.posDiff.x;
-	this.rotation.y += Mouse.SENSITIVITY * App.mouse.posDiff.y;
+	this.rotation.x += 0.001 * App.mouse.posDiff.x;
+	this.rotation.y += 0.001 * App.mouse.posDiff.y;
 
 	//Camera Move UP/DOWN
 	if(App.keyboard.isKeyPressed(Keyboard.SPACEBAR))
@@ -61,13 +61,13 @@ Spectator.prototype.update = function()
 	}
 
 	//Limit Vertical Rotation
-	if(this.rotation.y < -90)
+	if(this.rotation.y < -1.57)
 	{
-		this.rotation.y = -90;
+		this.rotation.y = -1.57;
 	}
-	else if(this.rotation.y > 90)
+	else if(this.rotation.y > 1.57)
 	{
-		this.rotation.y = 90;
+		this.rotation.y = 1.57;
 	}
 
 	//Set camera rotation

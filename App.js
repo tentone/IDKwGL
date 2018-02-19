@@ -134,7 +134,7 @@ App.loop = function()
 	App.time += App.deltaTime;
 
 	//Call loop again
-	setTimeout(App.loop, 0);
+	requestAnimationFrame(App.loop, 0);
 }
 
 // Called every time page is resized
