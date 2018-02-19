@@ -50,7 +50,7 @@ Body.prototype.update = function(world)
 		//Collision on X axis
 		for(var i = 0; i < world.body.length; i++)
 		{
-			if(this.getId() != world.body[i].getId())
+			if(this.getId() !== world.body[i].getId())
 			{
 				if(this.geometry.willCollide(new Vector3(this.speed.x,0,0), world.body[i].getGeometry()))
 				{
@@ -71,7 +71,7 @@ Body.prototype.update = function(world)
 		//Collision on Y axis
 		for(i = 0; i < world.body.length; i++)
 		{
-			if(this.getId() != world.body[i].getId())
+			if(this.getId() !== world.body[i].getId())
 			{
 				if(this.geometry.willCollide(new Vector3(0,this.speed.y,0), world.body[i].getGeometry()))
 				{
@@ -92,7 +92,7 @@ Body.prototype.update = function(world)
 		//Collision on Z axis
 		for(i = 0; i < world.body.length; i++)
 		{
-			if(this.getId() != world.body[i].getId())
+			if(this.getId() !== world.body[i].getId())
 			{
 				if(this.geometry.willCollide(new Vector3(0,0,this.speed.z), world.body[i].getGeometry()))
 				{

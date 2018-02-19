@@ -174,7 +174,7 @@ Text.prototype.draw = function(camera, scene)
 	gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 	
 	//Clone Camera Global transformation Matrix and multiply
-	var camTransformationMatrix = Matrix.mulTranspose(this.transformationMatrix, camera.transformationMatrix);
+	var camTransformationMatrix = Matrix.mul(this.transformationMatrix, camera.transformationMatrix).transpose();
 
 	//Normal matrix
 	var normalMatrix = MathUtils.matrix3Invert(camTransformationMatrix);

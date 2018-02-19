@@ -4,6 +4,7 @@ function Player(canvas)
 {
 	//Player Camera and rotation
 	this.camera = new PerspectiveCamera(canvas, 70, 1);
+	this.camera.position.set(0, 2, 0);
 	this.rotation = new Vector2(0.0, 0.0); //Horizontal / Vertical
 	
 	//Player Body
@@ -32,25 +33,25 @@ Player.prototype.update = function(world)
 	//Move WASD
 	if(App.keyboard.isKeyPressed(Keyboard.W))
 	{
-		this.body.speed.z += speedWalk * Math.cos(angle);
-		this.body.speed.x -= speedWalk * Math.sin(angle);
+		this.body.speed.z -= speedWalk * Math.cos(angle);
+		this.body.speed.x += speedWalk * Math.sin(angle);
 	}
 	if(App.keyboard.isKeyPressed(Keyboard.S))
 	{
-		this.body.speed.z -= speedWalk * Math.cos(angle);
-		this.body.speed.x += speedWalk * Math.sin(angle);
+		this.body.speed.z += speedWalk * Math.cos(angle);
+		this.body.speed.x -= speedWalk * Math.sin(angle);
 	}
 
 	angle += MathUtils.PID2;
 	if(App.keyboard.isKeyPressed(Keyboard.A))
 	{
-		this.body.speed.z -= speedWalk * Math.cos(angle);
-		this.body.speed.x += speedWalk * Math.sin(angle);
+		this.body.speed.z += speedWalk * Math.cos(angle);
+		this.body.speed.x -= speedWalk * Math.sin(angle);
 	}
 	if(App.keyboard.isKeyPressed(Keyboard.D))
 	{
-		this.body.speed.z += speedWalk * Math.cos(angle);
-		this.body.speed.x -= speedWalk * Math.sin(angle);
+		this.body.speed.z -= speedWalk * Math.cos(angle);
+		this.body.speed.x += speedWalk * Math.sin(angle);
 	}
 
 	//Jump
@@ -74,8 +75,8 @@ Player.prototype.update = function(world)
 	}
 	
 	//Set camera rotation
-	this.camera.setRotation(this.rotation.x, this.rotation.y);
-
+	this.camera.rotation.y = this.rotation.x;//, this.rotation.y);
+	
 	//Update player as a body
 	this.body.update(world);
 	this.camera.position.set(this.body.geometry.position.x, (this.body.geometry.position.y+10), this.body.geometry.position.z);

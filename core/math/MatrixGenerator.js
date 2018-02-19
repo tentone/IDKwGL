@@ -17,7 +17,6 @@ MatrixGenerator.translation = function(translateX, translateY, translateZ)
 //Creates rotation from direction vector (Vector3)
 MatrixGenerator.directionMatrix = function(direction)
 {
-
 	var mat = new Matrix(4,4);
 	var up = new Vector3(0,1,0);
 
@@ -48,7 +47,7 @@ MatrixGenerator.rotationMatrix = function(degreesX, degreesY, degreesZ)
 	var mat = new Matrix(4,4);
 
 	//Individual components
-	if(degreesZ != 0)
+	if(degreesZ !== 0)
 	{
 		var temp = new Matrix(4,4);
 		var radians = Conversion.degreesToRadians(degreesZ);
@@ -60,7 +59,7 @@ MatrixGenerator.rotationMatrix = function(degreesX, degreesY, degreesZ)
 
 		mat.mul(temp);
 	}
-	if(degreesY != 0)
+	if(degreesY !== 0)
 	{
 		var temp = new Matrix(4,4);
 		var radians = Conversion.degreesToRadians(degreesY);
@@ -72,7 +71,7 @@ MatrixGenerator.rotationMatrix = function(degreesX, degreesY, degreesZ)
 
 		mat.mul(temp);
 	}
-	if(degreesX != 0)
+	if(degreesX !== 0)
 	{
 		var temp = new Matrix(4,4);
 		var radians = Conversion.degreesToRadians(degreesX);

@@ -35,7 +35,7 @@ function Model()
 	this.updateBuffers();
 
 	//Tranformation Matrix
-	this.transformationMatrix = new Matrix(4,4);
+	this.transformationMatrix = new Matrix4();
 
 	//Shader
 	var vertex = "attribute vec3 vertexPosition;\
@@ -128,10 +128,9 @@ Model.prototype.draw = function(camera, scene)
 //Recalculate Tranformation Matrix (Should be called after changing position)
 Model.prototype.updateMatrix = function()
 {
-	this.transformationMatrix = MatrixGenerator.scalingMatrix(this.scale.x, this.scale.y, this.scale.z);
-	this.transformationMatrix.mul(MatrixGenerator.translation(-this.origin.x, -this.origin.y, -this.origin.z));
-	this.transformationMatrix.mul(MatrixGenerator.rotationMatrix(this.rotation.x, this.rotation.y, this.rotation.z));
-	this.transformationMatrix.mul(MatrixGenerator.translation(this.position.x, this.position.y, this.position.z));
+	this.transformationMatrix.makeRotationFromEuler(this.rotation, "YZX");
+	this.transformationMatrix.scale(this.scale);
+	this.transformationMatrix.setPosition(this.position);
 }
 
 //Recreate data buffers (Should be called after structural changes)
@@ -323,10 +322,10 @@ Model.prototype.loadOBJ = function(data)
 			}
 
 			//Check if material was found and add to list
-			if(j != this.material.length)
+			if(j !== this.material.length)
 			{
 				//If faces material has elements add last index
-				if(this.faceMaterial.length != 0)
+				if(this.faceMaterial.length !== 0)
 				{
 					this.faceMaterial[this.faceMaterial.length-2] = this.faces.length/3;
 				}
@@ -355,7 +354,7 @@ Model.prototype.loadOBJ = function(data)
 		this.uvs.push(1.0);
 
 		//Add Texture Component to all faces
-		for(i = 1; i < this.faces.length; i+=3)
+		for(var i = 1; i < this.faces.length; i+=3)
 		{
 			if(isNaN(this.faces[i]))
 			{

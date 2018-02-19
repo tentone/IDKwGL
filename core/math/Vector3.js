@@ -13,6 +13,11 @@ Vector3.cross = function(a, b)
     return new Vector3(a.y*b.z - a.z*b.y, a.z*b.x - a.x*b.z, a.x*b.y - a.y*b.x);
 }
 
+Vector3.prototype.cross = function(a, b)
+{
+	this.set(a.y*b.z - a.z*b.y, a.z*b.x - a.x*b.z, a.x*b.y - a.y*b.x);
+};
+
 Vector3.prototype.copy = function(vector)
 {
 	this.x = vector.x;
@@ -88,6 +93,11 @@ Vector3.prototype.mulConst = function(val)
 	this.y *= val;
 	this.z *= val;
 }
+
+Vector3.prototype.lengthSquared = function()
+{
+	return this.x * this.x + this.y * this.y + this.z * this.z;
+};
 
 //String info
 Vector3.prototype.toString = function()

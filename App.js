@@ -20,6 +20,7 @@ include("core/math/Vector2.js");
 include("core/math/Vector3.js");
 include("core/math/Vector4.js");
 include("core/math/Matrix.js");
+include("core/math/Matrix4.js");
 include("core/math/Conversion.js");
 include("core/math/MathsUtils.js");
 include("core/math/Color.js");

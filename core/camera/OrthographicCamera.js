@@ -11,20 +11,20 @@ function OrthographicCamera(canvas, height, width)
 	{
 		if(height === undefined)
 		{
-			this.aspectRatio = 1;
+			this.aspect = 1;
 			this.screenSize = new Vector2(1, 1);
 			this.size = new Vector2(1, 1);
 		}
 		else
 		{
-			this.aspectRatio = canvas.width/canvas.height; //x/y
+			this.aspect = canvas.width/canvas.height; //x/y
 			this.screenSize = new Vector2(canvas.width, canvas.height);
-			this.size = new Vector2(height*this.aspectRatio, height);
+			this.size = new Vector2(height*this.aspect, height);
 		}
 	}
 	else
 	{
-		this.aspectRatio = width/height; //x/y
+		this.aspect = width/height; //x/y
 		this.screenSize = new Vector2(width, height);
 		this.size = new Vector2(width, height);
 	}
@@ -34,58 +34,37 @@ function OrthographicCamera(canvas, height, width)
 	this.rotation = 0; //Camera Rotation
 	this.zoom = 1.0; //Camera Zoom
 
-	//Camera Projetion Matrix
-	this.projectionMatrix = OrthographicCamera.orthogonalProjectionMatrix(-this.size.x, this.size.x, -this.size.y, this.size.y, -this.size.y, this.size.y);
-
-	//Camera Transformation Matrix
-	this.transformationMatrix = new Matrix(4,4);
+	//Camera projection and transformation matrices
+	this.projectionMatrix = new Matrix4();
+	this.transformationMatrix = new Matrix4();
 }
 
 //Call before start a frame on this camera
 OrthographicCamera.prototype.updateMatrix = function()
 {
-	//Calculate Camera Transformation Matrix
-	this.transformationMatrix = MatrixGenerator.translation(this.position.x, this.position.y, this.position.z);
-	this.transformationMatrix.mul(MatrixGenerator.rotationMatrix(0, 0, this.rotation));
+	this.transformationMatrix.setPosition(this.position);
+	this.transformationMatrix.getInverse(this.transformationMatrix);
+}
+
+//Calculate camera projection Matrix
+OrthographicCamera.prototype.updateProjectionMatrix = function()
+{
+	this.projectionMatrix.makeOrthographic(-this.size.x, this.size.x, this.size.y, -this.size.y, near, far);
 }
 
 //Call every time the canvas is resized
 OrthographicCamera.prototype.resize = function(x, y)
 {
-	this.aspectRatio = x / y;
+	this.aspect = x / y;
 	this.screenSize.set(x, y);
-	this.size = new Vector2(this.size.y*this.aspectRatio, this.size.y);
+	this.size = new Vector2(this.size.y * this.aspect, this.size.y);
 
-	//Calculate Projection Matrix
-	this.projectionMatrix = OrthographicCamera.orthogonalProjectionMatrix(-this.size.x, this.size.x, -this.size.y, this.size.y, -this.size.y, this.size.y);
-}
-
-//Set custom projection matrix to camera
-OrthographicCamera.prototype.setProjectionMatrix = function(matrix)
-{
-	this.projectionMatrix = matrix;
+	this.updateProjectionMatrix();
 }
 
 //Create string with camera info
 OrthographicCamera.prototype.toString = function()
 {
-	return "OrthographicCamera (ScreenSize:"+this.screenSize.toString()+" VirtualSize:"+this.size.toString()+" AspectRatio:"+this.aspectRatio+")";
+	return "OrthographicCamera (ScreenSize:"+this.screenSize.toString()+" VirtualSize:"+this.size.toString()+" AspectRatio:"+this.aspect+")";
 }
 
-//Orthogonal Projection Matrix Generator (Angel / Shreiner)
-OrthographicCamera.orthogonalProjectionMatrix = function(left, right, bottom, top, near, far)
-{
-	var w = right - left;
-	var h = top - bottom;
-	var d = far - near;
-
-	var result = new Matrix(4,4);
-	result.matrix[0][0] = 2.0 / w;
-	result.matrix[1][1] = 2.0 / h;
-	result.matrix[2][2] = -2.0 / d;
-	result.matrix[0][3] = -(left + right) / w;
-	result.matrix[1][3] = -(top + bottom) / h;
-	result.matrix[2][3] = -(near + far) / d;
-
-	return result;
-}

@@ -96,7 +96,7 @@ Sprite.prototype.draw = function(camera, scene)
 	}
 
 	//Clone Camera Global transformation Matrix and multiply
-	var camTransformationMatrix = Matrix.mulTranspose(this.transformationMatrix, camera.transformationMatrix);
+	var camTransformationMatrix = Matrix.mul(this.transformationMatrix, camera.transformationMatrix).transpose();
 	
 	//Normal matrix
 	var normalMatrix = MathUtils.matrix3Invert(camTransformationMatrix);

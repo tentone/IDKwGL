@@ -1,10 +1,10 @@
 "use strict";
 
-//Constructor creates indentity matrix if sizeX equals sizeY
-function Matrix(sizeX, sizeY)
+//Constructor creates indentity matrix if width equals height
+function Matrix(width, height)
 {
 	this.matrix = [];
-	this.size = new Vector2(sizeX, sizeY);
+	this.size = new Vector2(width, height);
 
 	for(var i = 0; i < this.size.x; i++)
 	{
@@ -17,7 +17,7 @@ function Matrix(sizeX, sizeY)
 
 	if(this.size.x === this.size.y)
 	{
-		for(i = 0; i < this.size.x; i++)
+		for(var i = 0; i < this.size.x; i++)
 		{
 			this.matrix[i][i] = 1;
 		}
@@ -52,7 +52,7 @@ Matrix.prototype.equals = function(val)
 	{
 		for(var j = 0; j < this.size.y; j++)
 		{
-			if(this.matrix[i][j] != val.matrix[i][j])
+			if(this.matrix[i][j] !== val.matrix[i][j])
 			{
 				return false;
 			}
@@ -65,32 +65,29 @@ Matrix.prototype.equals = function(val)
 //Convert to array collum oriented
 Matrix.prototype.flatten = function()
 {
-	var mat = this.clone();
-	mat.transpose();
+	var array = new Float32Array(this.size.x * this.size.y);
+	var k = 0;
 
-	var array = [];
-	var i, j;
-	
-	for(i = 0; i < this.size.y; i++)
+	for(var i = 0; i < this.size.y; i++)
 	{
-		for(j = 0; j < this.size.x; j++)
+		for(var j = 0; j < this.size.x; j++)
 		{
-			array[i*this.size.x + j] = this.matrix[i][j];
+			array[k] = this.matrix[i][j];
+			k++;
 		}
 	}
 
-	return new Float32Array(array);
+	return array;
 }
 
 //Clone matrix into new object
 Matrix.prototype.clone = function()
 {
 	var mat = new Matrix(this.size.x, this.size.y);
-	var i, j;
 
-	for(i = 0; i < this.size.x; i++)
+	for(var i = 0; i < this.size.x; i++)
 	{
-		for(j = 0; j < this.size.y; j++)
+		for(var j = 0; j < this.size.y; j++)
 		{
 			mat.matrix[i][j] = this.matrix[i][j];
 		}
@@ -103,12 +100,11 @@ Matrix.prototype.clone = function()
 Matrix.prototype.transpose = function()
 {
 	var mat = [];
-	var i, j;
-
-	for(i = 0; i < this.size.y; i++)
+	
+	for(var i = 0; i < this.size.y; i++)
 	{
 		mat[i] = [];
-		for(j = 0; j < this.size.x; j++)
+		for(var j = 0; j < this.size.x; j++)
 		{
 			mat[i][j] = this.matrix[j][i];
 		}
@@ -123,7 +119,7 @@ Matrix.prototype.transpose = function()
 //Multiply Matrix
 Matrix.prototype.mul = function(val)
 {
-	if(this.size.x != val.size.y)
+	if(this.size.x !== val.size.y)
 	{
 		throw "Matrix cant be multiplied (check matrix size)";
 	}
@@ -147,37 +143,10 @@ Matrix.prototype.mul = function(val)
 	this.size.y = mat.size.y;
 }
 
-//Multiply Matrix and transpose after multiplication
-Matrix.prototype.mulTranspose = function(val)
-{
-	if(this.size.x != val.size.y)
-	{
-		throw "Matrix cant be multiplied (check matrix size)";
-	}
-
-	var mat = new Matrix(this.size.y, val.size.x);
-	for(var i = 0; i < this.size.y; i++)
-	{
-		for(var j = 0; j < val.size.x; j++)
-		{
-			var sum = 0;
-			for(var k = 0; k < this.size.x; k++)
-			{
-				sum += this.matrix[k][i] * val.matrix[j][k];
-			}
-			mat.matrix[i][j] = sum;
-		}
-	}
-
-	this.matrix = mat.matrix;
-	this.size.x = mat.size.x;
-	this.size.y = mat.size.y;
-}
-
 //Add to matrix (have to be same size)
 Matrix.prototype.add = function(val)
 {
-	if(val.size.x != this.size.x || val.size.y != this.size.y)
+	if(val.size.x !== this.size.x || val.size.y !== this.size.y)
 	{
 		throw "Matrix has different size";
 	}
@@ -194,7 +163,7 @@ Matrix.prototype.add = function(val)
 //Sub from matrix (have to be same size)
 Matrix.prototype.sub = function(val)
 {
-	if(val.size.x != this.size.x || val.size.y != this.size.y)
+	if(val.size.x !== this.size.x || val.size.y !== this.size.y)
 	{
 		throw "Matrix has different size";
 	}
@@ -241,7 +210,7 @@ Matrix.prototype.toString = function()
 //Multiply Matrix and store retult in a new one
 Matrix.mul = function(a, b)
 {
-	if(a.size.x != b.size.y)
+	if(a.size.x !== b.size.y)
 	{
 		throw "Matrix cant be multiplied (check matrix size)";
 		return null;
@@ -258,32 +227,6 @@ Matrix.mul = function(a, b)
 				sum += a.matrix[k][i] * b.matrix[j][k];
 			}
 			mat.matrix[j][i] = sum;
-		}
-	}
-
-	return mat;
-}
-
-//Multiply Matrix and transpose after multiplication
-Matrix.mulTranspose = function(a, b)
-{
-	if(a.size.x != b.size.y)
-	{
-		throw "Matrix cant be multiplied (check matrix size)";
-		return null;
-	}
-
-	var mat = new Matrix(a.size.y, b.size.x);
-	for(var i = 0; i < a.size.y; i++)
-	{
-		for(var j = 0; j < b.size.x; j++)
-		{
-			var sum = 0;
-			for(var k = 0; k < a.size.x; k++)
-			{
-				sum += a.matrix[k][i] * b.matrix[j][k];
-			}
-			mat.matrix[i][j] = sum;
 		}
 	}
 
