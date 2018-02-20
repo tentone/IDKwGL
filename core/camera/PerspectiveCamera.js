@@ -1,29 +1,25 @@
 "use strict";
 
 //Prespective camera constructor from canvas fov and zoom values
-function PerspectiveCamera(canvas, fov, zoom)
+function PerspectiveCamera(aspect, fov, zoom)
 {
-	//Camera type
 	this.type = Camera.PERSPECTIVE;
 
-	//Camera Screen Interface
-	this.aspect = canvas.width/canvas.height; //x/y
-	this.screenSize = new Vector2(canvas.width, canvas.height);
-
-	//Camera Movement
-	this.position = new Vector3(0,0,0); //Position
-	this.rotation = new Vector3(0,0,0); //Rotation in degres
+	//Position
+	this.position = new Vector3(0,0,0);
+	this.rotation = new Vector3(0,0,0);
 	this.scale = new Vector3(1,1,1);
 
-	//Camera Properties
-	this.zoom = zoom;
+	//Atributes
+	this.aspect = aspect; //x/y
 	this.fov = fov;
 
-	//Camera Transformation Matrix
+	//Matrices
 	this.projectionMatrix = new Matrix4();
 	this.inverseTransformationMatrix = new Matrix4();
 	this.transformationMatrix = new Matrix4();
 
+	//Update projection
 	this.updateProjectionMatrix();
 }
 
@@ -53,23 +49,16 @@ PerspectiveCamera.prototype.updateProjectionMatrix = function()
 	this.projectionMatrix.makePerspective(left, left + width, top, top - height, near, far);
 }
 
-//Change Camera Field of View
-PerspectiveCamera.prototype.setFov = function(fov)
-{
-	this.fov = fov;
-	this.updateProjectionMatrix();
-}
-
 //Call every time the canvas is resized
 PerspectiveCamera.prototype.resize = function(x, y)
 {
 	this.aspect = x / y;
-	this.screenSize.set(x, y);
+
 	this.updateProjectionMatrix();
 }
 
 //Create Info String
 PerspectiveCamera.prototype.toString = function()
 {
-	return "PerspectiveCamera\nPosition:"+this.position.toString()+"\nRotation:"+this.rotation.toString()+"\nFOV:"+this.fov+"\nScreenSize:"+this.screenSize.toString()+"\nAspectRatio:"+this.aspect;
+	return "PerspectiveCamera\nPosition:"+this.position.toString()+"\nRotation:"+this.rotation.toString()+"\nFOV:"+this.fov+"\nAspectRatio:"+this.aspect;
 }

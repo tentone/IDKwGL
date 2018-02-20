@@ -8,7 +8,7 @@ include("core/Shader.js");
 include("core/materials/Material.js");
 
 include("core/object/Sprite.js");
-include("core/object/Model.js");
+include("core/object/Mesh.js");
 include("core/object/Text.js");
 include("core/object/particle/Particle.js");
 include("core/object/particle/ParticleEmitter.js");
@@ -33,7 +33,7 @@ include("core/input/Key.js");
 include("core/input/Keyboard.js");
 include("core/input/Mouse.js");
 
-include("core/utils/ModelUtils.js");
+include("core/utils/GeometryUtils.js");
 
 include("core/light/Light.js");
 include("core/light/DirectionalLight.js");
@@ -56,7 +56,6 @@ include("game/Player.js");
 include("game/GameObject.js");
 include("game/Referencial.js");
 include("game/screen/Arena.js");
-include("game/screen/Test2D.js");
 include("game/screen/ArenaPhysics.js");
 
 include("Main.js");

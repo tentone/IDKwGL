@@ -17,7 +17,7 @@ function ArenaPhysics()
 	this.sceneGrass = new Scene();
 
 	//Skybox
-	this.skybox = new Model();
+	this.skybox = new Mesh();
 	this.skybox.loadMTL(App.readFile("data/models/skybox/skybox.mtl"), "data/models/skybox");
 	this.skybox.loadOBJ(App.readFile("data/models/skybox/skybox.obj"));
 	this.skybox.scale.set(800,800,800);
@@ -26,7 +26,7 @@ function ArenaPhysics()
 	this.scene.add(this.skybox);
 
 	//Floor
-	this.model = Model.cube();
+	this.model = Mesh.cube();
 	this.model.setTexture(Texture.createTextureRepeat(gl, "data/texture/grass.jpg"));
 	this.model.mulTextureCoords(10, 10);
 	this.model.position.set(0, -100, 0);
@@ -36,7 +36,7 @@ function ArenaPhysics()
 	this.world.addBody(new GameObject(this.model));
 	
 	//Walls
-	this.model = Model.cube();
+	this.model = Mesh.cube();
 	this.model.setTexture(Texture.createTextureRepeat(gl, "data/texture/wall.png"));
 	this.model.mulTextureCoords(20, 1);
 	this.model.position.set(0, 0, -400);
@@ -45,7 +45,7 @@ function ArenaPhysics()
 	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
-	this.model = Model.cube();
+	this.model = Mesh.cube();
 	this.model.setTexture(Texture.createTexture(gl, "data/texture/wall.png"));
 	this.model.mulTextureCoords(20, 1);
 	this.model.position.set(0, 0, 400);
@@ -54,7 +54,7 @@ function ArenaPhysics()
 	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
-	this.model = Model.cube();
+	this.model = Mesh.cube();
 	this.model.setTexture(Texture.createTexture(gl, "data/texture/wall.png"));
 	this.model.mulTextureCoords(20, 1);
 	this.model.position.set(-400, 0, 0);
@@ -63,7 +63,7 @@ function ArenaPhysics()
 	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
-	this.model = Model.cube();
+	this.model = Mesh.cube();
 	this.model.setTexture(Texture.createTexture(gl, "data/texture/wall.png"));
 	this.model.mulTextureCoords(20, 1);
 	this.model.position.set(400, 0, 0);
@@ -85,7 +85,7 @@ ArenaPhysics.prototype.update = function()
 	time++;
 	if(time % 5 === 0)
 	{
-		this.model = Model.cube();
+		this.model = Mesh.cube();
 		this.model.setTexture(Texture.createTexture(gl, "data/texture/woodBox.jpg"));
 		this.model.position.set(MathUtils.randomMod()*400,  MathUtils.randomMod()*300, MathUtils.randomMod()*400);
 		this.model.scale.set(5,5,5);

@@ -1,9 +1,9 @@
 "use strict";
 
-function ModelUtils(){}
+function GeometryUtils(){}
 
 //Moving vertices to the spherical surface of radius 1
-ModelUtils.moveToSphericalSurface = function(coords)
+GeometryUtils.moveToSphericalSurface = function(coords)
 {
 	for(var i = 0; i < coords.length; i += 3)
 	{
@@ -16,7 +16,7 @@ ModelUtils.moveToSphericalSurface = function(coords)
 }
 
 //Subdivide triangles from model
-ModelUtils.midPointRefinement = function(model, recursionDepth)
+GeometryUtils.midPointRefinement = function(model, recursionDepth)
 {
 	//Copying
 	var origCoords = model.vertex.slice();
@@ -32,7 +32,7 @@ ModelUtils.midPointRefinement = function(model, recursionDepth)
 	for(var i = 0; i < origCoords.length; i += 9)
 	{
 		// Call the recursive subdivision function
-		ModelUtils.recSubdivisionMidPoint(new Vector3(origCoords[i],origCoords[i+1],origCoords[i+2]),
+		GeometryUtils.recSubdivisionMidPoint(new Vector3(origCoords[i],origCoords[i+1],origCoords[i+2]),
 										  new Vector3(origCoords[i+3],origCoords[i+4],origCoords[i+5]),
 										  new Vector3(origCoords[i+6],origCoords[i+7],origCoords[i+8]),
 										  new Vector3(origColors[i],origColors[i+1],origColors[i+2]),
@@ -43,7 +43,7 @@ ModelUtils.midPointRefinement = function(model, recursionDepth)
 }
 
 //Recursive triangle subdivision, using the midpoints of edges
-ModelUtils.recSubdivisionMidPoint = function(v1, v2, v3, c1, c2, c3, model, recursionDepth)
+GeometryUtils.recSubdivisionMidPoint = function(v1, v2, v3, c1, c2, c3, model, recursionDepth)
 {
 	// Recursive midpoint subdivision of one triangle
 	if(recursionDepth === 0)
@@ -70,9 +70,9 @@ ModelUtils.recSubdivisionMidPoint = function(v1, v2, v3, c1, c2, c3, model, recu
 		var c31 = MathUtils.computeMidPoint(c3, c1);
 		
 		// 4 recursive calls 
-		ModelUtils.recSubdivisionMidPoint(v1, mid12, mid31, c1, c12, c31, model, recursionDepth - 1);
-		ModelUtils.recSubdivisionMidPoint(v2, mid23, mid12, c2, c23, c12, model, recursionDepth - 1);
-		ModelUtils.recSubdivisionMidPoint(v3, mid31, mid23, c3, c31, c23, model, recursionDepth - 1);
-		ModelUtils.recSubdivisionMidPoint(mid12, mid23, mid31, c12, c23, c31, model, recursionDepth - 1);
+		GeometryUtils.recSubdivisionMidPoint(v1, mid12, mid31, c1, c12, c31, model, recursionDepth - 1);
+		GeometryUtils.recSubdivisionMidPoint(v2, mid23, mid12, c2, c23, c12, model, recursionDepth - 1);
+		GeometryUtils.recSubdivisionMidPoint(v3, mid31, mid23, c3, c31, c23, model, recursionDepth - 1);
+		GeometryUtils.recSubdivisionMidPoint(mid12, mid23, mid31, c12, c23, c31, model, recursionDepth - 1);
 	}
 }

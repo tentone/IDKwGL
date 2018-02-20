@@ -1,9 +1,9 @@
 "use strict";
 
 //Empty model constructor
-function Model()
+function Mesh()
 {
-	//Model Data
+	//Mesh Data
 	this.vertex = []; //Vertex
 	this.uvs = []; //Vertex Texture
 	this.normals = []; //Vertex Normals
@@ -26,7 +26,6 @@ function Model()
 	this.texture = Texture.generateSolidColorTexture(gl, Color.RED);
 
 	//Transformation
-	this.origin = new Vector3(0,0,0);
 	this.position = new Vector3(0,0,0);
 	this.rotation = new Vector3(0,0,0);
 	this.scale = new Vector3(1,1,1);
@@ -86,15 +85,10 @@ function Model()
 	this.shader.program.modelMatrixUniform = gl.getUniformLocation(this.shader.program, "model");
 }
 
-//Draw Model to camera
-Model.prototype.draw = function(camera, scene)
+//Draw Mesh to camera
+Mesh.prototype.draw = function(camera, scene)
 {
 	gl.useProgram(this.shader.program);
-
-	//Update matrices
-	camera.updateMatrix();
-	camera.updateProjectionMatrix();
-	this.updateMatrix();
 
 	//Transformation matrices
 	gl.uniformMatrix4fv(gl.getUniformLocation(this.shader.program, "projection"), false, camera.projectionMatrix.flatten());
@@ -126,7 +120,7 @@ Model.prototype.draw = function(camera, scene)
 }
 
 //Recalculate Tranformation Matrix (Should be called after changing position)
-Model.prototype.updateMatrix = function()
+Mesh.prototype.updateMatrix = function()
 {
 	this.transformationMatrix.makeRotationFromEuler(this.rotation, "YZX");
 	this.transformationMatrix.scale(this.scale);
@@ -134,41 +128,41 @@ Model.prototype.updateMatrix = function()
 }
 
 //Recreate data buffers (Should be called after structural changes)
-Model.prototype.updateBuffers = function()
+Mesh.prototype.updateBuffers = function()
 {
 	//Vertex
 	this.vertexBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertex), gl.STATIC_DRAW);
 	this.vertexBuffer.itemSize = 3;
 	this.vertexBuffer.numItems = this.vertex.length/3;						
+	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertex), gl.STATIC_DRAW);
 
 	//Texture
 	this.textureCoordBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.uvs), gl.STATIC_DRAW);
 	this.textureCoordBuffer.itemSize = 2;
 	this.textureCoordBuffer.numItems = this.uvs.length/2;
+	gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.uvs), gl.STATIC_DRAW);
 
 	//Normals
 	this.normalBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normals), gl.STATIC_DRAW);
 	this.normalBuffer.itemSize = 3;
 	this.normalBuffer.numItems = this.normals.length/3;			
+	gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normals), gl.STATIC_DRAW);
 
-	//Vertex indices
+	//Faces
 	this.facesBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.facesBuffer);
-	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.faces), gl.STATIC_DRAW);
 	this.facesBuffer.itemSize = 1;
 	this.facesBuffer.numItems = this.faces.length;
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.facesBuffer);
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.faces), gl.STATIC_DRAW);
 }
 
 //Creates a copy of this model (keeps same vertex, buffer and texture data pointers)
-Model.prototype.clone = function()
+Mesh.prototype.clone = function()
 {
-	var model = new Model();
+	var model = new Mesh();
 
 	model.vertex = this.vertex;
 	model.uvs = this.uvs;
@@ -192,14 +186,14 @@ Model.prototype.clone = function()
 }
 
 //Set model size with absolute values
-Model.prototype.setSize = function(x, y, z)
+Mesh.prototype.setSize = function(x, y, z)
 {
 	this.scale.set(x,y,z);
 	this.scale.div(this.getBox().size);
 }
 
 //Attach texture image to this model
-Model.prototype.setTexture = function(texture)
+Mesh.prototype.setTexture = function(texture)
 {
 	this.texture = texture;
 
@@ -214,7 +208,7 @@ Model.prototype.setTexture = function(texture)
 }
 
 //OBJ file read from string
-Model.prototype.loadOBJ = function(data)
+Mesh.prototype.loadOBJ = function(data)
 {
 	var lines = data.split("\n");
 
@@ -381,7 +375,7 @@ Model.prototype.loadOBJ = function(data)
 }
 
 //Tranform OBJ file to single hash level as used in classes
-Model.prototype.modelOBJData = function()
+Mesh.prototype.modelOBJData = function()
 {
 	//Create temporary arrays to store all model data
 	var vertex = [];
@@ -417,7 +411,7 @@ Model.prototype.modelOBJData = function()
 }
 
 //Read MTL data from String
-Model.prototype.loadMTL = function(data, textureFolder)
+Mesh.prototype.loadMTL = function(data, textureFolder)
 {
 	var lines = data.split("\n");
 	var index = -1;
@@ -487,7 +481,7 @@ Model.prototype.loadMTL = function(data, textureFolder)
 }
 
 //Mult values by texture coords
-Model.prototype.mulTextureCoords = function(x, y)
+Mesh.prototype.mulTextureCoords = function(x, y)
 {
 	for(var i = 0; i < this.uvs.length; i += 2)
 	{
@@ -498,7 +492,7 @@ Model.prototype.mulTextureCoords = function(x, y)
 }
 
 //Computing the triangle unit normal vector to vertex 
-Model.prototype.computeVertexNormals = function()
+Mesh.prototype.computeVertexNormals = function()
 {
 	//Clearing the new normals array
 	this.normals.length = 0;
@@ -523,7 +517,7 @@ Model.prototype.computeVertexNormals = function()
 }
 
 //Get Bouding box created from vertex data
-Model.prototype.getBox = function()
+Mesh.prototype.getBox = function()
 {
 	//If not available calculate box from vertex data
 	if(this.box === null)
@@ -581,9 +575,9 @@ Model.prototype.getBox = function()
 }
 
 //Create string with model info
-Model.prototype.toString = function()
+Mesh.prototype.toString = function()
 {
-	var s = "Model\n   VertexCount:"+this.vertex.length+"\n   NormalCount:"+this.normals.length+
+	var s = "Mesh\n   VertexCount:"+this.vertex.length+"\n   NormalCount:"+this.normals.length+
 		"\n   TextureCount:"+this.uvs.length+"\n   Faces Count:"+this.faces.length+
 		"\n\n   FaceList:\n[";
 	
@@ -633,9 +627,9 @@ Model.prototype.toString = function()
 }
 
 //Test Function that creates a cube with texture and retuns it
-Model.cube = function()
+Mesh.cube = function()
 {
-	var model = new Model();
+	var model = new Mesh();
 
 	model.texture = Texture.generateSolidColorTexture(gl, Color.GREEN);
 
@@ -764,9 +758,9 @@ Model.cube = function()
 }
 
 //Test Function that creates a cube with texture and retuns it
-Model.plane = function()
+Mesh.plane = function()
 {
-	var model = new Model();
+	var model = new Mesh();
 
 	model.texture = Texture.generateSolidColorTexture(gl, Color.GREEN);
 

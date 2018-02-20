@@ -2,45 +2,88 @@
 
 function Sprite()
 {
-	//Square single sided sprite data
-	this.vertex = [0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0,  0.0];
-	this.uvs = [0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0];
-	this.faces = [0, 1, 2, 0, 2, 3]; //Face <vertex / texture / normal>
-
-	//Auto Rotate Flags
-	this.followCameraRotation = false;
-
-	//Buffers
-	this.normalBuffer = null;
-	this.vertexBuffer = null;
-	this.textureCoordBuffer = null;
-	this.facesBuffer = null;
-
+	if(Sprite.shader === undefined)
+	{
+		Sprite.initializeBuffers();
+		Sprite.initializeShaders();
+	}
+	
 	//Texture
-	this.texture = Texture.generateSolidColorTexture(gl, Color.RED);
+	this.texture = null;
 
-	//Tranformations Control
-	this.origin = new Vector3(0,0,0);
+	//Transformation
 	this.position = new Vector3(0,0,0);
 	this.rotation = new Vector3(0,0,0);
 	this.scale = new Vector3(1,1,1);
 
-	//Update sprite buffers
-	this.updateBuffers();
-
 	//Tranformation Matrix
-	this.transformationMatrix = new Matrix(4,4);
+	this.transformationMatrix = new Matrix4();
+}
 
-	var fragment = "precision mediump float;\
+//Draw Mesh to camera
+Sprite.prototype.draw = function(camera, scene)
+{
+	gl.useProgram(Sprite.shader.program);
+
+	//Transformation matrices
+	gl.uniformMatrix4fv(gl.getUniformLocation(Sprite.shader.program, "projection"), false, camera.projectionMatrix.flatten());
+	gl.uniformMatrix4fv(gl.getUniformLocation(Sprite.shader.program, "view"), false, camera.transformationMatrix.flatten());
+	gl.uniformMatrix4fv(gl.getUniformLocation(Sprite.shader.program, "model"), false, this.transformationMatrix.flatten());
+
+	//Vertex position
+	gl.bindBuffer(gl.ARRAY_BUFFER, Sprite.vertexBuffer);
+	gl.vertexAttribPointer(Sprite.shader.program.vertexPositionAttribute, Sprite.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+	//Texture UV
+	gl.bindBuffer(gl.ARRAY_BUFFER, Sprite.UVBuffer);
+	gl.vertexAttribPointer(Sprite.shader.program.vertexUVAttribute, Sprite.UVBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+	//Faces
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, Sprite.facesBuffer);
+
+	//Set texture
+	gl.activeTexture(gl.TEXTURE0);
+	gl.bindTexture(gl.TEXTURE_2D, this.texture);
+	gl.uniform1i(Sprite.shader.program.textureSampler, 0);
+	
+	//Draw the triangles
+	gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
+}
+
+//Recalculate Tranformation Matrix (Should be called after changing position)
+Sprite.prototype.updateMatrix = function()
+{
+	this.transformationMatrix.makeRotationFromEuler(this.rotation, "YZX");
+	this.transformationMatrix.scale(this.scale);
+	this.transformationMatrix.setPosition(this.position);
+};
+
+Sprite.initializeShaders = function()
+{
+	//Shader
+	var vertex = "attribute vec3 vertexPosition;\
+	attribute vec2 vertexUV;\
 	\
-	varying vec2 vTextureCoord;\
-	varying vec4 vPosition;\
+	uniform mat4 projection, view;\
+	uniform mat4 model;\
 	\
-	uniform sampler2D uSampler;\
+	varying vec2 pixelUV;\
 	\
 	void main(void)\
 	{\
-		gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));\
+		pixelUV = vertexUV;\
+		gl_Position = projection * view * model * vec4(vertexPosition, 1.0);\
+	}";
+
+	var fragment = "precision mediump float;\
+	\
+	varying vec2 pixelUV;\
+	\
+	uniform sampler2D texture;\
+	\
+	void main(void)\
+	{\
+		gl_FragColor = texture2D(texture, vec2(pixelUV.s, pixelUV.t));\
 		\
 		if(gl_FragColor.a < 0.3)\
 		{\
@@ -48,118 +91,52 @@ function Sprite()
 		}\
 	}";
 
-	var vertex = "attribute vec3 aVertexPosition;\
-	attribute vec2 aTextureCoord;\
-	\
-	uniform mat4 uMVMatrix;\
-	uniform mat4 uPMatrix;\
-	uniform mat3 uNMatrix;\
-	\
-	varying vec2 vTextureCoord;\
-	varying vec4 vPosition;\
-	\
-	void main(void)\
-	{\
-		vPosition = uMVMatrix * vec4(aVertexPosition, 1.0);\
-		vTextureCoord = aTextureCoord;\
-		gl_Position = uPMatrix * vPosition;\
-	}";
 	//Shader
-	this.shader = new Shader(fragment, vertex);
+	Sprite.shader = new Shader(fragment, vertex);
 
-	//Vertex Coordinates
-	this.shader.program.vertexPositionAttribute = gl.getAttribLocation(this.shader.program, "aVertexPosition");
-	gl.enableVertexAttribArray(this.shader.program.vertexPositionAttribute);
+	//Vertex Coordinates 
+	Sprite.shader.program.vertexPositionAttribute = gl.getAttribLocation(Sprite.shader.program, "vertexPosition");
+	gl.enableVertexAttribArray(Sprite.shader.program.vertexPositionAttribute);
 
 	//Texture coordinates
-	this.shader.program.textureCoordAttribute = gl.getAttribLocation(this.shader.program, "aTextureCoord");
-	gl.enableVertexAttribArray(this.shader.program.textureCoordAttribute);
+	Sprite.shader.program.vertexUVAttribute = gl.getAttribLocation(Sprite.shader.program, "vertexUV");
+	gl.enableVertexAttribArray(Sprite.shader.program.vertexUVAttribute);
 
 	//The sampler
-	this.shader.program.samplerUniform = gl.getUniformLocation(this.shader.program, "uSampler");
-	this.shader.program.pMatrixUniform = gl.getUniformLocation(this.shader.program, "uPMatrix");
-	this.shader.program.mvMatrixUniform = gl.getUniformLocation(this.shader.program, "uMVMatrix");
-	this.shader.program.nMatrixUniform = gl.getUniformLocation(this.shader.program, "uNMatrix");
-}
-
-//Draw sprite to camera
-Sprite.prototype.draw = function(camera, scene)
-{
-	//gl.enable(gl.SAMPLE_ALPHA_TO_COVERAGE);
-	gl.enable(gl.BLEND);
-	gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-
-	if(this.followCameraRotation && camera.type === Camera.PERSPECTIVE)
-	{
-		this.rotation.y = -camera.rotation.y;
-		this.updateMatrix();
-	}
-
-	//Clone Camera Global transformation Matrix and multiply
-	var camTransformationMatrix = Matrix.mul(this.transformationMatrix, camera.transformationMatrix).transpose();
-	
-	//Normal matrix
-	var normalMatrix = MathUtils.matrix3Invert(camTransformationMatrix);
-
-	gl.useProgram(this.shader.program);
-	gl.uniformMatrix4fv(gl.getUniformLocation(this.shader.program, "uPMatrix"), false, camera.projectionMatrix.flatten());
-	gl.uniformMatrix4fv(gl.getUniformLocation(this.shader.program, "uMVMatrix"), false, camTransformationMatrix.flatten());
-	gl.uniformMatrix3fv(gl.getUniformLocation(this.shader.program, "uNMatrix"), false, normalMatrix.flatten());
-	
-	//Vertex buffer
-	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
-	gl.vertexAttribPointer(this.shader.program.vertexPositionAttribute, this.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-	//Texture Coords buffer
-	gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
-	gl.vertexAttribPointer(this.shader.program.textureCoordAttribute, this.textureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-	//Faces buffer
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.facesBuffer);
-
-	//Set texture
-	gl.activeTexture(gl.TEXTURE0);
-	gl.bindTexture(gl.TEXTURE_2D, this.texture);
-	gl.uniform1i(this.shader.program.samplerUniform, 0);
-	
-	//Drawing the triangles
-	gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
-
-	gl.disable(gl.BLEND);
-};
-
-//Recalculate Tranformation Matrix (Should be called after changing position)
-Sprite.prototype.updateMatrix = function()
-{
-	this.transformationMatrix = MatrixGenerator.scalingMatrix(this.scale.x, this.scale.y, this.scale.z);
-	this.transformationMatrix.mul(MatrixGenerator.translation(-this.origin.x, -this.origin.y, -this.origin.z));
-	this.transformationMatrix.mul(MatrixGenerator.rotationMatrix(this.rotation.x, this.rotation.y, this.rotation.z));
-	this.transformationMatrix.mul(MatrixGenerator.translation(this.position.x, this.position.y, this.position.z));
+	Sprite.shader.program.textureSampler = gl.getUniformLocation(Sprite.shader.program, "texture");
+	Sprite.shader.program.viewMatrixUniform = gl.getUniformLocation(Sprite.shader.program, "view");
+	Sprite.shader.program.projectionMatrixUniform = gl.getUniformLocation(Sprite.shader.program, "projection");
+	Sprite.shader.program.modelMatrixUniform = gl.getUniformLocation(Sprite.shader.program, "model");
 };
 
 //Recreate data buffers (Should be called after structural changes)
-Sprite.prototype.updateBuffers = function()
+Sprite.initializeBuffers = function()
 {
+	//Geometry
+	var vertex = new Float32Array([-0.5, -0.5, 0.0, 0.5, -0.5, 0.0, 0.5, 0.5, 0.0, -0.5, 0.5, 0.0]);
+	var uvs = new Float32Array([0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0]);
+	var faces = new Uint16Array([0, 1, 2, 0, 2, 3]);
+
 	//Vertex
-	this.vertexBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertex), gl.STATIC_DRAW);
-	this.vertexBuffer.itemSize = 3;
-	this.vertexBuffer.numItems = this.vertex.length/3;						
+	Sprite.vertexBuffer = gl.createBuffer();
+	Sprite.vertexBuffer.itemSize = 3;
+	Sprite.vertexBuffer.numItems = vertex.length/3;
+	gl.bindBuffer(gl.ARRAY_BUFFER, Sprite.vertexBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, vertex, gl.STATIC_DRAW);
 
 	//Texture
-	this.textureCoordBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.uvs), gl.STATIC_DRAW);
-	this.textureCoordBuffer.itemSize = 2;
-	this.textureCoordBuffer.numItems = this.uvs.length/2;
+	Sprite.UVBuffer = gl.createBuffer();
+	Sprite.UVBuffer.itemSize = 2;
+	Sprite.UVBuffer.numItems = uvs.length/2;
+	gl.bindBuffer(gl.ARRAY_BUFFER, Sprite.UVBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, uvs, gl.STATIC_DRAW);
 
-	//Vertex indices
-	this.facesBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.facesBuffer);
-	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.faces), gl.STATIC_DRAW);
-	this.facesBuffer.itemSize = 1;
-	this.facesBuffer.numItems = this.faces.length;
+	//Faces
+	Sprite.facesBuffer = gl.createBuffer();
+	Sprite.facesBuffer.itemSize = 1;
+	Sprite.facesBuffer.numItems = faces.length;
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, Sprite.facesBuffer);
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, faces, gl.STATIC_DRAW);
 };
 
 //Creates a copy of this sprite (keeps same vertex, buffer and texture data pointers)
@@ -175,12 +152,6 @@ Sprite.prototype.clone = function()
 	sprite.origin.set(this.origin.x, this.origin.y, this.origin.z);
 
 	return sprite;
-};
-
-//Set sprite size with absolute values
-Sprite.prototype.setSize = function(x, y)
-{
-	this.scale.set(x, y, 1);
 };
 
 //Attach texture image to this sprite

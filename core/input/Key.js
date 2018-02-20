@@ -1,6 +1,5 @@
 "use strict";
 
-//Constructor
 function Key()
 {
 	this.isPressed = false;

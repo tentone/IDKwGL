@@ -3,7 +3,7 @@
 function Player(canvas)
 {
 	//Player Camera and rotation
-	this.camera = new PerspectiveCamera(canvas, 70, 1);
+	this.camera = new PerspectiveCamera(canvas.width/canvas.height, 70, 1);
 	this.camera.position.set(0, 2, 0);
 	this.rotation = new Vector2(0, 0); //Horizontal / Vertical
 	
@@ -61,8 +61,7 @@ Player.prototype.update = function(world)
 
 	//Camera Mouse Movement
 	this.rotation.x -= 0.001 * App.mouse.posDiff.x;
-	
-	/*this.rotation.y -= 0.001 * App.mouse.posDiff.y;
+	this.rotation.y -= 0.001 * App.mouse.posDiff.y;
 
 	//Limit Vertical Rotation
 	if(this.rotation.y < -1.57)
@@ -72,14 +71,15 @@ Player.prototype.update = function(world)
 	else if(this.rotation.y > 1.57)
 	{
 		this.rotation.y = 1.57;
-	}*/
-	
-	//Set camera rotation
-	this.camera.rotation.y = this.rotation.x;
+	}
 	
 	//Update player as a body
 	this.body.update(world);
+
+	//Update camera
+	this.camera.rotation.set(0, this.rotation.x, 0);
 	this.camera.position.set(this.body.geometry.position.x, (this.body.geometry.position.y+10), this.body.geometry.position.z);
+	this.camera.updateMatrix();
 }
 
 //Set ID for body
