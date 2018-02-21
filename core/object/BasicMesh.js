@@ -1,7 +1,7 @@
 "use strict";
 
 //Empty model constructor
-function Mesh()
+function BasicMesh()
 {
 	Object3D.call(this);
 
@@ -76,10 +76,10 @@ function Mesh()
 	this.shader.program.modelMatrixUniform = gl.getUniformLocation(this.shader.program, "model");
 }
 
-Mesh.prototype = Object.create(Object3D.prototype);
+BasicMesh.prototype = Object.create(Object3D.prototype);
 
-//Draw Mesh to camera
-Mesh.prototype.draw = function(camera, scene)
+//Draw BasicMesh to camera
+BasicMesh.prototype.draw = function(camera, scene)
 {
 	gl.useProgram(this.shader.program);
 
@@ -113,7 +113,7 @@ Mesh.prototype.draw = function(camera, scene)
 };
 
 //Recreate data buffers (Should be called after structural changes)
-Mesh.prototype.updateBuffers = function()
+BasicMesh.prototype.updateBuffers = function()
 {
 	//Vertex
 	this.vertexBuffer = gl.createBuffer();
@@ -145,9 +145,9 @@ Mesh.prototype.updateBuffers = function()
 };
 
 //Creates a copy of this model (keeps same vertex, buffer and texture data pointers)
-Mesh.prototype.clone = function()
+BasicMesh.prototype.clone = function()
 {
-	var model = new Mesh();
+	var model = new BasicMesh();
 
 	model.vertex = this.vertex;
 	model.uvs = this.uvs;
@@ -171,7 +171,7 @@ Mesh.prototype.clone = function()
 };
 
 //Attach texture image to this model
-Mesh.prototype.setTexture = function(texture)
+BasicMesh.prototype.setTexture = function(texture)
 {
 	this.texture = texture;
 
@@ -186,7 +186,7 @@ Mesh.prototype.setTexture = function(texture)
 };
 
 //OBJ file read from string
-Mesh.prototype.loadOBJ = function(data)
+BasicMesh.prototype.loadOBJ = function(data)
 {
 	var lines = data.split("\n");
 
@@ -353,7 +353,7 @@ Mesh.prototype.loadOBJ = function(data)
 };
 
 //Tranform OBJ file to single hash level as used in classes
-Mesh.prototype.modelOBJData = function()
+BasicMesh.prototype.modelOBJData = function()
 {
 	//Create temporary arrays to store all model data
 	var vertex = [];
@@ -389,7 +389,7 @@ Mesh.prototype.modelOBJData = function()
 };
 
 //Read MTL data from String
-Mesh.prototype.loadMTL = function(data, textureFolder)
+BasicMesh.prototype.loadMTL = function(data, textureFolder)
 {
 	var lines = data.split("\n");
 	var index = -1;
@@ -459,7 +459,7 @@ Mesh.prototype.loadMTL = function(data, textureFolder)
 };
 
 //Mult values by texture coords
-Mesh.prototype.mulTextureCoords = function(x, y)
+BasicMesh.prototype.mulTextureCoords = function(x, y)
 {
 	for(var i = 0; i < this.uvs.length; i += 2)
 	{
@@ -471,7 +471,7 @@ Mesh.prototype.mulTextureCoords = function(x, y)
 };
 
 //Computing the triangle unit normal vector to vertex 
-Mesh.prototype.computeVertexNormals = function()
+BasicMesh.prototype.computeVertexNormals = function()
 {
 	//Clearing the new normals array
 	this.normals.length = 0;
@@ -496,7 +496,7 @@ Mesh.prototype.computeVertexNormals = function()
 };
 
 //Get Bouding box created from vertex data
-Mesh.prototype.getBox = function()
+BasicMesh.prototype.getBox = function()
 {
 	//If not available calculate box from vertex data
 	if(this.box === null)
@@ -554,9 +554,9 @@ Mesh.prototype.getBox = function()
 };
 
 //Test Function that creates a cube with texture and retuns it
-Mesh.cube = function()
+BasicMesh.cube = function()
 {
-	var model = new Mesh();
+	var model = new BasicMesh();
 
 	model.texture = Texture.generateSolidColorTexture(gl, Color.GREEN);
 
@@ -685,9 +685,9 @@ Mesh.cube = function()
 };
 
 //Test Function that creates a cube with texture and retuns it
-Mesh.plane = function()
+BasicMesh.plane = function()
 {
-	var model = new Mesh();
+	var model = new BasicMesh();
 
 	model.texture = Texture.generateSolidColorTexture(gl, Color.GREEN);
 

@@ -54,22 +54,23 @@ Texture.generateSolidColorTexture = function(gl, color)
 }
 
 //Create a texture from array (elements by line)
-Texture.createFromDataArray = function(gl, size, colorList)
+Texture.createDataTexture = function(gl, size, colorList)
 {
-	colorArray = [] 
+	var data = [] 
+
 	for(var i = 0; i < colorList.length; i++)
 	{
-		colorArray.push(colorList[i].r * 255);
-		colorArray.push(colorList[i].g * 255);
-		colorArray.push(colorList[i].b * 255);
-		colorArray.push(255);
+		data.push(colorList[i].r * 255);
+		data.push(colorList[i].g * 255);
+		data.push(colorList[i].b * 255);
+		data.push(255);
 	}
 
 	var texture = gl.createTexture();
 	gl.bindTexture(gl.TEXTURE_2D, texture);
-	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, size, size, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(colorArray));
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, size, size, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(data));
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 	gl.generateMipmap(gl.TEXTURE_2D);
 
 	return texture;

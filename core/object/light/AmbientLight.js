@@ -2,6 +2,7 @@
 
 function AmbientLight()
 {
-	this.type = Light.POINT;
+	this.type = "AmbientLight";
+	
 	this.color = new Color(0.0, 0.0, 0.0);
 }

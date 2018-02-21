@@ -33,7 +33,7 @@ ParticleEmitter.prototype.update = function()
 			this.particles[i] = new Particle(this.model.clone(), this.position.clone(), speed, this.scale + this.scaleVar*MathUtils.randomMod(), this.time + this.timeVar*MathUtils.randomMod());
 		}
 	}
-}
+};
 
 //Draw particles into camera
 ParticleEmitter.prototype.draw = function(camera, light)
@@ -42,10 +42,4 @@ ParticleEmitter.prototype.draw = function(camera, light)
 	{
 		this.particles[i].draw(camera, light);
 	}
-}
-
-//Creates string with particle emitter info
-ParticleEmitter.prototype.toString = function()
-{
-	return "Particle (Count:" + this.particles.length + ")";
-}
+};

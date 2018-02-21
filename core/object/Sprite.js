@@ -8,17 +8,13 @@ function Sprite()
 		Sprite.initializeShaders();
 	}
 	
+	Object3D.call(this);
+
 	//Texture
 	this.texture = null;
-
-	//Transformation
-	this.position = new Vector3(0,0,0);
-	this.rotation = new Vector3(0,0,0);
-	this.scale = new Vector3(1,1,1);
-
-	//Tranformation Matrix
-	this.transformationMatrix = new Matrix4();
 }
+
+Sprite.prototype = Object.create(Object3D.prototype);
 
 //Draw Mesh to camera
 Sprite.prototype.draw = function(camera, scene)
@@ -48,14 +44,6 @@ Sprite.prototype.draw = function(camera, scene)
 	
 	//Draw the triangles
 	gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
-}
-
-//Recalculate Tranformation Matrix (Should be called after changing position)
-Sprite.prototype.updateMatrix = function()
-{
-	this.transformationMatrix.makeRotationFromEuler(this.rotation, "YZX");
-	this.transformationMatrix.scale(this.scale);
-	this.transformationMatrix.setPosition(this.position);
 };
 
 Sprite.initializeShaders = function()

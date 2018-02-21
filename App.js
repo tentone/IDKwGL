@@ -1,20 +1,6 @@
 "use strict";
 
 //Core
-include("core/Font.js");
-include("core/Texture.js");
-include("core/Shader.js");
-
-include("core/materials/Material.js");
-
-include("core/object/Sprite.js");
-include("core/object/Mesh.js");
-include("core/object/Text.js");
-include("core/object/particle/Particle.js");
-include("core/object/particle/ParticleEmitter.js");
-
-include("core/renderer/Scene.js");
-
 include("core/math/MatrixGenerator.js");
 include("core/math/Vector2.js");
 include("core/math/Vector3.js");
@@ -35,13 +21,30 @@ include("core/input/Mouse.js");
 
 include("core/utils/GeometryUtils.js");
 
-include("core/light/Light.js");
-include("core/light/DirectionalLight.js");
-include("core/light/PointLight.js");
+include("core/Font.js");
+include("core/Texture.js");
+include("core/Shader.js");
 
-include("core/camera/Camera.js");
-include("core/camera/OrthographicCamera.js");
-include("core/camera/PerspectiveCamera.js");
+include("core/materials/Material.js");
+
+include("core/object/Object3D.js");
+include("core/object/Sprite.js");
+include("core/object/Mesh.js");
+include("core/object/Text.js");
+
+include("core/object/particle/Particle.js");
+include("core/object/particle/ParticleEmitter.js");
+
+include("core/object/light/Light.js");
+include("core/object/light/DirectionalLight.js");
+include("core/object/light/PointLight.js");
+
+include("core/object/camera/Camera.js");
+include("core/object/camera/OrthographicCamera.js");
+include("core/object/camera/PerspectiveCamera.js");
+
+include("core/renderer/Scene.js");
+include("core/renderer/Renderer.js");
 
 include("core/physics/Body.js");
 include("core/physics/World.js");

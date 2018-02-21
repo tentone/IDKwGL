@@ -21,11 +21,11 @@ Particle.prototype.update = function()
 
 	this.model.position.set(this.position.x, this.position.y, this.position.z);
 	this.model.update();
-}
+};
 
 //Draw particles into camera
 Particle.prototype.draw = function(camera, light)
 {
 	this.model.draw(camera, light);
-}
+};
 
