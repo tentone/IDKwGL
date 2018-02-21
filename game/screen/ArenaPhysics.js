@@ -27,7 +27,7 @@ function ArenaPhysics()
 
 	//Floor
 	this.model = Mesh.cube();
-	this.model.setTexture(Texture.createTextureRepeat(gl, "data/texture/grass.jpg"));
+	this.model.setTexture(Texture.createTexture(gl, "data/texture/grass.jpg"));
 	this.model.mulTextureCoords(10, 10);
 	this.model.position.set(0, -100, 0);
 	this.model.scale.set(900, 100, 900);
@@ -37,7 +37,7 @@ function ArenaPhysics()
 	
 	//Walls
 	this.model = Mesh.cube();
-	this.model.setTexture(Texture.createTextureRepeat(gl, "data/texture/wall.png"));
+	this.model.setTexture(Texture.createTexture(gl, "data/texture/wall.png"));
 	this.model.mulTextureCoords(20, 1);
 	this.model.position.set(0, 0, -400);
 	this.model.scale.set(400, 50, 1);

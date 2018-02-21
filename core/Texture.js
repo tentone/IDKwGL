@@ -1,44 +1,48 @@
 "use strict";
 
-function Texture(){}
-
-//Texture Constructor from file name
-Texture.createTextureRepeat = function(gl, file)
+function Texture()
 {
-	if(file === undefined)
-	{
-		return Texture.generateSolidColorTexture(gl, Color.RED);
-	}
 
-	var texture = gl.createTexture();
-	texture.image = new Image();
-	texture.image.onload = function ()
-	{
-		Texture.handleTextureRepeatLoaded(gl, texture);
-	}
-
-	texture.image.src = file;
-	return texture;
 }
 
 //Texture Constructor from file name
 Texture.createTexture = function(gl, file)
 {
-	if(file === undefined)
-	{
-		return Texture.generateSolidColorTexture(gl, Color.RED);
-	}
-
 	var texture = gl.createTexture();
-	texture.image = new Image();
-	texture.image.onload = function ()
+	var image = document.createElement("img");
+	image.onload = function ()
 	{
-		Texture.handleTextureLoaded(gl, texture);
-	}
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+		gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
 
-	texture.image.src = file;
+		//Check anisotropic support
+		var anisotropic = gl.getExtension("EXT_texture_filter_anisotropic");
+		if(anisotropic !== undefined)
+		{
+			//TODO
+		}
+
+		//Only generate MIPMAPS is texture is a power of two
+		if(MathUtils.isPowerOf2() && MathUtils.isPowerOf2())
+		{
+			gl.generateMipmap(gl.TEXTURE_2D);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+		}
+		else
+		{	
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+		}
+	};
+	image.src = file;
+
 	return texture;
-}
+};
 
 //Creates a solid color texture
 Texture.generateSolidColorTexture = function(gl, color)
@@ -51,7 +55,7 @@ Texture.generateSolidColorTexture = function(gl, color)
 	gl.generateMipmap(gl.TEXTURE_2D);
 	
 	return texture;
-}
+};
 
 //Create a texture from array (elements by line)
 Texture.createDataTexture = function(gl, size, colorList)
@@ -74,28 +78,4 @@ Texture.createDataTexture = function(gl, size, colorList)
 	gl.generateMipmap(gl.TEXTURE_2D);
 
 	return texture;
-}
-
-//Handle Texture initialization after image loaded for repeating textures
-Texture.handleTextureRepeatLoaded = function(gl, texture)
-{
-	gl.bindTexture(gl.TEXTURE_2D, texture);
-	gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.image);
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-	gl.generateMipmap(gl.TEXTURE_2D);
-}
-
-//Handle Texture initialization after image loaded
-Texture.handleTextureLoaded = function(gl, texture)
-{
-	gl.bindTexture(gl.TEXTURE_2D, texture);
-	gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.image);
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-	gl.generateMipmap(gl.TEXTURE_2D);
-}
+};

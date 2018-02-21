@@ -7,6 +7,11 @@ MathUtils.PI2 = Math.PI*2;
 MathUtils.PID2 = Math.PI*0.5;
 MathUtils.PID4 = Math.PI*0.25;
 
+MathUtils.isPowerOf2 = function(value)
+{
+  return (value & (value - 1)) == 0;
+};
+
 MathUtils.randomInt = function()
 {
 	return Math.floor(Math.random() * 0xFFFFFFFF);

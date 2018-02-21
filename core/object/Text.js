@@ -110,7 +110,7 @@ Text.prototype.draw = function(camera, scene)
 	gl.drawElements(gl.TRIANGLES, this.faces.length, gl.UNSIGNED_SHORT, 0);
 
 	gl.disable(gl.BLEND);
-}
+};
 
 //Recreate data buffers
 Text.prototype.updateBuffers = function()

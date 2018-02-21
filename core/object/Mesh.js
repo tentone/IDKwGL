@@ -28,18 +28,26 @@ function Mesh()
 	this.updateBuffers();
 
 	//Shader
-	var vertex = "attribute vec3 vertexPosition;\
+	var vertex = "precision mediump float;\
+	attribute vec3 vertexPosition;\
 	attribute vec2 vertexUV;\
 	\
 	uniform mat4 projection, view;\
 	uniform mat4 model;\
 	\
 	varying vec2 pixelUV;\
+	uniform float time;\
 	\
 	void main(void)\
 	{\
 		pixelUV = vertexUV;\
-		gl_Position = projection * view * model * vec4(vertexPosition, 1.0);\
+		\
+		vec4 position = model * vec4(vertexPosition, 1.0);\
+		\
+		float dist = distance(position, vec4(0,0,0,0));\
+		position.y += cos(time + dist);\
+		\
+		gl_Position = projection * view * position;\
 	}";
 
 	var fragment = "precision mediump float;\
@@ -61,19 +69,23 @@ function Mesh()
 	//Shader
 	this.shader = new Shader(fragment, vertex);
 
-	//Vertex Coordinates 
+	//Vertex attributes
 	this.shader.program.vertexPositionAttribute = gl.getAttribLocation(this.shader.program, "vertexPosition");
 	gl.enableVertexAttribArray(this.shader.program.vertexPositionAttribute);
-
-	//Texture coordinates
 	this.shader.program.vertexUVAttribute = gl.getAttribLocation(this.shader.program, "vertexUV");
 	gl.enableVertexAttribArray(this.shader.program.vertexUVAttribute);
 
-	//The sampler
+	//Texture
 	this.shader.program.textureSampler = gl.getUniformLocation(this.shader.program, "texture");
+
+	//Matrices
 	this.shader.program.viewMatrixUniform = gl.getUniformLocation(this.shader.program, "view");
 	this.shader.program.projectionMatrixUniform = gl.getUniformLocation(this.shader.program, "projection");
 	this.shader.program.modelMatrixUniform = gl.getUniformLocation(this.shader.program, "model");
+
+	//Time
+	this.time = 0;
+	this.shader.program.time = gl.getUniformLocation(this.shader.program, "time");
 }
 
 Mesh.prototype = Object.create(Object3D.prototype);
@@ -81,12 +93,21 @@ Mesh.prototype = Object.create(Object3D.prototype);
 //Draw Mesh to camera
 Mesh.prototype.draw = function(camera, scene)
 {
+	this.time += 0.016;
+
 	gl.useProgram(this.shader.program);
 
+	//Enable backface culling
+	gl.enable(gl.CULL_FACE);
+	gl.cullFace(gl.BACK);
+
+	//Time
+	gl.uniform1f(this.shader.program.time, this.time);
+
 	//Transformation matrices
-	gl.uniformMatrix4fv(gl.getUniformLocation(this.shader.program, "projection"), false, camera.projectionMatrix.flatten());
-	gl.uniformMatrix4fv(gl.getUniformLocation(this.shader.program, "view"), false, camera.transformationMatrix.flatten());
-	gl.uniformMatrix4fv(gl.getUniformLocation(this.shader.program, "model"), false, this.transformationMatrix.flatten());
+	gl.uniformMatrix4fv(this.shader.program.projectionMatrixUniform, false, camera.projectionMatrix.flatten());
+	gl.uniformMatrix4fv(this.shader.program.viewMatrixUniform, false, camera.transformationMatrix.flatten());
+	gl.uniformMatrix4fv(this.shader.program.modelMatrixUniform, false, this.transformationMatrix.flatten());
 
 	//Vertex position
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
@@ -110,6 +131,8 @@ Mesh.prototype.draw = function(camera, scene)
 		//Draw the triangles
 		gl.drawElements(gl.TRIANGLES, this.faceMaterial[i+1], gl.UNSIGNED_SHORT, 0);
 	}
+
+	gl.disable(gl.CULL_FACE);
 };
 
 //Recreate data buffers (Should be called after structural changes)

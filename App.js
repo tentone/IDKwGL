@@ -35,7 +35,7 @@ include("core/object/Text.js");
 include("core/object/particle/Particle.js");
 include("core/object/particle/ParticleEmitter.js");
 
-include("core/object/light/Light.js");
+include("core/object/light/AmbientLight.js");
 include("core/object/light/DirectionalLight.js");
 include("core/object/light/PointLight.js");
 

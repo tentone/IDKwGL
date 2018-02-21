@@ -21,6 +21,9 @@ Sprite.prototype.draw = function(camera, scene)
 {
 	gl.useProgram(Sprite.shader.program);
 
+	gl.enable(gl.BLEND);
+	gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
 	//Transformation matrices
 	gl.uniformMatrix4fv(gl.getUniformLocation(Sprite.shader.program, "projection"), false, camera.projectionMatrix.flatten());
 	gl.uniformMatrix4fv(gl.getUniformLocation(Sprite.shader.program, "view"), false, camera.transformationMatrix.flatten());
@@ -44,6 +47,8 @@ Sprite.prototype.draw = function(camera, scene)
 	
 	//Draw the triangles
 	gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
+
+	gl.disable(gl.BLEND);
 };
 
 Sprite.initializeShaders = function()
@@ -82,16 +87,16 @@ Sprite.initializeShaders = function()
 	//Shader
 	Sprite.shader = new Shader(fragment, vertex);
 
-	//Vertex Coordinates 
+	//Vertex
 	Sprite.shader.program.vertexPositionAttribute = gl.getAttribLocation(Sprite.shader.program, "vertexPosition");
 	gl.enableVertexAttribArray(Sprite.shader.program.vertexPositionAttribute);
-
-	//Texture coordinates
 	Sprite.shader.program.vertexUVAttribute = gl.getAttribLocation(Sprite.shader.program, "vertexUV");
 	gl.enableVertexAttribArray(Sprite.shader.program.vertexUVAttribute);
 
-	//The sampler
+	//Texture
 	Sprite.shader.program.textureSampler = gl.getUniformLocation(Sprite.shader.program, "texture");
+	
+	//Matrices
 	Sprite.shader.program.viewMatrixUniform = gl.getUniformLocation(Sprite.shader.program, "view");
 	Sprite.shader.program.projectionMatrixUniform = gl.getUniformLocation(Sprite.shader.program, "projection");
 	Sprite.shader.program.modelMatrixUniform = gl.getUniformLocation(Sprite.shader.program, "model");
