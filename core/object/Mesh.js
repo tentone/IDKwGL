@@ -30,17 +30,22 @@ function Mesh()
 	//Shader
 	var vertex = "precision mediump float;\
 	attribute vec3 vertexPosition;\
+	attribute vec3 vertexNormal;\
 	attribute vec2 vertexUV;\
 	\
 	uniform mat4 projection, view;\
 	uniform mat4 model;\
-	\
-	varying vec2 pixelUV;\
 	uniform float time;\
+	\
+	varying vec2 fragmentUV;\
+	varying vec3 fragmentVertex;\
+	varying vec3 fragmentNormal;\
 	\
 	void main(void)\
 	{\
-		pixelUV = vertexUV;\
+		fragmentUV = vertexUV;\
+		fragmentVertex = vertexPosition;\
+		fragmentNormal = vertexNormal;\
 		\
 		vec4 position = model * vec4(vertexPosition, 1.0);\
 		\
@@ -52,13 +57,20 @@ function Mesh()
 
 	var fragment = "precision mediump float;\
 	\
-	varying vec2 pixelUV;\
+	varying vec2 fragmentUV;\
+	varying vec3 fragmentVertex;\
+	varying vec3 fragmentNormal;\
 	\
 	uniform sampler2D texture;\
+	uniform float time;\
 	\
 	void main(void)\
 	{\
-		gl_FragColor = texture2D(texture, vec2(pixelUV.s, pixelUV.t));\
+		gl_FragColor = texture2D(texture, vec2(fragmentUV.s, fragmentUV.t));\
+		/*if((cos(time) + 1.0) * gl_FragColor.b > 0.8)\
+		{\
+			discard;\
+		}*/\
 		\
 		if(gl_FragColor.a < 0.3)\
 		{\
@@ -72,8 +84,12 @@ function Mesh()
 	//Vertex attributes
 	this.shader.program.vertexPositionAttribute = gl.getAttribLocation(this.shader.program, "vertexPosition");
 	gl.enableVertexAttribArray(this.shader.program.vertexPositionAttribute);
+
 	this.shader.program.vertexUVAttribute = gl.getAttribLocation(this.shader.program, "vertexUV");
 	gl.enableVertexAttribArray(this.shader.program.vertexUVAttribute);
+
+	this.shader.program.vertexNormalAttribute = gl.getAttribLocation(this.shader.program, "vertexNormal");
+	gl.enableVertexAttribArray(this.shader.program.vertexNormalAttribute);
 
 	//Texture
 	this.shader.program.textureSampler = gl.getUniformLocation(this.shader.program, "texture");
@@ -113,6 +129,10 @@ Mesh.prototype.draw = function(camera, scene)
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
 	gl.vertexAttribPointer(this.shader.program.vertexPositionAttribute, this.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
+	//Vertex normal
+	gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
+	gl.vertexAttribPointer(this.shader.program.vertexNormalAttribute, this.normalBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	
 	//Texture UV
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
 	gl.vertexAttribPointer(this.shader.program.vertexUVAttribute, this.textureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
