@@ -66,16 +66,34 @@ function Mesh()
 	\
 	void main(void)\
 	{\
+		\
+		\ /* Directional light */\
+		vec3 normal = normalize(fragmentNormal);\
+		float light = dot(fragmentNormal, vec3(0, 1, 0.5)) * 0.5;\
+		\
+		\ /* Ambient light */\
+		\ light += 0.5;\
+		\
 		gl_FragColor = texture2D(texture, vec2(fragmentUV.s, fragmentUV.t));\
-		/*if((cos(time) + 1.0) * gl_FragColor.b > 0.8)\
+		\
+		\ /* Fade effect */\
+		float value = (cos(time) + 1.0) * gl_FragColor.r * gl_FragColor.g;\
+		if(value > 0.6)\
 		{\
 			discard;\
-		}*/\
+		}\
+		if(value > 0.55)\
+		{\
+			gl_FragColor.rgb = vec3(1.0, 1.0, 0.0);\
+			return;\
+		}\
 		\
 		if(gl_FragColor.a < 0.3)\
 		{\
 			discard;\
 		}\
+		\
+		gl_FragColor.rgb *= light;\
 	}";
 
 	//Shader
