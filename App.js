@@ -22,10 +22,14 @@ include("core/input/Mouse.js");
 include("core/utils/GeometryUtils.js");
 
 include("core/Font.js");
-include("core/Texture.js");
 include("core/Shader.js");
+include("core/Scene.js");
+
+include("core/textures/Texture.js");
 
 include("core/materials/Material.js");
+include("core/materials/BasicMaterial.js");
+include("core/materials/PhongMaterial.js");
 
 include("core/object/Object3D.js");
 include("core/object/Sprite.js");
@@ -43,7 +47,6 @@ include("core/object/camera/Camera.js");
 include("core/object/camera/OrthographicCamera.js");
 include("core/object/camera/PerspectiveCamera.js");
 
-include("core/renderer/Scene.js");
 include("core/renderer/Renderer.js");
 
 include("core/physics/Body.js");

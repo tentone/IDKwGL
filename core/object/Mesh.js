@@ -237,7 +237,7 @@ Mesh.prototype.setTexture = function(texture)
 	this.texture = texture;
 
 	this.material = [];
-	this.material[0] = new Material("mat");
+	this.material[0] = new PhongMaterial("mat");
 	this.material[0].texture = texture;
 
 	this.faceMaterial = [];
@@ -425,7 +425,7 @@ Mesh.prototype.modelOBJData = function()
 	//Transform Data
 	for(var i = 0; i < this.faces.length; i += 3)
 	{
-		faces.push(i/3);
+		faces.push(Math.floor(i/3));
 
 		vertex.push(this.vertex[(this.faces[i]-1)*3]);
 		vertex.push(this.vertex[(this.faces[i]-1)*3+1]);
@@ -467,7 +467,7 @@ Mesh.prototype.loadMTL = function(data, textureFolder)
 		if(tokens[0] === "newmtl")
 		{
 			index++;
-			this.material[index] = new Material(tokens[1]);
+			this.material[index] = new PhongMaterial(tokens[1]);
 		}
 
 		//If material found

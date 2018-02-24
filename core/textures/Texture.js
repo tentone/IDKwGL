@@ -1,9 +1,6 @@
 "use strict";
 
-function Texture()
-{
-
-}
+function Texture(){}
 
 //Texture Constructor from file name
 Texture.createTexture = function(gl, file)
