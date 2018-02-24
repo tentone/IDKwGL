@@ -4,6 +4,6 @@ function BasicMaterial(name)
 {
 	Material.call(this);
  
-	this.texture = null; //Texture
+	this.texture = null;
 }
 
