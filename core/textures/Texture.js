@@ -1,6 +1,13 @@
 "use strict";
 
-function Texture(){}
+function Texture()
+{
+	this.id = MathUtils.randomInt();
+	this.name = "";
+	this.type = "Texture";
+
+	//TODO <ADD CODE HERE>
+}
 
 //Texture Constructor from file name
 Texture.createTexture = function(gl, file)
@@ -51,28 +58,5 @@ Texture.generateSolidColorTexture = function(gl, color)
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 	gl.generateMipmap(gl.TEXTURE_2D);
 	
-	return texture;
-};
-
-//Create a texture from array (elements by line)
-Texture.createDataTexture = function(gl, size, colorList)
-{
-	var data = [] 
-
-	for(var i = 0; i < colorList.length; i++)
-	{
-		data.push(colorList[i].r * 255);
-		data.push(colorList[i].g * 255);
-		data.push(colorList[i].b * 255);
-		data.push(255);
-	}
-
-	var texture = gl.createTexture();
-	gl.bindTexture(gl.TEXTURE_2D, texture);
-	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, size, size, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(data));
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-	gl.generateMipmap(gl.TEXTURE_2D);
-
 	return texture;
 };
