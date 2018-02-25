@@ -80,40 +80,34 @@ Player.prototype.update = function(world)
 	this.camera.rotation.set(0, this.rotation.x, 0);
 	this.camera.position.set(this.body.geometry.position.x, (this.body.geometry.position.y+10), this.body.geometry.position.z);
 	this.camera.updateMatrix();
-}
+};
 
 //Set ID for body
 Player.prototype.setId = function(value)
 {
 	this.body.setId(value);
-}
+};
 
 //Get body ID
 Player.prototype.getId = function()
 {
 	return this.body.getId();
-}
+};
 
 //Get Body Geometry
 Player.prototype.getGeometry = function()
 {
 	return this.body.geometry;
-}
+};
 
 //Set static
 Player.prototype.setStatic = function(value)
 {
 	this.body.isStatic = value;
-}
+};
 
 //Set if it can collide
 Player.prototype.setCollidable = function(collidable)
 {
 	this.body.collidable = collidable;
-}
-
-//Return string with player info
-Player.prototype.toString = function()
-{
-	return "Player\nPosition:"+this.box.position.toString()+"\nRotation:"+this.rotation.toString();
-}
+};

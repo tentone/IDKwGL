@@ -38,4 +38,4 @@ Referencial.prototype.update = function(){}
 Referencial.prototype.draw = function(camera)
 {
 	this.referencial.draw(camera);
-}
+};

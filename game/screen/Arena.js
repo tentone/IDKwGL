@@ -313,14 +313,14 @@ Arena.prototype.update = function()
 	}
 	
 	this.cube.updateMatrix();
-}
+};
 
 Arena.prototype.draw = function()
 {
 	this.scene.draw(this.player.camera);
-}
+};
 
 Arena.prototype.resize = function(canvas)
 {
 	this.player.camera.resize(canvas.width, canvas.height);
-}
+};

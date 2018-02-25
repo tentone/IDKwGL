@@ -36,20 +36,6 @@ Spectator.prototype.update = function()
 		this.camera.position.x -= speed * Math.sin(angle);
 	}
 
-	//Camera Keyboard Movement
-	if(App.keyboard.isKeyPressed(Keyboard.Q))
-	{
-		this.rotation.x -= 3;
-	}
-	if(App.keyboard.isKeyPressed(Keyboard.E))
-	{
-		this.rotation.x += 3;
-	}
-
-	//Camera Mouse Movement
-	this.rotation.x += 0.001 * App.mouse.posDiff.x;
-	this.rotation.y += 0.001 * App.mouse.posDiff.y;
-
 	//Camera Move UP/DOWN
 	if(App.keyboard.isKeyPressed(Keyboard.SPACEBAR))
 	{
@@ -59,23 +45,4 @@ Spectator.prototype.update = function()
 	{
 		this.camera.position.y -= speed;
 	}
-
-	//Limit Vertical Rotation
-	if(this.rotation.y < -1.57)
-	{
-		this.rotation.y = -1.57;
-	}
-	else if(this.rotation.y > 1.57)
-	{
-		this.rotation.y = 1.57;
-	}
-
-	//Set camera rotation
-	this.camera.setRotation(this.rotation.x, this.rotation.y);
-}
-
-//Return string with player info
-Spectator.prototype.toString = function()
-{
-	return "Position:"+this.position.toString()+" Rotation:"+this.rotation.toString();
-}
+};

@@ -7,9 +7,8 @@ function ArenaPhysics()
 	this.idk = new Sprite();
 	this.idk.setTexture(Texture.createTexture(gl, "data/texture/idk.png"));
 	this.idk.scale.set(this.camera.size.y/2,this.camera.size.y/4,1);
-	this.idk.origin.set(this.camera.size.x/3,0,0);
 	this.idk.position.set(this.camera.size.x-1,-this.camera.size.y+1,0);
-	this.idk.update();
+	this.idk.updateMatrix();
 
 	//Create scene and world
 	this.world = new World(new Vector3(0, -20.8, 0));
@@ -22,7 +21,7 @@ function ArenaPhysics()
 	this.skybox.loadOBJ(App.readFile("data/models/skybox/skybox.obj"));
 	this.skybox.scale.set(800,800,800);
 	this.skybox.rotation.set(-90,0,0);
-	this.skybox.update();
+	this.skybox.updateMatrix();
 	this.scene.add(this.skybox);
 
 	//Floor
@@ -31,7 +30,7 @@ function ArenaPhysics()
 	this.model.mulTextureCoords(10, 10);
 	this.model.position.set(0, -100, 0);
 	this.model.scale.set(900, 100, 900);
-	this.model.update();
+	this.model.updateMatrix();
 	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 	
@@ -41,7 +40,7 @@ function ArenaPhysics()
 	this.model.mulTextureCoords(20, 1);
 	this.model.position.set(0, 0, -400);
 	this.model.scale.set(400, 50, 1);
-	this.model.update();
+	this.model.updateMatrix();
 	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
@@ -50,7 +49,7 @@ function ArenaPhysics()
 	this.model.mulTextureCoords(20, 1);
 	this.model.position.set(0, 0, 400);
 	this.model.scale.set(400, 50, 1);
-	this.model.update();
+	this.model.updateMatrix();
 	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
@@ -59,7 +58,7 @@ function ArenaPhysics()
 	this.model.mulTextureCoords(20, 1);
 	this.model.position.set(-400, 0, 0);
 	this.model.scale.set(1, 50, 400);
-	this.model.update();
+	this.model.updateMatrix();
 	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
@@ -68,7 +67,7 @@ function ArenaPhysics()
 	this.model.mulTextureCoords(20, 1);
 	this.model.position.set(400, 0, 0);
 	this.model.scale.set(1, 50, 400);
-	this.model.update();
+	this.model.updateMatrix();
 	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
@@ -89,7 +88,7 @@ ArenaPhysics.prototype.update = function()
 		this.model.setTexture(Texture.createTexture(gl, "data/texture/woodBox.jpg"));
 		this.model.position.set(MathUtils.randomMod()*400,  MathUtils.randomMod()*300, MathUtils.randomMod()*400);
 		this.model.scale.set(5,5,5);
-		this.model.update();
+		this.model.updateMatrix();
 		this.scene.add(this.model);
 		this.world.addBody(new GameObject(this.model));
 		this.world.body[this.world.body.length-1].setStatic(false);
