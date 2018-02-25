@@ -20,7 +20,7 @@ Box.prototype.isColliding = function(obj)
 	}
 
 	return false;
-}
+};
 
 //Check if box will collide after apllying a descolation
 Box.prototype.willCollide = function(speed, obj)
@@ -33,13 +33,7 @@ Box.prototype.willCollide = function(speed, obj)
 	}
 
 	return false;
-}
-
-//Retuns string with box info
-Box.prototype.toString = function()
-{
-	return "Box (Pos:"+this.position.toString()+" Size:"+this.size.toString()+" Ori:"+this.ori.toString()+")";
-}
+};
 
 //Self test function
 Box.test = function()

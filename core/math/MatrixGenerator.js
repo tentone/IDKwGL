@@ -12,7 +12,7 @@ MatrixGenerator.translation = function(translateX, translateY, translateZ)
 	mat.matrix[2][3] = translateZ;	
 	
 	return mat;
-}
+};
 
 //Creates rotation from direction vector (Vector3)
 MatrixGenerator.directionMatrix = function(direction)
@@ -39,7 +39,7 @@ MatrixGenerator.directionMatrix = function(direction)
 	mat.matrix[2][2] = direction.z;
 
 	return mat;
-}
+};
 
 //Generate Rotation Matrix
 MatrixGenerator.rotationMatrix = function(degreesX, degreesY, degreesZ)
@@ -85,7 +85,7 @@ MatrixGenerator.rotationMatrix = function(degreesX, degreesY, degreesZ)
 	}
 
 	return mat;
-}
+};
 
 //Generate Scalling Matrix
 MatrixGenerator.scalingMatrix = function(scaleX, scaleY, scaleZ)
@@ -97,4 +97,4 @@ MatrixGenerator.scalingMatrix = function(scaleX, scaleY, scaleZ)
 	mat.matrix[2][2] = scaleZ;
 
 	return mat;	
-}
+};

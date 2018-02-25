@@ -43,7 +43,7 @@ Matrix.prototype.clear = function()
 			this.matrix[i][i] = 1;
 		}
 	}
-}
+};
 
 //Checks if matri is equals to another
 Matrix.prototype.equals = function(val)
@@ -60,7 +60,7 @@ Matrix.prototype.equals = function(val)
 	}
 
 	return true;
-}
+};
 
 //Convert to array collum oriented
 Matrix.prototype.flatten = function()
@@ -78,7 +78,7 @@ Matrix.prototype.flatten = function()
 	}
 
 	return array;
-}
+};
 
 //Clone matrix into new object
 Matrix.prototype.clone = function()
@@ -94,7 +94,7 @@ Matrix.prototype.clone = function()
 	}
 
 	return mat;
-}
+};
 
 //Tranpose this matrix
 Matrix.prototype.transpose = function()
@@ -114,7 +114,7 @@ Matrix.prototype.transpose = function()
 	this.size.y = this.size.x;
 	this.size.x = i;
 	this.matrix = mat;
-}
+};
 
 //Multiply Matrix
 Matrix.prototype.mul = function(val)
@@ -141,7 +141,7 @@ Matrix.prototype.mul = function(val)
 	this.matrix = mat.matrix;
 	this.size.x = mat.size.x;
 	this.size.y = mat.size.y;
-}
+};
 
 //Add to matrix (have to be same size)
 Matrix.prototype.add = function(val)
@@ -158,7 +158,7 @@ Matrix.prototype.add = function(val)
 			this.matrix[i][j] += val.matrix[i][j];
 		}
 	}
-}
+};
 
 //Sub from matrix (have to be same size)
 Matrix.prototype.sub = function(val)
@@ -175,7 +175,7 @@ Matrix.prototype.sub = function(val)
 			this.matrix[i][j] -= val.matrix[i][j];
 		}
 	}
-}
+};
 
 //toString Matrix info
 Matrix.prototype.toString = function()
@@ -205,7 +205,7 @@ Matrix.prototype.toString = function()
 	}
 	
 	return string + "]";
-}
+};
 
 //Multiply Matrix and store retult in a new one
 Matrix.mul = function(a, b)
@@ -231,7 +231,7 @@ Matrix.mul = function(a, b)
 	}
 
 	return mat;
-}
+};
 	
 //Self testing function 
 Matrix.test = function()
@@ -335,4 +335,4 @@ Matrix.test = function()
 	var k = Matrix.mul(g, c);
 	console.log("\nK = G * ID(4x4)");
 	console.log(k.toString());
-}
+};

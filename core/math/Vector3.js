@@ -37,7 +37,7 @@ Vector3.prototype.set = function(x, y, z)
 Vector3.prototype.clone = function()
 {
 	return new Vector3(this.x, this.y, this.z);
-}
+};
 
 //Normalize Vector
 Vector3.prototype.normalize = function()
@@ -46,13 +46,13 @@ Vector3.prototype.normalize = function()
     this.x /= norm;
     this.y /= norm;
     this.z /= norm;
-}
+};
 
 //Compare values
 Vector3.prototype.equals = function(val)
 {
 	return (this.x === val.x && this.y === val.y && this.z === val.z)
-}
+};
 
 //Add
 Vector3.prototype.add = function(val)
@@ -60,7 +60,7 @@ Vector3.prototype.add = function(val)
 	this.x += val.x;
 	this.y += val.y;
 	this.z += val.z;
-}
+};
 
 //Sub
 Vector3.prototype.sub = function(val)
@@ -68,7 +68,7 @@ Vector3.prototype.sub = function(val)
 	this.x -= val.x;
 	this.y -= val.y;
 	this.z -= val.z
-}
+};
 
 //Mult
 Vector3.prototype.mul = function(val)
@@ -76,7 +76,7 @@ Vector3.prototype.mul = function(val)
 	this.x *= val.x;
 	this.y *= val.y;
 	this.z *= val.z;
-}
+};
 
 //Div
 Vector3.prototype.div = function(val)
@@ -84,7 +84,7 @@ Vector3.prototype.div = function(val)
 	this.x /= val.x;
 	this.y /= val.y;
 	this.z /= val.z;
-}
+};
 
 //Mult by const
 Vector3.prototype.mulConst = function(val)
@@ -92,18 +92,12 @@ Vector3.prototype.mulConst = function(val)
 	this.x *= val;
 	this.y *= val;
 	this.z *= val;
-}
+};
 
 Vector3.prototype.lengthSquared = function()
 {
 	return this.x * this.x + this.y * this.y + this.z * this.z;
 };
-
-//String info
-Vector3.prototype.toString = function()
-{
-	return "("+this.x+", "+this.y+", "+this.z+")";
-}
 
 //Round all values close to zero to zero
 Vector3.prototype.roundCloseToZero = function()
@@ -120,4 +114,4 @@ Vector3.prototype.roundCloseToZero = function()
 	{
 		this.z = 0;
 	}
-}
+};

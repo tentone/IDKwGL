@@ -6,9 +6,10 @@ function Renderer(canvas)
 	this.gl = canvas.getContext("webgl");
 
 	this.autoClear = true;
+	this.clearColor = new Color(0, 0, 0);
 }
 
-Renderer.prototype.render = function(scene)
+Renderer.prototype.render = function(scene, camera)
 {
 	var gl = this.gl;
 
@@ -22,4 +23,6 @@ Renderer.prototype.render = function(scene)
 	//Enable depth test
 	gl.enable(gl.DEPTH_TEST);
 	gl.depthFunc(gl.LESS);
+
+
 };

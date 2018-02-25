@@ -9,13 +9,13 @@ Conversion.degToRadRat = Math.PI / 180.0;
 Conversion.radiansToDegree = function(radians)
 {
     return radians * Conversion.radToDegRat;
-}
+};
 
 //Converts from degrees to radians
 Conversion.degreesToRadians = function(degrees)
 {
     return degrees * Conversion.degToRadRat;
-}
+};
 
 //Convert from cartesian to spherical (Vector3)
 Conversion.cartesianToSpherical = function(vec)
@@ -27,7 +27,7 @@ Conversion.cartesianToSpherical = function(vec)
 	result.z = Math.atan2(Math.sqrt(vec.x*vec.x + vec.y*vec.y), vec.z); // O = arcos(z / r) = arctan(sqrt(x^2 + y^2)/z)
 
  	return result;
-}
+};
 
 //Convert from spherical to cartesian (Vector3)
 Conversion.sphericalToCartesian = function(vec)
@@ -40,7 +40,7 @@ Conversion.sphericalToCartesian = function(vec)
 	result.z = vec.x * Math.cos(vec.z);
 
  	return result;
-}
+};
 
 //Convert from cartesian to cylindrical (Vector3)
 Conversion.cartesianToCylindrical = function(vec)
@@ -52,7 +52,7 @@ Conversion.cartesianToCylindrical = function(vec)
  	result.z = vec.z;
 
  	return result;
-}
+};
 
 Conversion.cylindricalToCartesian = function(vec)
 {
@@ -62,7 +62,7 @@ Conversion.cylindricalToCartesian = function(vec)
 	result.z = vec.z; // z = z
 
 	return result;
-}
+};
 
 Conversion.test = function(vec)
 {
@@ -81,4 +81,4 @@ Conversion.test = function(vec)
 	console.log(a.toString());
 	v = Conversion.cylindricalToCartesian(a);
 	console.log(v.toString());
-}
+};

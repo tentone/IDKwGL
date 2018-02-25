@@ -18,16 +18,10 @@ Sphere.prototype.isColliding = function(obj)
 	}
 
 	return false;
-}
+};
 
 //Check if will collide after movement
 Sphere.prototype.willCollide = function(speed, obj)
 {
 	return false;
-}
-
-//Retuns string with sphere info
-Sphere.prototype.toString = function()
-{
-	return "Pos"+this.position.toString()+" Radius"+this.radius+" Ori"+this.ori.toString();
-}
+};

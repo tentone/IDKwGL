@@ -19,3 +19,8 @@ function PhongMaterial(name)
 	
 	this.alpha = 1; //Alpha Value
 }
+
+
+PhongMaterial.fragment = "";
+
+PhongMaterial.vertex = "";
