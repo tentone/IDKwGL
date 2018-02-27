@@ -10,8 +10,8 @@ function Arena()
 	this.skybox = new Mesh();
 	this.skybox.loadMTL(App.readFile("data/models/skybox/skybox.mtl"), "data/models/skybox");
 	this.skybox.loadOBJ(App.readFile("data/models/skybox/skybox.obj"));
-	this.skybox.scale.set(800,800,800);
-	this.skybox.rotation.set(-90,0,0);
+	this.skybox.scale.set(10,10,10);
+	this.skybox.position.set(0,10,0);
 	this.skybox.updateMatrix();
 	this.scene.add(this.skybox);
 	

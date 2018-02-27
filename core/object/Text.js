@@ -210,18 +210,3 @@ Text.prototype.setText = function(text)
 	//Update buffers
 	this.updateBuffers();
 };
-
-//Creates a copy of this text (keeps same vertex, buffer and texture data pointers)
-Text.prototype.clone = function()
-{
-	var text = new Text();
-
-	text.text = this.text;
-	text.font = this.font;
-	text.texture = this.texture;
-	text.position.set(this.position.x, this.position.y, this.position.z);
-	text.rotation.set(this.rotation.x, this.rotation.y, this.rotation.z);
-	text.scale.set(this.scale.x, this.scale.y, this.scale.z);
-
-	return text;
-};

@@ -132,21 +132,6 @@ Sprite.initializeBuffers = function()
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, faces, gl.STATIC_DRAW);
 };
 
-//Creates a copy of this sprite (keeps same vertex, buffer and texture data pointers)
-Sprite.prototype.clone = function()
-{
-	var sprite = new Sprite();
-
-	sprite.texture = this.texture;
-	sprite.followCameraRotation = this.followCameraRotation;
-	sprite.position.set(this.position.x, this.position.y, this.position.z);
-	sprite.rotation.set(this.rotation.x, this.rotation.y, this.rotation.z);
-	sprite.scale.set(this.scale.x, this.scale.y, this.scale.z);
-	sprite.origin.set(this.origin.x, this.origin.y, this.origin.z);
-
-	return sprite;
-};
-
 //Attach texture image to this sprite
 Sprite.prototype.setTexture = function(texture)
 {

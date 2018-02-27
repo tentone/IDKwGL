@@ -28,7 +28,7 @@ function Mesh()
 	this.updateBuffers();
 
 	//Shader
-	this.shader = new Shader(PhongMaterial.fragment, PhongMaterial.vertex);
+	this.shader = new Shader(BasicMaterial.fragment, BasicMaterial.vertex);
 
 	//Vertex attributes
 	this.shader.program.vertexPositionAttribute = gl.getAttribLocation(this.shader.program, "vertexPosition");
@@ -340,13 +340,6 @@ Mesh.prototype.loadOBJ = function(data)
 		this.computeVertexNormals();
 	}
 
-	//Covert collected data
-	this.modelOBJData();
-};
-
-//Tranform OBJ file to single hash level as used in classes
-Mesh.prototype.modelOBJData = function()
-{
 	//Create temporary arrays to store all model data
 	var vertex = [];
 	var texture = [];
