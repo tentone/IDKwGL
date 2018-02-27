@@ -1,7 +1,7 @@
 "use strict";
 
 //Material Constructor
-function PhongMaterial(name)
+function WaterMaterial(name)
 {
 	Material.call(this);
 
@@ -20,7 +20,7 @@ function PhongMaterial(name)
 	this.alpha = 1; //Alpha Value
 }
 
-PhongMaterial.fragment = "precision mediump float;\
+WaterMaterial.fragment = "precision mediump float;\
 \
 varying vec2 fragmentUV;\
 varying vec3 fragmentVertex;\
@@ -41,6 +41,18 @@ void main(void)\
 	\
 	gl_FragColor = texture2D(texture, vec2(fragmentUV.s, fragmentUV.t));\
 	\
+	\ /* Fade effect */\
+	float value = (cos(time) + 1.0) * gl_FragColor.r * gl_FragColor.g;\
+	if(value > 0.6)\
+	{\
+		discard;\
+	}\
+	if(value > 0.55)\
+	{\
+		gl_FragColor.rgb = vec3(1.0, 1.0, 0.0);\
+		return;\
+	}\
+	\
 	if(gl_FragColor.a < 0.3)\
 	{\
 		discard;\
@@ -49,7 +61,7 @@ void main(void)\
 	gl_FragColor.rgb *= light;\
 }";
 
-PhongMaterial.vertex = "precision mediump float;\
+WaterMaterial.vertex = "precision mediump float;\
 \
 attribute vec3 vertexPosition;\
 attribute vec3 vertexNormal;\
@@ -69,5 +81,10 @@ void main(void)\
 	fragmentVertex = vertexPosition;\
 	fragmentNormal = vertexNormal;\
 	\
-	gl_Position = projection * view * model * vec4(vertexPosition, 1.0);\
+	vec4 position = model * vec4(vertexPosition, 1.0);\
+	\
+	float dist = distance(position, vec4(0,0,0,0));\
+	position.y += cos(time + dist);\
+	\
+	gl_Position = projection * view * position;\
 }";

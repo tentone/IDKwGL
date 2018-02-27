@@ -28,76 +28,7 @@ function Mesh()
 	this.updateBuffers();
 
 	//Shader
-	var vertex = "precision mediump float;\
-	attribute vec3 vertexPosition;\
-	attribute vec3 vertexNormal;\
-	attribute vec2 vertexUV;\
-	\
-	uniform mat4 projection, view;\
-	uniform mat4 model;\
-	uniform float time;\
-	\
-	varying vec2 fragmentUV;\
-	varying vec3 fragmentVertex;\
-	varying vec3 fragmentNormal;\
-	\
-	void main(void)\
-	{\
-		fragmentUV = vertexUV;\
-		fragmentVertex = vertexPosition;\
-		fragmentNormal = vertexNormal;\
-		\
-		vec4 position = model * vec4(vertexPosition, 1.0);\
-		\
-		float dist = distance(position, vec4(0,0,0,0));\
-		position.y += cos(time + dist);\
-		\
-		gl_Position = projection * view * position;\
-	}";
-
-	var fragment = "precision mediump float;\
-	\
-	varying vec2 fragmentUV;\
-	varying vec3 fragmentVertex;\
-	varying vec3 fragmentNormal;\
-	\
-	uniform sampler2D texture;\
-	uniform float time;\
-	\
-	void main(void)\
-	{\
-		\
-		\ /* Directional light */\
-		vec3 normal = normalize(fragmentNormal);\
-		float light = dot(fragmentNormal, vec3(0, 1, 0.5)) * 0.5;\
-		\
-		\ /* Ambient light */\
-		\ light += 0.5;\
-		\
-		gl_FragColor = texture2D(texture, vec2(fragmentUV.s, fragmentUV.t));\
-		\
-		\ /* Fade effect */\
-		float value = (cos(time) + 1.0) * gl_FragColor.r * gl_FragColor.g;\
-		if(value > 0.6)\
-		{\
-			discard;\
-		}\
-		if(value > 0.55)\
-		{\
-			gl_FragColor.rgb = vec3(1.0, 1.0, 0.0);\
-			return;\
-		}\
-		\
-		if(gl_FragColor.a < 0.3)\
-		{\
-			discard;\
-		}\
-		\
-		gl_FragColor.rgb *= light;\
-	}";
-
-	//Shader
-	this.shader = new Shader(fragment, vertex);
+	this.shader = new Shader(PhongMaterial.fragment, PhongMaterial.vertex);
 
 	//Vertex attributes
 	this.shader.program.vertexPositionAttribute = gl.getAttribLocation(this.shader.program, "vertexPosition");

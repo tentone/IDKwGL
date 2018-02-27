@@ -1,5 +1,14 @@
 "use strict";
 
+/**
+ * The renderer is responsible for managing the whole WebGL context.
+ * 
+ * It starts the rendering process and manages GL buffers and shaders.
+ *
+ * @class Renderer
+ * @constructor
+ * @parameter {Canvas} canvas Canvas to initialize webgl context.
+ */
 function Renderer(canvas)
 {
 	this.canvas = canvas;
@@ -7,6 +16,8 @@ function Renderer(canvas)
 
 	this.autoClear = true;
 	this.clearColor = new Color(0, 0, 0);
+
+	this.glBuffers = [];
 }
 
 Renderer.prototype.render = function(scene, camera)
