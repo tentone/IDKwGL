@@ -6,7 +6,6 @@ function Texture()
 	this.name = "";
 	this.type = "Texture";
 
-	//TODO <ADD CODE HERE>
 }
 
 //Texture Constructor from file name

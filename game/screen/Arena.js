@@ -10,7 +10,7 @@ function Arena()
 	this.skybox = new Mesh();
 	this.skybox.loadMTL(App.readFile("data/models/skybox/skybox.mtl"), "data/models/skybox");
 	this.skybox.loadOBJ(App.readFile("data/models/skybox/skybox.obj"));
-	this.skybox.scale.set(10,10,10);
+	this.skybox.scale.set(800,800,800);
 	this.skybox.position.set(0,10,0);
 	this.skybox.updateMatrix();
 	this.scene.add(this.skybox);
@@ -195,28 +195,24 @@ function Arena()
 		this.scene.add(grass);
 	}
 
-	/*
 	//Tank smoke
-	this.model = new Sprite();
+	/*this.model = new Sprite();
 	this.model.setTexture(Texture.createTexture(gl, "data/texture/smoke_2.png"));
 	this.model.scale.set(4, 4, 1);
-	this.model.origin.set(2, 2, 0);
-	this.model.followCameraRotation = true;
 	this.model.position.set(MathUtils.randomMod()*400, 2, MathUtils.randomMod()*400);
-	this.model.update();
-	this.particle = new ParticleEmitter(this.model, new Vector3(-250,8,100), new Vector3(0,0.7,0), new Vector3(0.3,0.5,0.3), 6, 4, 150, 150, 50);
+	this.model.updateMatrix();
+	this.particle = new ParticleEmitter(this.model, new Vector3(-250,8,100), new Vector3(0,0.7,0), new Vector3(0.3,0.5,0.3), 6, 4, 150, 150, 50);*/
 	
 	//Bullet
-	this.bullet = new Mesh();
+	/*this.bullet = new Mesh();
 	this.bullet.loadOBJ(App.readFile("data/models/skybox/skybox.obj"));
 	this.bullet.setTexture(Texture.generateSolidColorTexture(gl, Color.WHITE));
 	this.bullet.scale.set(0.2,0.2,0.2);
 	this.bullet.position.set(0,8,0);
-	this.bullet.update();
+	this.bullet.updateMatrix();
 	
 	this.bulletParticle = new Particle(this.bullet.clone(), new Vector3(0,8,0), new Vector3(0,0,0), 1, 10000);
-	this.bulletParticleList = [];
-	*/
+	this.bulletParticleList = [];*/
 
 	//Player
 	this.player = new Player(canvas);
