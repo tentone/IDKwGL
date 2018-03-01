@@ -25,7 +25,7 @@ Scene.prototype.draw = function(camera, clear)
 	gl.depthFunc(gl.LESS);
 
 	for(var i = 0; i < this.objects.length; i++)
-	{
+	{	
 		this.objects[i].draw(camera, this);
 	}
 }

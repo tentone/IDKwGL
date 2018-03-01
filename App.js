@@ -19,15 +19,21 @@ include("core/input/Key.js");
 include("core/input/Keyboard.js");
 include("core/input/Mouse.js");
 
+include("core/loaders/OBJLoader.js");
+
 include("core/utils/GeometryUtils.js");
 
 include("core/Font.js");
 include("core/Shader.js");
 include("core/Scene.js");
 
-include("core/textures/Texture.js");
+include("core/texture/Texture.js");
+include("core/texture/DataTexture.js");
+
+include("core/geometry/Geometry.js");
 
 include("core/materials/Material.js");
+include("core/materials/MeshMaterial.js");
 include("core/materials/BasicMaterial.js");
 include("core/materials/PhongMaterial.js");
 

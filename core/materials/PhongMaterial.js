@@ -1,9 +1,8 @@
 "use strict";
 
-//Material Constructor
 function PhongMaterial(name)
 {
-	Material.call(this);
+	MeshMaterial.call(this);
 
 	this.name = name;
 	
@@ -20,7 +19,11 @@ function PhongMaterial(name)
 	this.alpha = 1; //Alpha Value
 }
 
-PhongMaterial.fragment = "precision mediump float;\
+PhongMaterial.prototype = Object.create(MeshMaterial.prototype);
+
+PhongMaterial.vertexShader = MeshMaterial.vertexShader;
+
+PhongMaterial.fragmentShader = "precision mediump float;\
 \
 varying vec2 fragmentUV;\
 varying vec3 fragmentVertex;\
@@ -47,27 +50,4 @@ void main(void)\
 	}\
 	\
 	gl_FragColor.rgb *= light;\
-}";
-
-PhongMaterial.vertex = "precision mediump float;\
-\
-attribute vec3 vertexPosition;\
-attribute vec3 vertexNormal;\
-attribute vec2 vertexUV;\
-\
-uniform mat4 projection, view;\
-uniform mat4 model;\
-uniform float time;\
-\
-varying vec2 fragmentUV;\
-varying vec3 fragmentVertex;\
-varying vec3 fragmentNormal;\
-\
-void main(void)\
-{\
-	fragmentUV = vertexUV;\
-	fragmentVertex = vertexPosition;\
-	fragmentNormal = vertexNormal;\
-	\
-	gl_Position = projection * view * model * vec4(vertexPosition, 1.0);\
 }";

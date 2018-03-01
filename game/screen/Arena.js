@@ -7,46 +7,37 @@ function Arena()
 	this.scene = new Scene();
 
 	//Skybox
-	this.skybox = new Mesh();
-	this.skybox.loadMTL(App.readFile("data/models/skybox/skybox.mtl"), "data/models/skybox");
-	this.skybox.loadOBJ(App.readFile("data/models/skybox/skybox.obj"));
+	this.skybox = OBJLoader.load(App.readFile("data/models/skybox/skybox.obj"), App.readFile("data/models/skybox/skybox.mtl"), "data/models/skybox");
 	this.skybox.scale.set(800,800,800);
 	this.skybox.position.set(0,10,0);
 	this.skybox.updateMatrix();
 	this.scene.add(this.skybox);
 	
 	//Tank
-	this.model = new Mesh();
-	this.model.loadOBJ(tank);
+	/*this.model = OBJLoader.load(tank);
 	this.model.setTexture(Texture.createTexture(gl, "data/texture/tank.jpg"));
 	this.model.scale.set(15, 15, 15);
 	this.model.position.set(-250,0,100);
 	this.model.updateMatrix();
 	this.scene.add(this.model);
-	this.world.addBody(new GameObject(this.model));
+	this.world.addBody(new GameObject(this.model));*/
 
 	//Eyebot
-	this.model = new Mesh();
-	this.model.loadMTL(App.readFile("data/models/eyebot/eyebot.mtl"), "data/models/eyebot");
-	this.model.loadOBJ(App.readFile("data/models/eyebot/eyebot.obj"));
+	this.model = OBJLoader.load(App.readFile("data/models/eyebot/eyebot.obj"), App.readFile("data/models/eyebot/eyebot.mtl"), "data/models/eyebot");
 	this.model.position.set(0,20,-100);
 	this.model.scale.set(0.5,0.5,0.5);
 	this.model.updateMatrix();
 	this.scene.add(this.model);
 
 	//Asian Girl
-	this.model = new Mesh();
-	this.model.loadMTL(App.readFile("data/models/asiangirl/asiangirl.mtl"), "data/models/asiangirl");
-	this.model.loadOBJ(App.readFile("data/models/asiangirl/asiangirl.obj"));
+	this.model = OBJLoader.load(App.readFile("data/models/asiangirl/asiangirl.obj"), App.readFile("data/models/asiangirl/asiangirl.mtl"), "data/models/asiangirl");
 	this.model.position.set(-100,0,-100);
 	this.model.scale.set(0.15,0.15,0.15);
 	this.model.updateMatrix();
 	this.scene.add(this.model);
 
 	//Bus
-	this.bus = new Mesh();
-	this.bus.loadMTL(App.readFile("data/models/bus/bus.mtl"), "data/models/bus");
-	this.bus.loadOBJ(App.readFile("data/models/bus/bus.obj"));
+	this.bus = OBJLoader.load(App.readFile("data/models/bus/bus.obj"), App.readFile("data/models/bus/bus.mtl"), "data/models/bus");
 	this.bus.scale.set(0.08, 0.08, 0.08);
 	this.bus.position.set(100,19.8,300);
 	this.bus.rotation.set(0, Math.PI ,0);
@@ -55,8 +46,7 @@ function Arena()
 	this.world.addBody(new GameObject(this.bus));
 	
 	//House
-	this.model = new Mesh();
-	this.model.loadOBJ(house);
+	this.model = OBJLoader.load(house);
 	this.model.setTexture(Texture.createTexture(gl, "data/texture/house.jpg"));
 	this.model.scale.set(7, 7, 7);
 	this.model.position.set(300,0,500);
@@ -205,7 +195,7 @@ function Arena()
 	
 	//Bullet
 	/*this.bullet = new Mesh();
-	this.bullet.loadOBJ(App.readFile("data/models/skybox/skybox.obj"));
+	this.bullet = OBJLoader.load(App.readFile("data/models/skybox/skybox.obj"));
 	this.bullet.setTexture(Texture.generateSolidColorTexture(gl, Color.WHITE));
 	this.bullet.scale.set(0.2,0.2,0.2);
 	this.bullet.position.set(0,8,0);
@@ -249,7 +239,7 @@ Arena.prototype.update = function()
 	if(App.keyboard.isKeyPressed(Keyboard.NUM1))
 	{
 		this.weapon = new Mesh();
-		this.weapon.loadOBJ(App.readFile("data/models/pulserifle/pulserifle.obj"));
+		this.weapon = OBJLoader.load(App.readFile("data/models/pulserifle/pulserifle.obj"));
 		this.weapon.setTexture(Texture.createTexture(gl, "data/models/pulserifle/tex1.jpg"));
 		this.weapon.scale.set(2, 2, 2);
 		this.weapon.position.set(-0.3,-0.3,0.5);
@@ -258,7 +248,7 @@ Arena.prototype.update = function()
 	if(App.keyboard.isKeyPressed(Keyboard.NUM2))
 	{
 		this.weapon = new Mesh();
-		this.weapon.loadOBJ(App.readFile("data/models/scopedrifle/scopedrifle.obj"));
+		this.weapon = OBJLoader.load(App.readFile("data/models/scopedrifle/scopedrifle.obj"));
 		this.weapon.setTexture(Texture.createTexture(gl, "data/models/scopedrifle/tex1.jpg"));
 		this.weapon.scale.set(2, 2, 2);
 		this.weapon.position.set(-0.3,-0.3,0.5);
