@@ -5,7 +5,8 @@ function PhongMaterial(name)
 	MeshMaterial.call(this);
 
 	this.name = name;
-	
+	this.type = "PhongMaterial";
+
 	this.texture = null;
 	this.normalMap = null;
 	this.bumpMap = null;
@@ -30,7 +31,9 @@ varying vec3 fragmentVertex;\
 varying vec3 fragmentNormal;\
 \
 uniform sampler2D texture;\
+\
 uniform float time;\
+uniform float cameraFar, cameraNear;\
 \
 void main(void)\
 {\

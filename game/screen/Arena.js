@@ -117,7 +117,7 @@ function Arena()
 	//Floor
 	this.model = Mesh.cube();
 	this.model.setTexture(Texture.createTexture(gl, "data/texture/grass.jpg"));
-	this.model.mulTextureCoords(30, 30);
+	this.model.geometry.scaleUV(30, 30);
 	this.model.position.set(0, -100, 0);
 	this.model.scale.set(900, 100, 900);
 	this.model.updateMatrix();
@@ -127,7 +127,7 @@ function Arena()
 	//Walls
 	this.model = Mesh.cube();
 	this.model.setTexture(Texture.createTexture(gl, "data/texture/wall.png"));
-	this.model.mulTextureCoords(20, 1);
+	this.model.geometry.scaleUV(20, 1);
 	this.model.position.set(0, 0, -400);
 	this.model.scale.set(400, 50, 1);
 	this.model.updateMatrix();
@@ -136,7 +136,7 @@ function Arena()
 
 	this.model = Mesh.cube();
 	this.model.setTexture(Texture.createTexture(gl, "data/texture/wall.png"));
-	this.model.mulTextureCoords(20, 1);
+	this.model.geometry.scaleUV(20, 1);
 	this.model.position.set(0, 0, 400);
 	this.model.scale.set(400, 50, 1);
 	this.model.updateMatrix();
@@ -145,7 +145,7 @@ function Arena()
 
 	this.model = Mesh.cube();
 	this.model.setTexture(Texture.createTexture(gl, "data/texture/wall.png"));
-	this.model.mulTextureCoords(20, 1);
+	this.model.geometry.scaleUV(20, 1);
 	this.model.position.set(-400, 0, 0);
 	this.model.scale.set(1, 50, 400);
 	this.model.updateMatrix();
@@ -154,7 +154,7 @@ function Arena()
 
 	this.model = Mesh.cube();
 	this.model.setTexture(Texture.createTexture(gl, "data/texture/wall.png"));
-	this.model.mulTextureCoords(20, 1);
+	this.model.geometry.scaleUV(20, 1);
 	this.model.position.set(400, 0, 0);
 	this.model.scale.set(1, 50, 400);
 	this.model.updateMatrix();

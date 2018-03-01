@@ -11,7 +11,6 @@ include("core/math/Conversion.js");
 include("core/math/MathsUtils.js");
 include("core/math/Color.js");
 
-include("core/math/geometry/Geometry.js");
 include("core/math/geometry/Box.js");
 include("core/math/geometry/Sphere.js");
 

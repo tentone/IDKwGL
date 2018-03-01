@@ -3,6 +3,8 @@
 function MeshMaterial()
 {
 	Material.call(this);
+
+	this.type = "MeshMaterial";
 }
 
 MeshMaterial.prototype = Object.create(Material.prototype);
@@ -15,6 +17,8 @@ attribute vec2 vertexUV;\
 \
 uniform mat4 projection, view;\
 uniform mat4 model;\
+\
+uniform float cameraFar, cameraNear;\
 uniform float time;\
 \
 varying vec2 fragmentUV;\
@@ -37,6 +41,8 @@ varying vec3 fragmentVertex;\
 varying vec3 fragmentNormal;\
 \
 uniform sampler2D texture;\
+\
+uniform float cameraFar, cameraNear;\
 uniform float time;\
 \
 void main(void)\

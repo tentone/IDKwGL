@@ -13,6 +13,8 @@ OBJLoader.load = function(data, mtl, path)
 
 	var lines = data.split("\n");
 
+	var geometry = mesh.geometry;
+
 	// Check every line and store 
 	for(var i = 0; i < lines.length; i++)
 	{
@@ -22,22 +24,22 @@ OBJLoader.load = function(data, mtl, path)
 		//Vertices
 		if(tokens[0] === "v")
 		{
-			mesh.vertex.push(parseFloat(tokens[1]));
-			mesh.vertex.push(parseFloat(tokens[2]));
-			mesh.vertex.push(parseFloat(tokens[3]));
+			geometry.vertex.push(parseFloat(tokens[1]));
+			geometry.vertex.push(parseFloat(tokens[2]));
+			geometry.vertex.push(parseFloat(tokens[3]));
 		}
 		//Normals
 		else if(tokens[0] === "vn")
 		{
-			mesh.normals.push(parseFloat(tokens[1]));
-			mesh.normals.push(parseFloat(tokens[2]));
-			mesh.normals.push(parseFloat(tokens[3]));
+			geometry.normals.push(parseFloat(tokens[1]));
+			geometry.normals.push(parseFloat(tokens[2]));
+			geometry.normals.push(parseFloat(tokens[3]));
 		}
 		//Texture coords
 		else if(tokens[0] === "vt")
 		{
-			mesh.uvs.push(parseFloat(tokens[1]));
-			mesh.uvs.push(parseFloat(tokens[2]));
+			geometry.uvs.push(parseFloat(tokens[1]));
+			geometry.uvs.push(parseFloat(tokens[2]));
 		}
 		//Faces <vertex>/<texture>/<normal>
 		else if(tokens[0] === "f")
@@ -47,53 +49,53 @@ OBJLoader.load = function(data, mtl, path)
 			if(tokens.length === 4)
 			{
 				var val = tokens[1].split("/");
-				mesh.faces.push(parseInt(val[0])); //Vertex
-				mesh.faces.push(parseInt(val[1])); //Texture
-				mesh.faces.push(parseInt(val[2]));; //Normal
+				geometry.faces.push(parseInt(val[0])); //Vertex
+				geometry.faces.push(parseInt(val[1])); //Texture
+				geometry.faces.push(parseInt(val[2]));; //Normal
 
 				val = tokens[2].split("/");
-				mesh.faces.push(parseInt(val[0])); //Vertex
-				mesh.faces.push(parseInt(val[1])); //Texture
-				mesh.faces.push(parseInt(val[2]));; //Normal
+				geometry.faces.push(parseInt(val[0])); //Vertex
+				geometry.faces.push(parseInt(val[1])); //Texture
+				geometry.faces.push(parseInt(val[2]));; //Normal
 
 				val = tokens[3].split("/");
-				mesh.faces.push(parseInt(val[0])); //Vertex
-				mesh.faces.push(parseInt(val[1])); //Texture
-				mesh.faces.push(parseInt(val[2]));; //Normal
+				geometry.faces.push(parseInt(val[0])); //Vertex
+				geometry.faces.push(parseInt(val[1])); //Texture
+				geometry.faces.push(parseInt(val[2]));; //Normal
 			}
 			//4 vertex face (Quad)
 			//f 16/92/11 40/109/40 38/114/38 14/101/22
 			else if(tokens.length === 5)
 			{
 				var val = tokens[1].split("/");
-				mesh.faces.push(val[0]); //Vertex
-				mesh.faces.push(val[1]); //Texture
-				mesh.faces.push(val[2]); //Normal
+				geometry.faces.push(val[0]); //Vertex
+				geometry.faces.push(val[1]); //Texture
+				geometry.faces.push(val[2]); //Normal
 
 				val = tokens[2].split("/");
-				mesh.faces.push(val[0]); //Vertex
-				mesh.faces.push(val[1]); //Texture
-				mesh.faces.push(val[2]); //Normal
+				geometry.faces.push(val[0]); //Vertex
+				geometry.faces.push(val[1]); //Texture
+				geometry.faces.push(val[2]); //Normal
 
 				val = tokens[3].split("/");
-				mesh.faces.push(val[0]); //Vertex
-				mesh.faces.push(val[1]); //Texture
-				mesh.faces.push(val[2]); //Normal
+				geometry.faces.push(val[0]); //Vertex
+				geometry.faces.push(val[1]); //Texture
+				geometry.faces.push(val[2]); //Normal
 
 				val = tokens[1].split("/");
-				mesh.faces.push(val[0]); //Vertex
-				mesh.faces.push(val[1]); //Texture
-				mesh.faces.push(val[2]); //Normal
+				geometry.faces.push(val[0]); //Vertex
+				geometry.faces.push(val[1]); //Texture
+				geometry.faces.push(val[2]); //Normal
 
 				val = tokens[3].split("/");
-				mesh.faces.push(val[0]); //Vertex
-				mesh.faces.push(val[1]); //Texture
-				mesh.faces.push(val[2]); //Normal
+				geometry.faces.push(val[0]); //Vertex
+				geometry.faces.push(val[1]); //Texture
+				geometry.faces.push(val[2]); //Normal
 
 				val = tokens[4].split("/");
-				mesh.faces.push(val[0]); //Vertex
-				mesh.faces.push(val[1]); //Texture
-				mesh.faces.push(val[2]); //Normal
+				geometry.faces.push(val[0]); //Vertex
+				geometry.faces.push(val[1]); //Texture
+				geometry.faces.push(val[2]); //Normal
 			}
 		}
 		//Material
@@ -116,12 +118,12 @@ OBJLoader.load = function(data, mtl, path)
 				//If faces material has elements add last index
 				if(mesh.faceMaterial.length !== 0)
 				{
-					mesh.faceMaterial[mesh.faceMaterial.length-2] = mesh.faces.length/3;
+					mesh.faceMaterial[mesh.faceMaterial.length-2] = geometry.faces.length/3;
 				}
 
 				//Add new material
-				mesh.faceMaterial.push(mesh.faces.length/3); //Ini Position
-				mesh.faceMaterial.push(mesh.faces.length/3); //End Position (temporary)
+				mesh.faceMaterial.push(geometry.faces.length/3); //Ini Position
+				mesh.faceMaterial.push(geometry.faces.length/3); //End Position (temporary)
 				mesh.faceMaterial.push(j); //Material Index
 			}
 		}
@@ -129,40 +131,19 @@ OBJLoader.load = function(data, mtl, path)
 	
 	if(mesh.faceMaterial.length > 0)
 	{
-		mesh.faceMaterial[mesh.faceMaterial.length-2] = mesh.faces.length/3;
+		mesh.faceMaterial[mesh.faceMaterial.length-2] = geometry.faces.length/3;
 	}
 
 	//If no coord found complete with data
-	if(mesh.uvs.length === 0)
+	if(geometry.uvs.length === 0)
 	{
-		//Full texture to all triangles
-		mesh.uvs.push(0.0);
-		mesh.uvs.push(0.0);
-
-		mesh.uvs.push(1.0);
-		mesh.uvs.push(1.0);
-
-		//Add Texture Component to all faces
-		for(var i = 1; i < mesh.faces.length; i+=3)
-		{
-			if(isNaN(mesh.faces[i]))
-			{
-				if(i%2 === 0)
-				{
-					mesh.faces[i] = 1;
-				}
-				else
-				{
-					mesh.faces[i] = 2;
-				}
-			}
-		}
+		geometry.fillUV();
 	}
 
 	// Checking to see if the normals are defined on the file
-	if(mesh.normals.length === 0)
+	if(geometry.normals.length === 0)
 	{
-		mesh.computeVertexNormals();
+		geometry.computeNormals();
 	}
 
 	//Create temporary arrays to store all model data
@@ -172,30 +153,30 @@ OBJLoader.load = function(data, mtl, path)
 	var faces = [];
 	
 	//Transform Data
-	for(var i = 0; i < mesh.faces.length; i += 3)
+	for(var i = 0; i < geometry.faces.length; i += 3)
 	{
 		faces.push(Math.floor(i/3));
 
-		vertex.push(mesh.vertex[(mesh.faces[i]-1)*3]);
-		vertex.push(mesh.vertex[(mesh.faces[i]-1)*3+1]);
-		vertex.push(mesh.vertex[(mesh.faces[i]-1)*3+2]);
+		vertex.push(geometry.vertex[(geometry.faces[i]-1)*3]);
+		vertex.push(geometry.vertex[(geometry.faces[i]-1)*3+1]);
+		vertex.push(geometry.vertex[(geometry.faces[i]-1)*3+2]);
 
-		texture.push(mesh.uvs[(mesh.faces[i+1]-1)*2]);
-		texture.push(mesh.uvs[(mesh.faces[i+1]-1)*2+1]);
+		texture.push(geometry.uvs[(geometry.faces[i+1]-1)*2]);
+		texture.push(geometry.uvs[(geometry.faces[i+1]-1)*2+1]);
 
-		normals.push(mesh.normals[(mesh.faces[i+2]-1)*3]);
-		normals.push(mesh.normals[(mesh.faces[i+2]-1)*3+1]);
-		normals.push(mesh.normals[(mesh.faces[i+2]-1)*3+2]);
+		normals.push(geometry.normals[(geometry.faces[i+2]-1)*3]);
+		normals.push(geometry.normals[(geometry.faces[i+2]-1)*3+1]);
+		normals.push(geometry.normals[(geometry.faces[i+2]-1)*3+2]);
 	}
 
 	//Copy array pointer into main data and update bufffers
-	mesh.faces = faces;
-	mesh.vertex = vertex;
-	mesh.uvs = texture;
-	mesh.normals = normals;
+	geometry.faces = faces;
+	geometry.vertex = vertex;
+	geometry.uvs = texture;
+	geometry.normals = normals;
 
 	//Update Buffers
-	mesh.updateBuffers();
+	geometry.updateBuffers();
 
 	return mesh;
 };

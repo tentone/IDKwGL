@@ -6,13 +6,13 @@ function Sphere()
 	this.radius = 0;
 	this.ori = new Vector3(0,0,0);
 
-	this.type = Geometry.SPHERE;
+	this.type = "Sphere";
 }
 
 //Check if its colliding
 Sphere.prototype.isColliding = function(obj)
 {
-	if(obj.type === Geometry.SPHERE)
+	if(obj.type === "Sphere")
 	{
 		return MathUtils.pointDistance(this.position, obj.position) > this.radius + obj.radius;
 	}
