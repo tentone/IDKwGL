@@ -15,47 +15,47 @@ GeometryUtils.moveToSphericalSurface = function(coords)
 	}
 }
 
-//Subdivide triangles from model
-GeometryUtils.midPointRefinement = function(model, recursionDepth)
+//Subdivide triangles from geometry
+GeometryUtils.subdivide = function(geometry, recursionDepth)
 {
 	//Copying
-	var origCoords = model.vertex.slice();
-	var origColors = model.colors.slice();
+	var origCoords = geometry.vertex.slice();
+	var origColors = geometry.colors.slice();
 	
 	//Clearing the arrays
-	model.size = 0;
-	model.vertex = [];
-	model.colors = [];
-	model.computeVertexNormals();
+	geometry.size = 0;
+	geometry.vertex = [];
+	geometry.colors = [];
+	geometry.computeVertexNormals();
 
 	//Each triangle is recursively subdivided into 4 triangles, Iterate through the original triangular faces
 	for(var i = 0; i < origCoords.length; i += 9)
 	{
 		// Call the recursive subdivision function
-		GeometryUtils.recSubdivisionMidPoint(new Vector3(origCoords[i],origCoords[i+1],origCoords[i+2]),
+		GeometryUtils.recursiveDivision(new Vector3(origCoords[i],origCoords[i+1],origCoords[i+2]),
 										  new Vector3(origCoords[i+3],origCoords[i+4],origCoords[i+5]),
 										  new Vector3(origCoords[i+6],origCoords[i+7],origCoords[i+8]),
 										  new Vector3(origColors[i],origColors[i+1],origColors[i+2]),
 										  new Vector3(origColors[i+3],origColors[i+4],origColors[i+5]),
 										  new Vector3(origColors[i+6],origColors[i+7],origColors[i+8]),
-										  model, recursionDepth);
+										  geometry, recursionDepth);
 	}
 }
 
 //Recursive triangle subdivision, using the midpoints of edges
-GeometryUtils.recSubdivisionMidPoint = function(v1, v2, v3, c1, c2, c3, model, recursionDepth)
+GeometryUtils.recursiveDivision = function(v1, v2, v3, c1, c2, c3, geometry, recursionDepth)
 {
 	// Recursive midpoint subdivision of one triangle
 	if(recursionDepth === 0)
 	{
 		// Storing coordinates and colors in the destination arrays
-		model.vertex.push(v1.x, v1.y, v1.z);
-		model.vertex.push(v2.x, v2.y, v2.z);
-		model.vertex.push(v3.x, v3.y, v3.z);
-		model.size += 9;
-		model.colors.push(c1.x, c1.y, c1.z);
-		model.colors.push(c2.x, c2.y, c2.z);
-		model.colors.push(c3.x, c3.y, c3.z);	    
+		geometry.vertex.push(v1.x, v1.y, v1.z);
+		geometry.vertex.push(v2.x, v2.y, v2.z);
+		geometry.vertex.push(v3.x, v3.y, v3.z);
+		geometry.size += 9;
+		geometry.colors.push(c1.x, c1.y, c1.z);
+		geometry.colors.push(c2.x, c2.y, c2.z);
+		geometry.colors.push(c3.x, c3.y, c3.z);	    
 	}
 	else
 	{
@@ -70,9 +70,9 @@ GeometryUtils.recSubdivisionMidPoint = function(v1, v2, v3, c1, c2, c3, model, r
 		var c31 = MathUtils.computeMidPoint(c3, c1);
 		
 		// 4 recursive calls 
-		GeometryUtils.recSubdivisionMidPoint(v1, mid12, mid31, c1, c12, c31, model, recursionDepth - 1);
-		GeometryUtils.recSubdivisionMidPoint(v2, mid23, mid12, c2, c23, c12, model, recursionDepth - 1);
-		GeometryUtils.recSubdivisionMidPoint(v3, mid31, mid23, c3, c31, c23, model, recursionDepth - 1);
-		GeometryUtils.recSubdivisionMidPoint(mid12, mid23, mid31, c12, c23, c31, model, recursionDepth - 1);
+		GeometryUtils.recursiveDivision(v1, mid12, mid31, c1, c12, c31, geometry, recursionDepth - 1);
+		GeometryUtils.recursiveDivision(v2, mid23, mid12, c2, c23, c12, geometry, recursionDepth - 1);
+		GeometryUtils.recursiveDivision(v3, mid31, mid23, c3, c31, c23, geometry, recursionDepth - 1);
+		GeometryUtils.recursiveDivision(mid12, mid23, mid31, c12, c23, c31, geometry, recursionDepth - 1);
 	}
 }

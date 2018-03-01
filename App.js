@@ -38,6 +38,7 @@ include("core/materials/Material.js");
 include("core/materials/MeshMaterial.js");
 include("core/materials/BasicMaterial.js");
 include("core/materials/PhongMaterial.js");
+include("core/materials/DepthMaterial.js");
 
 include("core/object/Object3D.js");
 include("core/object/Sprite.js");

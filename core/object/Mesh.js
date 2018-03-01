@@ -1,6 +1,5 @@
 "use strict";
 
-//Empty model constructor
 function Mesh(geometry, material)
 {
 	Object3D.call(this);

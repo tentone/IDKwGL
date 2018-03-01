@@ -1,6 +1,5 @@
 "use strict";
 
-//Empty model constructor
 function Object3D()
 {
 	//Attributes
