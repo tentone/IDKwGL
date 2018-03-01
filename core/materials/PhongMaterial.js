@@ -33,7 +33,7 @@ varying vec3 fragmentNormal;\
 uniform sampler2D texture;\
 \
 uniform float time;\
-uniform float cameraFar, cameraNear;\
+uniform float far, near;\
 \
 void main(void)\
 {\

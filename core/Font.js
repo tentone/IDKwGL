@@ -74,7 +74,7 @@ function Font(fname, folder)
 //Load font from file
 Font.prototype.loadFont = function(fname, folder)
 {
-	var file = App.readFile(fname);
+	var file = FileLoader.loadText(fname);
 	var data = file.split("\n");
 	var id = -1;
 

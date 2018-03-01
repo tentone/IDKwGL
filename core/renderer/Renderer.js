@@ -25,3 +25,17 @@ Renderer.prototype.render = function(scene, camera)
 	gl.enable(gl.DEPTH_TEST);
 	gl.depthFunc(gl.LESS);
 };
+
+Renderer.prototype.initGL = function()
+{
+	try
+	{
+		this.gl = canvas.getContext("webgl", {alpha: false});
+		this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+	}
+	catch(e)
+	{
+		this.gl = null;
+		console.error("Failed to create WebGL context (" + e + ")");		
+	}
+};

@@ -13,7 +13,7 @@ Main.init = function(canvas)
 //Logic Update
 Main.update = function()
 {
-	if(App.keyboard.isKeyPressed(Keyboard.I))
+	if(App.keyboard.isKeyPressed(Keyboard.O))
 	{
 		screen = new Arena();
 	}

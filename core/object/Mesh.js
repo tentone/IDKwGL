@@ -17,7 +17,7 @@ function Mesh(geometry, material)
 
 	//Time
 	this.time = 0;
-	
+
 	//Shader
 	this.shader = new Shader(BasicMaterial.fragmentShader, BasicMaterial.vertexShader);
 
@@ -40,6 +40,8 @@ function Mesh(geometry, material)
 	this.shader.program.modelMatrixUniform = gl.getUniformLocation(this.shader.program, "model");
 
 	this.shader.program.time = gl.getUniformLocation(this.shader.program, "time");
+	this.shader.program.far = gl.getUniformLocation(this.shader.program, "far");
+	this.shader.program.near = gl.getUniformLocation(this.shader.program, "near");
 }
 
 Mesh.prototype = Object.create(Object3D.prototype);
@@ -57,6 +59,10 @@ Mesh.prototype.draw = function(camera, scene)
 
 	//Time
 	gl.uniform1f(this.shader.program.time, this.time);
+
+	//Camera
+	gl.uniform1f(this.shader.program.near, camera.near);
+	gl.uniform1f(this.shader.program.far, camera.far);
 
 	//Transformation matrices
 	gl.uniformMatrix4fv(this.shader.program.projectionMatrixUniform, false, camera.projectionMatrix.flatten());
@@ -188,172 +194,4 @@ Mesh.prototype.getBox = function()
 	}
 	
 	return this.box;
-};
-
-//Test Function that creates a cube with texture and retuns it
-Mesh.cube = function()
-{
-	var model = new Mesh();
-
-	model.geometry.vertex =
-	[
-		// Front face
-		-1.0, -1.0,  1.0,
-		1.0, -1.0,  1.0,
-		1.0,  1.0,  1.0,
-		-1.0,  1.0,  1.0,
-		// Back face
-		-1.0, -1.0, -1.0,
-		-1.0,  1.0, -1.0,
-		1.0,  1.0, -1.0,
-		1.0, -1.0, -1.0,
-		// Top face
-		-1.0,  1.0, -1.0,
-		-1.0,  1.0,  1.0,
-		1.0,  1.0,  1.0,
-		1.0,  1.0, -1.0,
-		// Bottom face
-		-1.0, -1.0, -1.0,
-		1.0, -1.0, -1.0,
-		1.0, -1.0,  1.0,
-		-1.0, -1.0,  1.0,
-		// Right face
-		1.0, -1.0, -1.0,
-		1.0,  1.0, -1.0,
-		1.0,  1.0,  1.0,
-		1.0, -1.0,  1.0,
-		// Left face
-		-1.0, -1.0, -1.0,
-		-1.0, -1.0,  1.0,
-		-1.0,  1.0,  1.0,
-		-1.0,  1.0, -1.0
-	];
-
-	model.geometry.uvs =
-	[
-		// Front face
-		0.0, 0.0,
-		1.0, 0.0,
-		1.0, 1.0,
-		0.0, 1.0,
-		// Back face
-		1.0, 0.0,
-		1.0, 1.0,
-		0.0, 1.0,
-		0.0, 0.0,
-		// Top face
-		0.0, 1.0,
-		0.0, 0.0,
-		1.0, 0.0,
-		1.0, 1.0,
-		// Bottom face
-		1.0, 1.0,
-		0.0, 1.0,
-		0.0, 0.0,
-		1.0, 0.0,
-		// Right face
-		1.0, 0.0,
-		1.0, 1.0,
-		0.0, 1.0,
-		0.0, 0.0,
-		// Left face
-		0.0, 0.0,
-		1.0, 0.0,
-		1.0, 1.0,
-		0.0, 1.0
-	];
-
-	model.geometry.normals  =
-	[
-		//Front face
-		0.0,  0.0,  1.0,
-		0.0,  0.0,  1.0,
-		0.0,  0.0,  1.0,
-		0.0,  0.0,  1.0,
-		// Back face
-		0.0,  0.0, -1.0,
-		0.0,  0.0, -1.0,
-		0.0,  0.0, -1.0,
-		0.0,  0.0, -1.0,
-		//Top face
-		0.0,  1.0,  0.0,
-		0.0,  1.0,  0.0,
-		0.0,  1.0,  0.0,
-		0.0,  1.0,  0.0,
-		//Bottom face
-		0.0, -1.0,  0.0,
-		0.0, -1.0,  0.0,
-		0.0, -1.0,  0.0,
-		0.0, -1.0,  0.0,
-		//Right face
-		1.0,  0.0,  0.0,
-		1.0,  0.0,  0.0,
-		1.0,  0.0,  0.0,
-		1.0,  0.0,  0.0,
-		//Left face
-		-1.0,  0.0,  0.0,
-		-1.0,  0.0,  0.0,
-		-1.0,  0.0,  0.0,
-		-1.0,  0.0,  0.0
-	];
-
-
-	model.geometry.faces =
-	[
-		//Front face
-		0, 1, 2, 0, 2, 3,    
-		//Back face
-		4, 5, 6, 4, 6, 7,    
-		//Top face
-		8, 9, 10, 8, 10, 11,
-		//Bottom face
-		12, 13, 14, 12, 14, 15,
-		//Right face
-		16, 17, 18, 16, 18, 19,
-		//Left face
-		20, 21, 22, 20, 22, 23
-	];
-
-	model.geometry.updateBuffers();
-
-	return model;
-};
-
-//Test Function that creates a cube with texture and retuns it
-Mesh.plane = function()
-{
-	var model = new Mesh();
-
-	model.geometry.vertex =
-	[
-		-1.0, -1.0,  0.0,
-		1.0, -1.0,  0.0,
-		1.0,  1.0,  0.0,
-		-1.0,  1.0,  0.0
-	];
-
-	model.geometry.uvs =
-	[
-		0.0, 0.0,
-		1.0, 0.0,
-		1.0, 1.0,
-		0.0, 1.0
-	];
-
-	model.geometry.normals =
-	[
-		0.0,  0.0,  -1.0,
-		0.0,  0.0,  -1.0,
-		0.0,  0.0,  -1.0,
-		0.0,  0.0,  -1.0
-	];
-
-	model.geometry.faces =
-	[
-		0, 1, 2, 0, 2, 3
-	];
-	
-	model.geometry.updateBuffers();
-
-	return model;
 };

@@ -18,7 +18,7 @@ attribute vec2 vertexUV;\
 uniform mat4 projection, view;\
 uniform mat4 model;\
 \
-uniform float cameraFar, cameraNear;\
+uniform float far, near;\
 uniform float time;\
 \
 varying vec2 fragmentUV;\
@@ -42,7 +42,7 @@ varying vec3 fragmentNormal;\
 \
 uniform sampler2D texture;\
 \
-uniform float cameraFar, cameraNear;\
+uniform float far, near;\
 uniform float time;\
 \
 void main(void)\

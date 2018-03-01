@@ -18,6 +18,7 @@ include("core/input/Key.js");
 include("core/input/Keyboard.js");
 include("core/input/Mouse.js");
 
+include("core/loaders/FileLoader.js");
 include("core/loaders/OBJLoader.js");
 
 include("core/utils/GeometryUtils.js");
@@ -30,6 +31,8 @@ include("core/texture/Texture.js");
 include("core/texture/DataTexture.js");
 
 include("core/geometry/Geometry.js");
+include("core/geometry/BoxGeometry.js");
+include("core/geometry/PlaneGeometry.js");
 
 include("core/materials/Material.js");
 include("core/materials/MeshMaterial.js");
@@ -76,10 +79,6 @@ var gl = null;
 
 //App class
 function App(){}
-
-//Time control
-App.deltaTime = 0;
-App.time = 0;
 
 //Input Input
 App.keyboard;
@@ -139,10 +138,6 @@ App.loop = function()
 	Main.update();
 	Main.draw();
 
-	//Update time values
-	App.deltaTime = new Date - App.time;
-	App.time += App.deltaTime;
-
 	//Call loop again
 	requestAnimationFrame(App.loop, 0);
 }
@@ -173,32 +168,6 @@ App.setFullscreen = function(event)
 App.isMouseLocked = function()
 {
 	return document.pointerLockElement === canvas || document.mozPointerLockElement === canvas || document.webkitPointerLockElement === canvas;
-}
-
-//Read text file
-App.readFile = function(fname)
-{
-	var file = new XMLHttpRequest();
-	file.overrideMimeType("text/plain");
-	
-	var data = null;
-
-	//Request file to server
-	file.open("GET", fname, false);
-
-	//Get file
-	file.onreadystatechange = function ()
-	{
-		if(file.status === 200 || file.status === 0)
-		{
-			data = file.responseText;
-		}
-	}
-
-	//Send null to ensure that file was received
-	file.send(null);
-
-	return data;
 }
 
 //Auxuiliary function to include JS files in app

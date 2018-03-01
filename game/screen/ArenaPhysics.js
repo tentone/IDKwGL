@@ -16,15 +16,13 @@ function ArenaPhysics()
 	this.sceneGrass = new Scene();
 
 	//Skybox
-	this.skybox = OBJLoader.load(App.readFile("data/models/skybox/skybox.obj"));
-	this.skybox.material = OBJLoader.loadMTL(App.readFile("data/models/skybox/skybox.mtl"), "data/models/skybox");
+	this.skybox = OBJLoader.load(FileLoader.loadText("data/models/skybox/skybox.obj"), FileLoader.loadText("data/models/skybox/skybox.mtl"), "data/models/skybox");
 	this.skybox.scale.set(800,800,800);
-	this.skybox.rotation.set(-90,0,0);
 	this.skybox.updateMatrix();
 	this.scene.add(this.skybox);
 
 	//Floor
-	this.model = Mesh.cube();
+	this.model = new Mesh(new BoxGeometry());
 	this.model.setTexture(Texture.createTexture(gl, "data/texture/grass.jpg"));
 	this.model.geometry.scaleUV(10, 10);
 	this.model.position.set(0, -100, 0);
@@ -34,7 +32,7 @@ function ArenaPhysics()
 	this.world.addBody(new GameObject(this.model));
 	
 	//Walls
-	this.model = Mesh.cube();
+	this.model = new Mesh(new BoxGeometry());
 	this.model.setTexture(Texture.createTexture(gl, "data/texture/wall.png"));
 	this.model.geometry.scaleUV(20, 1);
 	this.model.position.set(0, 0, -400);
@@ -43,7 +41,7 @@ function ArenaPhysics()
 	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
-	this.model = Mesh.cube();
+	this.model = new Mesh(new BoxGeometry());
 	this.model.setTexture(Texture.createTexture(gl, "data/texture/wall.png"));
 	this.model.geometry.scaleUV(20, 1);
 	this.model.position.set(0, 0, 400);
@@ -52,7 +50,7 @@ function ArenaPhysics()
 	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
-	this.model = Mesh.cube();
+	this.model = new Mesh(new BoxGeometry());
 	this.model.setTexture(Texture.createTexture(gl, "data/texture/wall.png"));
 	this.model.geometry.scaleUV(20, 1);
 	this.model.position.set(-400, 0, 0);
@@ -61,7 +59,7 @@ function ArenaPhysics()
 	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
-	this.model = Mesh.cube();
+	this.model = new Mesh(new BoxGeometry());
 	this.model.setTexture(Texture.createTexture(gl, "data/texture/wall.png"));
 	this.model.geometry.scaleUV(20, 1);
 	this.model.position.set(400, 0, 0);
@@ -73,20 +71,21 @@ function ArenaPhysics()
 	//Player
 	this.player = new Spectator(canvas);
 	this.player.camera.position.y += 50;
-}
 
-var time = 0;
+	this.time = 0;
+}
 
 ArenaPhysics.prototype.update = function()
 {
+	this.time++;
+
 	//Spawn boxes in random position
-	time++;
-	if(time % 5 === 0)
+	if(this.time % 10 === 0)
 	{
-		this.model = Mesh.cube();
+		this.model = new Mesh(new BoxGeometry());
 		this.model.setTexture(Texture.createTexture(gl, "data/texture/woodBox.jpg"));
 		this.model.position.set(MathUtils.randomMod()*400,  MathUtils.randomMod()*300, MathUtils.randomMod()*400);
-		this.model.scale.set(5,5,5);
+		this.model.scale.set(5, 5, 5);
 		this.model.updateMatrix();
 		this.scene.add(this.model);
 		this.world.addBody(new GameObject(this.model));
@@ -98,7 +97,7 @@ ArenaPhysics.prototype.update = function()
 
 	//Update Player Camera Position
 	this.world.update();
-}
+};
 
 ArenaPhysics.prototype.draw = function()
 {
@@ -109,11 +108,11 @@ ArenaPhysics.prototype.draw = function()
 	//Draw idk logo
 	this.camera.updateMatrix();
 	this.idk.draw(this.camera);
-}
+};
 
 //Resize cameras
 ArenaPhysics.prototype.resize = function(canvas)
 {
 	this.player.camera.resize(canvas.width, canvas.height);
 	this.camera.resize(canvas.width, canvas.height);
-}
+};
