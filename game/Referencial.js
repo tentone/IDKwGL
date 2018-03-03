@@ -1,41 +1,32 @@
 "use strict";
 
-function Referencial()
+function Referencial(scene)
 {
-	this.referencial = new Scene();
-	
 	this.referencialO = new Mesh(new BoxGeometry());
 	this.referencialO.scale.set(1.0, 1.0, 1.0);
-	this.referencialO.update();
+	this.referencialO.updateMatrix();
 	this.referencialO.setTexture(Texture.generateSolidColorTexture(gl, Color.WHITE));
 	
 	this.referencialX = new Mesh(new BoxGeometry());
 	this.referencialX.position.set(30.0, 0.0, 0.0);
 	this.referencialX.scale.set(30.0, 0.5, 0.5);
-	this.referencialX.update();
+	this.referencialX.updateMatrix();
 	this.referencialX.setTexture(Texture.generateSolidColorTexture(gl, Color.RED));
 	
 	this.referencialY = new Mesh(new BoxGeometry());
 	this.referencialY.scale.set(0.5, 30.0, 0.5);
 	this.referencialY.position.set(0.0, 30.0, 0.0);
-	this.referencialY.update();
+	this.referencialY.updateMatrix();
 	this.referencialY.setTexture(Texture.generateSolidColorTexture(gl, Color.GREEN));
 
 	this.referencialZ = new Mesh(new BoxGeometry());
 	this.referencialZ.scale.set(0.5, 0.5, 30.0);
 	this.referencialZ.position.set(0.0, 0.0, 30.0);
-	this.referencialZ.update();
+	this.referencialZ.updateMatrix();
 	this.referencialZ.setTexture(Texture.generateSolidColorTexture(gl, Color.BLUE));
 	
-	this.referencial.add(this.referencialO);
-	this.referencial.add(this.referencialX);
-	this.referencial.add(this.referencialY);
-	this.referencial.add(this.referencialZ);
+	scene.add(this.referencialO);
+	scene.add(this.referencialX);
+	scene.add(this.referencialY);
+	scene.add(this.referencialZ);
 }
-
-Referencial.prototype.update = function(){}
-
-Referencial.prototype.draw = function(camera)
-{
-	this.referencial.draw(camera);
-};

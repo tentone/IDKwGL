@@ -1,9 +1,9 @@
 "use strict";
 
-function Player(canvas)
+function Player()
 {
 	//Player Camera and rotation
-	this.camera = new PerspectiveCamera(canvas.width/canvas.height, 70, 1);
+	this.camera = new PerspectiveCamera(1, 70, 1);
 	this.camera.position.set(0, 2, 0);
 	this.rotation = new Vector2(0, 0); //Horizontal / Vertical
 	

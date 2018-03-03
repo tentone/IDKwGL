@@ -5,7 +5,7 @@ function ArenaPhysics()
 	this.sceneHUD = new Scene();
 
 	//IDK Logo
-	this.camera = new OrthographicCamera(canvas, 20);
+	this.camera = new OrthographicCamera(20, 20);
 	this.idk = new Sprite();
 	this.idk.setTexture(Texture.createTexture(gl, "data/texture/idk.png"));
 	this.idk.scale.set(this.camera.size.y/2,this.camera.size.y/4,1);
@@ -71,7 +71,7 @@ function ArenaPhysics()
 	this.world.addBody(new GameObject(this.model));
 
 	//Player
-	this.player = new Spectator(canvas);
+	this.player = new Spectator();
 	this.player.camera.position.y += 50;
 
 	this.time = 0;
@@ -117,8 +117,8 @@ ArenaPhysics.prototype.draw = function(renderer)
 };
 
 //Resize cameras
-ArenaPhysics.prototype.resize = function(canvas)
+ArenaPhysics.prototype.resize = function(width, height)
 {
-	this.player.camera.resize(canvas.width, canvas.height);
-	this.camera.resize(canvas.width, canvas.height);
+	this.player.camera.resize(width, height);
+	this.camera.resize(width, height);
 };

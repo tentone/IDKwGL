@@ -102,13 +102,15 @@ App.initialize = function()
 	};
 	
 	App.renderer = new Renderer(canvas);
+
 	gl = App.renderer.gl;
 	
 	App.keyboard = new Keyboard();
 	App.mouse = new Mouse();
 	App.screen = new Arena();
 	
-
+	App.resize(canvas.width, canvas.height);
+	
 	App.loop()
 }
 
@@ -142,18 +144,8 @@ App.resize = function()
 	canvas.width  = window.innerWidth;
 	canvas.height = window.innerHeight;
 
-	App.screen.resize(canvas);
-}
-
-//Should be called by canvas onclicked
-App.setFullscreen = function(event)
-{
-	//Key P Pressed
-	if(event.keyCode === 112)
-	{
-		var canvas = document.getElementById("canvas");
-		canvas.webkitRequestFullScreen();
-	}
+	App.renderer.resize(canvas.width, canvas.height);
+	App.screen.resize(canvas.width, canvas.height);
 }
 
 //Check if mouse is locked (cross-browser)

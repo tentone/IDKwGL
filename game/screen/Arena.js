@@ -6,6 +6,9 @@ function Arena()
 	this.world = new World();
 	this.scene = new Scene();
 
+	//Referencial
+	this.referential = new Referencial(this.scene);
+
 	//Skybox
 	this.skybox = OBJLoader.load(FileLoader.loadText("data/models/skybox/skybox.obj"), FileLoader.loadText("data/models/skybox/skybox.mtl"), "data/models/skybox");
 	this.skybox.scale.set(800,800,800);
@@ -205,7 +208,7 @@ function Arena()
 	this.bulletParticleList = [];*/
 
 	//Player
-	this.player = new Player(canvas);
+	this.player = new Player();
 	this.world.addBody(this.player);
 	this.world.body[this.world.body.length-1].setStatic(false);
 
@@ -306,7 +309,7 @@ Arena.prototype.draw = function(renderer)
 	renderer.render(this.scene, this.player.camera);
 };
 
-Arena.prototype.resize = function(canvas)
+Arena.prototype.resize = function(width, height)
 {
-	this.player.camera.resize(canvas.width, canvas.height);
+	this.player.camera.resize(width, height);
 };

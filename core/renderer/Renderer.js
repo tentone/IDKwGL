@@ -9,6 +9,9 @@ function Renderer(canvas)
 {
 	this.canvas = canvas;
 	this.gl = null;
+	
+	this.size = new Vector2(1, 1);
+	this.aspect = 1;
 
 	this.autoClear = true;
 	this.clearColor = new Color(0, 0, 0);
@@ -24,7 +27,8 @@ Renderer.prototype.initializeGLContext = function()
 	try
 	{
 		this.gl = this.canvas.getContext("webgl", {alpha: false});
-		this.setViewport(0, 0, this.canvas.width, this.canvas.height);
+
+		this.resize(this.canvas.width, this.canvas.height);
 	}
 	catch(e)
 	{
@@ -39,6 +43,16 @@ Renderer.prototype.initializeGLContext = function()
 Renderer.prototype.setViewport = function(x, y, width, height)
 {
 	this.gl.viewport(x, y, width, height);
+};
+
+/**
+ * Resize renderer.
+ */
+Renderer.prototype.resize = function(width, height)
+{
+	this.size.set(width, height);
+	this.aspect = width / height;
+	this.setViewport(0, 0, width, height);
 };
 
 /**

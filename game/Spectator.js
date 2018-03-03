@@ -1,8 +1,8 @@
 "use strict";
 
-function Spectator(canvas)
+function Spectator()
 {
-	this.camera = new PerspectiveCamera(canvas.width/canvas.height, 70, 1);
+	this.camera = new PerspectiveCamera(1, 70, 1);
 	this.rotation = new Vector2(0.0, 0.0); //Horizontal / Vertical
 }
 
