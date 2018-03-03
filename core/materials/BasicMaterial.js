@@ -5,8 +5,6 @@ function BasicMaterial(name)
 	MeshMaterial.call(this);
  
 	this.texture = null;
-	
-
 }
 
 BasicMaterial.prototype = Object.create(MeshMaterial.prototype);

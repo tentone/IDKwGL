@@ -8,10 +8,12 @@
 function Renderer(canvas)
 {
 	this.canvas = canvas;
-	this.gl = this.initializeGLContext();
+	this.gl = null;
 
 	this.autoClear = true;
 	this.clearColor = new Color(0, 0, 0);
+	
+	this.initializeGLContext();
 }
 
 /**
@@ -22,13 +24,21 @@ Renderer.prototype.initializeGLContext = function()
 	try
 	{
 		this.gl = this.canvas.getContext("webgl", {alpha: false});
-		this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+		this.setViewport(0, 0, this.canvas.width, this.canvas.height);
 	}
 	catch(e)
 	{
 		this.gl = null;
 		console.error("Failed to create WebGL context (" + e + ")");		
 	}
+};
+
+/**
+ * Set render viewport.
+ */
+Renderer.prototype.setViewport = function(x, y, width, height)
+{
+	this.gl.viewport(x, y, width, height);
 };
 
 /**
@@ -41,11 +51,17 @@ Renderer.prototype.render = function(scene, camera)
 	//Clear canvas
 	if(this.autoClear)
 	{
-		gl.clearColor(0, 0, 0, 1);
+		gl.clearColor(this.clearColor.r, this.clearColor.g, this.clearColor.b, 1);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	}
 
 	//Enable depth test
 	gl.enable(gl.DEPTH_TEST);
 	gl.depthFunc(gl.LESS);
-};
+
+	//Render scene objects
+	for(var i = 0; i < scene.objects.length; i++)
+	{	
+		scene.objects[i].draw(camera, scene);
+	}
+};	

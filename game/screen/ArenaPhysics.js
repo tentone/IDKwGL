@@ -2,6 +2,8 @@
 
 function ArenaPhysics()
 {
+	this.sceneHUD = new Scene();
+
 	//IDK Logo
 	this.camera = new OrthographicCamera(canvas, 20);
 	this.idk = new Sprite();
@@ -9,11 +11,11 @@ function ArenaPhysics()
 	this.idk.scale.set(this.camera.size.y/2,this.camera.size.y/4,1);
 	this.idk.position.set(this.camera.size.x-1,-this.camera.size.y+1,0);
 	this.idk.updateMatrix();
+	this.sceneHUD.add(this.idk);
 
 	//Create scene and world
 	this.world = new World(new Vector3(0, -20.8, 0));
 	this.scene = new Scene();
-	this.sceneGrass = new Scene();
 
 	//Skybox
 	this.skybox = OBJLoader.load(FileLoader.loadText("data/models/skybox/skybox.obj"), FileLoader.loadText("data/models/skybox/skybox.mtl"), "data/models/skybox");
@@ -99,15 +101,19 @@ ArenaPhysics.prototype.update = function()
 	this.world.update();
 };
 
-ArenaPhysics.prototype.draw = function()
+ArenaPhysics.prototype.draw = function(renderer)
 {
 	//Draw scene to player camera
 	this.player.camera.updateMatrix();
-	this.scene.draw(this.player.camera);
+	renderer.render(this.scene, this.player.camera);
+
+	renderer.autoClear = false;
 
 	//Draw idk logo
 	this.camera.updateMatrix();
-	this.idk.draw(this.camera);
+	renderer.render(this.sceneHUD, this.camera);
+
+	renderer.autoClear = true;
 };
 
 //Resize cameras

@@ -301,9 +301,9 @@ Arena.prototype.update = function()
 	this.cube.updateMatrix();
 };
 
-Arena.prototype.draw = function()
+Arena.prototype.draw = function(renderer)
 {
-	this.scene.draw(this.player.camera);
+	renderer.render(this.scene, this.player.camera);
 };
 
 Arena.prototype.resize = function(canvas)

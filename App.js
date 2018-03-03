@@ -24,8 +24,9 @@ include("core/loaders/OBJLoader.js");
 include("core/utils/GeometryUtils.js");
 
 include("core/Font.js");
-include("core/Shader.js");
 include("core/Scene.js");
+
+include("core/shader/Shader.js");
 
 include("core/texture/Texture.js");
 include("core/texture/DataTexture.js");
@@ -43,7 +44,6 @@ include("core/materials/DepthMaterial.js");
 include("core/object/Object3D.js");
 include("core/object/Sprite.js");
 include("core/object/Mesh.js");
-include("core/object/Text.js");
 
 include("core/object/particle/Particle.js");
 include("core/object/particle/ParticleEmitter.js");
@@ -73,17 +73,17 @@ include("game/Referencial.js");
 include("game/screen/Arena.js");
 include("game/screen/ArenaPhysics.js");
 
-include("Main.js");
-
 //Global App Variables
-var gl = null;
+var gl;
 
 //App class
 function App(){}
 
 //Input Input
-App.keyboard;
-App.mouse;
+App.keyboard = null;
+App.mouse = null;
+App.renderer = null;
+App.screen = null;
 
 // App Initialization
 App.initialize = function()
@@ -91,12 +91,6 @@ App.initialize = function()
 	var canvas = document.getElementById("canvas");
 	canvas.width  = window.innerWidth;
 	canvas.height = window.innerHeight;
-	
-	//Initialize Input
-	App.keyboard = new Keyboard();
-	App.mouse = new Mouse();
-
-	//Request to lock mouse if canvas is clicked (cross-browser)
 	canvas.onclick = function()
 	{
 		try
@@ -105,28 +99,17 @@ App.initialize = function()
 			canvas.requestPointerLock();
 		}
 		catch(e){}
-	}
-
-	App.initGL(canvas);
-	Main.init(canvas);
+	};
 	
+	App.renderer = new Renderer(canvas);
+	gl = App.renderer.gl;
+	
+	App.keyboard = new Keyboard();
+	App.mouse = new Mouse();
+	App.screen = new Arena();
+	
+
 	App.loop()
-}
-
-//Initialize WebGL
-App.initGL = function()
-{
-	try
-	{
-		gl = canvas.getContext("webgl", {alpha: false});
-		gl.viewport(0, 0, canvas.width, canvas.height);
-	}
-	catch(e){}
-
-	if(!gl)
-	{
-		throw "Failed to initialize WebGL";
-	}
 }
 
 // Timer to update game logic and render stuff (switch to independent timers?)
@@ -136,8 +119,17 @@ App.loop = function()
 	App.mouse.update();
 	
 	//Update and render stuff
-	Main.update();
-	Main.draw();
+	if(App.keyboard.isKeyPressed(Keyboard.O))
+	{
+		App.screen = new Arena();
+	}
+	else if(App.keyboard.isKeyPressed(Keyboard.P))
+	{
+		App.screen = new ArenaPhysics();
+	}
+
+	App.screen.update();
+	App.screen.draw(App.renderer);
 
 	//Call loop again
 	requestAnimationFrame(App.loop, 0);
@@ -150,8 +142,7 @@ App.resize = function()
 	canvas.width  = window.innerWidth;
 	canvas.height = window.innerHeight;
 
-	App.initGL(canvas);
-	Main.resize(canvas);
+	App.screen.resize(canvas);
 }
 
 //Should be called by canvas onclicked
@@ -190,4 +181,3 @@ function include(file)
 		document.body.appendChild(css);
 	}	
 }
-

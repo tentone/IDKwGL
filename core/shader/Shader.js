@@ -2,14 +2,22 @@
 
 function Shader(fragmentShader, vertexShader)
 {
+	this.id = MathUtils.randomInt();
+	this.name = "";
+	this.type = "Shader";
+
 	this.fragmentShader = fragmentShader;
 	this.vertexShader = vertexShader; 
 
-	this.compile();
+	this.fragmentProgram = null;
+	this.vertexProgram = null;
+	this.program = null;
+
+	this.compile(gl);
 }
 
 //Compiles fragment and vertex shader and links them into a program
-Shader.prototype.compile = function()
+Shader.prototype.compile = function(gl)
 {
 	this.fragmentProgram = Shader.compileFragmentShader(gl, this.fragmentShader);
 	this.vertexProgram = Shader.compileVertexShader(gl, this.vertexShader);
