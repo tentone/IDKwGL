@@ -46,8 +46,10 @@ function Mesh(geometry, material)
 Mesh.prototype = Object.create(Object3D.prototype);
 
 //Draw Mesh to camera
-Mesh.prototype.draw = function(camera, scene)
+Mesh.prototype.render = function(renderer, camera, scene)
 {
+	var gl = renderer.gl;
+	
 	this.time += 0.016;
 
 	gl.useProgram(this.shader.program);

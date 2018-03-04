@@ -20,3 +20,19 @@ Scene.prototype.add = function(object)
 {
 	this.objects.push(object);
 };
+
+/**
+ * Remove object from the scene.
+ */
+Scene.prototype.remove = function(object)
+{
+	var index = this.objects.indexOf(object)
+
+	if(index > -1)
+	{
+		this.objects.splice(index, 1);
+		return true;
+	}
+
+	return false;
+};

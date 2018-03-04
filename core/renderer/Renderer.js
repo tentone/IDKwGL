@@ -7,6 +7,19 @@
  */
 function Renderer(canvas)
 {
+	if(canvas === undefined)
+	{
+		canvas = document.createElement("canvas");
+		canvas.style.position = "absolute";
+		canvas.style.top = "0px";
+		canvas.style.left = "0px";
+		canvas.style.width = "100%";
+		canvas.style.height = "100%";
+		canvas.width  = window.innerWidth;
+		canvas.height = window.innerHeight;
+		document.body.appendChild(canvas);
+	}
+
 	this.canvas = canvas;
 	this.gl = null;
 	
@@ -15,19 +28,18 @@ function Renderer(canvas)
 
 	this.autoClear = true;
 	this.clearColor = new Color(0, 0, 0);
-	
+
 	this.initializeGLContext();
 }
 
 /**
- * Initializes WebGL context using the canvas attaached to the Renderer.
+ * Initializes WebGL context using the canvas attached to the Renderer.
  */
 Renderer.prototype.initializeGLContext = function()
 {
 	try
 	{
 		this.gl = this.canvas.getContext("webgl", {alpha: false});
-
 		this.resize(this.canvas.width, this.canvas.height);
 	}
 	catch(e)
@@ -75,7 +87,7 @@ Renderer.prototype.render = function(scene, camera)
 
 	//Render scene objects
 	for(var i = 0; i < scene.objects.length; i++)
-	{	
-		scene.objects[i].draw(camera, scene);
+	{
+		scene.objects[i].render(this, camera, scene);
 	}
-};	
+};

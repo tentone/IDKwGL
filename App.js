@@ -88,10 +88,11 @@ App.screen = null;
 // App Initialization
 App.initialize = function()
 {
-	var canvas = document.getElementById("canvas");
-	canvas.width  = window.innerWidth;
-	canvas.height = window.innerHeight;
-	canvas.onclick = function()
+	//var canvas = document.getElementById("canvas");
+	//canvas.width  = window.innerWidth;
+	//canvas.height = window.innerHeight;
+	App.renderer = new Renderer();
+	App.renderer.canvas.onclick = function()
 	{
 		try
 		{
@@ -101,15 +102,15 @@ App.initialize = function()
 		catch(e){}
 	};
 	
-	App.renderer = new Renderer(canvas);
 
+	//TODO <REMOVE GLOBAL REFERENCE>
 	gl = App.renderer.gl;
 	
 	App.keyboard = new Keyboard();
 	App.mouse = new Mouse();
 	App.screen = new Arena();
 	
-	App.resize(canvas.width, canvas.height);
+	App.resize(window.innerWidth, window.innerHeight);
 	
 	App.loop()
 }
@@ -140,12 +141,13 @@ App.loop = function()
 // Called every time page is resized
 App.resize = function()
 {
-	var canvas = document.getElementById("canvas");
-	canvas.width  = window.innerWidth;
-	canvas.height = window.innerHeight;
+	var width = window.innerWidth;
+	var height = window.innerHeight;
 
-	App.renderer.resize(canvas.width, canvas.height);
-	App.screen.resize(canvas.width, canvas.height);
+	App.renderer.canvas.width  = width;
+	App.renderer.canvas.height = height;
+	App.renderer.resize(width, height);
+	App.screen.resize(width, height);
 }
 
 //Check if mouse is locked (cross-browser)

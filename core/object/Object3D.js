@@ -16,7 +16,16 @@ function Object3D()
 	this.transformationMatrix = new Matrix4();
 }
 
-//Calculate tranformation Matrix (should be called after changing position)
+/**
+ * Render Object3D to a specific camera.
+ */
+Object3D.prototype.render = function(gl, camera, scene){};
+
+/**
+ * Calculate tranformation matrix.
+ *
+ * Should be called after changing world position.
+ */
 Object3D.prototype.updateMatrix = function()
 {
 	this.transformationMatrix.makeRotationFromEuler(this.rotation, "YZX");
@@ -24,7 +33,9 @@ Object3D.prototype.updateMatrix = function()
 	this.transformationMatrix.setPosition(this.position);
 };
 
-//Creates a copy of this model (keeps same vertex, buffer and texture data pointers)
+/**
+ * Creates a copy of this model.
+ */
 Object3D.prototype.clone = function()
 {
 	var object = new Object3D();
@@ -35,3 +46,4 @@ Object3D.prototype.clone = function()
 
 	return object;
 };
+

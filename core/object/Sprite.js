@@ -17,8 +17,10 @@ function Sprite()
 Sprite.prototype = Object.create(Object3D.prototype);
 
 //Draw Mesh to camera
-Sprite.prototype.draw = function(camera, scene)
+Sprite.prototype.render = function(renderer, camera, scene)
 {
+	var gl = renderer.gl;
+	
 	gl.useProgram(Sprite.shader.program);
 
 	gl.enable(gl.BLEND);

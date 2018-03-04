@@ -225,7 +225,9 @@ Arena.prototype.update = function()
 {
 	/*
 	this.particle.update();
-	
+	*/
+
+	/*
 	//Fire Gun
 	if(App.mouse.buttonJustPressed(Mouse.LEFT))
 	{
@@ -238,8 +240,22 @@ Arena.prototype.update = function()
 		this.bulletParticleList.push(bulletParticle);
 	}
 
+	//Update bullet list
+	for(var i = 0; i < this.bulletParticleList.length; i++)
+	{
+		if(this.bulletParticleList[i].time < 0)
+		{
+			this.bulletParticleList.splice(i, 1);
+		}
+		else
+		{
+			this.bulletParticleList[i].update();
+		}
+	}
+	*/
+
 	//Weapon change
-	if(App.keyboard.isKeyPressed(Keyboard.NUM1))
+	/*if(App.keyboard.isKeyPressed(Keyboard.NUM1))
 	{
 		this.weapon = new Mesh();
 		this.weapon = OBJLoader.load(FileLoader.loadText("data/models/pulserifle/pulserifle.obj"));
@@ -256,21 +272,7 @@ Arena.prototype.update = function()
 		this.weapon.scale.set(2, 2, 2);
 		this.weapon.position.set(-0.3,-0.3,0.5);
 		this.weapon.update();
-	}
-
-	//Update bullet list
-	for(var i = 0; i < this.bulletParticleList.length; i++)
-	{
-		if(this.bulletParticleList[i].time < 0)
-		{
-			this.bulletParticleList.splice(i, 1);
-		}
-		else
-		{
-			this.bulletParticleList[i].update();
-		}
-	}
-	*/
+	}*/
 
 	//Update Player Camera Position
 	this.world.update();
