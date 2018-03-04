@@ -12,23 +12,21 @@ function Mesh(geometry, material)
 
 	//Store relation between faces and materials 
 	this.faceMaterial = []; //<Face Index Ini / Face Index End / Material>
-	this.material = []; //Material Array
 
 	//Time
 	this.time = 0;
 
 	//Shader
-	this.shader = new Shader(BasicMaterial.fragmentShader, BasicMaterial.vertexShader);
+	this.shader = new Shader(gl, BasicMaterial.fragmentShader, BasicMaterial.vertexShader);
 
 	//Vertex attributes
 	this.shader.program.vertexPositionAttribute = gl.getAttribLocation(this.shader.program, "vertexPosition");
-	gl.enableVertexAttribArray(this.shader.program.vertexPositionAttribute);
-
 	this.shader.program.vertexUVAttribute = gl.getAttribLocation(this.shader.program, "vertexUV");
-	gl.enableVertexAttribArray(this.shader.program.vertexUVAttribute);
-
 	this.shader.program.vertexNormalAttribute = gl.getAttribLocation(this.shader.program, "vertexNormal");
-	gl.enableVertexAttribArray(this.shader.program.vertexNormalAttribute);
+	
+	this.shader.enableVertexAttributeArray("vertexPosition");
+	this.shader.enableVertexAttributeArray("vertexUV");
+	this.shader.enableVertexAttributeArray("vertexNormal");
 
 	//Texture
 	this.shader.program.textureSampler = gl.getUniformLocation(this.shader.program, "texture");
@@ -49,7 +47,7 @@ Mesh.prototype = Object.create(Object3D.prototype);
 Mesh.prototype.render = function(renderer, camera, scene)
 {
 	var gl = renderer.gl;
-	
+
 	this.time += 0.016;
 
 	gl.useProgram(this.shader.program);

@@ -24,7 +24,6 @@ include("core/loaders/OBJLoader.js");
 include("core/utils/GeometryUtils.js");
 
 include("core/Font.js");
-include("core/Scene.js");
 
 include("core/shader/Shader.js");
 
@@ -41,20 +40,21 @@ include("core/materials/BasicMaterial.js");
 include("core/materials/PhongMaterial.js");
 include("core/materials/DepthMaterial.js");
 
-include("core/object/Object3D.js");
-include("core/object/Sprite.js");
-include("core/object/Mesh.js");
+include("core/objects/Object3D.js");
+include("core/objects/Scene.js");
+include("core/objects/Sprite.js");
+include("core/objects/Mesh.js");
 
-include("core/object/particle/Particle.js");
-include("core/object/particle/ParticleEmitter.js");
+include("core/objects/particle/Particle.js");
+include("core/objects/particle/ParticleEmitter.js");
 
-include("core/object/light/AmbientLight.js");
-include("core/object/light/DirectionalLight.js");
-include("core/object/light/PointLight.js");
+include("core/objects/light/AmbientLight.js");
+include("core/objects/light/DirectionalLight.js");
+include("core/objects/light/PointLight.js");
 
-include("core/object/camera/Camera.js");
-include("core/object/camera/OrthographicCamera.js");
-include("core/object/camera/PerspectiveCamera.js");
+include("core/objects/camera/Camera.js");
+include("core/objects/camera/OrthographicCamera.js");
+include("core/objects/camera/PerspectiveCamera.js");
 
 include("core/renderer/Renderer.js");
 
@@ -92,10 +92,12 @@ App.initialize = function()
 	//canvas.width  = window.innerWidth;
 	//canvas.height = window.innerHeight;
 	App.renderer = new Renderer();
+
 	App.renderer.canvas.onclick = function()
 	{
 		try
 		{
+			var canvas = App.renderer.canvas;
 			canvas.requestPointerLock = canvas.mozRequestPointerLock || canvas.requestPointerLock || canvas.webkitRequestPointerLock;
 			canvas.requestPointerLock();
 		}

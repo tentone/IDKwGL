@@ -87,7 +87,7 @@ Sprite.initializeShaders = function()
 	}";
 
 	//Shader
-	Sprite.shader = new Shader(fragment, vertex);
+	Sprite.shader = new Shader(gl, fragment, vertex);
 
 	//Vertex
 	Sprite.shader.program.vertexPositionAttribute = gl.getAttribLocation(Sprite.shader.program, "vertexPosition");
@@ -115,21 +115,21 @@ Sprite.initializeBuffers = function()
 	//Vertex
 	Sprite.vertexBuffer = gl.createBuffer();
 	Sprite.vertexBuffer.itemSize = 3;
-	Sprite.vertexBuffer.numItems = vertex.length/3;
+	Sprite.vertexBuffer.length = vertex.length/3;
 	gl.bindBuffer(gl.ARRAY_BUFFER, Sprite.vertexBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, vertex, gl.STATIC_DRAW);
 
 	//Texture
 	Sprite.UVBuffer = gl.createBuffer();
 	Sprite.UVBuffer.itemSize = 2;
-	Sprite.UVBuffer.numItems = uvs.length/2;
+	Sprite.UVBuffer.length = uvs.length/2;
 	gl.bindBuffer(gl.ARRAY_BUFFER, Sprite.UVBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, uvs, gl.STATIC_DRAW);
 
 	//Faces
 	Sprite.facesBuffer = gl.createBuffer();
 	Sprite.facesBuffer.itemSize = 1;
-	Sprite.facesBuffer.numItems = faces.length;
+	Sprite.facesBuffer.length = faces.length;
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, Sprite.facesBuffer);
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, faces, gl.STATIC_DRAW);
 };

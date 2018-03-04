@@ -15,8 +15,6 @@ varying vec2 fragmentUV;\
 varying vec3 fragmentVertex;\
 varying vec3 fragmentNormal;\
 \
-uniform sampler2D texture;\
-uniform float time;\
 uniform float far, near;\
 \
 float linearize(float depth)\

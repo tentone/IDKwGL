@@ -58,7 +58,7 @@ function Text(text, font)
 	}";
 
 	//Shader
-	this.shader = new Shader(fragment, vertex);
+	this.shader = new Shader(gl, fragment, vertex);
 
 	//Vertex Coordinates 
 	this.shader.program.vertexPositionAttribute = gl.getAttribLocation(this.shader.program, "vertexPosition");
@@ -120,21 +120,21 @@ Text.prototype.updateBuffers = function()
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertex), gl.STATIC_DRAW);
 	this.vertexBuffer.itemSize = 3;
-	this.vertexBuffer.numItems = this.vertex.length/3;						
+	this.vertexBuffer.length = this.vertex.length/3;						
 
 	//Texture
 	this.textureCoordBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.uvs), gl.STATIC_DRAW);
 	this.textureCoordBuffer.itemSize = 2;
-	this.textureCoordBuffer.numItems = this.uvs.length/2;		
+	this.textureCoordBuffer.length = this.uvs.length/2;		
 
 	//Vertex indices
 	this.facesBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.facesBuffer);
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.faces), gl.STATIC_DRAW);
 	this.facesBuffer.itemSize = 1;
-	this.facesBuffer.numItems = this.faces.length;
+	this.facesBuffer.length = this.faces.length;
 };
 
 //Set text

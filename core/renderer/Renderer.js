@@ -29,6 +29,9 @@ function Renderer(canvas)
 	this.autoClear = true;
 	this.clearColor = new Color(0, 0, 0);
 
+	//Shaders used by materials
+	this.materialShader = [];
+
 	this.initializeGLContext();
 }
 

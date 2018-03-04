@@ -25,28 +25,28 @@ Geometry.prototype.updateBuffers = function()
 	//Vertex
 	this.vertexBuffer = gl.createBuffer();
 	this.vertexBuffer.itemSize = 3;
-	this.vertexBuffer.numItems = this.vertex.length/3;						
+	this.vertexBuffer.length = this.vertex.length/3;						
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertex), gl.STATIC_DRAW);
 
 	//Texture
 	this.textureCoordBuffer = gl.createBuffer();
 	this.textureCoordBuffer.itemSize = 2;
-	this.textureCoordBuffer.numItems = this.uvs.length/2;
+	this.textureCoordBuffer.length = this.uvs.length/2;
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.uvs), gl.STATIC_DRAW);
 
 	//Normals
 	this.normalBuffer = gl.createBuffer();
 	this.normalBuffer.itemSize = 3;
-	this.normalBuffer.numItems = this.normals.length/3;			
+	this.normalBuffer.length = this.normals.length/3;			
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normals), gl.STATIC_DRAW);
 
 	//Faces
 	this.facesBuffer = gl.createBuffer();
 	this.facesBuffer.itemSize = 1;
-	this.facesBuffer.numItems = this.faces.length;
+	this.facesBuffer.length = this.faces.length;
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.facesBuffer);
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.faces), gl.STATIC_DRAW);
 };

@@ -1,6 +1,9 @@
 "use strict";
 
-function Shader(fragmentShader, vertexShader)
+/**
+ * Shader class is responsible for creating and managing the state of GLSL shaders in a specific WebGL context.
+ */
+function Shader(gl, fragmentShader, vertexShader)
 {
 	this.id = MathUtils.randomInt();
 	this.name = "";
@@ -9,16 +12,46 @@ function Shader(fragmentShader, vertexShader)
 	this.fragmentShader = fragmentShader;
 	this.vertexShader = vertexShader; 
 
+	this.gl = gl;
+
 	this.fragmentProgram = null;
 	this.vertexProgram = null;
 	this.program = null;
 
-	this.compile(gl);
+	this.compile();
 }
 
-//Compiles fragment and vertex shader and links them into a program
-Shader.prototype.compile = function(gl)
+/**
+ * Enable vertex attribute array.
+ */
+Shader.prototype.enableVertexAttributeArray = function(name)
 {
+	this.gl.enableVertexAttribArray(this.gl.getAttribLocation(this.program, name));
+};
+
+/**
+ * Set uniform value (automatic type detection).
+ */
+Shader.prototype.setUniformValue = function(name, value)
+{
+	if(typeof value === "number")
+	{
+		this.gl.uniform1f(this.gl.getUniformLocation(this.program, name), value);
+	}
+	else if(value instanceof Matrix4)
+	{
+		this.gl.uniformMatrix4fv(this.gl.getUniformLocation(this.program, name), false, value.flatten());
+	}
+};
+
+
+/** 
+ * Compiles fragment and vertex shader and links them into a program.
+ */
+Shader.prototype.compile = function()
+{
+	var gl = this.gl;
+
 	this.fragmentProgram = Shader.compileFragmentShader(gl, this.fragmentShader);
 	this.vertexProgram = Shader.compileVertexShader(gl, this.vertexShader);
 	this.program = gl.createProgram();
@@ -29,17 +62,16 @@ Shader.prototype.compile = function(gl)
 
 	if(!gl.getProgramParameter(this.program, gl.LINK_STATUS))
 	{
-		throw "Could not initialise shader";
+		throw "Could not initialize shader";
 	}
 };
 
-//Create vertex shader from string
+/**
+ * Create vertex shader from string.
+ */
 Shader.compileVertexShader = function(gl, str)
 {
-	//Create Shader object
 	var shader = gl.createShader(gl.VERTEX_SHADER);
-
-	//Compile Shader
 	gl.shaderSource(shader, str);
 	gl.compileShader(shader);
 
@@ -52,13 +84,12 @@ Shader.compileVertexShader = function(gl, str)
 };
 
 
-//Create fragment shader from string
+/**
+ * Create fragment shader from string.
+ */
 Shader.compileFragmentShader = function(gl, str)
 {
-	//Create Shader object
 	var shader = gl.createShader(gl.FRAGMENT_SHADER);;
-
-	//Compile Shader
 	gl.shaderSource(shader, str);
 	gl.compileShader(shader);
 

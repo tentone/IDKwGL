@@ -5,6 +5,7 @@ function MeshMaterial()
 	Material.call(this);
 
 	this.type = "MeshMaterial";
+
 }
 
 MeshMaterial.prototype = Object.create(Material.prototype);
