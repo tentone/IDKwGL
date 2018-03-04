@@ -25,8 +25,6 @@ include("core/utils/GeometryUtils.js");
 
 include("core/Font.js");
 
-include("core/shader/Shader.js");
-
 include("core/texture/Texture.js");
 include("core/texture/DataTexture.js");
 
@@ -56,6 +54,7 @@ include("core/objects/camera/Camera.js");
 include("core/objects/camera/OrthographicCamera.js");
 include("core/objects/camera/PerspectiveCamera.js");
 
+include("core/renderer/shader/Shader.js");
 include("core/renderer/Renderer.js");
 
 include("core/physics/Body.js");
