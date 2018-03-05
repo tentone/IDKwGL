@@ -18,7 +18,7 @@ function Arena()
 	
 	//Tank
 	this.model = OBJLoader.load(tank);
-	this.model.setTexture(Texture.createTexture(gl, "data/texture/tank.jpg"));
+	this.model.setTexture(new Texture("data/texture/tank.jpg"));
 	this.model.scale.set(15, 15, 15);
 	this.model.position.set(-250,0,100);
 	this.model.updateMatrix();
@@ -50,7 +50,7 @@ function Arena()
 	
 	//House
 	this.model = OBJLoader.load(house);
-	this.model.setTexture(Texture.createTexture(gl, "data/texture/house.jpg"));
+	this.model.setTexture(new Texture("data/texture/house.jpg"));
 	this.model.scale.set(7, 7, 7);
 	this.model.position.set(300,0,500);
 	this.model.updateMatrix();
@@ -89,7 +89,7 @@ function Arena()
 
 	//Crate Pile
 	this.model = new Mesh(new BoxGeometry());
-	this.model.setTexture(Texture.createTexture(gl, "data/texture/wood_box.jpg"));
+	this.model.setTexture(new Texture("data/texture/wood_box.jpg"));
 	this.model.position.set(-200,5,0);
 	this.model.scale.set(5,5,5);
 	this.model.updateMatrix();
@@ -119,7 +119,7 @@ function Arena()
 
 	//Floor
 	this.model = new Mesh(new BoxGeometry());
-	this.model.setTexture(Texture.createTexture(gl, "data/texture/grass.jpg"));
+	this.model.setTexture(new Texture("data/texture/grass.jpg"));
 	this.model.geometry.scaleUV(30, 30);
 	this.model.position.set(0, -100, 0);
 	this.model.scale.set(900, 100, 900);
@@ -129,7 +129,7 @@ function Arena()
 	
 	//Walls
 	this.model = new Mesh(new BoxGeometry());
-	this.model.setTexture(Texture.createTexture(gl, "data/texture/wall.png"));
+	this.model.setTexture(new Texture("data/texture/wall.png"));
 	this.model.geometry.scaleUV(20, 1);
 	this.model.position.set(0, 0, -400);
 	this.model.scale.set(400, 50, 1);
@@ -138,7 +138,7 @@ function Arena()
 	this.world.addBody(new GameObject(this.model));
 
 	this.model = new Mesh(new BoxGeometry());
-	this.model.setTexture(Texture.createTexture(gl, "data/texture/wall.png"));
+	this.model.setTexture(new Texture("data/texture/wall.png"));
 	this.model.geometry.scaleUV(20, 1);
 	this.model.position.set(0, 0, 400);
 	this.model.scale.set(400, 50, 1);
@@ -147,7 +147,7 @@ function Arena()
 	this.world.addBody(new GameObject(this.model));
 
 	this.model = new Mesh(new BoxGeometry());
-	this.model.setTexture(Texture.createTexture(gl, "data/texture/wall.png"));
+	this.model.setTexture(new Texture("data/texture/wall.png"));
 	this.model.geometry.scaleUV(20, 1);
 	this.model.position.set(-400, 0, 0);
 	this.model.scale.set(1, 50, 400);
@@ -156,7 +156,7 @@ function Arena()
 	this.world.addBody(new GameObject(this.model));
 
 	this.model = new Mesh(new BoxGeometry());
-	this.model.setTexture(Texture.createTexture(gl, "data/texture/wall.png"));
+	this.model.setTexture(new Texture("data/texture/wall.png"));
 	this.model.geometry.scaleUV(20, 1);
 	this.model.position.set(400, 0, 0);
 	this.model.scale.set(1, 50, 400);
@@ -164,7 +164,7 @@ function Arena()
 	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
-	var texture = Texture.createTexture(gl, "data/texture/grass.png");
+	var texture = new Texture("data/texture/grass.png");
 	var position = new Vector3();
 
 	//Grass
@@ -190,7 +190,7 @@ function Arena()
 
 	//Tank smoke
 	/*this.model = new Sprite();
-	this.model.setTexture(Texture.createTexture(gl, "data/texture/smoke_2.png"));
+	this.model.setTexture(new Texture("data/texture/smoke_2.png"));
 	this.model.scale.set(4, 4, 1);
 	this.model.position.set(MathUtils.randomMod()*400, 2, MathUtils.randomMod()*400);
 	this.model.updateMatrix();
@@ -214,7 +214,7 @@ function Arena()
 
 	//Test Cube
 	this.cube = new Mesh(new BoxGeometry());
-	this.cube.setTexture(Texture.createTexture(gl, "data/texture/wood_box.jpg"));//font.pageTexture[0]);
+	this.cube.setTexture(new Texture("data/texture/wood_box.jpg"));//font.pageTexture[0]);
 	this.cube.position.set(0,0,0);
 	this.cube.scale.set(5,5,5);
 	this.cube.updateMatrix();
@@ -259,7 +259,7 @@ Arena.prototype.update = function()
 	{
 		this.weapon = new Mesh();
 		this.weapon = OBJLoader.load(FileLoader.loadText("data/models/pulserifle/pulserifle.obj"));
-		this.weapon.setTexture(Texture.createTexture(gl, "data/models/pulserifle/tex1.jpg"));
+		this.weapon.setTexture(new Texture("data/models/pulserifle/tex1.jpg"));
 		this.weapon.scale.set(2, 2, 2);
 		this.weapon.position.set(-0.3,-0.3,0.5);
 		this.weapon.update();
@@ -268,7 +268,7 @@ Arena.prototype.update = function()
 	{
 		this.weapon = new Mesh();
 		this.weapon = OBJLoader.load(FileLoader.loadText("data/models/scopedrifle/scopedrifle.obj"));
-		this.weapon.setTexture(Texture.createTexture(gl, "data/models/scopedrifle/tex1.jpg"));
+		this.weapon.setTexture(new Texture("data/models/scopedrifle/tex1.jpg"));
 		this.weapon.scale.set(2, 2, 2);
 		this.weapon.position.set(-0.3,-0.3,0.5);
 		this.weapon.update();

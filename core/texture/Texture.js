@@ -6,20 +6,42 @@ function Texture(file)
 	this.name = "";
 	this.type = "Texture";
 
+	this.format = Texture.RGBA;
+	this.flipY = true;
+	this.premultiplyAlpha = false;
+
 	this.file = file;
 }
 
+Texture.RGB = 100;
+Texture.RGBA = 101;
+
+Texture.REPEAT = 200;
+Texture.CLAMP_TO_EDGE = 201;
+Texture.MIRRORED_REPEAT = 202;
+
+Texture.LINEAR = 300;
+Texture.NEAREST = 301;
+Texture.NEAREST_MIPMAP_NEAREST = 302;
+Texture.NEAREST_MIPMAP_LINEAR = 303;
+Texture.LINEAR_MIPMAP_NEAREST = 304;
+Texture.LINEAR_MIPMAP_LINEAR = 305;
+
 //Texture Constructor from file name
-Texture.createTexture = function(gl, file)
+Texture.prototype.createTexture = function(gl)
 {
 	var texture = gl.createTexture();
 	var image = document.createElement("img");
-	image.onload = function ()
-	{
+
+	var self = this;
+	var format = this.format === Texture.RGBA ? gl.RGBA : gl.RGB;
+
+	image.onload = function()
+	{	
 		gl.bindTexture(gl.TEXTURE_2D, texture);
-		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-		gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
+		gl.texImage2D(gl.TEXTURE_2D, 0, format, format, gl.UNSIGNED_BYTE, image);
+		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, self.flipY);
+		gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, self.premultiplyAlpha);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
 
@@ -43,20 +65,7 @@ Texture.createTexture = function(gl, file)
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 		}
 	};
-	image.src = file;
+	image.src = this.file;
 
-	return texture;
-};
-
-//Creates a solid color texture
-Texture.generateSolidColorTexture = function(gl, color)
-{
-	var texture = gl.createTexture();
-	gl.bindTexture(gl.TEXTURE_2D, texture);
-	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([(color.r*255), (color.g*255), (color.b*255), 255]));
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-	gl.generateMipmap(gl.TEXTURE_2D);
-	
 	return texture;
 };

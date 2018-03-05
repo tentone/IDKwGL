@@ -42,9 +42,16 @@ Sprite.prototype.render = function(renderer, camera, scene)
 	//Faces
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, Sprite.facesBuffer);
 
+	var texture = renderer.textures[this.texture.id];
+	if(texture === undefined)
+	{
+		texture = this.texture.createTexture(gl);
+		renderer.textures[this.texture.id] = texture;
+	}
+
 	//Set texture
 	gl.activeTexture(gl.TEXTURE0);
-	gl.bindTexture(gl.TEXTURE_2D, this.texture);
+	gl.bindTexture(gl.TEXTURE_2D, texture);
 	gl.uniform1i(Sprite.shader.program.textureSampler, 0);
 	
 	//Draw the triangles

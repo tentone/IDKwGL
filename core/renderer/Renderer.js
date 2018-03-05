@@ -20,17 +20,21 @@ function Renderer(canvas)
 		document.body.appendChild(canvas);
 	}
 
-	this.canvas = canvas;
 	this.gl = null;
-	
+		
+	//Rendering canvas
+	this.canvas = canvas;
 	this.size = new Vector2(1, 1);
 	this.aspect = 1;
 
+	//Screen clear
 	this.autoClear = true;
 	this.clearColor = new Color(0, 0, 0);
 
+	//Runtime
 	this.shaders = [];
 	this.buffers = [];
+	this.textures = [];
 
 	this.initializeGLContext();
 }
@@ -92,4 +96,47 @@ Renderer.prototype.render = function(scene, camera)
 	}
 
 	gl.disable(gl.DEPTH_TEST);
+};
+
+
+/**
+ * Get GL texture from texture resource.
+ */
+Renderer.prototype.getTexture = function(texture)
+{
+	var glTexture = this.textures[texture.id];
+	if(glTexture === undefined)
+	{
+		glTexture = texture.createTexture(gl);
+		this.textures[texture.id] = glTexture;
+	}
+	return glTexture;
+};
+
+/**
+ * Get GL buffers from geometry resource.
+ */
+Renderer.prototype.getGeometryBuffers = function(geometry)
+{
+	var buffers = this.shaders[geometry.id];
+	if(buffers === undefined)
+	{
+		buffers = geometry.createBuffers(gl);
+		this.shaders[geometry.id] = buffers;
+	}
+	return buffers;
+};
+
+/**
+ * Get shader object from material resource.
+ */
+Renderer.prototype.getMaterialShader = function(material)
+{
+	var shader = this.shaders[material.id];
+	if(shader === undefined)
+	{
+		shader = material.createShader(gl);
+		this.shaders[material.id] = shader;
+	}
+	return shader;
 };

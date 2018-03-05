@@ -1,5 +1,12 @@
 "use strict";
 
+/** 
+ * A mesh material is used to render 3D meshes.
+ * 
+ * A mesh is composed of a geometry and a material.
+ * 
+ * One mesh can have multiple materials attached.
+ */
 function MeshMaterial()
 {
 	Material.call(this);
@@ -8,25 +15,15 @@ function MeshMaterial()
 }
 
 MeshMaterial.prototype = Object.create(Material.prototype);
-
 MeshMaterial.prototype.id = MathUtils.randomInt();
 
 MeshMaterial.prototype.render = function(renderer, camera, object)
 {
 	var gl = renderer.gl;
 
-	var shader = renderer.shaders[this.id];
-	if(shader === undefined)
-	{
-		shader = this.createShader(gl);
-		renderer.shaders[this.id] = shader;
-	}
+	var shader = renderer.getMaterialShader(this);
 
 	gl.useProgram(shader.program);
-
-	//Enable backface culling
-	gl.enable(gl.CULL_FACE);
-	gl.cullFace(gl.BACK);
 
 	//Camera
 	gl.uniform1f(shader.uniforms["near"], camera.near);
@@ -37,12 +34,7 @@ MeshMaterial.prototype.render = function(renderer, camera, object)
 	gl.uniformMatrix4fv(shader.uniforms["view"], false, camera.transformationMatrix.flatten());
 	gl.uniformMatrix4fv(shader.uniforms["model"], false, object.transformationMatrix.flatten());
 
-	var buffers = renderer.shaders[object.geometry.id];
-	if(buffers === undefined)
-	{
-		buffers = object.geometry.createBuffers(gl);
-		renderer.shaders[object.geometry.id] = buffers;
-	}
+	var buffers = renderer.getGeometryBuffers(object.geometry);
 
 	//Vertex position
 	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.vertexBuffer);
@@ -59,13 +51,17 @@ MeshMaterial.prototype.render = function(renderer, camera, object)
 	//Faces
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.facesBuffer);
 
-	//TODO <STORE GL TEXTURES IN RENDERER>
-	var texture = this.texture;
+	//Enable backface culling
+	var texture = renderer.getTexture(this.texture);
 
 	//Set texture
 	gl.activeTexture(gl.TEXTURE0);
 	gl.bindTexture(gl.TEXTURE_2D, texture);
 	gl.uniform1i(shader.uniforms["texture"], 0);
+
+	//Enable backface culling
+	gl.enable(gl.CULL_FACE);
+	gl.cullFace(gl.BACK);
 
 	//Draw the triangles
 	gl.drawElements(gl.TRIANGLES, buffers.facesBuffer.length, gl.UNSIGNED_SHORT, 0);

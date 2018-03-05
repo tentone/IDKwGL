@@ -200,7 +200,7 @@ Font.prototype.loadFont = function(fname, folder)
 				else if(field[0] === "file")
 				{
 					this.pageFile[id] = field[1].replace(new RegExp("\"", 'g'), "");
-					this.pageTexture[id] = Texture.createTexture(gl, folder + this.pageFile[id]);
+					this.pageTexture[id] = new Texture(folder + this.pageFile[id]);
 				}
 			}
 		}

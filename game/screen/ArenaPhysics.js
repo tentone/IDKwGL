@@ -7,7 +7,7 @@ function ArenaPhysics()
 	//IDK Logo
 	this.camera = new OrthographicCamera(20, 20);
 	this.idk = new Sprite();
-	this.idk.setTexture(Texture.createTexture(gl, "data/texture/idk.png"));
+	this.idk.setTexture(new Texture("data/texture/idk.png"));
 	this.idk.scale.set(this.camera.size.y/2,this.camera.size.y/4,1);
 	this.idk.position.set(this.camera.size.x-1,-this.camera.size.y+1,0);
 	this.idk.updateMatrix();
@@ -25,7 +25,7 @@ function ArenaPhysics()
 
 	//Floor
 	this.model = new Mesh(new BoxGeometry());
-	this.model.setTexture(Texture.createTexture(gl, "data/texture/grass.jpg"));
+	this.model.setTexture(new Texture("data/texture/grass.jpg"));
 	this.model.geometry.scaleUV(10, 10);
 	this.model.position.set(0, -100, 0);
 	this.model.scale.set(900, 100, 900);
@@ -35,7 +35,7 @@ function ArenaPhysics()
 	
 	//Walls
 	this.model = new Mesh(new BoxGeometry());
-	this.model.setTexture(Texture.createTexture(gl, "data/texture/wall.png"));
+	this.model.setTexture(new Texture("data/texture/wall.png"));
 	this.model.geometry.scaleUV(20, 1);
 	this.model.position.set(0, 0, -400);
 	this.model.scale.set(400, 50, 1);
@@ -44,7 +44,7 @@ function ArenaPhysics()
 	this.world.addBody(new GameObject(this.model));
 
 	this.model = new Mesh(new BoxGeometry());
-	this.model.setTexture(Texture.createTexture(gl, "data/texture/wall.png"));
+	this.model.setTexture(new Texture("data/texture/wall.png"));
 	this.model.geometry.scaleUV(20, 1);
 	this.model.position.set(0, 0, 400);
 	this.model.scale.set(400, 50, 1);
@@ -53,7 +53,7 @@ function ArenaPhysics()
 	this.world.addBody(new GameObject(this.model));
 
 	this.model = new Mesh(new BoxGeometry());
-	this.model.setTexture(Texture.createTexture(gl, "data/texture/wall.png"));
+	this.model.setTexture(new Texture("data/texture/wall.png"));
 	this.model.geometry.scaleUV(20, 1);
 	this.model.position.set(-400, 0, 0);
 	this.model.scale.set(1, 50, 400);
@@ -62,7 +62,7 @@ function ArenaPhysics()
 	this.world.addBody(new GameObject(this.model));
 
 	this.model = new Mesh(new BoxGeometry());
-	this.model.setTexture(Texture.createTexture(gl, "data/texture/wall.png"));
+	this.model.setTexture(new Texture("data/texture/wall.png"));
 	this.model.geometry.scaleUV(20, 1);
 	this.model.position.set(400, 0, 0);
 	this.model.scale.set(1, 50, 400);
@@ -85,7 +85,7 @@ ArenaPhysics.prototype.update = function()
 	if(this.time % 10 === 0)
 	{
 		this.model = new Mesh(new BoxGeometry());
-		this.model.setTexture(Texture.createTexture(gl, "data/texture/woodBox.jpg"));
+		this.model.setTexture(new Texture("data/texture/woodBox.jpg"));
 		this.model.position.set(MathUtils.randomMod()*400,  MathUtils.randomMod()*300, MathUtils.randomMod()*400);
 		this.model.scale.set(5, 5, 5);
 		this.model.updateMatrix();

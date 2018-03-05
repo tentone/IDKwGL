@@ -209,12 +209,12 @@ OBJLoader.loadMTL = function(data, path)
 			//Texture
 			if(tokens[offset] === "map_Kd" || tokens[offset] === "map_Ka")
 			{
-				materials[index].texture = Texture.createTexture(gl, path + "/" + tokens[1+offset]);
+				materials[index].texture = new Texture(path + "/" + tokens[1+offset]);
 			}
 			//Bump map
 			else if(tokens[offset] === "mapBump" || tokens[offset] === "bump")
 			{
-				materials[index].bumpMap = Texture.createTexture(gl, path + "/" + tokens[1+offset]);
+				materials[index].bumpMap = new Texture(path + "/" + tokens[1+offset]);
 			}
 			//Ambient color
 			else if(tokens[offset] === "Ka")
