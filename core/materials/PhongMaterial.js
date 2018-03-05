@@ -22,8 +22,6 @@ function PhongMaterial(name)
 
 PhongMaterial.prototype = Object.create(MeshMaterial.prototype);
 
-BasicMaterial.prototype.id = MathUtils.randomInt();
-
 PhongMaterial.prototype.createShader = function(gl)
 {
 	var shader = new Shader(gl, PhongMaterial.fragmentShader, MeshMaterial.vertexShader);

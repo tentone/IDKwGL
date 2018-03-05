@@ -3,7 +3,7 @@
 function Object3D()
 {
 	//Attributes
-	this.id = MathUtils.randomInt();
+	this.id = MathUtils.generateID();
 	this.name = "";
 	this.type = "Object3D";
 	

@@ -12,68 +12,43 @@ function Mesh(geometry, material)
 
 	//Store relation between faces and materials 
 	this.faceMaterial = []; //<Face Index Ini / Face Index End / Material>
+	this.count = 0;
 }
 
 Mesh.prototype = Object.create(Object3D.prototype);
 
-//Draw Mesh to camera
+/** 
+ * Render this mesh to screen using its attached material.
+ */
 Mesh.prototype.render = function(renderer, camera, scene)
 {
 	if(this.material instanceof Array)
 	{
-		if(this.material.length > 0)
-		{
-			this.material[0].render(renderer, camera, this);
-		}
-		else
-		{
-			console.log("Empty material array");
-		}
-	}
-	else
-	{
-		this.material.render(renderer, camera, this);
-	}
-
-	/*
-	if(this.material instanceof Array)
-	{
-		//Draw all faces w/ correspondent material
 		for(var i = 0; i < this.faceMaterial.length; i += 3)
 		{
-			//Set texture
-			gl.activeTexture(gl.TEXTURE0);
-			gl.bindTexture(gl.TEXTURE_2D, this.material[this.faceMaterial[i+2]].texture);
-			gl.uniform1i(this.shader.program.textureSampler, 0);
-			
-			//Draw the triangles
-			gl.drawElements(gl.TRIANGLES, this.faceMaterial[i+1], gl.UNSIGNED_SHORT, 0);
+			this.offset = this.faceMaterial[i];
+			this.count = this.faceMaterial[i+1];
+			this.material[this.faceMaterial[i+2]].render(renderer, camera, this);
 		}
 	}
 	else
 	{
-		//Set texture
-		gl.activeTexture(gl.TEXTURE0);
-		gl.bindTexture(gl.TEXTURE_2D, this.material.texture);
-		gl.uniform1i(this.shader.program.textureSampler, 0);
-		
-		//Draw the triangles
-		gl.drawElements(gl.TRIANGLES, this.geometry.faces.length, gl.UNSIGNED_SHORT, 0);
+		this.count = this.geometry.faces.length;
+		this.material.render(renderer, camera, this);
 	}
-	*/
 };
 
-//Creates a copy of this model (keeps same vertex, buffer and texture data pointers)
+/**
+ * Creates a copy of this mesh.
+ */
 Mesh.prototype.clone = function()
 {
 	var model = new Mesh();
 
 	model.geometry = this.geometry;
-
 	model.material = this.material;
-	model.faceMaterial = this.faceMaterial;
 
-	model.texture = this.texture;
+	model.faceMaterial = this.faceMaterial;
 
 	model.position.set(this.position.x, this.position.y, this.position.z);
 	model.rotation.set(this.rotation.x, this.rotation.y, this.rotation.z);
@@ -82,14 +57,18 @@ Mesh.prototype.clone = function()
 	return model;
 };
 
-//Attach texture image to this model
+/**
+ * Attach texture image to this model.
+ */
 Mesh.prototype.setTexture = function(texture)
 {
 	this.material = new PhongMaterial();
 	this.material.texture = texture;
 };
 
-//Get Bouding box created from vertex data
+/** 
+ * Get Bouding box created from vertex data.
+ */
 Mesh.prototype.getBox = function()
 {
 	//If not available calculate box from vertex data

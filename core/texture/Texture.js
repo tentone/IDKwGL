@@ -2,7 +2,7 @@
 
 function Texture(file)
 {
-	this.id = MathUtils.randomInt();
+	this.id = MathUtils.generateID();
 	this.name = "";
 	this.type = "Texture";
 
@@ -46,11 +46,11 @@ Texture.prototype.createTexture = function(gl)
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
 
 		//Check anisotropic support
-		var anisotropic = gl.getExtension("EXT_texture_filter_anisotropic");
+		/*var anisotropic = gl.getExtension("EXT_texture_filter_anisotropic");
 		if(anisotropic !== undefined)
 		{
 			//TODO
-		}
+		}*/
 
 		//Only generate MIPMAPS is texture is a power of two
 		if(MathUtils.isPowerOf2() && MathUtils.isPowerOf2())

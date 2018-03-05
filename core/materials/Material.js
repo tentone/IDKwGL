@@ -2,7 +2,7 @@
 
 function Material()
 {
-	this.id = MathUtils.randomInt();
+	this.id = MathUtils.generateID();
 	this.name = "";
 	this.type = "Material";
 

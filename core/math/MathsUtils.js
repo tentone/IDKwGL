@@ -12,6 +12,11 @@ MathUtils.isPowerOf2 = function(value)
   return (value & (value - 1)) == 0;
 };
 
+MathUtils.generateID = function()
+{
+	return "ID" + Math.floor(Math.random() * 0xFFFFFFFF);
+};
+
 MathUtils.randomInt = function()
 {
 	return Math.floor(Math.random() * 0xFFFFFFFF);

@@ -32,9 +32,9 @@ function Renderer(canvas)
 	this.clearColor = new Color(0, 0, 0);
 
 	//Runtime
-	this.shaders = [];
-	this.buffers = [];
-	this.textures = [];
+	this.shaders = {};
+	this.buffers = {};
+	this.textures = {};
 
 	this.initializeGLContext();
 }
@@ -114,29 +114,29 @@ Renderer.prototype.getTexture = function(texture)
 };
 
 /**
- * Get GL buffers from geometry resource.
+ * Get GL buffers from object or geometry resource.
  */
-Renderer.prototype.getGeometryBuffers = function(geometry)
+Renderer.prototype.getBuffers = function(object)
 {
-	var buffers = this.shaders[geometry.id];
+	var buffers = this.buffers[object.id];
 	if(buffers === undefined)
 	{
-		buffers = geometry.createBuffers(gl);
-		this.shaders[geometry.id] = buffers;
+		buffers = object.createBuffers(gl);
+		this.buffers[object.id] = buffers;
 	}
 	return buffers;
 };
 
 /**
- * Get shader object from material resource.
+ * Get shader object from material or object.
  */
-Renderer.prototype.getMaterialShader = function(material)
+Renderer.prototype.getShader = function(object)
 {
-	var shader = this.shaders[material.id];
+	var shader = this.shaders[object.id];
 	if(shader === undefined)
 	{
-		shader = material.createShader(gl);
-		this.shaders[material.id] = shader;
+		shader = object.createShader(gl);
+		this.shaders[object.id] = shader;
 	}
 	return shader;
 };

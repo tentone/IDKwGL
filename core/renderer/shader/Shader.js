@@ -5,7 +5,7 @@
  */
 function Shader(gl, fragmentShader, vertexShader)
 {
-	this.id = MathUtils.randomInt();
+	this.id = MathUtils.generateID();
 	this.name = "";
 	this.type = "Shader";
 
@@ -18,8 +18,8 @@ function Shader(gl, fragmentShader, vertexShader)
 	this.vertexProgram = null;
 	this.program = null;
 
-	this.uniforms = [];
-	this.attributes = [];
+	this.uniforms = {};
+	this.attributes = {};
 
 	this.compile();
 }

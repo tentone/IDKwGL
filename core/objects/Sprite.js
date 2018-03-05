@@ -2,12 +2,6 @@
 
 function Sprite()
 {
-	if(Sprite.shader === undefined)
-	{
-		Sprite.initializeBuffers();
-		Sprite.initializeShaders();
-	}
-	
 	Object3D.call(this);
 
 	//Texture
@@ -16,7 +10,7 @@ function Sprite()
 
 Sprite.prototype = Object.create(Object3D.prototype);
 
-Sprite.prototype.id = MathUtils.randomInt();
+Sprite.id = MathUtils.generateID();
 
 //Attach texture image to this sprite
 Sprite.prototype.setTexture = function(texture)
@@ -29,33 +23,37 @@ Sprite.prototype.render = function(renderer, camera, scene)
 {
 	var gl = renderer.gl;
 	
-	gl.useProgram(Sprite.shader.program);
+	var shader = renderer.getShader(Sprite);
+
+	gl.useProgram(shader.program);
 
 	gl.enable(gl.BLEND);
 	gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
 	//Transformation matrices
-	gl.uniformMatrix4fv(gl.getUniformLocation(Sprite.shader.program, "projection"), false, camera.projectionMatrix.flatten());
-	gl.uniformMatrix4fv(gl.getUniformLocation(Sprite.shader.program, "view"), false, camera.transformationMatrix.flatten());
-	gl.uniformMatrix4fv(gl.getUniformLocation(Sprite.shader.program, "model"), false, this.transformationMatrix.flatten());
+	gl.uniformMatrix4fv(shader.uniforms["projection"], false, camera.projectionMatrix.flatten());
+	gl.uniformMatrix4fv(shader.uniforms["view"], false, camera.transformationMatrix.flatten());
+	gl.uniformMatrix4fv(shader.uniforms["model"], false, this.transformationMatrix.flatten());
+
+	var buffers = renderer.getBuffers(Sprite);
 
 	//Vertex position
-	gl.bindBuffer(gl.ARRAY_BUFFER, Sprite.vertexBuffer);
-	gl.vertexAttribPointer(Sprite.shader.program.vertexPositionAttribute, Sprite.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.vertexBuffer);
+	gl.vertexAttribPointer(shader.attributes["vertexPosition"], buffers.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
 	//Texture UV
-	gl.bindBuffer(gl.ARRAY_BUFFER, Sprite.uvBuffer);
-	gl.vertexAttribPointer(Sprite.shader.program.vertexUVAttribute, Sprite.uvBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.uvBuffer);
+	gl.vertexAttribPointer(shader.attributes["vertexUV"], buffers.uvBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
 	//Faces
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, Sprite.facesBuffer);
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.facesBuffer);
 
 	var texture = renderer.getTexture(this.texture);
 
 	//Set texture
 	gl.activeTexture(gl.TEXTURE0);
 	gl.bindTexture(gl.TEXTURE_2D, texture);
-	gl.uniform1i(Sprite.shader.program.textureSampler, 0);
+	gl.uniform1i(shader.uniforms["texture"], 0);
 	
 	//Draw the triangles
 	gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
@@ -63,9 +61,11 @@ Sprite.prototype.render = function(renderer, camera, scene)
 	gl.disable(gl.BLEND);
 };
 
-Sprite.initializeShaders = function()
+/**
+ * Create sprite shader.
+ */
+Sprite.createShader = function(gl)
 {
-	//Shader
 	var vertex = "attribute vec3 vertexPosition;\
 	attribute vec2 vertexUV;\
 	\
@@ -97,25 +97,25 @@ Sprite.initializeShaders = function()
 	}";
 
 	//Shader
-	Sprite.shader = new Shader(gl, fragment, vertex);
+	var shader = new Shader(gl, fragment, vertex);
 
-	//Vertex
-	Sprite.shader.program.vertexPositionAttribute = gl.getAttribLocation(Sprite.shader.program, "vertexPosition");
-	gl.enableVertexAttribArray(Sprite.shader.program.vertexPositionAttribute);
-	Sprite.shader.program.vertexUVAttribute = gl.getAttribLocation(Sprite.shader.program, "vertexUV");
-	gl.enableVertexAttribArray(Sprite.shader.program.vertexUVAttribute);
+	//Vertex attributes
+	shader.registerVertexAttributeArray("vertexPosition");
+	shader.registerVertexAttributeArray("vertexUV");
 
 	//Texture
-	Sprite.shader.program.textureSampler = gl.getUniformLocation(Sprite.shader.program, "texture");
-	
+	shader.registerUniform("texture");
+
 	//Matrices
-	Sprite.shader.program.viewMatrixUniform = gl.getUniformLocation(Sprite.shader.program, "view");
-	Sprite.shader.program.projectionMatrixUniform = gl.getUniformLocation(Sprite.shader.program, "projection");
-	Sprite.shader.program.modelMatrixUniform = gl.getUniformLocation(Sprite.shader.program, "model");
+	shader.registerUniform("view");
+	shader.registerUniform("projection");
+	shader.registerUniform("model");
+
+	return shader;
 };
 
 //Recreate data buffers (Should be called after structural changes)
-Sprite.initializeBuffers = function()
+Sprite.createBuffers = function(gl)
 {
 	//Geometry
 	var vertex = new Float32Array([-0.5, -0.5, 0.0, 0.5, -0.5, 0.0, 0.5, 0.5, 0.0, -0.5, 0.5, 0.0]);
@@ -123,23 +123,25 @@ Sprite.initializeBuffers = function()
 	var faces = new Uint16Array([0, 1, 2, 0, 2, 3]);
 
 	//Vertex
-	Sprite.vertexBuffer = gl.createBuffer();
-	Sprite.vertexBuffer.itemSize = 3;
-	Sprite.vertexBuffer.length = vertex.length/3;
-	gl.bindBuffer(gl.ARRAY_BUFFER, Sprite.vertexBuffer);
+	var vertexBuffer = gl.createBuffer();
+	vertexBuffer.itemSize = 3;
+	vertexBuffer.length = vertex.length/3;
+	gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, vertex, gl.STATIC_DRAW);
 
 	//Texture
-	Sprite.uvBuffer = gl.createBuffer();
-	Sprite.uvBuffer.itemSize = 2;
-	Sprite.uvBuffer.length = uvs.length/2;
-	gl.bindBuffer(gl.ARRAY_BUFFER, Sprite.uvBuffer);
+	var uvBuffer = gl.createBuffer();
+	uvBuffer.itemSize = 2;
+	uvBuffer.length = uvs.length/2;
+	gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, uvs, gl.STATIC_DRAW);
 
 	//Faces
-	Sprite.facesBuffer = gl.createBuffer();
-	Sprite.facesBuffer.itemSize = 1;
-	Sprite.facesBuffer.length = faces.length;
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, Sprite.facesBuffer);
+	var facesBuffer = gl.createBuffer();
+	facesBuffer.itemSize = 1;
+	facesBuffer.length = faces.length;
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, facesBuffer);
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, faces, gl.STATIC_DRAW);
+
+	return {vertexBuffer:vertexBuffer, uvBuffer:uvBuffer, facesBuffer:facesBuffer};
 };

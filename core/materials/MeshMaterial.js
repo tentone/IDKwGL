@@ -16,13 +16,11 @@ function MeshMaterial()
 
 MeshMaterial.prototype = Object.create(Material.prototype);
 
-MeshMaterial.prototype.id = MathUtils.randomInt();
-
 MeshMaterial.prototype.render = function(renderer, camera, object)
 {
 	var gl = renderer.gl;
 
-	var shader = renderer.getMaterialShader(this);
+	var shader = renderer.getShader(this);
 
 	gl.useProgram(shader.program);
 
@@ -35,7 +33,7 @@ MeshMaterial.prototype.render = function(renderer, camera, object)
 	gl.uniformMatrix4fv(shader.uniforms["view"], false, camera.transformationMatrix.flatten());
 	gl.uniformMatrix4fv(shader.uniforms["model"], false, object.transformationMatrix.flatten());
 
-	var buffers = renderer.getGeometryBuffers(object.geometry);
+	var buffers = renderer.getBuffers(object.geometry);
 
 	//Vertex position
 	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.vertexBuffer);
@@ -61,14 +59,14 @@ MeshMaterial.prototype.render = function(renderer, camera, object)
 	gl.uniform1i(shader.uniforms["texture"], 0);
 
 	//Enable backface culling
-	gl.enable(gl.CULL_FACE);
-	gl.cullFace(gl.BACK);
+	//gl.enable(gl.CULL_FACE);
+	//gl.cullFace(gl.BACK);
 
 	//Draw the triangles
-	gl.drawElements(gl.TRIANGLES, buffers.facesBuffer.length, gl.UNSIGNED_SHORT, 0);
+	gl.drawElements(gl.TRIANGLES, object.count, gl.UNSIGNED_SHORT, 0);
 
 	//Disable cullface
-	gl.disable(gl.CULL_FACE);
+	//gl.disable(gl.CULL_FACE);
 };
 
 MeshMaterial.vertexShader = "precision mediump float;\
