@@ -21,7 +21,6 @@ Mesh.prototype.render = function(renderer, camera, scene)
 {
 	if(this.material instanceof Array)
 	{
-		//console.log("A");
 		if(this.material.length > 0)
 		{
 			this.material[0].render(renderer, camera, this);
@@ -33,45 +32,10 @@ Mesh.prototype.render = function(renderer, camera, scene)
 	}
 	else
 	{
-		//console.log("B");
 		this.material.render(renderer, camera, this);
 	}
 
-	/*var gl = renderer.gl;
-
-	gl.useProgram(this.shader.program);
-
-	//Enable backface culling
-	gl.enable(gl.CULL_FACE);
-	gl.cullFace(gl.BACK);
-
-	//Time
-	gl.uniform1f(this.shader.program.time, this.time);
-
-	//Camera
-	gl.uniform1f(this.shader.program.near, camera.near);
-	gl.uniform1f(this.shader.program.far, camera.far);
-
-	//Transformation matrices
-	gl.uniformMatrix4fv(this.shader.program.projectionMatrixUniform, false, camera.projectionMatrix.flatten());
-	gl.uniformMatrix4fv(this.shader.program.viewMatrixUniform, false, camera.transformationMatrix.flatten());
-	gl.uniformMatrix4fv(this.shader.program.modelMatrixUniform, false, this.transformationMatrix.flatten());
-
-	//Vertex position
-	gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexBuffer);
-	gl.vertexAttribPointer(this.shader.program.vertexPositionAttribute, this.geometry.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-	//Vertex normal
-	gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.normalBuffer);
-	gl.vertexAttribPointer(this.shader.program.vertexNormalAttribute, this.geometry.normalBuffer.itemSize, gl.FLOAT, false, 0, 0);
-	
-	//Texture UV
-	gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.uvBuffer);
-	gl.vertexAttribPointer(this.shader.program.vertexUVAttribute, this.geometry.uvBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-	//Faces
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.geometry.facesBuffer);
-
+	/*
 	if(this.material instanceof Array)
 	{
 		//Draw all faces w/ correspondent material
@@ -96,8 +60,7 @@ Mesh.prototype.render = function(renderer, camera, scene)
 		//Draw the triangles
 		gl.drawElements(gl.TRIANGLES, this.geometry.faces.length, gl.UNSIGNED_SHORT, 0);
 	}
-
-	gl.disable(gl.CULL_FACE);*/
+	*/
 };
 
 //Creates a copy of this model (keeps same vertex, buffer and texture data pointers)
@@ -122,7 +85,7 @@ Mesh.prototype.clone = function()
 //Attach texture image to this model
 Mesh.prototype.setTexture = function(texture)
 {
-	this.material = new BasicMaterial("mat");
+	this.material = new PhongMaterial();
 	this.material.texture = texture;
 };
 

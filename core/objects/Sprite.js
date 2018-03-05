@@ -16,6 +16,14 @@ function Sprite()
 
 Sprite.prototype = Object.create(Object3D.prototype);
 
+Sprite.prototype.id = MathUtils.randomInt();
+
+//Attach texture image to this sprite
+Sprite.prototype.setTexture = function(texture)
+{
+	this.texture = texture;
+};
+
 //Draw Mesh to camera
 Sprite.prototype.render = function(renderer, camera, scene)
 {
@@ -42,12 +50,7 @@ Sprite.prototype.render = function(renderer, camera, scene)
 	//Faces
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, Sprite.facesBuffer);
 
-	var texture = renderer.textures[this.texture.id];
-	if(texture === undefined)
-	{
-		texture = this.texture.createTexture(gl);
-		renderer.textures[this.texture.id] = texture;
-	}
+	var texture = renderer.getTexture(this.texture);
 
 	//Set texture
 	gl.activeTexture(gl.TEXTURE0);
@@ -139,10 +142,4 @@ Sprite.initializeBuffers = function()
 	Sprite.facesBuffer.length = faces.length;
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, Sprite.facesBuffer);
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, faces, gl.STATIC_DRAW);
-};
-
-//Attach texture image to this sprite
-Sprite.prototype.setTexture = function(texture)
-{
-	this.texture = texture;
 };

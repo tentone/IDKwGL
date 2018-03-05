@@ -10,7 +10,9 @@ function Arena()
 	this.referential = new Referencial(this.scene);
 
 	//Skybox
-	this.skybox = OBJLoader.load(FileLoader.loadText("data/models/skybox/skybox.obj"), FileLoader.loadText("data/models/skybox/skybox.mtl"), "data/models/skybox");
+	this.skybox = OBJLoader.load(FileLoader.loadText("data/models/skybox/skybox.obj"));
+	this.skybox.material = new BasicMaterial();
+	this.skybox.material.texture = new Texture("data/models/skybox/skybox.jpg");
 	this.skybox.scale.set(800,800,800);
 	this.skybox.rotation.set(-1.57, 0, 0);
 	this.skybox.updateMatrix();
@@ -52,7 +54,7 @@ function Arena()
 	this.model = OBJLoader.load(house);
 	this.model.setTexture(new Texture("data/texture/house.jpg"));
 	this.model.scale.set(7, 7, 7);
-	this.model.position.set(300,0,500);
+	this.model.position.set(300,0,0);
 	this.model.updateMatrix();
 	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));

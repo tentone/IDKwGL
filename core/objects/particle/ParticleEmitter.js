@@ -36,10 +36,10 @@ ParticleEmitter.prototype.update = function()
 };
 
 //Draw particles into camera
-ParticleEmitter.prototype.draw = function(camera, light)
+ParticleEmitter.prototype.render = function(renderer, camera, scene)
 {
 	for(var i = 0; i < this.particles.length; i++)
 	{
-		this.particles[i].draw(camera, light);
+		this.particles[i].render(camera, light);
 	}
 };

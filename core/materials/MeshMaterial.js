@@ -15,6 +15,7 @@ function MeshMaterial()
 }
 
 MeshMaterial.prototype = Object.create(Material.prototype);
+
 MeshMaterial.prototype.id = MathUtils.randomInt();
 
 MeshMaterial.prototype.render = function(renderer, camera, object)

@@ -20,12 +20,12 @@ Particle.prototype.update = function()
 	this.time--;
 
 	this.model.position.set(this.position.x, this.position.y, this.position.z);
-	this.model.update();
+	this.model.updateMatrix();
 };
 
 //Draw particles into camera
-Particle.prototype.draw = function(camera, light)
+Particle.prototype.render = function(renderer, camera, scene)
 {
-	this.model.draw(camera, light);
+	this.model.render(renderer, camera, scene)
 };
 
