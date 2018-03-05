@@ -6,6 +6,8 @@ function Vector2(x, y)
 	this.y = y;
 }
 
+Vector2.prototype.constructor = Vector2;
+
 Vector2.prototype.clone = function()
 {
 	return new Vector2(this.x, this.y);

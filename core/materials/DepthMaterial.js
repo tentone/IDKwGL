@@ -9,6 +9,8 @@ function DepthMaterial(name)
 
 DepthMaterial.prototype = Object.create(MeshMaterial.prototype);
 
+DepthMaterial.prototype.constructor = DepthMaterial;
+
 DepthMaterial.prototype.createShader = function(gl)
 {
 	var shader = new Shader(gl, DepthMaterial.fragmentShader, MeshMaterial.vertexShader);

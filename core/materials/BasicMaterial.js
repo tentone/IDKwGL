@@ -9,7 +9,7 @@ function BasicMaterial(name)
 
 BasicMaterial.prototype = Object.create(MeshMaterial.prototype);
 
-BasicMaterial.prototype.constructor = Sprite;
+BasicMaterial.prototype.constructor = BasicMaterial;
 
 BasicMaterial.prototype.createShader = function(gl)
 {

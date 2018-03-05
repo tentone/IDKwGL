@@ -16,6 +16,8 @@ function MeshMaterial()
 
 MeshMaterial.prototype = Object.create(Material.prototype);
 
+MeshMaterial.prototype.constructor = MeshMaterial;
+
 MeshMaterial.prototype.render = function(renderer, camera, object)
 {
 	var gl = renderer.gl;

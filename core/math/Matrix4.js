@@ -10,6 +10,8 @@ function Matrix4()
 	]);
 }
 
+Matrix4.prototype.constructor = Matrix4;
+
 Matrix4.prototype.flatten = function()
 {
 	return this.elements;
