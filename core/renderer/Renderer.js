@@ -107,7 +107,7 @@ Renderer.prototype.getTexture = function(texture)
 	var glTexture = this.textures[texture.id];
 	if(glTexture === undefined)
 	{
-		glTexture = texture.createTexture(gl);
+		glTexture = texture.createTexture(this.gl);
 		this.textures[texture.id] = glTexture;
 	}
 	return glTexture;
@@ -121,7 +121,7 @@ Renderer.prototype.getBuffers = function(object)
 	var buffers = this.buffers[object.id];
 	if(buffers === undefined)
 	{
-		buffers = object.createBuffers(gl);
+		buffers = object.createBuffers(this.gl);
 		this.buffers[object.id] = buffers;
 	}
 	return buffers;
@@ -135,7 +135,7 @@ Renderer.prototype.getShader = function(object)
 	var shader = this.shaders[object.id];
 	if(shader === undefined)
 	{
-		shader = object.createShader(gl);
+		shader = object.createShader(this.gl);
 		this.shaders[object.id] = shader;
 	}
 	return shader;

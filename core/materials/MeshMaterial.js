@@ -59,14 +59,14 @@ MeshMaterial.prototype.render = function(renderer, camera, object)
 	gl.uniform1i(shader.uniforms["texture"], 0);
 
 	//Enable backface culling
-	//gl.enable(gl.CULL_FACE);
-	//gl.cullFace(gl.BACK);
+	gl.enable(gl.CULL_FACE);
+	gl.cullFace(gl.BACK);
 
 	//Draw the triangles
 	gl.drawElements(gl.TRIANGLES, object.count, gl.UNSIGNED_SHORT, 0);
 
 	//Disable cullface
-	//gl.disable(gl.CULL_FACE);
+	gl.disable(gl.CULL_FACE);
 };
 
 MeshMaterial.vertexShader = "precision mediump float;\

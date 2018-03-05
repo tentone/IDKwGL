@@ -72,9 +72,6 @@ include("game/Referencial.js");
 include("game/screen/Arena.js");
 include("game/screen/ArenaPhysics.js");
 
-//Global App Variables
-var gl;
-
 //App class
 function App(){}
 
@@ -103,12 +100,9 @@ App.initialize = function()
 		catch(e){}
 	};
 	
-
-	//TODO <REMOVE GLOBAL REFERENCE>
-	gl = App.renderer.gl;
-	
 	App.keyboard = new Keyboard();
 	App.mouse = new Mouse();
+
 	App.screen = new Arena();
 	
 	App.resize(window.innerWidth, window.innerHeight);
@@ -121,16 +115,6 @@ App.loop = function()
 {
 	//Update Mouse Values (to keep in sync with game actions)
 	App.mouse.update();
-	
-	//Update and render stuff
-	if(App.keyboard.isKeyPressed(Keyboard.O))
-	{
-		App.screen = new Arena();
-	}
-	else if(App.keyboard.isKeyPressed(Keyboard.P))
-	{
-		App.screen = new ArenaPhysics();
-	}
 
 	App.screen.update();
 	App.screen.draw(App.renderer);
