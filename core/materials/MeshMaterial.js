@@ -5,7 +5,6 @@ function MeshMaterial()
 	Material.call(this);
 
 	this.type = "MeshMaterial";
-
 }
 
 MeshMaterial.prototype = Object.create(Material.prototype);
@@ -98,20 +97,4 @@ void main(void)\
 	fragmentNormal = vertexNormal;\
 	\
 	gl_Position = projection * view * model * vec4(vertexPosition, 1.0);\
-}";
-
-MeshMaterial.fragmentShader = "precision mediump float;\
-\
-varying vec2 fragmentUV;\
-varying vec3 fragmentVertex;\
-varying vec3 fragmentNormal;\
-\
-uniform sampler2D texture;\
-\
-uniform float far, near;\
-uniform float time;\
-\
-void main(void)\
-{\
-	gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\
 }";
