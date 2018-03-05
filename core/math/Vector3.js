@@ -7,6 +7,8 @@ function Vector3(x, y, z)
 	this.z = z;
 }
 
+Vector3.prototype.constructor = Vector3;
+
 //Cross product
 Vector3.cross = function(a, b)
 {

@@ -24,6 +24,8 @@ function Matrix(width, height)
 	}
 }
 
+Matrix.prototype.constructor = Matrix;
+
 //Clears matrix data to 0's if matrix if square clears to indentity
 Matrix.prototype.clear = function()
 {

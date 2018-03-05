@@ -8,6 +8,8 @@ function Vector4(x, y, z, w)
 	this.w = w;
 }
 
+Vector4.prototype.constructor = Vector4;
+
 Vector4.prototype.clone = function()
 {
 	return new Vector4(this.x, this.y, this.z, this.w);

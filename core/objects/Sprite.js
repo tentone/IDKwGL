@@ -10,6 +10,8 @@ function Sprite()
 
 Sprite.prototype = Object.create(Object3D.prototype);
 
+Sprite.prototype.constructor = Sprite;
+
 Sprite.id = MathUtils.generateID();
 
 //Attach texture image to this sprite

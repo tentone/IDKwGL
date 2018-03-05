@@ -8,6 +8,8 @@ function Color(r, g, b)
 	this.a = 1.0;
 }
 
+Color.prototype.constructor = Color;
+
 Color.prototype.clone = function()
 {
 	return new Color(this.r, this.g, this.b);
