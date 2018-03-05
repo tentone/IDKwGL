@@ -9,6 +9,29 @@ function DepthMaterial(name)
 
 DepthMaterial.prototype = Object.create(MeshMaterial.prototype);
 
+DepthMaterial.prototype.id = MathUtils.randomInt();
+
+DepthMaterial.prototype.createShader = function(gl)
+{
+	var shader = new Shader(gl, DepthMaterial.fragmentShader, MeshMaterial.vertexShader);
+
+	//Attributes
+	shader.registerVertexAttributeArray("vertexPosition");
+	shader.registerVertexAttributeArray("vertexUV");
+	shader.registerVertexAttributeArray("vertexNormal");
+
+	//Matrices
+	shader.registerUniform("view");
+	shader.registerUniform("projection");
+	shader.registerUniform("model");
+
+	//Camera
+	shader.registerUniform("far");
+	shader.registerUniform("near");
+
+	return shader;
+};
+
 DepthMaterial.fragmentShader = "precision mediump float;\
 \
 varying vec2 fragmentUV;\
@@ -28,5 +51,3 @@ void main(void)\
     float depth = linearize(gl_FragCoord.z) / far;\
     gl_FragColor = vec4(vec3(depth), 1.0);\
 }";
-
-DepthMaterial.vertexShader = MeshMaterial.vertexShader;

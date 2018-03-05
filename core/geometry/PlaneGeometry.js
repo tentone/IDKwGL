@@ -32,8 +32,6 @@ function PlaneGeometry()
 	[
 		0, 1, 2, 0, 2, 3
 	];
-	
-	this.updateBuffers();
 }
 
 PlaneGeometry.prototype = Object.create(Geometry.prototype);

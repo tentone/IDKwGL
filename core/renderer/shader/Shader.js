@@ -18,32 +18,28 @@ function Shader(gl, fragmentShader, vertexShader)
 	this.vertexProgram = null;
 	this.program = null;
 
+	this.uniforms = [];
+	this.attributes = [];
+
 	this.compile();
 }
 
 /**
- * Enable vertex attribute array.
+ * Register and enable vertex attribute array.
  */
-Shader.prototype.enableVertexAttributeArray = function(name)
+Shader.prototype.registerVertexAttributeArray = function(name)
 {
-	this.gl.enableVertexAttribArray(this.gl.getAttribLocation(this.program, name));
+	this.attributes[name] = this.gl.getAttribLocation(this.program, name);
+	this.gl.enableVertexAttribArray(this.attributes[name]);
 };
 
 /**
- * Set uniform value (automatic type detection).
+ * Register uniform location.
  */
-Shader.prototype.setUniformValue = function(name, value)
+Shader.prototype.registerUniform = function(name)
 {
-	if(typeof value === "number")
-	{
-		this.gl.uniform1f(this.gl.getUniformLocation(this.program, name), value);
-	}
-	else if(value instanceof Matrix4)
-	{
-		this.gl.uniformMatrix4fv(this.gl.getUniformLocation(this.program, name), false, value.flatten());
-	}
+	this.uniforms[name] = this.gl.getUniformLocation(this.program, name);
 };
-
 
 /** 
  * Compiles fragment and vertex shader and links them into a program.

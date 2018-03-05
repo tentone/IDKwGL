@@ -122,9 +122,6 @@ function BoxGeometry()
 		//Left face
 		20, 21, 22, 20, 22, 23
 	];
-
-	
-	this.updateBuffers();
 }
 
 BoxGeometry.prototype = Object.create(Geometry.prototype);

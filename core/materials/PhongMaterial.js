@@ -22,7 +22,31 @@ function PhongMaterial(name)
 
 PhongMaterial.prototype = Object.create(MeshMaterial.prototype);
 
-PhongMaterial.vertexShader = MeshMaterial.vertexShader;
+BasicMaterial.prototype.id = MathUtils.randomInt();
+
+PhongMaterial.prototype.createShader = function(gl)
+{
+	var shader = new Shader(gl, PhongMaterial.fragmentShader, MeshMaterial.vertexShader);
+
+	//Vertex attributes
+	shader.registerVertexAttributeArray("vertexPosition");
+	shader.registerVertexAttributeArray("vertexUV");
+	shader.registerVertexAttributeArray("vertexNormal");
+
+	//Texture
+	shader.registerUniform("texture");
+
+	//Matrices
+	shader.registerUniform("view");
+	shader.registerUniform("projection");
+	shader.registerUniform("model");
+
+	//Camera
+	shader.registerUniform("far");
+	shader.registerUniform("near");
+
+	return shader;
+};
 
 PhongMaterial.fragmentShader = "precision mediump float;\
 \

@@ -9,12 +9,6 @@ function Material()
 	this.shader = null;
 }
 
-Material.prototype.createShader = function(gl)
-{
-	//TODO <ADD CODE HERE>
-};
+Material.prototype.createShader = function(gl){};
 
-Material.render = function(gl, shdader, renderer, camera, object)
-{
-	//TODO <ADD CODE HERE>
-};
+Material.prototype.render = function(renderer, camera, object){};

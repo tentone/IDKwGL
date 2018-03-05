@@ -1,12 +1,12 @@
 "use strict";
 
-function Texture()
+function Texture(file)
 {
 	this.id = MathUtils.randomInt();
 	this.name = "";
 	this.type = "Texture";
 
-	this.image = "";
+	this.file = file;
 }
 
 //Texture Constructor from file name

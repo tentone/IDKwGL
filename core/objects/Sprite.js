@@ -36,8 +36,8 @@ Sprite.prototype.render = function(renderer, camera, scene)
 	gl.vertexAttribPointer(Sprite.shader.program.vertexPositionAttribute, Sprite.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
 	//Texture UV
-	gl.bindBuffer(gl.ARRAY_BUFFER, Sprite.UVBuffer);
-	gl.vertexAttribPointer(Sprite.shader.program.vertexUVAttribute, Sprite.UVBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	gl.bindBuffer(gl.ARRAY_BUFFER, Sprite.uvBuffer);
+	gl.vertexAttribPointer(Sprite.shader.program.vertexUVAttribute, Sprite.uvBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
 	//Faces
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, Sprite.facesBuffer);
@@ -120,10 +120,10 @@ Sprite.initializeBuffers = function()
 	gl.bufferData(gl.ARRAY_BUFFER, vertex, gl.STATIC_DRAW);
 
 	//Texture
-	Sprite.UVBuffer = gl.createBuffer();
-	Sprite.UVBuffer.itemSize = 2;
-	Sprite.UVBuffer.length = uvs.length/2;
-	gl.bindBuffer(gl.ARRAY_BUFFER, Sprite.UVBuffer);
+	Sprite.uvBuffer = gl.createBuffer();
+	Sprite.uvBuffer.itemSize = 2;
+	Sprite.uvBuffer.length = uvs.length/2;
+	gl.bindBuffer(gl.ARRAY_BUFFER, Sprite.uvBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, uvs, gl.STATIC_DRAW);
 
 	//Faces

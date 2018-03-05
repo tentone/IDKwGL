@@ -11,49 +11,44 @@ function Geometry()
 	this.name = "";
 	this.type = "Geometry";
 
-	//Array data
 	this.vertex = []; //Vertex
 	this.uvs = []; //Vertex Texture
 	this.normals = []; //Vertex Normals
 	this.faces = []; //Face <vertex / texture / normal>
-
-	//GL Buffers
-	this.normalBuffer = null;
-	this.vertexBuffer = null;
-	this.textureCoordBuffer = null;
-	this.facesBuffer = null;
 }
 
 //Update GL buffers
-Geometry.prototype.updateBuffers = function()
+Geometry.prototype.createBuffers = function(gl)
 {
 	//Vertex
-	this.vertexBuffer = gl.createBuffer();
-	this.vertexBuffer.itemSize = 3;
-	this.vertexBuffer.length = this.vertex.length/3;						
-	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
+	var vertexBuffer = gl.createBuffer();
+	vertexBuffer.itemSize = 3;
+	vertexBuffer.length = this.vertex.length/3;						
+	gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertex), gl.STATIC_DRAW);
 
 	//Texture
-	this.textureCoordBuffer = gl.createBuffer();
-	this.textureCoordBuffer.itemSize = 2;
-	this.textureCoordBuffer.length = this.uvs.length/2;
-	gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
+	var uvBuffer = gl.createBuffer();
+	uvBuffer.itemSize = 2;
+	uvBuffer.length = this.uvs.length/2;
+	gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.uvs), gl.STATIC_DRAW);
 
 	//Normals
-	this.normalBuffer = gl.createBuffer();
-	this.normalBuffer.itemSize = 3;
-	this.normalBuffer.length = this.normals.length/3;			
-	gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
+	var normalBuffer = gl.createBuffer();
+	normalBuffer.itemSize = 3;
+	normalBuffer.length = this.normals.length/3;			
+	gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normals), gl.STATIC_DRAW);
 
 	//Faces
-	this.facesBuffer = gl.createBuffer();
-	this.facesBuffer.itemSize = 1;
-	this.facesBuffer.length = this.faces.length;
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.facesBuffer);
+	var facesBuffer = gl.createBuffer();
+	facesBuffer.itemSize = 1;
+	facesBuffer.length = this.faces.length;
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, facesBuffer);
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.faces), gl.STATIC_DRAW);
+
+	return {vertexBuffer: vertexBuffer, uvBuffer: uvBuffer, normalBuffer: normalBuffer, facesBuffer: facesBuffer};
 };
 
 //Computing the triangle unit normal vector to vertex 
@@ -110,6 +105,4 @@ Geometry.prototype.scaleUV = function(x, y)
 		this.uvs[i] *= x;
 		this.uvs[i+1] *= y;
 	}
-
-	this.updateBuffers();
 };

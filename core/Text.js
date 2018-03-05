@@ -17,7 +17,7 @@ function Text(text, font)
 	//GL Buffers
 	this.normalBuffer = null;
 	this.vertexBuffer = null;
-	this.textureCoordBuffer = null;
+	this.uvBuffer = null;
 	this.facesBuffer = null;
 
 	//Texture
@@ -95,8 +95,8 @@ Text.prototype.draw = function(camera, scene)
 	gl.vertexAttribPointer(this.shader.program.vertexPositionAttribute, this.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
 	//Texture UV
-	gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
-	gl.vertexAttribPointer(this.shader.program.vertexUVAttribute, this.textureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	gl.bindBuffer(gl.ARRAY_BUFFER, this.uvBuffer);
+	gl.vertexAttribPointer(this.shader.program.vertexUVAttribute, this.uvBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
 	//Faces
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.facesBuffer);
@@ -123,11 +123,11 @@ Text.prototype.updateBuffers = function()
 	this.vertexBuffer.length = this.vertex.length/3;						
 
 	//Texture
-	this.textureCoordBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
+	this.uvBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, this.uvBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.uvs), gl.STATIC_DRAW);
-	this.textureCoordBuffer.itemSize = 2;
-	this.textureCoordBuffer.length = this.uvs.length/2;		
+	this.uvBuffer.itemSize = 2;
+	this.uvBuffer.length = this.uvs.length/2;		
 
 	//Vertex indices
 	this.facesBuffer = gl.createBuffer();

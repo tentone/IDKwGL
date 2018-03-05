@@ -12,33 +12,6 @@ function Mesh(geometry, material)
 
 	//Store relation between faces and materials 
 	this.faceMaterial = []; //<Face Index Ini / Face Index End / Material>
-
-	//Time
-	this.time = 0;
-
-	//Shader
-	this.shader = new Shader(gl, BasicMaterial.fragmentShader, BasicMaterial.vertexShader);
-
-	//Vertex attributes
-	this.shader.program.vertexPositionAttribute = gl.getAttribLocation(this.shader.program, "vertexPosition");
-	this.shader.program.vertexUVAttribute = gl.getAttribLocation(this.shader.program, "vertexUV");
-	this.shader.program.vertexNormalAttribute = gl.getAttribLocation(this.shader.program, "vertexNormal");
-	
-	this.shader.enableVertexAttributeArray("vertexPosition");
-	this.shader.enableVertexAttributeArray("vertexUV");
-	this.shader.enableVertexAttributeArray("vertexNormal");
-
-	//Texture
-	this.shader.program.textureSampler = gl.getUniformLocation(this.shader.program, "texture");
-
-	//Matrices
-	this.shader.program.viewMatrixUniform = gl.getUniformLocation(this.shader.program, "view");
-	this.shader.program.projectionMatrixUniform = gl.getUniformLocation(this.shader.program, "projection");
-	this.shader.program.modelMatrixUniform = gl.getUniformLocation(this.shader.program, "model");
-
-	this.shader.program.time = gl.getUniformLocation(this.shader.program, "time");
-	this.shader.program.far = gl.getUniformLocation(this.shader.program, "far");
-	this.shader.program.near = gl.getUniformLocation(this.shader.program, "near");
 }
 
 Mesh.prototype = Object.create(Object3D.prototype);
@@ -46,9 +19,25 @@ Mesh.prototype = Object.create(Object3D.prototype);
 //Draw Mesh to camera
 Mesh.prototype.render = function(renderer, camera, scene)
 {
-	var gl = renderer.gl;
+	if(this.material instanceof Array)
+	{
+		//console.log("A");
+		if(this.material.length > 0)
+		{
+			this.material[0].render(renderer, camera, this);
+		}
+		else
+		{
+			console.log("Empty material array");
+		}
+	}
+	else
+	{
+		//console.log("B");
+		this.material.render(renderer, camera, this);
+	}
 
-	this.time += 0.016;
+	/*var gl = renderer.gl;
 
 	gl.useProgram(this.shader.program);
 
@@ -77,8 +66,8 @@ Mesh.prototype.render = function(renderer, camera, scene)
 	gl.vertexAttribPointer(this.shader.program.vertexNormalAttribute, this.geometry.normalBuffer.itemSize, gl.FLOAT, false, 0, 0);
 	
 	//Texture UV
-	gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.textureCoordBuffer);
-	gl.vertexAttribPointer(this.shader.program.vertexUVAttribute, this.geometry.textureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.uvBuffer);
+	gl.vertexAttribPointer(this.shader.program.vertexUVAttribute, this.geometry.uvBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
 	//Faces
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.geometry.facesBuffer);
@@ -108,7 +97,7 @@ Mesh.prototype.render = function(renderer, camera, scene)
 		gl.drawElements(gl.TRIANGLES, this.geometry.faces.length, gl.UNSIGNED_SHORT, 0);
 	}
 
-	gl.disable(gl.CULL_FACE);
+	gl.disable(gl.CULL_FACE);*/
 };
 
 //Creates a copy of this model (keeps same vertex, buffer and texture data pointers)
@@ -133,7 +122,7 @@ Mesh.prototype.clone = function()
 //Attach texture image to this model
 Mesh.prototype.setTexture = function(texture)
 {
-	this.material = new PhongMaterial("mat");
+	this.material = new BasicMaterial("mat");
 	this.material.texture = texture;
 };
 

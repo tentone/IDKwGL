@@ -175,9 +175,6 @@ OBJLoader.load = function(data, mtl, path)
 	geometry.uvs = texture;
 	geometry.normals = normals;
 
-	//Update Buffers
-	geometry.updateBuffers();
-
 	return mesh;
 };
 

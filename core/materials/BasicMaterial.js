@@ -9,31 +9,28 @@ function BasicMaterial(name)
 
 BasicMaterial.prototype = Object.create(MeshMaterial.prototype);
 
-BasicMaterial.prototype.createShader = function(renderer)
+BasicMaterial.prototype.id = MathUtils.randomInt();
+
+BasicMaterial.prototype.createShader = function(gl)
 {
-	var shader = new Shader(gl, BasicMaterial.fragmentShader, BasicMaterial.vertexShader);
+	var shader = new Shader(gl, BasicMaterial.fragmentShader, MeshMaterial.vertexShader);
 
 	//Vertex attributes
-	//shader.program.vertexPositionAttribute = gl.getAttribLocation(shader.program, "vertexPosition");
-	gl.enableVertexAttribArray(gl.getAttribLocation(shader.program, "vertexPosition"));
-
-	//shader.program.vertexUVAttribute = gl.getAttribLocation(shader.program, "vertexUV");
-	gl.enableVertexAttribArray(gl.getAttribLocation(shader.program, "vertexUV"));
-
-	//shader.program.vertexNormalAttribute = gl.getAttribLocation(shader.program, "vertexNormal");
-	gl.enableVertexAttribArray(gl.getAttribLocation(shader.program, "vertexNormal"));
+	shader.registerVertexAttributeArray("vertexPosition");
+	shader.registerVertexAttributeArray("vertexUV");
+	shader.registerVertexAttributeArray("vertexNormal");
 
 	//Texture
-	/*shader.program.textureSampler = gl.getUniformLocation(shader.program, "texture");
+	shader.registerUniform("texture");
 
 	//Matrices
-	shader.program.viewMatrixUniform = gl.getUniformLocation(shader.program, "view");
-	shader.program.projectionMatrixUniform = gl.getUniformLocation(shader.program, "projection");
-	shader.program.modelMatrixUniform = gl.getUniformLocation(shader.program, "model");
+	shader.registerUniform("view");
+	shader.registerUniform("projection");
+	shader.registerUniform("model");
 
-	shader.program.time = gl.getUniformLocation(shader.program, "time");
-	shader.program.far = gl.getUniformLocation(shader.program, "far");
-	shader.program.near = gl.getUniformLocation(shader.program, "near");*/
+	//Camera
+	shader.registerUniform("far");
+	shader.registerUniform("near");
 
 	return shader;
 };
@@ -51,5 +48,3 @@ void main(void)\
 {\
 	gl_FragColor = texture2D(texture, vec2(fragmentUV.s, fragmentUV.t));\
 }";
-
-BasicMaterial.vertexShader = MeshMaterial.vertexShader;
