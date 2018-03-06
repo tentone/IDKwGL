@@ -13,9 +13,12 @@ function Arena()
 	this.skybox = OBJLoader.load(FileLoader.loadText("data/models/sphere.obj"));
 	this.skybox.material = new BasicMaterial();
 	this.skybox.material.texture = new Texture("data/models/sky.jpg");
+	this.skybox.material.faceCulling = MeshMaterial.FRONT;
 	this.skybox.scale.set(800,800,800);
+	this.skybox.rotation.set(Math.PI, 0, 0);
 	this.skybox.updateMatrix();
 	this.scene.add(this.skybox);
+
 
 	//Tank
 	this.model = OBJLoader.load(tank);

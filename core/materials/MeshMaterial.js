@@ -12,7 +12,12 @@ function MeshMaterial()
 	Material.call(this);
 
 	this.type = "MeshMaterial";
+
+	this.faceCulling = MeshMaterial.BACK;
 }
+
+MeshMaterial.BACK = 100;
+MeshMaterial.FRONT = 101;
 
 MeshMaterial.prototype = Object.create(Material.prototype);
 
@@ -62,7 +67,7 @@ MeshMaterial.prototype.render = function(renderer, camera, object)
 
 	//Enable backface culling
 	gl.enable(gl.CULL_FACE);
-	gl.cullFace(gl.BACK);
+	gl.cullFace(this.faceCulling === MeshMaterial.BACK ? gl.BACK : gl.FRONT);
 
 	//Draw the triangles
 	gl.drawElements(gl.TRIANGLES, object.count, gl.UNSIGNED_SHORT, 0);
