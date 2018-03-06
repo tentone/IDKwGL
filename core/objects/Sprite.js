@@ -4,7 +4,6 @@ function Sprite()
 {
 	Object3D.call(this);
 
-	//Texture
 	this.texture = null;
 }
 
@@ -25,18 +24,21 @@ Sprite.prototype.clone = function()
 	object.rotation.set(this.rotation.x, this.rotation.y, this.rotation.z);
 	object.scale.set(this.scale.x, this.scale.y, this.scale.z);
 	object.texture = this.texture;
+
 	return object;
 };
 
-
-
-//Attach texture image to this sprite
+/**
+ * Attach texture image to this sprite.
+ */
 Sprite.prototype.setTexture = function(texture)
 {
 	this.texture = texture;
 };
 
-//Draw Mesh to camera
+/** 
+ * Renders sprite to the screen.
+ */
 Sprite.prototype.render = function(renderer, camera, scene)
 {
 	var gl = renderer.gl;
@@ -57,11 +59,11 @@ Sprite.prototype.render = function(renderer, camera, scene)
 
 	//Vertex position
 	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.vertexBuffer);
-	gl.vertexAttribPointer(shader.attributes["vertexPosition"], buffers.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	gl.vertexAttribPointer(shader.attributes["vertexPosition"], 3, gl.FLOAT, false, 0, 0);
 
 	//Texture UV
 	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.uvBuffer);
-	gl.vertexAttribPointer(shader.attributes["vertexUV"], buffers.uvBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	gl.vertexAttribPointer(shader.attributes["vertexUV"], 2, gl.FLOAT, false, 0, 0);
 
 	//Faces
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.facesBuffer);
@@ -132,7 +134,9 @@ Sprite.createShader = function(gl)
 	return shader;
 };
 
-//Recreate data buffers (Should be called after structural changes)
+/**
+ * Create data buffer for the sprite quad.
+ */
 Sprite.createBuffers = function(gl)
 {
 	//Geometry

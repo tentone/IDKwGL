@@ -13,30 +13,40 @@ function ParticleEmitter(model, position, speed, speedVar, scale, scaleVar, time
 	this.timeVar = timeVar;
 	this.model = model;
 
+	var speed = new Vector3();
+
 	//Initialize particles
-	for(var i = 0; i < particleCount; i++)
+	for(var i = 0; i < this.particleCount; i++)
 	{
-		speed = new Vector3(this.speed.x + this.speedVar.x*MathUtils.randomMod(), this.speed.y + this.speedVar.y*MathUtils.randomMod(), this.speed.z + this.speedVar.z*MathUtils.randomMod());
-		this.particles.push(new Particle(this.model.clone(), this.position.clone(), speed, this.scale + this.scaleVar*MathUtils.randomMod(), this.time + this.timeVar*MathUtils.randomMod()));
+		speed.set(this.speed.x + this.speedVar.x*MathUtils.randomMod(), this.speed.y + this.speedVar.y*MathUtils.randomMod(), this.speed.z + this.speedVar.z*MathUtils.randomMod());
+		this.particles.push(new Particle(this.model, this.position, speed, this.scale + this.scaleVar*MathUtils.randomMod(), this.time + this.timeVar*MathUtils.randomMod()));
 	}
 }
 
-//Update Particles position
+/**
+ * Update Particles position.
+ */
 ParticleEmitter.prototype.update = function()
 {
 	for(var i = 0; i < this.particles.length; i++)
 	{
 		this.particles[i].update();
 
+		//Reset particle
 		if(this.particles[i].time < 0)
 		{
-			var speed = new Vector3(this.speed.x + this.speedVar.x*MathUtils.randomMod(), this.speed.y + this.speedVar.y*MathUtils.randomMod(), this.speed.z + this.speedVar.z*MathUtils.randomMod());
-			this.particles[i] = new Particle(this.model.clone(), this.position.clone(), speed, this.scale + this.scaleVar*MathUtils.randomMod(), this.time + this.timeVar*MathUtils.randomMod());
+			this.particles[i].position.copy(this.position);
+			var scale = this.scale + this.scaleVar * MathUtils.randomMod();
+			this.particles[i].scale.set(scale, scale, scale);
+			this.particles[i].time = this.time + this.timeVar*MathUtils.randomMod();
+			this.particles[i].speed.set(this.speed.x + this.speedVar.x*MathUtils.randomMod(), this.speed.y + this.speedVar.y*MathUtils.randomMod(), this.speed.z + this.speedVar.z*MathUtils.randomMod());
 		}
 	}
 };
 
-//Draw particles into camera
+/**
+ * Draw particles into camera.
+ */
 ParticleEmitter.prototype.render = function(renderer, camera, scene)
 {
 	for(var i = 0; i < this.particles.length; i++)

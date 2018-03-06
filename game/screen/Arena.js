@@ -16,7 +16,7 @@ function Arena()
 	this.skybox.scale.set(800,800,800);
 	this.skybox.updateMatrix();
 	this.scene.add(this.skybox);
-	
+
 	//Tank
 	this.model = OBJLoader.load(tank);
 	this.model.setTexture(new Texture("data/texture/tank.jpg"));
@@ -43,8 +43,8 @@ function Arena()
 	//Bus
 	this.bus = OBJLoader.load(FileLoader.loadText("data/models/bus/bus.obj"), FileLoader.loadText("data/models/bus/bus.mtl"), "data/models/bus");
 	this.bus.scale.set(0.08, 0.08, 0.08);
-	this.bus.position.set(100,19.8,300);
-	this.bus.rotation.set(0, Math.PI ,0);
+	this.bus.position.set(100, 19.8, 230);
+	this.bus.rotation.set(0, Math.PI, 0);
 	this.bus.updateMatrix();
 	this.scene.add(this.bus);
 	this.world.addBody(new GameObject(this.bus));
@@ -132,8 +132,8 @@ function Arena()
 	this.model = new Mesh(new BoxGeometry());
 	this.model.setTexture(new Texture("data/texture/wall.png"));
 	this.model.geometry.scaleUV(20, 1);
-	this.model.position.set(0, 0, -400);
-	this.model.scale.set(400, 50, 1);
+	this.model.position.set(0, 0, -300);
+	this.model.scale.set(300, 50, 1);
 	this.model.updateMatrix();
 	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
@@ -141,8 +141,8 @@ function Arena()
 	this.model = new Mesh(new BoxGeometry());
 	this.model.setTexture(new Texture("data/texture/wall.png"));
 	this.model.geometry.scaleUV(20, 1);
-	this.model.position.set(0, 0, 400);
-	this.model.scale.set(400, 50, 1);
+	this.model.position.set(0, 0, 300);
+	this.model.scale.set(300, 50, 1);
 	this.model.updateMatrix();
 	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
@@ -150,8 +150,8 @@ function Arena()
 	this.model = new Mesh(new BoxGeometry());
 	this.model.setTexture(new Texture("data/texture/wall.png"));
 	this.model.geometry.scaleUV(20, 1);
-	this.model.position.set(-400, 0, 0);
-	this.model.scale.set(1, 50, 400);
+	this.model.position.set(-300, 0, 0);
+	this.model.scale.set(1, 50, 300);
 	this.model.updateMatrix();
 	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
@@ -159,8 +159,8 @@ function Arena()
 	this.model = new Mesh(new BoxGeometry());
 	this.model.setTexture(new Texture("data/texture/wall.png"));
 	this.model.geometry.scaleUV(20, 1);
-	this.model.position.set(400, 0, 0);
-	this.model.scale.set(1, 50, 400);
+	this.model.position.set(300, 0, 0);
+	this.model.scale.set(1, 50, 300);
 	this.model.updateMatrix();
 	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
@@ -171,18 +171,18 @@ function Arena()
 	//Grass
 	for(var i = 0; i < 200; i++)
 	{
-		position.set(MathUtils.randomMod()*400, 4, MathUtils.randomMod()*400);
+		position.set(MathUtils.randomMod()*300, 5, MathUtils.randomMod()*300);
 
 		var grass = new Sprite();
 		grass.setTexture(texture);
-		grass.scale.set(8, 8, 1);
+		grass.scale.set(10, 10, 1);
 		grass.position.copy(position);
 		grass.updateMatrix();
 		this.scene.add(grass);
 
 		var grass = new Sprite();
 		grass.setTexture(texture);
-		grass.scale.set(8, 8, 1);
+		grass.scale.set(10, 10, 1);
 		grass.position.copy(position);
 		grass.rotation.set(0, 1.57, 0);
 		grass.updateMatrix();
@@ -192,11 +192,9 @@ function Arena()
 	//Tank smoke
 	this.model = new Sprite();
 	this.model.setTexture(new Texture("data/texture/smoke_2.png"));
-	this.model.scale.set(4, 4, 1);
-	this.model.position.set(MathUtils.randomMod()*400, 2, MathUtils.randomMod()*400);
-	this.model.updateMatrix();
-	this.particle = new ParticleEmitter(this.model, new Vector3(-250,8,100), new Vector3(0,0.7,0), new Vector3(0.3,0.5,0.3), 6, 4, 150, 150, 50);
+	this.particle = new ParticleEmitter(this.model, new Vector3(-250,8,100), new Vector3(0,0.7,0), new Vector3(0.3,0.5,0.3), 30, 10, 150, 150, 50);
 	this.scene.add(this.particle);
+	
 	//Bullet
 	/*this.bullet = new Mesh();
 	this.bullet = OBJLoader.load(FileLoader.loadText("data/models/skybox/skybox.obj"));

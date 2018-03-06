@@ -104,10 +104,9 @@ App.initialize = function()
 	App.mouse = new Mouse();
 
 	App.screen = new Arena();
-	
 	App.resize(window.innerWidth, window.innerHeight);
 	
-	App.loop()
+	App.loop();
 }
 
 // Timer to update game logic and render stuff (switch to independent timers?)
