@@ -190,13 +190,13 @@ function Arena()
 	}
 
 	//Tank smoke
-	/*this.model = new Sprite();
+	this.model = new Sprite();
 	this.model.setTexture(new Texture("data/texture/smoke_2.png"));
 	this.model.scale.set(4, 4, 1);
 	this.model.position.set(MathUtils.randomMod()*400, 2, MathUtils.randomMod()*400);
 	this.model.updateMatrix();
-	this.particle = new ParticleEmitter(this.model, new Vector3(-250,8,100), new Vector3(0,0.7,0), new Vector3(0.3,0.5,0.3), 6, 4, 150, 150, 50);*/
-	
+	this.particle = new ParticleEmitter(this.model, new Vector3(-250,8,100), new Vector3(0,0.7,0), new Vector3(0.3,0.5,0.3), 6, 4, 150, 150, 50);
+	this.scene.add(this.particle);
 	//Bullet
 	/*this.bullet = new Mesh();
 	this.bullet = OBJLoader.load(FileLoader.loadText("data/models/skybox/skybox.obj"));
@@ -224,9 +224,7 @@ function Arena()
 
 Arena.prototype.update = function()
 {
-	/*
 	this.particle.update();
-	*/
 
 	/*
 	//Fire Gun

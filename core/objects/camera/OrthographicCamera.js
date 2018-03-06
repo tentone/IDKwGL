@@ -16,6 +16,8 @@ function OrthographicCamera(height, width)
 
 OrthographicCamera.prototype = Object.create(Camera.prototype);
 
+OrthographicCamera.prototype.constructor = OrthographicCamera;
+
 //Calculate camera projection Matrix
 OrthographicCamera.prototype.updateProjectionMatrix = function()
 {

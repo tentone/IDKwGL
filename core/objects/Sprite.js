@@ -14,6 +14,22 @@ Sprite.prototype.constructor = Sprite;
 
 Sprite.id = MathUtils.generateID();
 
+/**
+ * Creates a copy of this sprite.
+ */
+Sprite.prototype.clone = function()
+{
+	var object = new Sprite();
+
+	object.position.set(this.position.x, this.position.y, this.position.z);
+	object.rotation.set(this.rotation.x, this.rotation.y, this.rotation.z);
+	object.scale.set(this.scale.x, this.scale.y, this.scale.z);
+	object.texture = this.texture;
+	return object;
+};
+
+
+
 //Attach texture image to this sprite
 Sprite.prototype.setTexture = function(texture)
 {

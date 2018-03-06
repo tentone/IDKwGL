@@ -17,6 +17,8 @@ function Camera()
 
 Camera.prototype = Object.create(Object3D.prototype);
 
+Camera.prototype.constructor = Camera;
+
 //Call before start a frame on this camera
 Camera.prototype.updateMatrix = function()
 {

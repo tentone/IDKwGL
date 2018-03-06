@@ -16,6 +16,8 @@ function PerspectiveCamera(aspect, fov, zoom)
 
 PerspectiveCamera.prototype = Object.create(Camera.prototype);
 
+PerspectiveCamera.prototype.constructor = PerspectiveCamera;
+
 //Calculate camera projection Matrix
 PerspectiveCamera.prototype.updateProjectionMatrix = function()
 {
