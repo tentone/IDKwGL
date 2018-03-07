@@ -24,74 +24,40 @@ PhongMaterial.prototype = Object.create(MeshMaterial.prototype);
 PhongMaterial.prototype.constructor = PhongMaterial;
 PhongMaterial.id = MathUtils.generateID();
 
-PhongMaterial.prototype.render = function(renderer, camera, object)
-{
-	var gl = renderer.gl;
-
-	var shader = renderer.getShader(PhongMaterial);
-
-	gl.useProgram(shader.program);
-
-	//Camera
-	gl.uniform1f(shader.uniforms["near"], camera.near);
-	gl.uniform1f(shader.uniforms["far"], camera.far);
-
-	//Transformation matrices
-	gl.uniformMatrix4fv(shader.uniforms["projection"], false, camera.projectionMatrix.flatten());
-	gl.uniformMatrix4fv(shader.uniforms["view"], false, camera.transformationMatrix.flatten());
-	gl.uniformMatrix4fv(shader.uniforms["model"], false, object.transformationMatrix.flatten());
-
-	var buffers = renderer.getBuffers(object.geometry);
-
-	//Vertex position
-	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.vertexBuffer);
-	gl.vertexAttribPointer(shader.attributes["vertexPosition"], buffers.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-	//Vertex normal
-	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.normalBuffer);
-	gl.vertexAttribPointer(shader.attributes["vertexNormal"], buffers.normalBuffer.itemSize, gl.FLOAT, false, 0, 0);
-	
-	//Texture UV
-	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.uvBuffer);
-	gl.vertexAttribPointer(shader.attributes["vertexUV"], buffers.uvBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-	//Faces
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.facesBuffer);
-
-	//Enable backface culling
-	var texture = renderer.getTexture(this.texture);
-
-	//Set texture
-	gl.activeTexture(gl.TEXTURE0);
-	gl.bindTexture(gl.TEXTURE_2D, texture);
-	gl.uniform1i(shader.uniforms["texture"], 0);
-
-	//Enable backface culling
-	gl.enable(gl.CULL_FACE);
-	gl.cullFace(this.faceCullingMode === MeshMaterial.BACK ? gl.BACK : gl.FRONT);
-
-	//Draw the triangles
-	gl.drawElements(gl.TRIANGLES, object.count, gl.UNSIGNED_SHORT, 0);
-
-	//Disable cullface
-	gl.disable(gl.CULL_FACE);
-};
-
 PhongMaterial.createShader = function(gl)
 {
 	var fragmentShader = MeshMaterial.fragmentHeader + "void main(void)\
 	{\
+		vec3 normal = normalize(vec3((model * vec4(fragmentNormal, 0.0)).xyz));\
+		vec4 vertex = model * vec4(fragmentVertex, 1.0);\
 		\
-		\ /* Directional light */\
-		vec3 normal = normalize(fragmentNormal);\
-		float light = dot(fragmentNormal, vec3(0, 1, 0.5)) * 0.5;\
+		/* Directional light */\
+		vec3 directionalColor = vec3(0.3, 0.3, 0.3);\
+		vec3 directional = directionalColor * dot(normal, vec3(0, 1, 0.5));\
 		\
-		\ /* Ambient light */\
-		\ light += 0.5;\
+		/* Ambient light */\
+		vec3 ambient = vec3(0.3, 0.3, 0.3);\
+		\
+		/* Point light A*/\
+		vec3 pointLightColor = vec3(0.0, 0.0, 2.0);\
+		vec4 pointLightPosition = vec4(50.0, 30.0, 50.0, 1.0);\
+		vec3 lightDirection = normalize(pointLightPosition.xyz - vertex.xyz);\
+		vec3 pointA = pointLightColor * max(dot(normalize(normal), lightDirection), 0.0);\
+		\
+		/* Point light B*/\
+		pointLightColor = vec3(2.0, 0.0, 0.0);\
+		pointLightPosition = vec4(-50.0, 30.0, -50.0, 1.0);\
+		lightDirection = normalize(pointLightPosition.xyz - vertex.xyz);\
+		vec3 pointB = pointLightColor * max(dot(normalize(normal), lightDirection), 0.0);\
+		\
+		/* Point light C*/\
+		pointLightColor = vec3(0.0, 1.0, 0.0);\
+		pointLightPosition = vec4(-50.0, 30.0, 50.0, 1.0);\
+		lightDirection = normalize(pointLightPosition.xyz - vertex.xyz);\
+		vec3 pointC = pointLightColor * max(dot(normalize(normal), lightDirection), 0.0);\
 		\
 		gl_FragColor = texture2D(texture, vec2(fragmentUV.s, fragmentUV.t));\
-		\
-		gl_FragColor.rgb *= light;" + MeshMaterial.alphaTest + "\
+		gl_FragColor.rgb *= ambient + directional + pointA + pointB + pointC;" + MeshMaterial.alphaTest + "\
 	}";
 
 	var shader = new Shader(gl, fragmentShader, MeshMaterial.vertexShader);

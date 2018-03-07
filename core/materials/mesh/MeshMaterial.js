@@ -111,6 +111,8 @@ varying vec3 fragmentNormal;\
 \
 uniform sampler2D texture;\
 \
+uniform mat4 model;\
+\
 uniform float alphaTest;\
 uniform float far, near;";
 
