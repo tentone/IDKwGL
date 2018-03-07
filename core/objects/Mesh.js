@@ -57,22 +57,14 @@ Mesh.prototype.clone = function()
 	return model;
 };
 
-/**
- * Attach texture image to this model.
- */
-Mesh.prototype.setTexture = function(texture)
-{
-	this.material = new PhongMaterial();
-	this.material.texture = texture;
-};
-
 /** 
  * Get Bouding box created from vertex data.
+ *
+ * If not available calculate box from vertex data.
  */
-Mesh.prototype.getBox = function()
+Mesh.prototype.getBox = function(recalculate)
 {
-	//If not available calculate box from vertex data
-	if(this.box === null)
+	if(this.box === null || recalculate === true)
 	{
 		var vertex = this.geometry.vertex;
 

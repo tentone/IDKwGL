@@ -31,12 +31,13 @@ include("core/texture/DataTexture.js");
 include("core/geometry/Geometry.js");
 include("core/geometry/BoxGeometry.js");
 include("core/geometry/PlaneGeometry.js");
+include("core/geometry/GrassGeometry.js");
 
 include("core/materials/Material.js");
-include("core/materials/MeshMaterial.js");
-include("core/materials/BasicMaterial.js");
-include("core/materials/PhongMaterial.js");
-include("core/materials/DepthMaterial.js");
+include("core/materials/mesh/MeshMaterial.js");
+include("core/materials/mesh/BasicMaterial.js");
+include("core/materials/mesh/PhongMaterial.js");
+include("core/materials/mesh/DepthMaterial.js");
 
 include("core/objects/Object3D.js");
 include("core/objects/Scene.js");

@@ -7,25 +7,29 @@ function Texture(file)
 	this.type = "Texture";
 
 	this.format = Texture.RGBA;
+
 	this.flipY = true;
 	this.premultiplyAlpha = false;
+
+	this.wrapS = Texture.REPEAT;
+	this.wrapT = Texture.REPEAT;
 
 	this.file = file;
 }
 
-Texture.RGB = 100;
-Texture.RGBA = 101;
+Texture.RGB = 6407;
+Texture.RGBA = 6408;
 
-Texture.REPEAT = 200;
-Texture.CLAMP_TO_EDGE = 201;
-Texture.MIRRORED_REPEAT = 202;
+Texture.REPEAT = 10497;
+Texture.CLAMP_TO_EDGE = 33071;
+Texture.MIRRORED_REPEAT = 33648;
 
-Texture.LINEAR = 300;
-Texture.NEAREST = 301;
-Texture.NEAREST_MIPMAP_NEAREST = 302;
-Texture.NEAREST_MIPMAP_LINEAR = 303;
-Texture.LINEAR_MIPMAP_NEAREST = 304;
-Texture.LINEAR_MIPMAP_LINEAR = 305;
+Texture.LINEAR = 9729;
+Texture.NEAREST = 9728;
+Texture.NEAREST_MIPMAP_NEAREST = 9984;
+Texture.NEAREST_MIPMAP_LINEAR = 9986;
+Texture.LINEAR_MIPMAP_NEAREST = 9985;
+Texture.LINEAR_MIPMAP_LINEAR = 9987;
 
 //Texture Constructor from file name
 Texture.prototype.createTexture = function(gl)
@@ -34,26 +38,20 @@ Texture.prototype.createTexture = function(gl)
 	var image = document.createElement("img");
 
 	var self = this;
-	var format = this.format === Texture.RGBA ? gl.RGBA : gl.RGB;
 
 	image.onload = function()
 	{	
 		gl.bindTexture(gl.TEXTURE_2D, texture);
-		gl.texImage2D(gl.TEXTURE_2D, 0, format, format, gl.UNSIGNED_BYTE, image);
+		gl.texImage2D(gl.TEXTURE_2D, 0, self.format, self.format, gl.UNSIGNED_BYTE, image);
 		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, self.flipY);
 		gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, self.premultiplyAlpha);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
 
-		//Check anisotropic support
-		/*var anisotropic = gl.getExtension("EXT_texture_filter_anisotropic");
-		if(anisotropic !== undefined)
-		{
-			//TODO
-		}*/
+		//Wrap mode
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, self.wrapS);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, self.wrapT);
 
-		//Only generate MIPMAPS is texture is a power of two
-		if(MathUtils.isPowerOf2() && MathUtils.isPowerOf2())
+		//Only generate mipmaps is texture is power of two
+		if(MathUtils.isPowerOf2(image.naturalWidth) && MathUtils.isPowerOf2(image.naturalHeight))
 		{
 			gl.generateMipmap(gl.TEXTURE_2D);
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);

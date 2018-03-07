@@ -8,27 +8,16 @@ function DepthMaterial(name)
 }
 
 DepthMaterial.prototype = Object.create(MeshMaterial.prototype);
-
 DepthMaterial.prototype.constructor = DepthMaterial;
-
 DepthMaterial.id = MathUtils.generateID();
 
 DepthMaterial.createShader = function(gl)
 {
-	var fragmentShader = "precision mediump float;\
-	\
-	varying vec2 fragmentUV;\
-	varying vec3 fragmentVertex;\
-	varying vec3 fragmentNormal;\
-	\
-	uniform float far, near;\
-	\
-	float linearize(float depth)\
+	var fragmentShader = MeshMaterial.fragmentHeader + "float linearize(float depth)\
 	{\
 		float z = depth * 2.0 - 1.0; \
 		return (2.0 * near * far) / (far + near - z * (far - near));\
 	}\
-	\
 	void main(void)\
 	{\
 	    float depth = linearize(gl_FragCoord.z) / far;\
@@ -47,7 +36,8 @@ DepthMaterial.createShader = function(gl)
 	shader.registerUniform("projection");
 	shader.registerUniform("model");
 
-	//Camera
+	//Uniforms
+	shader.registerUniform("alphaTest");
 	shader.registerUniform("far");
 	shader.registerUniform("near");
 

@@ -8,9 +8,7 @@ function Sprite()
 }
 
 Sprite.prototype = Object.create(Object3D.prototype);
-
 Sprite.prototype.constructor = Sprite;
-
 Sprite.id = MathUtils.generateID();
 
 /**
@@ -26,14 +24,6 @@ Sprite.prototype.clone = function()
 	object.texture = this.texture;
 
 	return object;
-};
-
-/**
- * Attach texture image to this sprite.
- */
-Sprite.prototype.setTexture = function(texture)
-{
-	this.texture = texture;
 };
 
 /** 

@@ -1,23 +1,34 @@
 "use strict";
 
-function BasicMaterial(name)
+function PhongMaterial(name)
 {
 	MeshMaterial.call(this);
- 
+
+	this.name = name;
+	this.type = "PhongMaterial";
+
 	this.texture = null;
+	this.normalMap = null;
+	this.bumpMap = null;
+	this.specularMap = null;
+
+	this.ambient = new Color(1,1,1); //Ambient Value
+	this.diffuse = new Color(1,1,1); //Diffuse Value
+	this.specular = new Color(1,1,1); //Specular Value
+	this.specularIntensity = 1; //Specular Intensity (Phong constant) range [1, 1000]
+	
+	this.alpha = 1; //Alpha Value
 }
 
-BasicMaterial.prototype = Object.create(MeshMaterial.prototype);
+PhongMaterial.prototype = Object.create(MeshMaterial.prototype);
+PhongMaterial.prototype.constructor = PhongMaterial;
+PhongMaterial.id = MathUtils.generateID();
 
-BasicMaterial.prototype.constructor = BasicMaterial;
-
-BasicMaterial.id = MathUtils.generateID();
-
-BasicMaterial.prototype.render = function(renderer, camera, object)
+PhongMaterial.prototype.render = function(renderer, camera, object)
 {
 	var gl = renderer.gl;
 
-	var shader = renderer.getShader(BasicMaterial);
+	var shader = renderer.getShader(PhongMaterial);
 
 	gl.useProgram(shader.program);
 
@@ -57,7 +68,7 @@ BasicMaterial.prototype.render = function(renderer, camera, object)
 
 	//Enable backface culling
 	gl.enable(gl.CULL_FACE);
-	gl.cullFace(this.faceCulling === MeshMaterial.BACK ? gl.BACK : gl.FRONT);
+	gl.cullFace(this.faceCullingMode === MeshMaterial.BACK ? gl.BACK : gl.FRONT);
 
 	//Draw the triangles
 	gl.drawElements(gl.TRIANGLES, object.count, gl.UNSIGNED_SHORT, 0);
@@ -66,20 +77,21 @@ BasicMaterial.prototype.render = function(renderer, camera, object)
 	gl.disable(gl.CULL_FACE);
 };
 
-BasicMaterial.createShader = function(gl)
+PhongMaterial.createShader = function(gl)
 {
-	var fragmentShader = "precision mediump float;\
-	\
-	varying vec2 fragmentUV;\
-	varying vec3 fragmentVertex;\
-	varying vec3 fragmentNormal;\
-	\
-	uniform sampler2D texture;\
-	uniform float time;\
-	\
-	void main(void)\
+	var fragmentShader = MeshMaterial.fragmentHeader + "void main(void)\
 	{\
+		\
+		\ /* Directional light */\
+		vec3 normal = normalize(fragmentNormal);\
+		float light = dot(fragmentNormal, vec3(0, 1, 0.5)) * 0.5;\
+		\
+		\ /* Ambient light */\
+		\ light += 0.5;\
+		\
 		gl_FragColor = texture2D(texture, vec2(fragmentUV.s, fragmentUV.t));\
+		\
+		gl_FragColor.rgb *= light;" + MeshMaterial.alphaTest + "\
 	}";
 
 	var shader = new Shader(gl, fragmentShader, MeshMaterial.vertexShader);
@@ -97,7 +109,8 @@ BasicMaterial.createShader = function(gl)
 	shader.registerUniform("projection");
 	shader.registerUniform("model");
 
-	//Camera
+	//Uniforms
+	shader.registerUniform("alphaTest");
 	shader.registerUniform("far");
 	shader.registerUniform("near");
 

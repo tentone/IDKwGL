@@ -13,14 +13,15 @@ function Arena()
 	this.skybox = OBJLoader.load(FileLoader.loadText("data/models/sphere.obj"));
 	this.skybox.material = new BasicMaterial();
 	this.skybox.material.texture = new Texture("data/models/sky.jpg");
-	this.skybox.material.faceCulling = MeshMaterial.FRONT;
+	this.skybox.material.faceCullingMode = MeshMaterial.FRONT;
 	this.skybox.scale.set(800,800,800);
 	this.skybox.updateMatrix();
 	this.scene.add(this.skybox);
 
 	//Tank
 	this.model = OBJLoader.load(tank);
-	this.model.setTexture(new Texture("data/texture/tank.jpg"));
+	this.model.material = new PhongMaterial();
+	this.model.material.texture = new Texture("data/texture/tank.jpg");
 	this.model.scale.set(15, 15, 15);
 	this.model.position.set(-250,0,100);
 	this.model.updateMatrix();
@@ -52,7 +53,8 @@ function Arena()
 	
 	//House
 	this.model = OBJLoader.load(house);
-	this.model.setTexture(new Texture("data/texture/house.jpg"));
+	this.model.material = new PhongMaterial();
+	this.model.material.texture = new Texture("data/texture/house.jpg");
 	this.model.scale.set(7, 7, 7);
 	this.model.position.set(300,0,0);
 	this.model.updateMatrix();
@@ -91,7 +93,8 @@ function Arena()
 
 	//Crate Pile
 	this.model = new Mesh(new BoxGeometry());
-	this.model.setTexture(new Texture("data/texture/wood_box.jpg"));
+	this.model.material = new PhongMaterial();
+	this.model.material.texture = new Texture("data/texture/wood_box.jpg");
 	this.model.position.set(-200,5,0);
 	this.model.scale.set(5,5,5);
 	this.model.updateMatrix();
@@ -121,7 +124,8 @@ function Arena()
 
 	//Floor
 	this.model = new Mesh(new BoxGeometry());
-	this.model.setTexture(new Texture("data/texture/grass.jpg"));
+	this.model.material = new PhongMaterial();
+	this.model.material.texture = new Texture("data/texture/grass.jpg");
 	this.model.geometry.scaleUV(30, 30);
 	this.model.position.set(0, -100, 0);
 	this.model.scale.set(900, 100, 900);
@@ -129,9 +133,13 @@ function Arena()
 	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 	
+	var wallMaterial = new PhongMaterial();
+	wallMaterial.texture = new Texture("data/texture/wall.png");
+
+	var wallGeometry = new BoxGeometry();
+
 	//Walls
-	this.model = new Mesh(new BoxGeometry());
-	this.model.setTexture(new Texture("data/texture/wall.png"));
+	this.model = new Mesh(wallGeometry, wallMaterial);
 	this.model.geometry.scaleUV(20, 1);
 	this.model.position.set(0, 0, -300);
 	this.model.scale.set(300, 50, 1);
@@ -139,8 +147,7 @@ function Arena()
 	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
-	this.model = new Mesh(new BoxGeometry());
-	this.model.setTexture(new Texture("data/texture/wall.png"));
+	this.model = new Mesh(wallGeometry, wallMaterial);
 	this.model.geometry.scaleUV(20, 1);
 	this.model.position.set(0, 0, 300);
 	this.model.scale.set(300, 50, 1);
@@ -148,8 +155,7 @@ function Arena()
 	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
-	this.model = new Mesh(new BoxGeometry());
-	this.model.setTexture(new Texture("data/texture/wall.png"));
+	this.model = new Mesh(wallGeometry, wallMaterial);
 	this.model.geometry.scaleUV(20, 1);
 	this.model.position.set(-300, 0, 0);
 	this.model.scale.set(1, 50, 300);
@@ -157,8 +163,7 @@ function Arena()
 	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
-	this.model = new Mesh(new BoxGeometry());
-	this.model.setTexture(new Texture("data/texture/wall.png"));
+	this.model = new Mesh(wallGeometry, wallMaterial);
 	this.model.geometry.scaleUV(20, 1);
 	this.model.position.set(300, 0, 0);
 	this.model.scale.set(1, 50, 300);
@@ -166,33 +171,29 @@ function Arena()
 	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
-	var texture = new Texture("data/texture/grass.png");
-	var position = new Vector3();
+	var grassMaterial = new BasicMaterial();
+	grassMaterial.texture = new Texture("data/texture/grass.png");
+	grassMaterial.texture.wrapS = Texture.CLAMP_TO_EDGE;
+	grassMaterial.texture.wrapT = Texture.CLAMP_TO_EDGE;
+	grassMaterial.blending = true;
+	grassMaterial.faceCulling = false;
+	grassMaterial.alphaTest = 0.3;
+
+	var grassGeometry = new GrassGeometry();
 
 	//Grass
-	for(var i = 0; i < 200; i++)
+	for(var i = 0; i < 400; i++)
 	{
-		position.set(MathUtils.randomMod()*300, 5, MathUtils.randomMod()*300);
-
-		var grass = new Sprite();
-		grass.setTexture(texture);
-		grass.scale.set(10, 10, 1);
-		grass.position.copy(position);
-		grass.updateMatrix();
-		this.scene.add(grass);
-
-		var grass = new Sprite();
-		grass.setTexture(texture);
-		grass.scale.set(10, 10, 1);
-		grass.position.copy(position);
-		grass.rotation.set(0, 1.57, 0);
+		var grass = new Mesh(grassGeometry, grassMaterial);
+		grass.scale.set(6, 6, 6);
+		grass.position.set(MathUtils.randomMod()*300, 6, MathUtils.randomMod()*300);
 		grass.updateMatrix();
 		this.scene.add(grass);
 	}
 
 	//Tank smoke
 	this.model = new Sprite();
-	this.model.setTexture(new Texture("data/texture/smoke_2.png"));
+	this.model.texture = new Texture("data/texture/smoke_2.png");
 	this.particle = new ParticleEmitter(this.model, new Vector3(-250,8,100), new Vector3(0,0.7,0), new Vector3(0.3,0.5,0.3), 30, 10, 150, 150, 50);
 	this.scene.add(this.particle);
 	
@@ -214,7 +215,8 @@ function Arena()
 
 	//Test Cube
 	this.cube = new Mesh(new BoxGeometry());
-	this.cube.setTexture(new Texture("data/texture/wood_box.jpg"));//font.pageTexture[0]);
+	this.cube.material = new PhongMaterial();
+	this.cube.material.texture = new Texture("data/texture/wood_box.jpg");//font.pageTexture[0]);
 	this.cube.position.set(0,0,0);
 	this.cube.scale.set(5,5,5);
 	this.cube.updateMatrix();
