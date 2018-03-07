@@ -15,7 +15,7 @@ function Arena()
 	//Skybox
 	this.skybox = OBJLoader.load(FileLoader.loadText("data/models/sphere.obj"));
 	this.skybox.material = new BasicMaterial();
-	this.skybox.material.texture = new Texture("data/models/sky.jpg");
+	this.skybox.material.texture = new Texture("data/texture/sky.jpg");
 	this.skybox.material.faceCullingMode = MeshMaterial.FRONT;
 	this.skybox.scale.set(800,800,800);
 	this.skybox.updateMatrix();
@@ -125,11 +125,15 @@ function Arena()
 	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
+	var floorMaterial = new PhongMaterial();
+	floorMaterial.texture = new Texture("data/texture/grass.jpg");
+	//floorMaterial.normalMap = new Texture("data/texture/normal.png");
+
+	var floorGeometry = new BoxGeometry();
+	floorGeometry.scaleUV(30, 30);
+
 	//Floor
-	this.model = new Mesh(new BoxGeometry());
-	this.model.material = new PhongMaterial();
-	this.model.material.texture = new Texture("data/texture/grass.jpg");
-	this.model.geometry.scaleUV(30, 30);
+	this.model = new Mesh(floorGeometry, floorMaterial);
 	this.model.position.set(0, -100, 0);
 	this.model.scale.set(900, 100, 900);
 	this.model.updateMatrix();
@@ -138,6 +142,7 @@ function Arena()
 	
 	var wallMaterial = new PhongMaterial();
 	wallMaterial.texture = new Texture("data/texture/wall.png");
+	
 
 	var wallGeometry = new BoxGeometry();
 	wallGeometry.scaleUV(20, 1);
