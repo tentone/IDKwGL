@@ -29,7 +29,7 @@ PhongMaterial.createShader = function(gl)
 	var fragmentShader = MeshMaterial.fragmentHeader + "void main(void)\
 	{\
 		vec3 normal = normalize(vec3((model * vec4(fragmentNormal, 0.0)).xyz));\
-		vec4 vertex = model * vec4(fragmentVertex, 1.0);\
+		vec3 vertex = (model * vec4(fragmentVertex, 1.0)).xyz;\
 		\
 		/* Directional light */\
 		vec3 directionalColor = vec3(0.3, 0.3, 0.3);\
@@ -41,24 +41,27 @@ PhongMaterial.createShader = function(gl)
 		/* Point light A*/\
 		vec3 pointLightColor = vec3(0.0, 0.0, 2.0);\
 		vec4 pointLightPosition = vec4(50.0, 30.0, 50.0, 1.0);\
-		vec3 lightDirection = normalize(pointLightPosition.xyz - vertex.xyz);\
-		vec3 pointA = pointLightColor * max(dot(normalize(normal), lightDirection), 0.0);\
+		float maxDistance = 50.0;\
+		vec3 lightDirection = normalize(pointLightPosition.xyz - vertex);\
+		vec3 pointA = pointLightColor * max(dot(normalize(normal), lightDirection), 0.0) * maxDistance / max(distance(pointLightPosition.xyz, vertex), 0.001);\
 		\
 		/* Point light B*/\
 		pointLightColor = vec3(2.0, 0.0, 0.0);\
 		pointLightPosition = vec4(-50.0, 30.0, -50.0, 1.0);\
-		lightDirection = normalize(pointLightPosition.xyz - vertex.xyz);\
-		vec3 pointB = pointLightColor * max(dot(normalize(normal), lightDirection), 0.0);\
+		maxDistance = 50.0;\
+		lightDirection = normalize(pointLightPosition.xyz - vertex);\
+		vec3 pointB = pointLightColor * max(dot(normalize(normal), lightDirection), 0.0) * maxDistance / max(distance(pointLightPosition.xyz, vertex), 0.001);\
 		\
 		/* Point light C*/\
 		pointLightColor = vec3(0.0, 1.0, 0.0);\
 		pointLightPosition = vec4(-50.0, 30.0, 50.0, 1.0);\
-		lightDirection = normalize(pointLightPosition.xyz - vertex.xyz);\
-		vec3 pointC = pointLightColor * max(dot(normalize(normal), lightDirection), 0.0);\
+		maxDistance = 50.0;\
+		lightDirection = normalize(pointLightPosition.xyz - vertex);\
+		vec3 pointC = pointLightColor * max(dot(normalize(normal), lightDirection), 0.0) * maxDistance / max(distance(pointLightPosition.xyz, vertex), 0.001);\
 		\
 		gl_FragColor = texture2D(texture, vec2(fragmentUV.s, fragmentUV.t));\
 		gl_FragColor.rgb *= ambient + directional + pointA + pointB + pointC;" + MeshMaterial.alphaTest + "\
-	}";
+	}"; 
 
 	var shader = new Shader(gl, fragmentShader, MeshMaterial.vertexShader);
 
