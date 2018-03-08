@@ -14,6 +14,14 @@ function Scene()
 }
 
 /**
+ * Add light to the scene.
+ */
+Scene.prototype.addLight = function(light)
+{
+	this.lights.push(light);
+};
+
+/**
  * Add object to the scene.
  */
 Scene.prototype.add = function(object)

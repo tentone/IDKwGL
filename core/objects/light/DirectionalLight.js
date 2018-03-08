@@ -1,8 +1,9 @@
 "use strict";
 
-function DirectionalLight()
+function DirectionalLight(color)
 {
 	this.type = "DirectionalLight";
 	
-	this.color = new Color(0.2, 0.5, 0.3);
+	this.color = color !== undefined ? color : new Color(0.3, 0.3, 0.3);
+	this.position = new Vector3(0.0, 0.0, 0.0);
 }

@@ -115,6 +115,19 @@ PhongMaterial.createShader = function(gl)
 	uniform bool hasNormalMap;\
 	uniform sampler2D normalMap;\
 	\
+	struct PointLight\
+	{\
+		vec3 position;\
+		vec3 color;\
+		float maxDistance;\
+	};\
+	\
+	vec3 pointLight(PointLight light, vec3 vertex, vec3 normal)\
+	{\
+		vec3 lightDirection = normalize(light.position - vertex);\
+		return light.color * max(dot(normalize(normal), lightDirection), 0.0) * light.maxDistance / max(distance(light.position, vertex), 0.001);\
+	}\
+	\
 	void main(void)\
 	{\
 		/* Fragment normal */\
@@ -143,25 +156,23 @@ PhongMaterial.createShader = function(gl)
 		vec3 ambient = vec3(0.3, 0.3, 0.3);\
 		\
 		/* Point light A*/\
-		vec3 pointLightColor = vec3(0.0, 0.0, 2.0);\
-		vec4 pointLightPosition = vec4(50.0, 30.0, 50.0, 1.0);\
-		float maxDistance = 60.0;\
-		vec3 lightDirection = normalize(pointLightPosition.xyz - vertex);\
-		vec3 pointA = pointLightColor * max(dot(normalize(normal), lightDirection), 0.0) * maxDistance / max(distance(pointLightPosition.xyz, vertex), 0.001);\
+		PointLight light;\
+		light.color = vec3(2.0, 0.0, 0.0);\
+		light.position = vec3(-50.0, 30.0, -50.0);\
+		light.maxDistance = 20.0;\
+		vec3 pointA = pointLight(light, vertex, normal);\
 		\
 		/* Point light B*/\
-		pointLightColor = vec3(2.0, 0.0, 0.0);\
-		pointLightPosition = vec4(-50.0, 30.0, -50.0, 1.0);\
-		maxDistance = 60.0;\
-		lightDirection = normalize(pointLightPosition.xyz - vertex);\
-		vec3 pointB = pointLightColor * max(dot(normalize(normal), lightDirection), 0.0) * maxDistance / max(distance(pointLightPosition.xyz, vertex), 0.001);\
+		light.color = vec3(2.0, 0.0, 0.0);\
+		light.position = vec3(-50.0, 30.0, 50.0);\
+		light.maxDistance = 20.0;\
+		vec3 pointB = pointLight(light, vertex, normal);\
 		\
 		/* Point light C*/\
-		pointLightColor = vec3(0.0, 1.0, 0.0);\
-		pointLightPosition = vec4(-50.0, 30.0, 50.0, 1.0);\
-		maxDistance = 60.0;\
-		lightDirection = normalize(pointLightPosition.xyz - vertex);\
-		vec3 pointC = pointLightColor * max(dot(normalize(normal), lightDirection), 0.0) * maxDistance / max(distance(pointLightPosition.xyz, vertex), 0.001);\
+		light.color = vec3(2.0, 0.0, 0.0);\
+		light.position = vec3(50.0, 30.0, -50.0);\
+		light.maxDistance = 20.0;\
+		vec3 pointC = pointLight(light, vertex, normal);\
 		\
 		gl_FragColor = texture2D(texture, vec2(fragmentUV.s, fragmentUV.t));\
 		gl_FragColor.rgb *= ambient + directional + pointA + pointB + pointC;" + MeshMaterial.alphaTest + "\

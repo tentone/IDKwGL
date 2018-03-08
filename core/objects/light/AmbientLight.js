@@ -1,8 +1,8 @@
 "use strict";
 
-function AmbientLight()
+function AmbientLight(color)
 {
 	this.type = "AmbientLight";
 	
-	this.color = new Color(0.0, 0.0, 0.0);
+	this.color = color !== undefined ? color : new Color(0.3, 0.3, 0.3);
 }
