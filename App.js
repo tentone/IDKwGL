@@ -85,9 +85,6 @@ App.screen = null;
 // App Initialization
 App.initialize = function()
 {
-	//var canvas = document.getElementById("canvas");
-	//canvas.width  = window.innerWidth;
-	//canvas.height = window.innerHeight;
 	App.renderer = new Renderer();
 
 	App.renderer.canvas.onclick = function()
