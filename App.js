@@ -66,12 +66,10 @@ include("data/models/house.js");
 include("data/models/tank.js");
 
 //Game
-include("game/Spectator.js");
 include("game/Player.js");
 include("game/GameObject.js");
 include("game/Referencial.js");
-include("game/screen/Arena.js");
-include("game/screen/ArenaPhysics.js");
+include("game/Arena.js");
 
 //App class
 function App(){}

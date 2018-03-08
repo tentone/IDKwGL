@@ -59,6 +59,8 @@ Player.prototype.update = function(world)
 		this.body.acceleration.y += speedJump;
 	}
 
+	this.camera.position.set(this.body.geometry.position.x, (this.body.geometry.position.y + 10), this.body.geometry.position.z);
+
 	//Camera Mouse Movement
 	this.rotation.x -= 0.001 * App.mouse.posDiff.x;
 	this.rotation.y -= 0.001 * App.mouse.posDiff.y;
@@ -72,14 +74,16 @@ Player.prototype.update = function(world)
 	{
 		this.rotation.y = 1.57;
 	}
-	
+
+	var cos = Math.cos(this.rotation.y);
+	var direction = new Vector3(Math.sin(this.rotation.x + Math.PI) * cos, Math.sin(this.rotation.y), Math.cos(this.rotation.x + Math.PI) * cos);
+	direction.add(this.camera.position);
+
 	//Update player as a body
 	this.body.update(world);
 
 	//Update camera
-	this.camera.rotation.set(0, this.rotation.x, 0);
-	this.camera.position.set(this.body.geometry.position.x, (this.body.geometry.position.y+10), this.body.geometry.position.z);
-	this.camera.updateMatrix();
+	this.camera.lookAtDirection(direction);
 };
 
 //Set ID for body

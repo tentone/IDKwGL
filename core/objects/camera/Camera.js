@@ -16,14 +16,23 @@ function Camera()
 }
 
 Camera.prototype = Object.create(Object3D.prototype);
-
 Camera.prototype.constructor = Camera;
+Camera.UP = new Vector3(0, 1, 0);
+
+//Call before start a frame on this camera
+Camera.prototype.lookAtDirection = function(direction)
+{
+	this.inverseTransformationMatrix.lookAt(this.position, direction, Camera.UP);
+	this.inverseTransformationMatrix.setPosition(this.position);
+
+	this.transformationMatrix.getInverse(this.inverseTransformationMatrix);
+};
+
 
 //Call before start a frame on this camera
 Camera.prototype.updateMatrix = function()
 {
 	this.inverseTransformationMatrix.makeRotationFromEuler(this.rotation, "YZX");
-	this.inverseTransformationMatrix.scale(this.scale);
 	this.inverseTransformationMatrix.setPosition(this.position);
 	
 	this.transformationMatrix.getInverse(this.inverseTransformationMatrix);
