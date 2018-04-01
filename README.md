@@ -1,25 +1,28 @@
 ![alt tag](https://raw.githubusercontent.com/tentone/IDKwGL/master/data/idk.png)
 
 ## IDKGL
- - A really basic WebGL based graphic library for the web
+ - A basic WebGL based graphic library for the web
  - Live demo tentone.github.io/IDKwGL
 
 ## Features
- - Fast 3D webgl renderer
+ - Support for colored lighting
+    - Point Lights
+    - Ambient Lights
+    - Directional Lights
  - Basic physics engine
- - Loader OBJ files
+    - AAB
+ - Loader files
+    - OBJ
  - Sprites 
- - Particle system
+    - Particle system
+    - Bitmap Fonts support with filtering
  - Mouse and keyboard input
- - Math library with support for Vectors and Matrix operations
- - Bitmap Fonts support with filtering
+    - Math library with support for Vectors and Matrix operations
 
-## FPS Game example
- - Simple FPS Game
- - WASD to move, mouse to look around and shoot SHIFT to run
- - 1 and 2 to change weapons
 
-![alt tag](https://raw.githubusercontent.com/tentone/IDKwGL/master/data/screenshot/1.jpg)![alt tag](https://raw.githubusercontent.com/tentone/IDKwGL/master/data/screenshot/2.jpg)![alt tag](https://raw.githubusercontent.com/tentone/IDKwGL/master/data/screenshot/3.jpg)
+## Screeshots
+![alt tag](https://raw.githubusercontent.com/tentone/IDKwGL/master/data/screenshot/4.jpg)![alt tag](https://raw.githubusercontent.com/tentone/IDKwGL/master/data/screenshot/2.jpg)![alt tag](https://raw.githubusercontent.com/tentone/IDKwGL/master/data/screenshot/6.jpg)
+
 
 ## License
  - Distributed under MIT license available on the github repository

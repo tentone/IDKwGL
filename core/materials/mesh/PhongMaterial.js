@@ -122,10 +122,26 @@ PhongMaterial.createShader = function(gl)
 		float maxDistance;\
 	};\
 	\
+	struct DirectionalLight\
+	{\
+		vec3 position;\
+		vec3 color;\
+	};\
+	\
+	struct AmbientLight\
+	{\
+		vec3 color;\
+	};\
+	\
 	vec3 pointLight(PointLight light, vec3 vertex, vec3 normal)\
 	{\
 		vec3 lightDirection = normalize(light.position - vertex);\
 		return light.color * max(dot(normalize(normal), lightDirection), 0.0) * light.maxDistance / max(distance(light.position, vertex), 0.001);\
+	}\
+	\
+	vec3 directionalLight(DirectionalLight light, vec3 vertex, vec3 normal)\
+	{\
+		return light.color * dot(normal, light.position);\
 	}\
 	\
 	void main(void)\
@@ -149,11 +165,13 @@ PhongMaterial.createShader = function(gl)
 		vec3 vertex = (model * vec4(fragmentVertex, 1.0)).xyz;\
 		\
 		/* Directional light */\
-		vec3 directionalColor = vec3(0.3, 0.3, 0.3);\
-		vec3 directional = directionalColor * dot(normal, vec3(0, 1, 0.5));\
+		DirectionalLight direct;\
+		direct.color = vec3(0.3, 0.3, 0.3);\
+		direct.position = vec3(0.0, 2.0, 1.0);\
+		vec3 directional = directionalLight(direct, vertex, normal);\
 		\
 		/* Ambient light */\
-		vec3 ambient = vec3(0.3, 0.3, 0.3);\
+		vec3 ambient = vec3(0.6, 0.6, 0.6);\
 		\
 		/* Point light A*/\
 		PointLight light;\
@@ -163,13 +181,13 @@ PhongMaterial.createShader = function(gl)
 		vec3 pointA = pointLight(light, vertex, normal);\
 		\
 		/* Point light B*/\
-		light.color = vec3(2.0, 0.0, 0.0);\
+		light.color = vec3(0.0, 2.0, 0.0);\
 		light.position = vec3(-50.0, 30.0, 50.0);\
 		light.maxDistance = 20.0;\
 		vec3 pointB = pointLight(light, vertex, normal);\
 		\
 		/* Point light C*/\
-		light.color = vec3(2.0, 0.0, 0.0);\
+		light.color = vec3(0.0, 0.0, 2.0);\
 		light.position = vec3(50.0, 30.0, -50.0);\
 		light.maxDistance = 20.0;\
 		vec3 pointC = pointLight(light, vertex, normal);\
