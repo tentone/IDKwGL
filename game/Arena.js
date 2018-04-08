@@ -200,19 +200,37 @@ function Arena()
 	grassMaterial.texture.wrapT = Texture.CLAMP_TO_EDGE;
 	grassMaterial.blending = true;
 	grassMaterial.faceCulling = false;
-	grassMaterial.alphaTest = 0.3;
+	grassMaterial.alphaTest = 0.6;
 
-	var grassGeometry = new GrassGeometry();
+	var grass = new GrassGeometry();
+	var merged = new Geometry();
 
-	//Grass
-	for(var i = 0; i < 400; i++)
+	//Merge grass geometry
+	for(var i = 0; i < 3200; i++)
 	{
-		var grass = new Mesh(grassGeometry, grassMaterial);
-		grass.scale.set(6, 6, 6);
-		grass.position.set(MathUtils.randomMod()*300, 6, MathUtils.randomMod()*300);
-		grass.updateMatrix();
-		this.scene.add(grass);
+		var x = MathUtils.randomMod() * 50;
+		var z = MathUtils.randomMod() * 50;
+
+		for(var k = 0; k < grass.vertex.length; k+=3)
+		{
+			merged.vertex.push(grass.vertex[k] + x);
+			merged.vertex.push(grass.vertex[k + 1] + 1);
+			merged.vertex.push(grass.vertex[k + 2] + z);
+		}
+
+		merged.uvs = merged.uvs.concat(grass.uvs);
+		merged.normals = merged.normals.concat(grass.normals);
+
+		for(var k = 0; k < grass.faces.length; k++)
+		{
+			merged.faces.push(grass.faces[k] + 8 * i);
+		}
 	}
+
+	var grass = new Mesh(merged, grassMaterial);
+	grass.scale.set(6, 6, 6);
+	grass.updateMatrix();
+	this.scene.add(grass);
 
 	//Tank smoke
 	this.model = new Sprite();
