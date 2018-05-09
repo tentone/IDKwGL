@@ -13,6 +13,8 @@ function Scene()
 	this.lights = [];
 }
 
+Scene.prototype.constructor = Scene;
+
 /**
  * Add light to the scene.
  */

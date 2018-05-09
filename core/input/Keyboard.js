@@ -22,6 +22,8 @@ function Keyboard()
 	}
 }
 
+Keyboard.prototype.constructor = Keyboard;
+
 Keyboard.prototype.update = function(key, action)
 {
 	this.keys[key].update(action);

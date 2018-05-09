@@ -9,6 +9,8 @@ function Box()
 	this.type = "Box";
 }
 
+Box.prototype.constructor = Box;
+
 //Checks if body is colliding
 Box.prototype.isColliding = function(obj)
 {

@@ -7,6 +7,8 @@ function Key()
 	this.justReleased = false;
 }
 
+Key.prototype.constructor = Key;
+
 //Action List
 Key.KEY_DOWN = 0;
 Key.KEY_UP = 1;

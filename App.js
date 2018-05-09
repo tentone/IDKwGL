@@ -144,7 +144,7 @@ function include(file)
 		var js = document.createElement("script");
 		js.src = file;
 		js.type = "text/javascript";
-		js.async = false;
+		js.async = true;
 		document.body.appendChild(js);
 	}
 	else if(file.endsWith(".css"))

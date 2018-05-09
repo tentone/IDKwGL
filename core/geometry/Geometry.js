@@ -17,6 +17,8 @@ function Geometry()
 	this.faces = []; //Face <vertex / texture / normal>
 }
 
+Geometry.prototype.constructor = Geometry;
+
 //Update GL buffers
 Geometry.prototype.createBuffers = function(gl)
 {

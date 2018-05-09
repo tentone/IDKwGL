@@ -16,6 +16,8 @@ function Object3D()
 	this.transformationMatrix = new Matrix4();
 }
 
+Object3D.prototype.constructor = Object3D;
+
 /**
  * Render Object3D to a specific camera.
  */

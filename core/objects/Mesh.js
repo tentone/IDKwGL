@@ -17,6 +17,8 @@ function Mesh(geometry, material)
 
 Mesh.prototype = Object.create(Object3D.prototype);
 
+Mesh.prototype.constructor = Mesh;
+
 /** 
  * Render this mesh to screen using its attached material.
  */

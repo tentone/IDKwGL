@@ -46,6 +46,8 @@ Mouse.LEFT = 0;
 Mouse.MIDDLE = 1;
 Mouse.RIGHT = 2;
 
+Mouse.prototype.constructor = Mouse;
+
 //Check if Mouse button is pressed
 Mouse.prototype.buttonPressed = function(button)
 {

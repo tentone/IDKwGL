@@ -23,6 +23,8 @@ function ParticleEmitter(model, position, speed, speedVar, scale, scaleVar, time
 	}
 }
 
+ParticleEmitter.prototype.constructor = ParticleEmitter;
+
 /**
  * Update Particles position.
  */

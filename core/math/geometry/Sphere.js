@@ -9,6 +9,8 @@ function Sphere()
 	this.type = "Sphere";
 }
 
+Sphere.prototype.constructor = Sphere;
+
 //Check if its colliding
 Sphere.prototype.isColliding = function(obj)
 {

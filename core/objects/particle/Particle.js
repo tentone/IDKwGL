@@ -10,6 +10,8 @@ function Particle(model, position, speed, scale, time)
 	this.model = model;
 }
 
+Particle.prototype.constructor = Particle;
+
 /**
  * Update particle position.
  */
