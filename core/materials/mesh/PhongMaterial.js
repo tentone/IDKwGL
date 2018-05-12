@@ -108,95 +108,100 @@ PhongMaterial.prototype.render = function(renderer, camera, object)
 	}
 };
 
+PhongMaterial.fragmentHeader = MeshMaterial.fragmentHeader + "\
+\
+uniform bool hasNormalMap;\
+uniform sampler2D normalMap;";
+
+PhongMaterial.fragmentShader = MeshMaterial.fragmentHeader + "\
+\
+uniform bool hasNormalMap;\
+uniform sampler2D normalMap;\
+\
+struct PointLight\
+{\
+	vec3 position;\
+	vec3 color;\
+	float maxDistance;\
+};\
+\
+struct DirectionalLight\
+{\
+	vec3 position;\
+	vec3 color;\
+};\
+\
+struct AmbientLight\
+{\
+	vec3 color;\
+};\
+\
+vec3 pointLight(PointLight light, vec3 vertex, vec3 normal)\
+{\
+	vec3 lightDirection = normalize(light.position - vertex);\
+	return light.color * max(dot(normalize(normal), lightDirection), 0.0) * light.maxDistance / max(distance(light.position, vertex), 0.001);\
+}\
+\
+vec3 directionalLight(DirectionalLight light, vec3 vertex, vec3 normal)\
+{\
+	return light.color * dot(normal, light.position);\
+}\
+\
+void main(void)\
+{\
+	/* Fragment normal */\
+	vec3 normal;\
+	if(hasNormalMap)\
+	{\
+		vec3 normalValue = texture2D(normalMap, vec2(fragmentUV.s, fragmentUV.t)).rgb;\
+		normalValue = normalize(normalValue * 2.0 - 1.0);\
+		\
+		vec4 temp = model * vec4(normalValue, 0.0);\
+		normal = normalize(temp.xyz);\
+	}\
+	else\
+	{\
+		normal = normalize(vec3((model * vec4(fragmentNormal, 0.0)).xyz));\
+	}\
+	\
+	/* Fragment position */\
+	vec3 vertex = (model * vec4(fragmentVertex, 1.0)).xyz;\
+	\
+	/* Directional light */\
+	DirectionalLight direct;\
+	direct.color = vec3(0.3, 0.3, 0.3);\
+	direct.position = vec3(0.0, 2.0, 1.0);\
+	vec3 directional = directionalLight(direct, vertex, normal);\
+	\
+	/* Ambient light */\
+	vec3 ambient = vec3(0.6, 0.6, 0.6);\
+	\
+	/* Point light A*/\
+	PointLight light;\
+	light.color = vec3(2.0, 0.0, 0.0);\
+	light.position = vec3(-50.0, 30.0, -50.0);\
+	light.maxDistance = 20.0;\
+	vec3 pointA = pointLight(light, vertex, normal);\
+	\
+	/* Point light B*/\
+	light.color = vec3(0.0, 2.0, 0.0);\
+	light.position = vec3(-50.0, 30.0, 50.0);\
+	light.maxDistance = 20.0;\
+	vec3 pointB = pointLight(light, vertex, normal);\
+	\
+	/* Point light C*/\
+	light.color = vec3(0.0, 0.0, 2.0);\
+	light.position = vec3(50.0, 30.0, -50.0);\
+	light.maxDistance = 20.0;\
+	vec3 pointC = pointLight(light, vertex, normal);\
+	\
+	gl_FragColor = texture2D(texture, vec2(fragmentUV.s, fragmentUV.t));\
+	gl_FragColor.rgb *= ambient + directional + pointA + pointB + pointC;" + MeshMaterial.alphaTest + "\
+}"; 
+
 PhongMaterial.createShader = function(gl)
 {
-	var fragmentShader = MeshMaterial.fragmentHeader + "\
-	\
-	uniform bool hasNormalMap;\
-	uniform sampler2D normalMap;\
-	\
-	struct PointLight\
-	{\
-		vec3 position;\
-		vec3 color;\
-		float maxDistance;\
-	};\
-	\
-	struct DirectionalLight\
-	{\
-		vec3 position;\
-		vec3 color;\
-	};\
-	\
-	struct AmbientLight\
-	{\
-		vec3 color;\
-	};\
-	\
-	vec3 pointLight(PointLight light, vec3 vertex, vec3 normal)\
-	{\
-		vec3 lightDirection = normalize(light.position - vertex);\
-		return light.color * max(dot(normalize(normal), lightDirection), 0.0) * light.maxDistance / max(distance(light.position, vertex), 0.001);\
-	}\
-	\
-	vec3 directionalLight(DirectionalLight light, vec3 vertex, vec3 normal)\
-	{\
-		return light.color * dot(normal, light.position);\
-	}\
-	\
-	void main(void)\
-	{\
-		/* Fragment normal */\
-		vec3 normal;\
-		if(hasNormalMap)\
-		{\
-			vec3 normalValue = texture2D(normalMap, vec2(fragmentUV.s, fragmentUV.t)).rgb;\
-			normalValue = normalize(normalValue * 2.0 - 1.0);\
-			\
-			vec4 temp = model * vec4(normalValue, 0.0);\
-			normal = normalize(temp.xyz);\
-		}\
-		else\
-		{\
-			normal = normalize(vec3((model * vec4(fragmentNormal, 0.0)).xyz));\
-		}\
-		\
-		/* Fragment position */\
-		vec3 vertex = (model * vec4(fragmentVertex, 1.0)).xyz;\
-		\
-		/* Directional light */\
-		DirectionalLight direct;\
-		direct.color = vec3(0.3, 0.3, 0.3);\
-		direct.position = vec3(0.0, 2.0, 1.0);\
-		vec3 directional = directionalLight(direct, vertex, normal);\
-		\
-		/* Ambient light */\
-		vec3 ambient = vec3(0.6, 0.6, 0.6);\
-		\
-		/* Point light A*/\
-		PointLight light;\
-		light.color = vec3(2.0, 0.0, 0.0);\
-		light.position = vec3(-50.0, 30.0, -50.0);\
-		light.maxDistance = 20.0;\
-		vec3 pointA = pointLight(light, vertex, normal);\
-		\
-		/* Point light B*/\
-		light.color = vec3(0.0, 2.0, 0.0);\
-		light.position = vec3(-50.0, 30.0, 50.0);\
-		light.maxDistance = 20.0;\
-		vec3 pointB = pointLight(light, vertex, normal);\
-		\
-		/* Point light C*/\
-		light.color = vec3(0.0, 0.0, 2.0);\
-		light.position = vec3(50.0, 30.0, -50.0);\
-		light.maxDistance = 20.0;\
-		vec3 pointC = pointLight(light, vertex, normal);\
-		\
-		gl_FragColor = texture2D(texture, vec2(fragmentUV.s, fragmentUV.t));\
-		gl_FragColor.rgb *= ambient + directional + pointA + pointB + pointC;" + MeshMaterial.alphaTest + "\
-	}"; 
-
-	var shader = new Shader(gl, fragmentShader, MeshMaterial.vertexShader);
+	var shader = new Shader(gl, PhongMaterial.fragmentShader, MeshMaterial.vertexShader);
 
 	//Vertex attributes
 	shader.registerVertexAttributeArray("vertexPosition");
