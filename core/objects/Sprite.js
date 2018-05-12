@@ -34,7 +34,6 @@ Sprite.prototype.clone = function()
 Sprite.prototype.render = function(renderer, camera, scene)
 {
 	var gl = renderer.gl;
-	
 	var shader = renderer.getShader(Sprite);
 
 	gl.useProgram(shader.program);
@@ -67,9 +66,14 @@ Sprite.prototype.render = function(renderer, camera, scene)
 	gl.bindTexture(gl.TEXTURE_2D, texture);
 	gl.uniform1i(shader.uniforms["texture"], 0);
 	
+	//Disable depth write
+	gl.depthMask(false);
+
 	//Draw the triangles
 	gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
 
+	//Reset gl
+	gl.depthMask(true);
 	gl.disable(gl.BLEND);
 };
 
@@ -88,8 +92,21 @@ Sprite.createShader = function(gl)
 	\
 	void main(void)\
 	{\
+		\
+		mat4 matrix = view * model;\
+		\
+		matrix[0][0] = 100.0;\
+		matrix[0][1] = 0.0;\
+		matrix[0][2] = 0.0;\
+		matrix[1][0] = 0.0;\
+		matrix[1][1] = 100.0;\
+		matrix[1][2] = 0.0;\
+		matrix[2][0] = 0.0;\
+		matrix[2][1] = 0.0;\
+		matrix[2][2] = 100.0;\
+		\
+		gl_Position =  projection * matrix * vec4(vertexPosition, 1.0);\
 		pixelUV = vertexUV;\
-		gl_Position = projection * view * model * vec4(vertexPosition, 1.0);\
 	}";
 
 	var fragment = "precision mediump float;\
@@ -101,11 +118,6 @@ Sprite.createShader = function(gl)
 	void main(void)\
 	{\
 		gl_FragColor = texture2D(texture, vec2(pixelUV.s, pixelUV.t));\
-		\
-		if(gl_FragColor.a < 0.3)\
-		{\
-			discard;\
-		}\
 	}";
 
 	//Shader

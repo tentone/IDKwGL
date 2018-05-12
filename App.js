@@ -74,12 +74,6 @@ include("game/Arena.js");
 //App class
 function App(){}
 
-//Input Input
-App.keyboard = null;
-App.mouse = null;
-App.renderer = null;
-App.screen = null;
-
 // App Initialization
 App.initialize = function()
 {
@@ -144,7 +138,7 @@ function include(file)
 		var js = document.createElement("script");
 		js.src = file;
 		js.type = "text/javascript";
-		js.async = true;
+		js.async = false;
 		document.body.appendChild(js);
 	}
 	else if(file.endsWith(".css"))
