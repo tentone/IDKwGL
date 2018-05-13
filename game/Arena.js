@@ -160,7 +160,6 @@ function Arena()
 	
 	var wallMaterial = new PhongMaterial();
 	wallMaterial.texture = new Texture("data/texture/wall.png");
-	
 
 	var wallGeometry = new BoxGeometry();
 	wallGeometry.scaleUV(20, 1);
@@ -194,7 +193,7 @@ function Arena()
 	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
-	var grassMaterial = new PhongMaterial();
+	var grassMaterial = new WavyMaterial();
 	grassMaterial.texture = new Texture("data/texture/grass.png");
 	grassMaterial.texture.wrapS = Texture.CLAMP_TO_EDGE;
 	grassMaterial.texture.wrapT = Texture.CLAMP_TO_EDGE;
@@ -206,7 +205,7 @@ function Arena()
 	var merged = new Geometry();
 
 	//Merge grass geometry
-	for(var i = 0; i < 3200; i++)
+	for(var i = 0; i < 3000; i++)
 	{
 		var x = MathUtils.randomMod() * 50;
 		var z = MathUtils.randomMod() * 50;

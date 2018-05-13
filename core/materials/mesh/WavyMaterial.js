@@ -25,6 +25,9 @@ WavyMaterial.prototype.render = function(renderer, camera, object)
 	//Alpha test
 	gl.uniform1f(shader.uniforms["alphaTest"], this.alphaTest);
 
+	//Time
+	gl.uniform1f(shader.uniforms["time"], this.time);
+
 	//Camera
 	gl.uniform1f(shader.uniforms["near"], camera.near);
 	gl.uniform1f(shader.uniforms["far"], camera.far);
@@ -100,12 +103,15 @@ WavyMaterial.prototype.render = function(renderer, camera, object)
 
 WavyMaterial.createShader = function(gl)
 {
-	var shader = new Shader(gl, PhongMaterial.fragmentShader, MeshMaterial.vertexShader);
+	var shader = new Shader(gl, PhongMaterial.fragmentShader, WavyMaterial.vertexShader);
 
 	//Vertex attributes
 	shader.registerVertexAttributeArray("vertexPosition");
 	shader.registerVertexAttributeArray("vertexUV");
 	shader.registerVertexAttributeArray("vertexNormal");
+
+	//Time
+	shader.registerUniform("time");
 
 	//Texture
 	shader.registerUniform("texture");
@@ -126,3 +132,22 @@ WavyMaterial.createShader = function(gl)
 
 	return shader;
 };
+
+WavyMaterial.vertexShader = MeshMaterial.vertexHeader + "\
+\
+uniform float time;\
+\
+void main(void)\
+{\
+	fragmentUV = vertexUV;\
+	fragmentVertex = vertexPosition;\
+	fragmentNormal = vertexNormal;\
+	\
+	float distance = distance(vertexPosition, vec3(0, 0, 0));\
+	vec4 position = vec4(vertexPosition, 1.0);\
+	\
+	position.x += sin(distance + time / 3.0) * position.y / 4.0;\
+	\
+	gl_Position = projection * view * model * position;\
+}";
+

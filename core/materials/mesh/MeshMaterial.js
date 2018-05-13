@@ -118,7 +118,7 @@ uniform float far, near;";
 
 MeshMaterial.alphaTest = "if(gl_FragColor.a < alphaTest) discard;"
 
-MeshMaterial.vertexShader = "precision mediump float;\
+MeshMaterial.vertexHeader = "precision mediump float;\
 \
 attribute vec3 vertexPosition;\
 attribute vec3 vertexNormal;\
@@ -132,7 +132,9 @@ uniform float alphaTest;\
 \
 varying vec2 fragmentUV;\
 varying vec3 fragmentVertex;\
-varying vec3 fragmentNormal;\
+varying vec3 fragmentNormal;";
+
+MeshMaterial.vertexShader = MeshMaterial.vertexHeader + "\
 \
 void main(void)\
 {\

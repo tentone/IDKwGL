@@ -34,6 +34,14 @@ Shader.prototype.registerVertexAttributeArray = function(name)
 };
 
 /**
+ * Register attribute location.
+ */
+Shader.prototype.registerAttribute = function(name)
+{
+	this.attributes[name] = this.gl.getAttribLocation(this.program, name);
+};
+
+/**
  * Register uniform location.
  */
 Shader.prototype.registerUniform = function(name)

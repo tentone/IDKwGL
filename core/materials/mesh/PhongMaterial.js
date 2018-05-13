@@ -108,15 +108,47 @@ PhongMaterial.prototype.render = function(renderer, camera, object)
 	}
 };
 
+PhongMaterial.createShader = function(gl)
+{
+	var shader = new Shader(gl, PhongMaterial.fragmentShader, MeshMaterial.vertexShader);
+
+	//Vertex attributes
+	shader.registerVertexAttributeArray("vertexPosition");
+	shader.registerVertexAttributeArray("vertexUV");
+	shader.registerVertexAttributeArray("vertexNormal");
+
+	//Texture
+	shader.registerUniform("texture");
+
+	//Normal
+	shader.registerUniform("hasNormalMap");
+	shader.registerUniform("normalMap");
+
+	//Matrices
+	shader.registerUniform("view");
+	shader.registerUniform("projection");
+	shader.registerUniform("model");
+
+	//Uniforms
+	shader.registerUniform("alphaTest");
+	shader.registerUniform("far");
+	shader.registerUniform("near");
+
+	return shader;
+};
+
+/**
+ * Phong material fragment shader header.
+ */
 PhongMaterial.fragmentHeader = MeshMaterial.fragmentHeader + "\
 \
 uniform bool hasNormalMap;\
 uniform sampler2D normalMap;";
 
-PhongMaterial.fragmentShader = MeshMaterial.fragmentHeader + "\
-\
-uniform bool hasNormalMap;\
-uniform sampler2D normalMap;\
+/**
+ * Full phong material fragment shader.
+ */
+PhongMaterial.fragmentShader = PhongMaterial.fragmentHeader + "\
 \
 struct PointLight\
 {\
@@ -198,32 +230,3 @@ void main(void)\
 	gl_FragColor = texture2D(texture, vec2(fragmentUV.s, fragmentUV.t));\
 	gl_FragColor.rgb *= ambient + directional + pointA + pointB + pointC;" + MeshMaterial.alphaTest + "\
 }"; 
-
-PhongMaterial.createShader = function(gl)
-{
-	var shader = new Shader(gl, PhongMaterial.fragmentShader, MeshMaterial.vertexShader);
-
-	//Vertex attributes
-	shader.registerVertexAttributeArray("vertexPosition");
-	shader.registerVertexAttributeArray("vertexUV");
-	shader.registerVertexAttributeArray("vertexNormal");
-
-	//Texture
-	shader.registerUniform("texture");
-
-	//Normal
-	shader.registerUniform("hasNormalMap");
-	shader.registerUniform("normalMap");
-
-	//Matrices
-	shader.registerUniform("view");
-	shader.registerUniform("projection");
-	shader.registerUniform("model");
-
-	//Uniforms
-	shader.registerUniform("alphaTest");
-	shader.registerUniform("far");
-	shader.registerUniform("near");
-
-	return shader;
-};
