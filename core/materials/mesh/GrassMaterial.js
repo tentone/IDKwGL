@@ -1,19 +1,19 @@
 "use strict";
 
-function WavyMaterial(name)
+function GrassMaterial(name)
 {
 	PhongMaterial.call(this);
 
-	this.type = "WavyMaterial";
+	this.type = "GrassMaterial";
 
 	this.time = 0;
 }
 
-WavyMaterial.prototype = Object.create(PhongMaterial.prototype);
-WavyMaterial.prototype.constructor = WavyMaterial;
-WavyMaterial.id = MathUtils.generateID();
+GrassMaterial.prototype = Object.create(PhongMaterial.prototype);
+GrassMaterial.prototype.constructor = GrassMaterial;
+GrassMaterial.id = MathUtils.generateID();
 
-WavyMaterial.prototype.render = function(renderer, camera, object)
+GrassMaterial.prototype.render = function(renderer, camera, object)
 {
 	var gl = renderer.gl;
 	var shader = renderer.getShader(this.constructor);
@@ -101,9 +101,9 @@ WavyMaterial.prototype.render = function(renderer, camera, object)
 	}
 };
 
-WavyMaterial.createShader = function(gl)
+GrassMaterial.createShader = function(gl)
 {
-	var shader = new Shader(gl, PhongMaterial.fragmentShader, WavyMaterial.vertexShader);
+	var shader = new Shader(gl, GrassMaterial.fragmentShader, GrassMaterial.vertexShader);
 
 	//Vertex attributes
 	shader.registerVertexAttributeArray("vertexPosition");
@@ -133,7 +133,60 @@ WavyMaterial.createShader = function(gl)
 	return shader;
 };
 
-WavyMaterial.vertexShader = MeshMaterial.vertexHeader + "\
+GrassMaterial.fragmentShader = PhongMaterial.fragmentHeader + MeshMaterial.fragmentLightStructs + "\
+vec3 pointLight(PointLight light, vec3 vertex, vec3 normal)\
+{\
+	vec3 lightDirection = normalize(light.position - vertex);\
+	return light.color * light.maxDistance / max(distance(light.position, vertex), 0.001);\
+}\
+\
+vec3 directionalLight(DirectionalLight light, vec3 vertex, vec3 normal)\
+{\
+	return light.color * dot(normal, light.position);\
+}\
+\
+void main(void)\
+{\
+	/* Fragment normal */\
+	vec3 normal = normalize(vec3((model * vec4(fragmentNormal, 0.0)).xyz));\
+	\
+	/* Fragment position */\
+	vec3 vertex = (model * vec4(fragmentVertex, 1.0)).xyz;\
+	\
+	/* Directional light */\
+	DirectionalLight direct;\
+	direct.color = vec3(0.3, 0.3, 0.3);\
+	direct.position = vec3(0.0, 2.0, 1.0);\
+	vec3 directional = directionalLight(direct, vertex, normal);\
+	\
+	/* Ambient light */\
+	vec3 ambient = vec3(0.6, 0.6, 0.6);\
+	\
+	/* Point light A*/\
+	PointLight light;\
+	light.color = vec3(2.0, 0.0, 0.0);\
+	light.position = vec3(-50.0, 30.0, -50.0);\
+	light.maxDistance = 20.0;\
+	vec3 pointA = pointLight(light, vertex, normal);\
+	\
+	/* Point light B*/\
+	light.color = vec3(0.0, 2.0, 0.0);\
+	light.position = vec3(-50.0, 30.0, 50.0);\
+	light.maxDistance = 20.0;\
+	vec3 pointB = pointLight(light, vertex, normal);\
+	\
+	/* Point light C*/\
+	light.color = vec3(0.0, 0.0, 3.0);\
+	light.position = vec3(50.0, 30.0, -50.0);\
+	light.maxDistance = 20.0;\
+	vec3 pointC = pointLight(light, vertex, normal);\
+	\
+	gl_FragColor = texture2D(texture, vec2(fragmentUV.s, fragmentUV.t));\
+	gl_FragColor.rgb *= ambient + directional + pointA + pointB + pointC;" + MeshMaterial.alphaTest + "\
+}"; 
+
+
+GrassMaterial.vertexShader = MeshMaterial.vertexHeader + "\
 \
 uniform float time;\
 \

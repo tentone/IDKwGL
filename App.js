@@ -38,7 +38,7 @@ include("core/materials/mesh/MeshMaterial.js");
 include("core/materials/mesh/BasicMaterial.js");
 include("core/materials/mesh/DepthMaterial.js");
 include("core/materials/mesh/PhongMaterial.js");
-include("core/materials/mesh/WavyMaterial.js");
+include("core/materials/mesh/GrassMaterial.js");
 
 include("core/objects/Object3D.js");
 include("core/objects/Scene.js");
@@ -129,24 +129,4 @@ App.resize = function()
 App.isMouseLocked = function()
 {
 	return document.pointerLockElement === canvas || document.mozPointerLockElement === canvas || document.webkitPointerLockElement === canvas;
-}
-
-//Auxuiliary function to include JS files in app
-function include(file)
-{
-	if(file.endsWith(".js"))
-	{
-		var js = document.createElement("script");
-		js.src = file;
-		js.type = "text/javascript";
-		js.async = false;
-		document.body.appendChild(js);
-	}
-	else if(file.endsWith(".css"))
-	{
-		var css = document.createElement("link");
-		css.href = file;
-		css.rel = "stylesheet";
-		document.body.appendChild(css);
-	}	
 }

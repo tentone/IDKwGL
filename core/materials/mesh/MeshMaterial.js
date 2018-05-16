@@ -103,6 +103,24 @@ MeshMaterial.prototype.render = function(renderer, camera, object)
 	}
 };
 
+MeshMaterial.fragmentLightStructs = "struct PointLight\
+{\
+	vec3 position;\
+	vec3 color;\
+	float maxDistance;\
+};\
+\
+struct DirectionalLight\
+{\
+	vec3 position;\
+	vec3 color;\
+};\
+\
+struct AmbientLight\
+{\
+	vec3 color;\
+};";
+
 MeshMaterial.fragmentHeader = "precision mediump float;\
 \
 varying vec2 fragmentUV;\

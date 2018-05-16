@@ -193,7 +193,7 @@ function Arena()
 	this.scene.add(this.model);
 	this.world.addBody(new GameObject(this.model));
 
-	var grassMaterial = new WavyMaterial();
+	var grassMaterial = new GrassMaterial();
 	grassMaterial.texture = new Texture("data/texture/grass.png");
 	grassMaterial.texture.wrapS = Texture.CLAMP_TO_EDGE;
 	grassMaterial.texture.wrapT = Texture.CLAMP_TO_EDGE;

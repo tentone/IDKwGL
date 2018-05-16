@@ -146,28 +146,13 @@ uniform bool hasNormalMap;\
 uniform sampler2D normalMap;";
 
 /**
+ * Light structures.
+ */
+
+/**
  * Full phong material fragment shader.
  */
-PhongMaterial.fragmentShader = PhongMaterial.fragmentHeader + "\
-\
-struct PointLight\
-{\
-	vec3 position;\
-	vec3 color;\
-	float maxDistance;\
-};\
-\
-struct DirectionalLight\
-{\
-	vec3 position;\
-	vec3 color;\
-};\
-\
-struct AmbientLight\
-{\
-	vec3 color;\
-};\
-\
+PhongMaterial.fragmentShader = PhongMaterial.fragmentHeader + MeshMaterial.fragmentLightStructs + "\
 vec3 pointLight(PointLight light, vec3 vertex, vec3 normal)\
 {\
 	vec3 lightDirection = normalize(light.position - vertex);\
