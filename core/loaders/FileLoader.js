@@ -13,7 +13,7 @@ FileLoader.loadText = function(fname)
 	file.open("GET", fname, false);
 
 	//Get file
-	file.onreadystatechange = function ()
+	file.onreadystatechange = function()
 	{
 		if(file.status === 200 || file.status === 0)
 		{
@@ -24,5 +24,5 @@ FileLoader.loadText = function(fname)
 	//Send null to ensure that file was received
 	file.send(null);
 
-	return data;
+	return file.response;
 };

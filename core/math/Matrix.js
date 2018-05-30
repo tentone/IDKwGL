@@ -123,7 +123,7 @@ Matrix.prototype.mul = function(val)
 {
 	if(this.size.x !== val.size.y)
 	{
-		throw "Matrix cant be multiplied (check matrix size)";
+		throw new Error("Matrix cant be multiplied, check matrix size");
 	}
 
 	var mat = new Matrix(this.size.y, val.size.x);
@@ -150,7 +150,7 @@ Matrix.prototype.add = function(val)
 {
 	if(val.size.x !== this.size.x || val.size.y !== this.size.y)
 	{
-		throw "Matrix has different size";
+		throw new Error("Matrix has different size");
 	}
 
 	for(var i = 0; i < this.size.x; i++)
@@ -167,7 +167,7 @@ Matrix.prototype.sub = function(val)
 {
 	if(val.size.x !== this.size.x || val.size.y !== this.size.y)
 	{
-		throw "Matrix has different size";
+		throw new Error("Matrix has different size");
 	}
 
 	for(var i = 0; i < this.size.x; i++)
@@ -214,8 +214,7 @@ Matrix.mul = function(a, b)
 {
 	if(a.size.x !== b.size.y)
 	{
-		throw "Matrix cant be multiplied (check matrix size)";
-		return null;
+		throw new Error("Matrix cant be multiplied, check matrix size");
 	}
 
 	var mat = new Matrix(a.size.y, b.size.x);

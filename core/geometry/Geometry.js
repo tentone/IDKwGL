@@ -1,6 +1,6 @@
 "use strict";
 
-/**
+/*
  * Geometry class represents triangulated geometries and auxiliar vertex data.
  *
  * Vertex are organized into faces.
