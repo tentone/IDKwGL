@@ -6,9 +6,6 @@ function Arena()
 	this.world = new World();
 	this.scene = new Scene();
 
-	//this.cameraWeapon = new PerspectiveCamera(1, 70, 1);
-	//this.sceneWeapon = new Scene();
-
 	//Lights
 	var light = new PointLight();
 	light.color.set(0.4, 0.0, 0.0);
@@ -236,7 +233,7 @@ function Arena()
 	this.model.texture = new Texture("data/texture/smoke_2.png");
 	this.particle = new ParticleEmitter(this.model, new Vector3(-250,8,100), new Vector3(0,0.7,0), new Vector3(0.3,0.5,0.3), 30, 10, 150, 150, 50);
 	this.scene.add(this.particle);
-	
+
 	//Bullet
 	/*this.bullet = new Mesh();
 	this.bullet = OBJLoader.load(FileLoader.loadText("data/models/skybox/skybox.obj"));
@@ -260,6 +257,33 @@ function Arena()
 	this.cube.scale.set(5,5,5);
 	this.cube.updateMatrix();
 	this.scene.add(this.cube);
+
+	//Weapon scene
+	/*this.cameraWeapon = new PerspectiveCamera(1, 70, 1);
+
+	this.sceneWeapon = new Scene();
+
+	this.weapon = OBJLoader.load(FileLoader.loadText("data/models/pulserifle/pulserifle.obj"), FileLoader.loadText("data/models/pulserifle/pulserifle.mtl"), "data/models/pulserifle");
+	this.weapon.scale.set(10, 10, 10);
+	this.weapon.position.set(-0.3,5,0.5);
+	this.weapon.updateMatrix();
+	this.scene.add(this.weapon);*/
+
+	/*
+	//IDK Logo
+	this.idk = new Sprite();
+	this.idk.setTexture(Texture.createTexture("data/texture/idk.png"));
+	this.idk.scale.set(this.hud_camera.size.y/2,this.hud_camera.size.y/4,1);
+	this.idk.origin.set(this.hud_camera.size.x/3,0,0);
+	this.idk.position.set(this.hud_camera.size.x-1,-this.hud_camera.size.y+1,0);
+	this.idk.update();
+	
+	//Crosshair
+	this.cross = new Sprite();
+	this.cross.setTexture(Texture.createTexture("data/texture/cross.png"));
+	this.cross.position.set(-0.5, -0.5, 0);
+	this.cross.update();
+	*/
 }
 
 Arena.prototype.update = function()
@@ -347,7 +371,10 @@ Arena.prototype.update = function()
 
 Arena.prototype.draw = function(renderer)
 {
+	//renderer.autoClear = true;
 	renderer.render(this.scene, this.player.camera);
+	//renderer.render(this.sceneWeapon, this.player.camera);
+	//renderer.autoClear = false;
 };
 
 Arena.prototype.resize = function(width, height)
