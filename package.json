@@ -1,0 +1,20 @@
+{
+	"name": "IDKwGL",
+	"description": "IDKwGL is a WebGL graphics library.",
+	"scripts": {
+		"run": "python -m http.server"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/tentone/IDKwGL.git"
+	},
+	"keywords": [
+		"webgl",
+		"engine",
+		"gamedev"
+	],
+	"author": "Tentone",
+	"license": "MIT",
+	"devDependencies":{
+	}
+}

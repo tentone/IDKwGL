@@ -7,6 +7,11 @@ function Material()
 	this.type = "Material";
 
 	this.shader = null;
+
+	this.useLights = false;
+	this.ambientLights = 0;
+	this.pointLights = 0;
+	this.directionalLights = 0;
 }
 
 Material.prototype.constructor = Material;

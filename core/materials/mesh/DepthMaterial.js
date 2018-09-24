@@ -62,7 +62,7 @@ DepthMaterial.prototype.render = function(renderer, camera, object)
 	}
 
 	//Draw the triangles
-	gl.drawElements(gl.TRIANGLES, object.count, gl.UNSIGNED_SHORT, 0);
+	gl.drawElements(object.mode, object.count, gl.UNSIGNED_SHORT, 0);
 
 	//Disable cullface
 	if(this.faceCulling)

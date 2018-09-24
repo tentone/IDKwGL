@@ -6,6 +6,8 @@ function Mesh(geometry, material)
 
 	this.geometry = geometry !== undefined ? geometry : new Geometry();
 	this.material = material !== undefined ? material : [];
+	
+	this.mode = Mesh.TRIANGLES;
 
 	//Bounding box
 	this.box = null;
@@ -16,6 +18,14 @@ function Mesh(geometry, material)
 }
 
 Mesh.prototype = Object.create(Object3D.prototype);
+
+Mesh.POINTS = 0x0000;
+Mesh.LINES = 0x0001;
+Mesh.LINE_LOOP = 0x0002;
+Mesh.LINE_STRIP = 0x0003;
+Mesh.TRIANGLES = 0x0004;
+Mesh.TRIANGLE_STRIP = 0x0005;
+Mesh.TRIANGLE_FAN = 0x0006;
 
 Mesh.prototype.constructor = Mesh;
 
