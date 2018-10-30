@@ -18,4 +18,4 @@ Material.prototype.constructor = Material;
 
 Material.prototype.createShader = function(gl){};
 
-Material.prototype.render = function(renderer, camera, object){};
+Material.prototype.render = function(renderer, camera, object, scene){};

@@ -40,13 +40,13 @@ Mesh.prototype.render = function(renderer, camera, scene)
 		{
 			this.offset = this.faceMaterial[i];
 			this.count = this.faceMaterial[i+1];
-			this.material[this.faceMaterial[i+2]].render(renderer, camera, this);
+			this.material[this.faceMaterial[i+2]].render(renderer, camera, this, scene);
 		}
 	}
 	else
 	{
 		this.count = this.geometry.faces.length;
-		this.material.render(renderer, camera, this);
+		this.material.render(renderer, camera, this, scene);
 	}
 };
 

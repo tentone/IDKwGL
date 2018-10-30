@@ -13,7 +13,7 @@ GrassMaterial.prototype = Object.create(PhongMaterial.prototype);
 GrassMaterial.prototype.constructor = GrassMaterial;
 GrassMaterial.id = MathUtils.generateID();
 
-GrassMaterial.prototype.render = function(renderer, camera, object)
+GrassMaterial.prototype.render = function(renderer, camera, object, scene)
 {
 	var gl = renderer.gl;
 	var shader = renderer.getShader(this.constructor);

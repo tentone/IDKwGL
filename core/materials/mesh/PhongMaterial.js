@@ -24,7 +24,7 @@ PhongMaterial.prototype = Object.create(MeshMaterial.prototype);
 PhongMaterial.prototype.constructor = PhongMaterial;
 PhongMaterial.id = MathUtils.generateID();
 
-PhongMaterial.prototype.render = function(renderer, camera, object)
+PhongMaterial.prototype.render = function(renderer, camera, object, scene)
 {
 	var gl = renderer.gl;
 
@@ -45,15 +45,17 @@ PhongMaterial.prototype.render = function(renderer, camera, object)
 	gl.uniformMatrix4fv(shader.uniforms["model"], false, object.transformationMatrix.flatten());
 
 	//Ambient lights
-	//gl.uniform1f(shader.uniforms["far"], camera.far);
+	gl.uniform1i(shader.uniforms["ambientLightsLength"], scene.ambientLights.length);
 	//TODO <ADD CODE HERE>
 
 	//Point lights
+	gl.uniform1i(shader.uniforms["pointLightsLength"], scene.pointLights.length);
 	//TODO <ADD CODE HERE>
 
 	//Directinal lights
+	gl.uniform1i(shader.uniforms["directionalLightsLength"], scene.directionalLights.length);
 	//TODO <ADD CODE HERE>
-	
+
 	var buffers = renderer.getBuffers(object.geometry);
 
 	//Vertex position

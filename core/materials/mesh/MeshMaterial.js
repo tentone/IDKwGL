@@ -31,7 +31,7 @@ MeshMaterial.ONE_MINUS_SRC_ALPHA = 771;
 MeshMaterial.prototype = Object.create(Material.prototype);
 MeshMaterial.prototype.constructor = MeshMaterial;
 
-MeshMaterial.prototype.render = function(renderer, camera, object)
+MeshMaterial.prototype.render = function(renderer, camera, object, scene)
 {
 	var gl = renderer.gl;
 

@@ -11,7 +11,7 @@ DepthMaterial.prototype = Object.create(MeshMaterial.prototype);
 DepthMaterial.prototype.constructor = DepthMaterial;
 DepthMaterial.id = MathUtils.generateID();
 
-DepthMaterial.prototype.render = function(renderer, camera, object)
+DepthMaterial.prototype.render = function(renderer, camera, object, scene)
 {
 	var gl = renderer.gl;
 
