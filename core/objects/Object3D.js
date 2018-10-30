@@ -18,6 +18,8 @@ function Object3D()
 
 Object3D.prototype.constructor = Object3D;
 
+Object3D.prototype.isObject3D = true;
+
 /**
  * Render Object3D to a specific camera.
  */

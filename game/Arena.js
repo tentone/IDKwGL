@@ -10,19 +10,19 @@ function Arena()
 	var light = new PointLight();
 	light.color.set(0.4, 0.0, 0.0);
 	light.position.set(50.0, 20.0, 0.0);
-	this.scene.addLight(light);
+	this.scene.add(light);
 
 	var light = new PointLight();
 	light.color.set(0.0, 0.0, 0.4);
 	light.position.set(0.0, 20.0, 50.0);
-	this.scene.addLight(light);
+	this.scene.add(light);
 
 	var light = new PointLight();
 	light.color.set(0.0, 0.4, 0.0);
 	light.position.set(0.0, 20.0, -50.0);
-	this.scene.addLight(light);
+	this.scene.add(light);
 
-	this.scene.addLight(new AmbientLight());
+	this.scene.add(new AmbientLight());
 
 	//Referencial
 	this.referential = new Referencial(this.scene);

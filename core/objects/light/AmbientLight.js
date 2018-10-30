@@ -12,7 +12,9 @@ function AmbientLight(color)
 
 AmbientLight.prototype.constructor = AmbientLight;
 
+AmbientLight.prototype.isAmbientLight = true;
+
 AmbientLight.prototype.toArray = function()
 {
-	return [0, color.r, color.g, color.b];
+	return [color.r, color.g, color.b];
 };

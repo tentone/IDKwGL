@@ -16,7 +16,9 @@ function PointLight(color)
 
 PointLight.prototype.constructor = PointLight;
 
+PointLight.prototype.isPointLight = true;
+
 PointLight.prototype.toArray = function()
 {
-	return [0, color.r, color.g, color.b, position.x, position.y, position.z];
+	return [color.r, color.g, color.b, position.x, position.y, position.z, maxDistance];
 };

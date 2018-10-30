@@ -10,25 +10,35 @@
 function Scene()
 {
 	this.objects = [];
-	this.lights = [];
+	
+	this.pointLights = [];
+	this.ambientLights = [];
+	this.directionalLights = [];
 }
 
 Scene.prototype.constructor = Scene;
 
 /**
- * Add light to the scene.
- */
-Scene.prototype.addLight = function(light)
-{
-	this.lights.push(light);
-};
-
-/**
- * Add object to the scene.
+ * Add object or lights to the scene.
  */
 Scene.prototype.add = function(object)
 {
-	this.objects.push(object);
+	if(object.isObject3D)
+	{
+		this.objects.push(object);
+	}
+	else if(object.isPointLight)
+	{
+		this.pointLights.push(object);
+	}
+	else if(object.isDirectionalLight)
+	{
+		this.directional.push(object);
+	}
+	else if(object.isAmbientLight)
+	{
+		this.ambientLights.push(object);
+	}
 };
 
 /**

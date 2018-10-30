@@ -44,6 +44,16 @@ PhongMaterial.prototype.render = function(renderer, camera, object)
 	gl.uniformMatrix4fv(shader.uniforms["view"], false, camera.transformationMatrix.flatten());
 	gl.uniformMatrix4fv(shader.uniforms["model"], false, object.transformationMatrix.flatten());
 
+	//Ambient lights
+	//gl.uniform1f(shader.uniforms["far"], camera.far);
+	//TODO <ADD CODE HERE>
+
+	//Point lights
+	//TODO <ADD CODE HERE>
+
+	//Directinal lights
+	//TODO <ADD CODE HERE>
+	
 	var buffers = renderer.getBuffers(object.geometry);
 
 	//Vertex position

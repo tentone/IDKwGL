@@ -103,6 +103,9 @@ MeshMaterial.prototype.render = function(renderer, camera, object)
 	}
 };
 
+/**
+ * Header lights structs declaration.
+ */
 MeshMaterial.fragmentLightStructs = "\
 struct PointLight\
 {\
@@ -123,7 +126,7 @@ struct AmbientLight\
 };";
 
 /**
- * Header lights declaration.
+ * Header lights uniform declaration.
  */
 MeshMaterial.fragmentHeaderLights = "\
 uniform PointLight pointLights[8];\
