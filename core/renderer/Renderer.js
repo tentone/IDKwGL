@@ -49,10 +49,10 @@ Renderer.prototype.initializeGLContext = function()
 		this.gl = this.canvas.getContext("webgl", {alpha: false});
 		this.resize(this.canvas.width, this.canvas.height);
 	}
-	catch(e)
+	catch(error)
 	{
 		this.gl = null;
-		console.error("Failed to create WebGL context (" + e + ")");		
+		console.error("IDKwGL: Failed to create WebGL context.", error);		
 	}
 };
 

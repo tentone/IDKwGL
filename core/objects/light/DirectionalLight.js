@@ -1,5 +1,10 @@
 "use strict";
 
+/**
+ * Directional light is a infinitely far away light (similar to the sun).
+ *
+ * It has a position used to calculate the light direction.
+ */
 function DirectionalLight(color)
 {
 	this.type = "DirectionalLight";

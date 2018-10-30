@@ -103,7 +103,8 @@ MeshMaterial.prototype.render = function(renderer, camera, object)
 	}
 };
 
-MeshMaterial.fragmentLightStructs = "struct PointLight\
+MeshMaterial.fragmentLightStructs = "\
+struct PointLight\
 {\
 	vec3 position;\
 	vec3 color;\
@@ -121,7 +122,21 @@ struct AmbientLight\
 	vec3 color;\
 };";
 
-MeshMaterial.fragmentHeader = "precision mediump float;\
+/**
+ * Header lights declaration.
+ */
+MeshMaterial.fragmentHeaderLights = "\
+uniform PointLight pointLights[8];\
+int pointLightsLength;\
+\
+uniform AmbientLight ambientLights[8];\
+int ambientLightsLength;\
+\
+uniform DirectionalLight directionalLights[8];\
+int directionalLightsLength;";
+
+MeshMaterial.fragmentHeader = "\
+precision mediump float;\
 \
 varying vec2 fragmentUV;\
 varying vec3 fragmentVertex;\
@@ -136,7 +151,8 @@ uniform float far, near;";
 
 MeshMaterial.alphaTest = "if(gl_FragColor.a < alphaTest) discard;"
 
-MeshMaterial.vertexHeader = "precision mediump float;\
+MeshMaterial.vertexHeader = "\
+precision mediump float;\
 \
 attribute vec3 vertexPosition;\
 attribute vec3 vertexNormal;\

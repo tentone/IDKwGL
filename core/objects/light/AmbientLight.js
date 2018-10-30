@@ -1,5 +1,8 @@
 "use strict";
 
+/**
+ * Ambient light does not have a position it is the base ilumination layer of the scene.
+ */
 function AmbientLight(color)
 {
 	this.type = "AmbientLight";

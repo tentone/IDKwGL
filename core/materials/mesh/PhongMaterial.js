@@ -140,19 +140,15 @@ PhongMaterial.createShader = function(gl)
 /**
  * Phong material fragment shader header.
  */
-PhongMaterial.fragmentHeader = MeshMaterial.fragmentHeader + "\
+PhongMaterial.fragmentHeader = MeshMaterial.fragmentHeader +  "\
 \
 uniform bool hasNormalMap;\
 uniform sampler2D normalMap;";
 
 /**
- * Light structures.
+ * Light calculation methods.
  */
-
-/**
- * Full phong material fragment shader.
- */
-PhongMaterial.fragmentShader = PhongMaterial.fragmentHeader + MeshMaterial.fragmentLightStructs + "\
+PhongMaterial.fragmentLightFunctions = "\
 vec3 pointLight(PointLight light, vec3 vertex, vec3 normal)\
 {\
 	vec3 lightDirection = normalize(light.position - vertex);\
@@ -162,7 +158,12 @@ vec3 pointLight(PointLight light, vec3 vertex, vec3 normal)\
 vec3 directionalLight(DirectionalLight light, vec3 vertex, vec3 normal)\
 {\
 	return light.color * dot(normal, light.position);\
-}\
+}";
+
+/**
+ * Full phong material fragment shader.
+ */
+PhongMaterial.fragmentShader = PhongMaterial.fragmentHeader + MeshMaterial.fragmentLightStructs + MeshMaterial.fragmentHeaderLights + PhongMaterial.fragmentLightFunctions + "\
 \
 void main(void)\
 {\

@@ -56,17 +56,24 @@ Shader.prototype.compile = function()
 {
 	var gl = this.gl;
 
-	this.fragmentProgram = Shader.compileFragmentShader(gl, this.fragmentShader);
-	this.vertexProgram = Shader.compileVertexShader(gl, this.vertexShader);
-	this.program = gl.createProgram();
+	try
+	{
+		this.fragmentProgram = Shader.compileFragmentShader(gl, this.fragmentShader);
+		this.vertexProgram = Shader.compileVertexShader(gl, this.vertexShader);
+		this.program = gl.createProgram();
 
-	gl.attachShader(this.program, this.vertexProgram);
-	gl.attachShader(this.program, this.fragmentProgram);
-	gl.linkProgram(this.program);
+		gl.attachShader(this.program, this.vertexProgram);
+		gl.attachShader(this.program, this.fragmentProgram);
+		gl.linkProgram(this.program);
+	}
+	catch(error)
+	{
+		console.error("IDKwGL: Error compiling shader.", this, error);
+	}
 
 	if(!gl.getProgramParameter(this.program, gl.LINK_STATUS))
 	{
-		throw "Could not initialize shader";
+		console.error("IDKwGL: Could not initialize shader.");
 	}
 };
 
@@ -81,7 +88,7 @@ Shader.compileVertexShader = function(gl, str)
 
 	if(!gl.getShaderParameter(shader, gl.COMPILE_STATUS))
 	{
-		throw "Error in shader compilation ("+gl.getShaderInfoLog(shader)+")";
+		console.error("IDKwGL: Error in shader compilation.", gl.getShaderInfoLog(shader));
 	}
 
 	return shader;
@@ -99,7 +106,7 @@ Shader.compileFragmentShader = function(gl, str)
 
 	if(!gl.getShaderParameter(shader, gl.COMPILE_STATUS))
 	{
-		throw "Error in shader compilation ("+gl.getShaderInfoLog(shader)+")";
+		console.error("IDKwGL: Error in shader compilation.", gl.getShaderInfoLog(shader));
 	}
 
 	return shader;
