@@ -182,7 +182,8 @@ void main(void)\
 	vec3 pointC = pointLight(light, vertex, normal);\
 	\
 	gl_FragColor = texture2D(texture, vec2(fragmentUV.s, fragmentUV.t));\
-	gl_FragColor.rgb *= ambient + directional + pointA + pointB + pointC;" + MeshMaterial.alphaTest + "\
+	gl_FragColor.rgb *= ambient + directional + pointA + pointB + pointC;\
+	" + MeshMaterial.alphaTest + "\
 }"; 
 
 

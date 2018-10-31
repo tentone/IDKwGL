@@ -194,37 +194,40 @@ void main(void)\
 		normal = normalize(vec3((model * vec4(fragmentNormal, 0.0)).xyz));\
 	}\
 	\
+	vec3 lighIntesity = vec3(0.0, 0.0, 0.0);\
+	\
 	/* Fragment position */\
 	vec3 vertex = (model * vec4(fragmentVertex, 1.0)).xyz;\
 	\
 	/* Directional light */\
-	DirectionalLight direct;\
+	/* DirectionalLight direct;\
 	direct.color = vec3(0.3, 0.3, 0.3);\
 	direct.position = vec3(0.0, 2.0, 1.0);\
-	vec3 directional = directionalLight(direct, vertex, normal);\
+	vec3 directional = directionalLight(direct, vertex, normal); */\
 	\
 	/* Ambient light */\
-	vec3 ambient = vec3(0.6, 0.6, 0.6);\
+	/* vec3 ambient = vec3(0.6, 0.6, 0.6); */\
 	\
 	/* Point light A*/\
-	PointLight light;\
+	/* PointLight light;\
 	light.color = vec3(2.0, 0.0, 0.0);\
 	light.position = vec3(-50.0, 30.0, -50.0);\
 	light.maxDistance = 20.0;\
-	vec3 pointA = pointLight(light, vertex, normal);\
+	vec3 pointA = pointLight(light, vertex, normal); */\
 	\
 	/* Point light B*/\
-	light.color = vec3(0.0, 2.0, 0.0);\
+	/* light.color = vec3(0.0, 2.0, 0.0);\
 	light.position = vec3(-50.0, 30.0, 50.0);\
 	light.maxDistance = 20.0;\
-	vec3 pointB = pointLight(light, vertex, normal);\
+	vec3 pointB = pointLight(light, vertex, normal); */\
 	\
 	/* Point light C*/\
-	light.color = vec3(0.0, 0.0, 2.0);\
+	/* light.color = vec3(0.0, 0.0, 2.0);\
 	light.position = vec3(50.0, 30.0, -50.0);\
 	light.maxDistance = 20.0;\
-	vec3 pointC = pointLight(light, vertex, normal);\
+	vec3 pointC = pointLight(light, vertex, normal); */\
 	\
 	gl_FragColor = texture2D(texture, vec2(fragmentUV.s, fragmentUV.t));\
-	gl_FragColor.rgb *= ambient + directional + pointA + pointB + pointC;" + MeshMaterial.alphaTest + "\
+	gl_FragColor.rgb *= lighIntesity;\
+	" + MeshMaterial.alphaTest + "\
 }"; 
