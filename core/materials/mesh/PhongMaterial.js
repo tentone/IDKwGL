@@ -45,15 +45,15 @@ PhongMaterial.prototype.render = function(renderer, camera, object, scene)
 	gl.uniformMatrix4fv(shader.uniforms["model"], false, object.transformationMatrix.flatten());
 
 	//Ambient lights
-	gl.uniform1i(shader.uniforms["ambientLightsLength"], scene.ambientLights.length);
+	//gl.uniform1i(shader.uniforms["ambientLightsLength"], scene.ambientLights.length);
 	//TODO <ADD CODE HERE>
 
 	//Point lights
-	gl.uniform1i(shader.uniforms["pointLightsLength"], scene.pointLights.length);
+	//gl.uniform1i(shader.uniforms["pointLightsLength"], scene.pointLights.length);
 	//TODO <ADD CODE HERE>
 
 	//Directinal lights
-	gl.uniform1i(shader.uniforms["directionalLightsLength"], scene.directionalLights.length);
+	//gl.uniform1i(shader.uniforms["directionalLightsLength"], scene.directionalLights.length);
 	//TODO <ADD CODE HERE>
 
 	var buffers = renderer.getBuffers(object.geometry);
@@ -173,61 +173,47 @@ vec3 directionalLight(DirectionalLight light, vec3 vertex, vec3 normal)\
 }";
 
 /**
+ * Phong light calculation, done after the albedo color is set.
+ */
+PhongMaterial.fragmentLightCalculation = "\
+\
+/* Light Intensity */\
+vec3 lighIntesity = vec3(1.0, 1.0, 1.0);\
+\
+/* Fragment normal */\
+vec3 normal;\
+if(hasNormalMap)\
+{\
+	vec3 normalValue = texture2D(normalMap, vec2(fragmentUV.s, fragmentUV.t)).rgb;\
+	normalValue = normalize(normalValue * 2.0 - 1.0);\
+	\
+	vec4 temp = model * vec4(normalValue, 0.0);\
+	normal = normalize(temp.xyz);\
+}\
+else\
+{\
+	normal = normalize(vec3((model * vec4(fragmentNormal, 0.0)).xyz));\
+}\
+	\
+/* Fragment position */\
+vec3 vertex = (model * vec4(fragmentVertex, 1.0)).xyz;\
+\
+/* Ambient light */\
+/* for(int i = 0; i < ambientLightsLength; i++)\
+{\
+	lighIntesity += ambientLights[i].color;\
+} */\
+\
+gl_FragColor.rgb *= lighIntesity;";
+
+/**
  * Full phong material fragment shader.
  */
 PhongMaterial.fragmentShader = PhongMaterial.fragmentHeader + MeshMaterial.fragmentLightStructs + MeshMaterial.fragmentHeaderLights + PhongMaterial.fragmentLightFunctions + "\
 \
 void main(void)\
 {\
-	/* Fragment normal */\
-	vec3 normal;\
-	if(hasNormalMap)\
-	{\
-		vec3 normalValue = texture2D(normalMap, vec2(fragmentUV.s, fragmentUV.t)).rgb;\
-		normalValue = normalize(normalValue * 2.0 - 1.0);\
-		\
-		vec4 temp = model * vec4(normalValue, 0.0);\
-		normal = normalize(temp.xyz);\
-	}\
-	else\
-	{\
-		normal = normalize(vec3((model * vec4(fragmentNormal, 0.0)).xyz));\
-	}\
-	\
-	vec3 lighIntesity = vec3(0.0, 0.0, 0.0);\
-	\
-	/* Fragment position */\
-	vec3 vertex = (model * vec4(fragmentVertex, 1.0)).xyz;\
-	\
-	/* Directional light */\
-	/* DirectionalLight direct;\
-	direct.color = vec3(0.3, 0.3, 0.3);\
-	direct.position = vec3(0.0, 2.0, 1.0);\
-	vec3 directional = directionalLight(direct, vertex, normal); */\
-	\
-	/* Ambient light */\
-	/* vec3 ambient = vec3(0.6, 0.6, 0.6); */\
-	\
-	/* Point light A*/\
-	/* PointLight light;\
-	light.color = vec3(2.0, 0.0, 0.0);\
-	light.position = vec3(-50.0, 30.0, -50.0);\
-	light.maxDistance = 20.0;\
-	vec3 pointA = pointLight(light, vertex, normal); */\
-	\
-	/* Point light B*/\
-	/* light.color = vec3(0.0, 2.0, 0.0);\
-	light.position = vec3(-50.0, 30.0, 50.0);\
-	light.maxDistance = 20.0;\
-	vec3 pointB = pointLight(light, vertex, normal); */\
-	\
-	/* Point light C*/\
-	/* light.color = vec3(0.0, 0.0, 2.0);\
-	light.position = vec3(50.0, 30.0, -50.0);\
-	light.maxDistance = 20.0;\
-	vec3 pointC = pointLight(light, vertex, normal); */\
-	\
 	gl_FragColor = texture2D(texture, vec2(fragmentUV.s, fragmentUV.t));\
-	gl_FragColor.rgb *= lighIntesity;\
-	" + MeshMaterial.alphaTest + "\
+	\
+	" + PhongMaterial.fragmentLightCalculation + MeshMaterial.alphaTest + "\
 }"; 
