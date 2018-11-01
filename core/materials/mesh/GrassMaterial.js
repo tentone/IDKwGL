@@ -103,7 +103,7 @@ GrassMaterial.prototype.render = function(renderer, camera, object, scene)
 
 GrassMaterial.createShader = function(gl)
 {
-	var shader = new Shader(gl, PhongMaterial.fragmentShader, GrassMaterial.vertexShader);
+	var shader = new Shader(gl, GrassMaterial.fragmentShader, GrassMaterial.vertexShader);
 
 	//Vertex attributes
 	shader.registerVertexAttributeArray("vertexPosition");
@@ -133,6 +133,18 @@ GrassMaterial.createShader = function(gl)
 	return shader;
 };
 
+GrassMaterial.fragmentLightFunctions = "\
+\
+vec3 pointLight(PointLight light, vec3 vertex, vec3 normal)\
+{\
+	return light.color * light.maxDistance / max(distance(light.position, vertex), 0.001);\
+}\
+\
+vec3 directionalLight(DirectionalLight light, vec3 vertex, vec3 normal)\
+{\
+	return light.color;\
+}";
+
 GrassMaterial.vertexShader = MeshMaterial.vertexHeader + "\
 \
 uniform float time;\
@@ -151,3 +163,14 @@ void main(void)\
 	gl_Position = projection * view * model * position;\
 }";
 
+/**
+ * Full phong material fragment shader.
+ */
+GrassMaterial.fragmentShader = PhongMaterial.fragmentHeader + MeshMaterial.fragmentLightStructs + MeshMaterial.fragmentHeaderLights + GrassMaterial.fragmentLightFunctions + "\
+\
+void main(void)\
+{\
+	gl_FragColor = texture2D(texture, vec2(fragmentUV.s, fragmentUV.t));\
+	\
+	" + PhongMaterial.fragmentLightCalculation + MeshMaterial.alphaTest + "\
+}"; 

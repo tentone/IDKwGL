@@ -109,15 +109,15 @@ MeshMaterial.prototype.render = function(renderer, camera, object, scene)
 MeshMaterial.fragmentLightStructs = "\
 struct PointLight\
 {\
-	vec3 position;\
 	vec3 color;\
+	vec3 position;\
 	float maxDistance;\
 };\
 \
 struct DirectionalLight\
 {\
-	vec3 position;\
 	vec3 color;\
+	vec3 position;\
 };\
 \
 struct AmbientLight\
@@ -128,7 +128,7 @@ struct AmbientLight\
 /**
  * Header lights uniform declaration.
  */
-MeshMaterial.fragmentHeaderLights = "\
+MeshMaterial.fragmentHeaderLights = "";/*"\
 PointLight pointLights[8];\
 int pointLightsLength = 0;\
 \
@@ -136,7 +136,7 @@ AmbientLight ambientLights[8];\
 int ambientLightsLength = 0;\
 \
 DirectionalLight directionalLights[8];\
-int directionalLightsLength = 0;";
+int directionalLightsLength = 0;";*/
 
 MeshMaterial.fragmentHeader = "\
 precision mediump float;\

@@ -161,6 +161,7 @@ uniform sampler2D normalMap;";
  * Light calculation methods.
  */
 PhongMaterial.fragmentLightFunctions = "\
+\
 vec3 pointLight(PointLight light, vec3 vertex, vec3 normal)\
 {\
 	vec3 lightDirection = normalize(light.position - vertex);\
@@ -177,8 +178,22 @@ vec3 directionalLight(DirectionalLight light, vec3 vertex, vec3 normal)\
  */
 PhongMaterial.fragmentLightCalculation = "\
 \
+PointLight pointLights[8];\
+pointLights[0] = PointLight(vec3(1.0, 0.0, 0.0), vec3(-50.0, 30.0, -50.0), 20.0);\
+pointLights[1] = PointLight(vec3(0.0, 1.0, 0.0), vec3(-50.0, 30.0, 50.0), 20.0);\
+pointLights[2] = PointLight(vec3(0.0, 0.0, 2.0), vec3(50.0, 30.0, -50.0), 20.0);\
+int pointLightsLength = 3;\
+\
+AmbientLight ambientLights[8];\
+ambientLights[0] = AmbientLight(vec3(0.3, 0.3, 0.3));\
+int ambientLightsLength = 1;\
+\
+DirectionalLight directionalLights[8];\
+directionalLights[0] = DirectionalLight(vec3(0.3, 0.3, 0.3), vec3(0.0, 2.0, 1.0));\
+int directionalLightsLength = 1;\
+\
 /* Light Intensity */\
-vec3 lighIntesity = vec3(1.0, 1.0, 1.0);\
+vec3 lighIntesity = vec3(0.0, 0.0, 0.0);\
 \
 /* Fragment normal */\
 vec3 normal;\
@@ -199,10 +214,22 @@ else\
 vec3 vertex = (model * vec4(fragmentVertex, 1.0)).xyz;\
 \
 /* Ambient light */\
-/* for(int i = 0; i < ambientLightsLength; i++)\
+for(int i = 0; i < 8; i++)\
 {\
 	lighIntesity += ambientLights[i].color;\
-} */\
+}\
+\
+/* Directinal light */\
+for(int i = 0; i < 8; i++)\
+{\
+	lighIntesity += directionalLight(directionalLights[i], vertex, normal);\
+}\
+\
+/* Point light */\
+for(int i = 0; i < 8; i++)\
+{\
+	lighIntesity += pointLight(pointLights[i], vertex, normal);\
+}\
 \
 gl_FragColor.rgb *= lighIntesity;";
 
