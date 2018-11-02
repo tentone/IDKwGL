@@ -45,15 +45,12 @@ PhongMaterial.prototype.render = function(renderer, camera, object, scene)
 	gl.uniformMatrix4fv(shader.uniforms["model"], false, object.transformationMatrix.flatten());
 
 	//Ambient lights
-	//gl.uniform1i(shader.uniforms["ambientLightsLength"], scene.ambientLights.length);
 	//TODO <ADD CODE HERE>
 
 	//Point lights
-	//gl.uniform1i(shader.uniforms["pointLightsLength"], scene.pointLights.length);
 	//TODO <ADD CODE HERE>
 
 	//Directinal lights
-	//gl.uniform1i(shader.uniforms["directionalLightsLength"], scene.directionalLights.length);
 	//TODO <ADD CODE HERE>
 
 	var buffers = renderer.getBuffers(object.geometry);
@@ -129,6 +126,11 @@ PhongMaterial.createShader = function(gl)
 	shader.registerVertexAttributeArray("vertexUV");
 	shader.registerVertexAttributeArray("vertexNormal");
 
+	//Lights
+	shader.registerUniform("pointLights");
+	shader.registerUniform("ambientLights");
+	shader.registerUniform("directionalLights");
+
 	//Texture
 	shader.registerUniform("texture");
 
@@ -178,19 +180,18 @@ vec3 directionalLight(DirectionalLight light, vec3 vertex, vec3 normal)\
  */
 PhongMaterial.fragmentLightCalculation = "\
 \
+/*\
 PointLight pointLights[8];\
 pointLights[0] = PointLight(vec3(1.0, 0.0, 0.0), vec3(-50.0, 30.0, -50.0), 20.0);\
 pointLights[1] = PointLight(vec3(0.0, 1.0, 0.0), vec3(-50.0, 30.0, 50.0), 20.0);\
 pointLights[2] = PointLight(vec3(0.0, 0.0, 2.0), vec3(50.0, 30.0, -50.0), 20.0);\
-int pointLightsLength = 3;\
 \
 AmbientLight ambientLights[8];\
 ambientLights[0] = AmbientLight(vec3(0.3, 0.3, 0.3));\
-int ambientLightsLength = 1;\
 \
 DirectionalLight directionalLights[8];\
 directionalLights[0] = DirectionalLight(vec3(0.3, 0.3, 0.3), vec3(0.0, 2.0, 1.0));\
-int directionalLightsLength = 1;\
+*/\
 \
 /* Light Intensity */\
 vec3 lighIntesity = vec3(0.0, 0.0, 0.0);\

@@ -110,6 +110,11 @@ GrassMaterial.createShader = function(gl)
 	shader.registerVertexAttributeArray("vertexUV");
 	shader.registerVertexAttributeArray("vertexNormal");
 
+	//Lights
+	shader.registerUniform("pointLights");
+	shader.registerUniform("ambientLights");
+	shader.registerUniform("directionalLights");
+
 	//Time
 	shader.registerUniform("time");
 

@@ -128,15 +128,10 @@ struct AmbientLight\
 /**
  * Header lights uniform declaration.
  */
-MeshMaterial.fragmentHeaderLights = "";/*"\
-PointLight pointLights[8];\
-int pointLightsLength = 0;\
-\
-AmbientLight ambientLights[8];\
-int ambientLightsLength = 0;\
-\
-DirectionalLight directionalLights[8];\
-int directionalLightsLength = 0;";*/
+MeshMaterial.fragmentHeaderLights = "\
+uniform PointLight pointLights[8];\
+uniform AmbientLight ambientLights[8];\
+uniform DirectionalLight directionalLights[8];";
 
 MeshMaterial.fragmentHeader = "\
 precision mediump float;\
