@@ -77,7 +77,7 @@ PhongMaterial.prototype.render = function(renderer, camera, object, scene)
 	gl.uniformMatrix4fv(shader.uniforms["model"], false, object.transformationMatrix.flatten());
 
 	//Directinal lights
-	for(var i = 0; i < scene.directionalLights.length && i < 8; i++)
+	for(var i = 0; i < scene.directionalLights.length && i < Material.MAX_LIGHTS; i++)
 	{
 		var color = scene.directionalLights[i].color;
 		gl.uniform3f(shader.uniforms["directionalLights[" + i + "].color"], color.r, color.g, color.b);
@@ -87,14 +87,14 @@ PhongMaterial.prototype.render = function(renderer, camera, object, scene)
 	}
 
 	//Ambient lights
-	for(var i = 0; i < scene.ambientLights.length && i < 8; i++)
+	for(var i = 0; i < scene.ambientLights.length && i < Material.MAX_LIGHTS; i++)
 	{
 		var color = scene.ambientLights[i].color;
 		gl.uniform3f(shader.uniforms["ambientLights[" + i + "].color"], color.r, color.g, color.b);
 	}
 
 	//Point lights
-	for(var i = 0; i < scene.pointLights.length && i < 8; i++)
+	for(var i = 0; i < scene.pointLights.length && i < Material.MAX_LIGHTS; i++)
 	{
 		var color = scene.pointLights[i].color;
 		gl.uniform3f(shader.uniforms["pointLights[" + i + "].color"], color.r, color.g, color.b);
@@ -173,23 +173,14 @@ PhongMaterial.createShader = function(gl)
 {
 	var shader = new Shader(gl, PhongMaterial.fragmentShader, MeshMaterial.vertexShader);
 
-	//Vertex attributes
-	shader.registerVertexAttributeArray("vertexPosition");
-	shader.registerVertexAttributeArray("vertexUV");
-	shader.registerVertexAttributeArray("vertexNormal");
+	PhongMaterial.registerUniforms(gl, shader);
 
-	//Lights
-	for(var i = 0; i < Material.MAX_LIGHTS; i++)
-	{
-		shader.registerUniform("ambientLights[" + i + "].color");
+	return shader;
+};
 
-		shader.registerUniform("directionalLights[" + i + "].color");
-		shader.registerUniform("directionalLights[" + i + "].position");
-
-		shader.registerUniform("pointLights[" + i + "].color");
-		shader.registerUniform("pointLights[" + i + "].position");
-		shader.registerUniform("pointLights[" + i + "].maxDistance");
-	}
+PhongMaterial.registerUniforms = function(gl, shader)
+{
+	MeshMaterial.registerUniforms(gl, shader);
 
 	//Texture
 	shader.registerUniform("texture");
@@ -197,23 +188,6 @@ PhongMaterial.createShader = function(gl)
 	//Normal
 	shader.registerUniform("hasNormalMap");
 	shader.registerUniform("normalMap");
-
-	//Matrices
-	shader.registerUniform("view");
-	shader.registerUniform("projection");
-	shader.registerUniform("model");
-
-	//Uniforms
-	shader.registerUniform("alphaTest");
-	shader.registerUniform("far");
-	shader.registerUniform("near");
-
-	return shader;
-};
-
-PhongMaterial.registerUniforms = function(gl, shader)
-{
-
 };
 
 /**

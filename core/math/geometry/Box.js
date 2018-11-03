@@ -11,7 +11,9 @@ function Box()
 
 Box.prototype.constructor = Box;
 
-//Checks if body is colliding
+/**
+ * Checks if body is colliding with another one.
+ */
 Box.prototype.isColliding = function(obj)
 {
 	if(obj.type === "Box")
@@ -24,7 +26,9 @@ Box.prototype.isColliding = function(obj)
 	return false;
 };
 
-//Check if box will collide after apllying a descolation
+/**
+ * Check if box will collide after apllying a descolation.
+ */
 Box.prototype.willCollide = function(speed, obj)
 {
 	if(obj.type === "Box")

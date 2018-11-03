@@ -1,18 +1,32 @@
 "use strict";
 
+/**
+ * Object 3D is used as the base for all the drawable objects.
+ */
 function Object3D()
 {
-	//Attributes
 	this.id = MathUtils.generateID();
 	this.name = "";
 	this.type = "Object3D";
 	
-	//Transformation
+	/**
+	 * Local position.
+	 */
 	this.position = new Vector3(0,0,0);
+
+	/**
+	 * Local euler rotation.
+	 */
 	this.rotation = new Vector3(0,0,0);
+
+	/**
+	 * Local scale.
+	 */
 	this.scale = new Vector3(1,1,1);
 
-	//Matrix
+	/**
+	 * Transformation matrix.
+	 */
 	this.transformationMatrix = new Matrix4();
 }
 
@@ -50,4 +64,3 @@ Object3D.prototype.clone = function()
 
 	return object;
 };
-

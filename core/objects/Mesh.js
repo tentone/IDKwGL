@@ -1,19 +1,38 @@
 "use strict";
 
+/**
+ * Mesh is used to combine a geometry and a material.
+ */
 function Mesh(geometry, material)
 {
 	Object3D.call(this);
 
+	/**
+	 * Geometry object.
+	 */
 	this.geometry = geometry !== undefined ? geometry : new Geometry();
+
+	/**
+	 * Material object or array of materials, used to draw the geometry.
+	 */
 	this.material = material !== undefined ? material : [];
 	
+	/**
+	 * GL drawing mode.
+	 */
 	this.mode = Mesh.TRIANGLES;
 
-	//Bounding box
+	/**
+	 * Bounding box surrounding the mesh.
+	 */
 	this.box = null;
 
-	//Store relation between faces and materials 
-	this.faceMaterial = []; //<Face Index Ini / Face Index End / Material>
+	/**
+	 * Store relation between faces and materials.
+	 *
+	 * <Face Index Ini / Face Index End / Material>
+	 */
+	this.faceMaterial = [];
 	this.count = 0;
 }
 

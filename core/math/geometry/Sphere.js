@@ -11,7 +11,9 @@ function Sphere()
 
 Sphere.prototype.constructor = Sphere;
 
-//Check if its colliding
+/**
+ * Check sphere collision against another geometry.
+ */
 Sphere.prototype.isColliding = function(obj)
 {
 	if(obj.type === "Sphere")
@@ -22,7 +24,9 @@ Sphere.prototype.isColliding = function(obj)
 	return false;
 };
 
-//Check if will collide after movement
+/**
+ * Check if sphere will collide after movement.
+ */
 Sphere.prototype.willCollide = function(speed, obj)
 {
 	return false;

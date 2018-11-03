@@ -38,21 +38,8 @@ BasicMaterial.createShader = function(gl)
 
 BasicMaterial.registerUniforms = function(gl, shader)
 {
-	//Vertex attributes
-	shader.registerVertexAttributeArray("vertexPosition");
-	shader.registerVertexAttributeArray("vertexUV");
-	shader.registerVertexAttributeArray("vertexNormal");
+	MeshMaterial.registerUniforms(gl, shader);
 
 	//Texture
 	shader.registerUniform("texture");
-
-	//Matrices
-	shader.registerUniform("view");
-	shader.registerUniform("projection");
-	shader.registerUniform("model");
-
-	//Uniforms
-	shader.registerUniform("alphaTest");
-	shader.registerUniform("far");
-	shader.registerUniform("near");
 };

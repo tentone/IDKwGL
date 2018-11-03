@@ -2,7 +2,9 @@
 
 function GeometryUtils(){}
 
-//Moving vertices to the spherical surface of radius 1
+/**
+ * Project vertices to the spherical surface of radius 1-
+ */
 GeometryUtils.moveToSphericalSurface = function(coords)
 {
 	for(var i = 0; i < coords.length; i += 3)
@@ -13,9 +15,11 @@ GeometryUtils.moveToSphericalSurface = function(coords)
 		coords[i+1] = vec.y;
 		coords[i+2] = vec.z;
 	}
-}
+};
 
-//Subdivide triangles from geometry
+/**
+ * Subdivide triangles from a geometry by n levels.
+ */
 GeometryUtils.subdivide = function(geometry, recursionDepth)
 {
 	//Copying
@@ -40,9 +44,11 @@ GeometryUtils.subdivide = function(geometry, recursionDepth)
 										  new Vector3(origColors[i+6],origColors[i+7],origColors[i+8]),
 										  geometry, recursionDepth);
 	}
-}
+};
 
-//Recursive triangle subdivision, using the midpoints of edges
+/**
+ * Recursive triangle subdivision, using the midpoints of edges.
+ */
 GeometryUtils.recursiveDivision = function(v1, v2, v3, c1, c2, c3, geometry, recursionDepth)
 {
 	// Recursive midpoint subdivision of one triangle
@@ -75,4 +81,4 @@ GeometryUtils.recursiveDivision = function(v1, v2, v3, c1, c2, c3, geometry, rec
 		GeometryUtils.recursiveDivision(v3, mid31, mid23, c3, c31, c23, geometry, recursionDepth - 1);
 		GeometryUtils.recursiveDivision(mid12, mid23, mid31, c12, c23, c31, geometry, recursionDepth - 1);
 	}
-}
+};

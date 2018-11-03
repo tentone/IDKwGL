@@ -1,5 +1,10 @@
 "use strict";
 
+/**
+ * A particle emitter can be used to create and move 3D objects as particles.
+ *
+ * Particle have a speed, scale and time limit and wrap a drawable object.
+ */
 function ParticleEmitter(model, position, speed, speedVar, scale, scaleVar, time, timeVar, particleCount)
 {
 	this.particles = [];
@@ -15,7 +20,6 @@ function ParticleEmitter(model, position, speed, speedVar, scale, scaleVar, time
 
 	var speed = new Vector3();
 
-	//Initialize particles
 	for(var i = 0; i < this.particleCount; i++)
 	{
 		speed.set(this.speed.x + this.speedVar.x*MathUtils.randomMod(), this.speed.y + this.speedVar.y*MathUtils.randomMod(), this.speed.z + this.speedVar.z*MathUtils.randomMod());
@@ -47,7 +51,7 @@ ParticleEmitter.prototype.update = function()
 };
 
 /**
- * Draw particles into camera.
+ * Draw particles object into the camera.
  */
 ParticleEmitter.prototype.render = function(renderer, camera, scene)
 {

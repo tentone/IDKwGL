@@ -99,18 +99,5 @@ DepthMaterial.createShader = function(gl)
 
 DepthMaterial.registerUniforms = function(gl, shader)
 {
-	//Attributes
-	shader.registerVertexAttributeArray("vertexPosition");
-	shader.registerVertexAttributeArray("vertexUV");
-	shader.registerVertexAttributeArray("vertexNormal");
-
-	//Matrices
-	shader.registerUniform("view");
-	shader.registerUniform("projection");
-	shader.registerUniform("model");
-
-	//Uniforms
-	shader.registerUniform("alphaTest");
-	shader.registerUniform("far");
-	shader.registerUniform("near");
+	MeshMaterial.registerUniforms(gl, shader);
 };

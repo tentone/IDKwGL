@@ -1,5 +1,8 @@
 "use strict";
 
+/**
+ * Data texture is manually created from a color array instead of a image file.
+ */
 function DataTexture()
 {
 	Texture.call(this);
@@ -10,7 +13,9 @@ function DataTexture()
 	this.size = new Vector2(0, 0);
 }
 
-//Texture Constructor from file name
+/**
+ * Create the GL texture.
+ */
 DataTexture.prototype.createTexture = function(gl)
 {
 	var texture = gl.createTexture();
@@ -26,7 +31,9 @@ DataTexture.prototype.createTexture = function(gl)
 	return texture;
 };
 
-//Creates a solid color texture
+/**
+ * Creates a solid color texture.
+ */
 DataTexture.prototype.generateSolidColorTexture = function(color)
 {
 	this.data = [(color.r*255), (color.g*255), (color.b*255), 255];

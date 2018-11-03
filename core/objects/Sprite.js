@@ -1,5 +1,10 @@
 "use strict";
 
+/**
+ * Sprite is a 2D that always faces the camera direction.
+ *
+ * Ignores is world rotation value.
+ */
 function Sprite()
 {
 	Object3D.call(this);

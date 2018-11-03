@@ -1,14 +1,22 @@
 "use strict";
 
-//Prespective camera constructor from canvas fov and zoom values
+/**
+ * Prespective camera constructor from canvas fov and zoom values.
+ */
 function PerspectiveCamera(aspect, fov, zoom)
 {
 	Camera.call(this);
 
 	this.type = "PerspectiveCamera";
 
-	//Attributes
+	/**
+	 * Aspect ratio of the camera.
+	 */
 	this.aspect = aspect; //x/y
+
+	/**
+	 * Horizontal field of view of the camera.
+	 */
 	this.fov = fov;
 
 	this.updateProjectionMatrix();
@@ -18,7 +26,6 @@ PerspectiveCamera.prototype = Object.create(Camera.prototype);
 
 PerspectiveCamera.prototype.constructor = PerspectiveCamera;
 
-//Calculate camera projection Matrix
 PerspectiveCamera.prototype.updateProjectionMatrix = function()
 {
 	var top = this.near * Math.tan(Conversion.degreesToRadians(this.fov)/2);
@@ -29,7 +36,6 @@ PerspectiveCamera.prototype.updateProjectionMatrix = function()
 	this.projectionMatrix.makePerspective(left, left + width, top, top - height, this.near, this.far);
 }
 
-//Call every time the canvas is resized
 PerspectiveCamera.prototype.resize = function(x, y)
 {
 	this.aspect = x / y;

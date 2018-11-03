@@ -1,5 +1,8 @@
 "use strict";
 
+/**
+ * Physics world. 
+ */
 function World(acceleration)
 {
 	if(acceleration === undefined)
@@ -17,7 +20,9 @@ function World(acceleration)
 	this.acceleration.mulConst(0.016);
 }
 
-//Update all bodys in world
+/**
+ * Update all bodys in world.
+ */
 World.prototype.update = function()
 {
 	for(var i = 0; i < this.body.length; i++)
@@ -26,14 +31,15 @@ World.prototype.update = function()
 	}	
 }
 
-//Add body to world
+/**
+ * Add body to world.
+ */
 World.prototype.addBody = function(body)
 {
 	body.setId(this.body.length);
 	this.body.push(body);
 }
 
-//World info to String
 World.prototype.toString = function()
 {
 	var s = "World (BodyCount:"+this.body.length+")\n   Body List:";

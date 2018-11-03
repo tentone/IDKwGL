@@ -1,19 +1,42 @@
 "use strict";
 
+/**
+ * Textures contains image data that can be mapped into 3D objects.
+ */
 function Texture(file)
 {
 	this.id = MathUtils.generateID();
 	this.name = "";
 	this.type = "Texture";
 
+	/**
+	 * Texture color channel format.
+	 */
 	this.format = Texture.RGBA;
 
+	/**
+	 * If true the texture coords are flipped in Y.
+	 */
 	this.flipY = true;
+
+	/**
+	 * If set to true the alpha channel is pre multiplied with all colors.
+	 */
 	this.premultiplyAlpha = false;
 
+	/**
+	 * Horizontal texture GL wrap mode.
+	 */
 	this.wrapS = Texture.REPEAT;
+
+	/**
+	 * Vertical texture GL wrap mode.
+	 */
 	this.wrapT = Texture.REPEAT;
 
+	/**
+	 * Image file path URL.
+	 */
 	this.file = file;
 }
 
@@ -31,7 +54,9 @@ Texture.NEAREST_MIPMAP_LINEAR = 9986;
 Texture.LINEAR_MIPMAP_NEAREST = 9985;
 Texture.LINEAR_MIPMAP_LINEAR = 9987;
 
-//Texture Constructor from file name
+/**
+ * Create the GL texture.
+ */
 Texture.prototype.createTexture = function(gl)
 {
 	var texture = gl.createTexture();

@@ -13,10 +13,24 @@ function MeshMaterial()
 
 	this.type = "MeshMaterial";
 
+	/**
+	 * Enable triangle face culling.
+	 */
 	this.faceCulling = true;
+
+	/**
+	 * Face culling mode, used to cull/hide back or fontal faces.
+	 */
 	this.faceCullingMode = MeshMaterial.BACK;
 
+	/**
+	 * Enable blending functions.
+	 */
 	this.blending = false;
+
+	/**
+	 * Color blending mode, only used if bleding set to true.
+	 */
 	this.blendingMode = MeshMaterial.ONE_MINUS_SRC_ALPHA;
 
 	/**
@@ -34,11 +48,11 @@ MeshMaterial.ONE_MINUS_SRC_ALPHA = 771;
 MeshMaterial.prototype = Object.create(Material.prototype);
 MeshMaterial.prototype.constructor = MeshMaterial;
 
-MeshMaterial.registerUniforms = function()
+MeshMaterial.registerUniforms = function(gl, shader)
 {
 	//Lights
-	if(this.useLights)
-	{
+	//if(this.useLights)
+	{		
 		for(var i = 0; i < 8; i++)
 		{
 			//Ambient
@@ -169,9 +183,9 @@ struct AmbientLight\
  * Header lights uniform declaration.
  */
 MeshMaterial.fragmentHeaderLights = "\
-uniform PointLight pointLights[8];\
-uniform AmbientLight ambientLights[8];\
-uniform DirectionalLight directionalLights[8];";
+uniform PointLight pointLights[" + Material.MAX_LIGHTS + "];\
+uniform AmbientLight ambientLights[" + Material.MAX_LIGHTS + "];\
+uniform DirectionalLight directionalLights[" + Material.MAX_LIGHTS + "];";
 
 MeshMaterial.fragmentHeader = "\
 precision mediump float;\

@@ -1,5 +1,8 @@
 "use strict";
 
+/**
+ * Canvas texture is created from a 2D javascript canvas.
+ */
 function CanvasTexture(canvas)
 {
 	Texture.call(this);

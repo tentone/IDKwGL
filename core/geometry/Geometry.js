@@ -19,7 +19,9 @@ function Geometry()
 
 Geometry.prototype.constructor = Geometry;
 
-//Update GL buffers
+/**
+ * Create GL buffers for the geometry data.
+ */
 Geometry.prototype.createBuffers = function(gl)
 {
 	//Vertex
@@ -53,7 +55,9 @@ Geometry.prototype.createBuffers = function(gl)
 	return {vertexBuffer: vertexBuffer, uvBuffer: uvBuffer, normalBuffer: normalBuffer, facesBuffer: facesBuffer};
 };
 
-//Computing the triangle unit normal vector to vertex 
+/**
+ * Computing the triangle normals vector from vertex.
+ */
 Geometry.prototype.computeNormals = function()
 {
 	this.normals = [];
@@ -77,7 +81,9 @@ Geometry.prototype.computeNormals = function()
 	}
 };
 
-//Fill geometry UV coordinates
+/**
+ * Fill geometry missing UV coordinates.
+ */
 Geometry.prototype.fillUV = function()
 {
 	this.uvs = [0.0, 0.0, 1.0, 1.0];
@@ -99,7 +105,9 @@ Geometry.prototype.fillUV = function()
 	}
 };
 
-//Scale UV by multiplying them by x and y constants
+/**
+ * Scale UV by multiplying them by x and y constants.
+ */
 Geometry.prototype.scaleUV = function(x, y)
 {
 	for(var i = 0; i < this.uvs.length; i += 2)

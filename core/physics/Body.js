@@ -1,5 +1,8 @@
 "use strict";
 
+/**
+ * Physics rigid body.
+ */
 function Body(geometry)
 {
 	//Random ID to identify body
@@ -16,19 +19,25 @@ function Body(geometry)
 	this.isColliding = new Vector3(0,0,0);
 }
 
-//Set ID
+/**
+ * Set ID
+ */
 Body.prototype.setId = function(value)
 {
 	this.id = value;
 }
 
-//Get ID
+/** 
+ * Get ID
+ */
 Body.prototype.getId = function()
 {
 	return this.id;
 }
 
-//Updates body status 
+/**
+ * Updates body state.
+ */ 
 Body.prototype.update = function(world)
 {
 	if(world === undefined)
@@ -115,25 +124,30 @@ Body.prototype.update = function(world)
 	this.position = this.geometry.position;
 }
 
-//Set static
+/**
+ * Set as static body.
+ */
 Body.prototype.setStatic = function(value)
 {
 	this.body.isStatic = value;
 }
 
-//Get Body Geometry
+/**
+ * Get body geometry.
+ */
 Body.prototype.getGeometry = function()
 {
 	return this.geometry;
 }
 
-//Set if body is collidable
+/**
+ * Set if body is collidable.
+ */
 Body.prototype.setCollidable = function(collidable)
 {
 	this.collidable = collidable;
 }
 
-//String
 Body.prototype.toString = function()
 {
 	return "Body (Position:" + this.position.toString() + ", Speed:" + this.speed.toString() + ", Acceleration:"+this.acceleration.toString() +")";
