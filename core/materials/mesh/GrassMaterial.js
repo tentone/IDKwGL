@@ -36,6 +36,35 @@ GrassMaterial.prototype.render = function(renderer, camera, object, scene)
 	gl.uniformMatrix4fv(shader.uniforms["projection"], false, camera.projectionMatrix.flatten());
 	gl.uniformMatrix4fv(shader.uniforms["view"], false, camera.transformationMatrix.flatten());
 	gl.uniformMatrix4fv(shader.uniforms["model"], false, object.transformationMatrix.flatten());
+	
+	//Directinal lights
+	for(var i = 0; i < scene.directionalLights.length && i < 8; i++)
+	{
+		var color = scene.directionalLights[i].color;
+		gl.uniform3f(shader.uniforms["directionalLights[" + i + "].color"], color.r, color.g, color.b);
+
+		var position = scene.directionalLights[i].position;
+		gl.uniform3f(shader.uniforms["directionalLights[" + i + "].position"], position.x, position.y, position.z);
+	}
+
+	//Ambient lights
+	for(var i = 0; i < scene.ambientLights.length && i < 8; i++)
+	{
+		var color = scene.ambientLights[i].color;
+		gl.uniform3f(shader.uniforms["ambientLights[" + i + "].color"], color.r, color.g, color.b);
+	}
+
+	//Point lights
+	for(var i = 0; i < scene.pointLights.length && i < 8; i++)
+	{
+		var color = scene.pointLights[i].color;
+		gl.uniform3f(shader.uniforms["pointLights[" + i + "].color"], color.r, color.g, color.b);
+
+		var position = scene.pointLights[i].position;
+		gl.uniform3f(shader.uniforms["pointLights[" + i + "].position"], position.x, position.y, position.z);
+
+		gl.uniform1f(shader.uniforms["pointLights[" + i + "].maxDistance"], scene.pointLights[i].maxDistance);
+	}
 
 	var buffers = renderer.getBuffers(object.geometry);
 
@@ -111,9 +140,17 @@ GrassMaterial.createShader = function(gl)
 	shader.registerVertexAttributeArray("vertexNormal");
 
 	//Lights
-	shader.registerUniform("pointLights");
-	shader.registerUniform("ambientLights");
-	shader.registerUniform("directionalLights");
+	for(var i = 0; i < 8; i++)
+	{
+		shader.registerUniform("ambientLights[" + i + "].color");
+		
+		shader.registerUniform("directionalLights[" + i + "].color");
+		shader.registerUniform("directionalLights[" + i + "].position");
+
+		shader.registerUniform("pointLights[" + i + "].color");
+		shader.registerUniform("pointLights[" + i + "].position");
+		shader.registerUniform("pointLights[" + i + "].maxDistance");
+	}
 
 	//Time
 	shader.registerUniform("time");

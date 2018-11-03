@@ -33,7 +33,7 @@ Scene.prototype.add = function(object)
 	}
 	else if(object.isDirectionalLight)
 	{
-		this.directional.push(object);
+		this.directionalLights.push(object);
 	}
 	else if(object.isAmbientLight)
 	{

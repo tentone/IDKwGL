@@ -8,21 +8,28 @@ function Arena()
 
 	//Lights
 	var light = new PointLight();
-	light.color.set(0.4, 0.0, 0.0);
+	light.color.set(1.0, 0.0, 0.0);
 	light.position.set(50.0, 20.0, 0.0);
 	this.scene.add(light);
 
 	var light = new PointLight();
-	light.color.set(0.0, 0.0, 0.4);
+	light.color.set(0.0, 0.0, 2.0);
 	light.position.set(0.0, 20.0, 50.0);
 	this.scene.add(light);
 
 	var light = new PointLight();
-	light.color.set(0.0, 0.4, 0.0);
+	light.color.set(0.0, 1.0, 0.0);
 	light.position.set(0.0, 20.0, -50.0);
 	this.scene.add(light);
 
-	this.scene.add(new AmbientLight());
+	var ambient = new AmbientLight();
+	ambient.color.set(0.2, 0.2, 0.2);
+	this.scene.add(ambient);
+
+	var directional = new DirectionalLight();
+	directional.color.set(0.3, 0.3, 0.3);
+	directional.position.set(0.0, 2.0, 1.0);
+	this.scene.add(directional);
 
 	//Referencial
 	this.referential = new Referencial(this.scene);
