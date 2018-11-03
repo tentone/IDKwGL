@@ -3,9 +3,9 @@
 /** 
  * A mesh material is used to render 3D meshes.
  * 
- * A mesh is composed of a geometry and a material.
+ * A mesh is composed of a geometry and a material, a mesh can have multiple materials attached.
  * 
- * One mesh can have multiple materials attached.
+ * Is used as base for other mesh materials
  */
 function MeshMaterial()
 {
@@ -19,6 +19,9 @@ function MeshMaterial()
 	this.blending = false;
 	this.blendingMode = MeshMaterial.ONE_MINUS_SRC_ALPHA;
 
+	/**
+	 * Alpha test value, if opacity is bellow the alpha test value the pixel is discarded.
+	 */
 	this.alphaTest = 0.0;
 }
 
@@ -30,6 +33,43 @@ MeshMaterial.ONE_MINUS_SRC_ALPHA = 771;
 
 MeshMaterial.prototype = Object.create(Material.prototype);
 MeshMaterial.prototype.constructor = MeshMaterial;
+
+MeshMaterial.registerUniforms = function()
+{
+	//Lights
+	if(this.useLights)
+	{
+		for(var i = 0; i < 8; i++)
+		{
+			//Ambient
+			shader.registerUniform("ambientLights[" + i + "].color");
+				
+			//Directional
+			shader.registerUniform("directionalLights[" + i + "].color");
+			shader.registerUniform("directionalLights[" + i + "].position");
+
+			//Point
+			shader.registerUniform("pointLights[" + i + "].color");
+			shader.registerUniform("pointLights[" + i + "].position");
+			shader.registerUniform("pointLights[" + i + "].maxDistance");
+		}
+	}
+
+	//Vertex attributes
+	shader.registerVertexAttributeArray("vertexPosition");
+	shader.registerVertexAttributeArray("vertexUV");
+	shader.registerVertexAttributeArray("vertexNormal");
+
+	//Matrices
+	shader.registerUniform("view");
+	shader.registerUniform("projection");
+	shader.registerUniform("model");
+
+	//Uniforms
+	shader.registerUniform("alphaTest");
+	shader.registerUniform("far");
+	shader.registerUniform("near");
+}
 
 MeshMaterial.prototype.render = function(renderer, camera, object, scene)
 {

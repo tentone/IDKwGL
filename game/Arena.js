@@ -6,30 +6,31 @@ function Arena()
 	this.world = new World();
 	this.scene = new Scene();
 
+	//Timer
+	this.timer = new Timer();
+	this.timer.start();
+
 	//Lights
-	var light = new PointLight();
-	light.color.set(1.0, 0.0, 0.0);
-	light.position.set(50.0, 20.0, 0.0);
-	this.scene.add(light);
+	this.lightA = new PointLight();
+	this.lightA.color.set(1.0, 0.0, 0.0);
+	this.scene.add(this.lightA);
 
-	var light = new PointLight();
-	light.color.set(0.0, 0.0, 2.0);
-	light.position.set(0.0, 20.0, 50.0);
-	this.scene.add(light);
+	this.lightB = new PointLight();
+	this.lightB.color.set(0.0, 0.0, 1.5);
+	this.scene.add(this.lightB);
 
-	var light = new PointLight();
-	light.color.set(0.0, 1.0, 0.0);
-	light.position.set(0.0, 20.0, -50.0);
-	this.scene.add(light);
+	this.lightC = new PointLight();
+	this.lightC.color.set(0.0, 0.7, 0.0);
+	this.scene.add(this.lightC);
 
-	var ambient = new AmbientLight();
-	ambient.color.set(0.2, 0.2, 0.2);
-	this.scene.add(ambient);
+	this.ambient = new AmbientLight();
+	this.ambient.color.set(0.1, 0.1, 0.1);
+	this.scene.add(this.ambient);
 
-	var directional = new DirectionalLight();
-	directional.color.set(0.3, 0.3, 0.3);
-	directional.position.set(0.0, 2.0, 1.0);
-	this.scene.add(directional);
+	this.directional = new DirectionalLight();
+	this.directional.color.set(0.2, 0.2, 0.2);
+	this.directional.position.set(0.0, 2.0, 1.0);
+	this.scene.add(this.directional);
 
 	//Referencial
 	this.referential = new Referencial(this.scene);
@@ -209,7 +210,7 @@ function Arena()
 	var merged = new Geometry();
 
 	//Merge grass geometry
-	for(var i = 0; i < 3000; i++)
+	for(var i = 0; i < 5000; i++)
 	{
 		var x = MathUtils.randomMod() * 50;
 		var z = MathUtils.randomMod() * 50;
@@ -238,7 +239,7 @@ function Arena()
 	//Tank smoke
 	this.model = new Sprite();
 	this.model.texture = new Texture("data/texture/smoke_2.png");
-	this.particle = new ParticleEmitter(this.model, new Vector3(-250,8,100), new Vector3(0,0.7,0), new Vector3(0.3,0.5,0.3), 30, 10, 150, 150, 50);
+	this.particle = new ParticleEmitter(this.model, new Vector3(-250, 8, 100), new Vector3(0,0.7,0), new Vector3(0.3,0.5,0.3), 30, 10, 150, 150, 50);
 	this.scene.add(this.particle);
 
 	//Bullet
@@ -343,6 +344,12 @@ Arena.prototype.update = function()
 		this.weapon.position.set(-0.3,-0.3,0.5);
 		this.weapon.updateMatrix();
 	}*/
+
+	var time = this.timer.get();
+
+	this.lightA.position.set(Math.cos(time / 1000.0) * 70.0 + 50.0, 30, Math.sin(time / 1300.0) * 70.0 + 50.0);
+	this.lightB.position.set(Math.cos(time / 800.0) * 80.0, 30, Math.sin(time / 900.0) * 80.0);
+	this.lightC.position.set(Math.cos(time / 1200.0) * 90.0 - 50.0, 30, Math.sin(time / 1100.0) * 90.0 - 50.0);
 
 	//Update Player Camera Position
 	this.world.update();

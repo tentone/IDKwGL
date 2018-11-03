@@ -21,6 +21,7 @@ include("core/input/Mouse.js");
 include("core/loaders/FileLoader.js");
 include("core/loaders/OBJLoader.js");
 
+include("core/utils/Timer.js");
 include("core/utils/GeometryUtils.js");
 
 include("core/Font.js");

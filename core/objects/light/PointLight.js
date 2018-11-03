@@ -11,7 +11,7 @@ function PointLight(color)
 
 	this.color = color !== undefined ? color : new Color(0.3, 0.3, 0.3);
 	this.position = new Vector3(0.0, 0.0, 0.0);
-	this.maxDistance = 10.0;
+	this.maxDistance = 50.0;
 }
 
 PointLight.prototype.constructor = PointLight;

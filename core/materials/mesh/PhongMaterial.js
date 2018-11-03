@@ -1,5 +1,10 @@
 "use strict";
 
+/**
+ * Implements the phong shading model.
+ *
+ * Compatible with point, ambient and directional lights.
+ */
 function PhongMaterial(name)
 {
 	MeshMaterial.call(this);
@@ -7,17 +12,44 @@ function PhongMaterial(name)
 	this.name = name;
 	this.type = "PhongMaterial";
 
+	/**
+	 * Color texture of this material. 
+	 */
 	this.texture = null;
+
+	/**
+	 * Normal vector map used for lighting calculation. 
+	 */
 	this.normalMap = null;
 	this.bumpMap = null;
 	this.specularMap = null;
 
-	this.ambient = new Color(1,1,1); //Ambient Value
-	this.diffuse = new Color(1,1,1); //Diffuse Value
-	this.specular = new Color(1,1,1); //Specular Value
-	this.specularIntensity = 1; //Specular Intensity (Phong constant) range [1, 1000]
+	this.ambient = new Color(1, 1, 1); //Ambient Value
+	this.diffuse = new Color(1, 1, 1); //Diffuse Value
+	this.specular = new Color(1, 1, 1); //Specular Value
+
+	/**
+	 * Specular color intensity, phong constant range [1, 1000].
+	 *
+	 * TODO
+	 */
+	this.specularIntensity = 1;
 	
-	this.alpha = 1; //Alpha Value
+	/**
+	 * Indicates if the material is transparent.
+	 *
+	 * TODO
+	 */
+	this.transparent = false;
+
+	/**
+	 * Level of alpha of the material.
+	 *
+	 * Only applied if the material is transparent.
+	 *
+	 * TODO
+	 */
+	this.alpha = 1.0;
 }
 
 PhongMaterial.prototype = Object.create(MeshMaterial.prototype);
@@ -147,7 +179,7 @@ PhongMaterial.createShader = function(gl)
 	shader.registerVertexAttributeArray("vertexNormal");
 
 	//Lights
-	for(var i = 0; i < 8; i++)
+	for(var i = 0; i < Material.MAX_LIGHTS; i++)
 	{
 		shader.registerUniform("ambientLights[" + i + "].color");
 
@@ -177,6 +209,11 @@ PhongMaterial.createShader = function(gl)
 	shader.registerUniform("near");
 
 	return shader;
+};
+
+PhongMaterial.registerUniforms = function(gl, shader)
+{
+
 };
 
 /**
@@ -230,19 +267,19 @@ else\
 vec3 vertex = (model * vec4(fragmentVertex, 1.0)).xyz;\
 \
 /* Ambient light */\
-for(int i = 0; i < 8; i++)\
+for(int i = 0; i < " + Material.MAX_LIGHTS + "; i++)\
 {\
 	lighIntesity += ambientLights[i].color;\
 }\
 \
 /* Directinal light */\
-for(int i = 0; i < 8; i++)\
+for(int i = 0; i < " + Material.MAX_LIGHTS + "; i++)\
 {\
 	lighIntesity += directionalLight(directionalLights[i], vertex, normal);\
 }\
 \
 /* Point light */\
-for(int i = 0; i < 8; i++)\
+for(int i = 0; i < " + Material.MAX_LIGHTS + "; i++)\
 {\
 	lighIntesity += pointLight(pointLights[i], vertex, normal);\
 }\

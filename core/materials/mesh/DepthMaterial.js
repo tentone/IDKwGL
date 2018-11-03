@@ -92,6 +92,13 @@ DepthMaterial.createShader = function(gl)
 
 	var shader = new Shader(gl, fragmentShader, MeshMaterial.vertexShader);
 
+	DepthMaterial.registerUniforms(gl, shader);
+	
+	return shader;
+};
+
+DepthMaterial.registerUniforms = function(gl, shader)
+{
 	//Attributes
 	shader.registerVertexAttributeArray("vertexPosition");
 	shader.registerVertexAttributeArray("vertexUV");
@@ -106,6 +113,4 @@ DepthMaterial.createShader = function(gl)
 	shader.registerUniform("alphaTest");
 	shader.registerUniform("far");
 	shader.registerUniform("near");
-
-	return shader;
 };
