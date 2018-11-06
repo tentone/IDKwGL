@@ -42,9 +42,8 @@ DissolveMaterial.prototype.updateUniforms = function(renderer, gl, shader, camer
 	}
 };
 
-
 DissolveMaterial.createShader = function(gl)
-{
+{	
 	var shader = new Shader(gl, DissolveMaterial.fragmentShader, MeshMaterial.vertexShader);
 
 	DissolveMaterial.registerUniforms(gl, shader);
@@ -60,14 +59,14 @@ DissolveMaterial.registerUniforms = function(gl, shader)
 	shader.registerUniform("dissolveMap");
 };
 
-DissolveMaterial.fragmentHeader = PhongMaterial.fragmentHeader +  "\
+DissolveMaterial.fragmentHeader = PhongMaterial.fragmentHeader + "\
 \
 uniform bool hasDissolveMap;\
 uniform sampler2D dissolveMap;";
 
-DissolveMaterial.fragmentShader = DissolveMaterial.fragmentHeader + MeshMaterial.fragmentLightStructs + MeshMaterial.fragmentHeaderLights + DissolveMaterial.fragmentLightFunctions + "\
+DissolveMaterial.fragmentShader = DissolveMaterial.fragmentHeader + MeshMaterial.fragmentLightStructs + MeshMaterial.fragmentHeaderLights + PhongMaterial.fragmentLightFunctions + "\
 \
 void main(void)\
 {\
-	" + BasicMaterial.fragmentBaseColor + "\n" + DissolveMaterial.fragmentLightCalculation + "\n" + MeshMaterial.alphaTest + "\
+	" + BasicMaterial.fragmentBaseColor + PhongMaterial.fragmentLightCalculation + MeshMaterial.alphaTest + "\
 }"; 

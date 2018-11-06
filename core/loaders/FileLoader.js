@@ -11,8 +11,6 @@ FileLoader.loadMultiple = function(files, onLoad)
 	{
 		FileLoader.loadText(files[j], false, function(data)
 		{
-			console.log(j);
-
 			responses[j] = data;
 			count++;
 

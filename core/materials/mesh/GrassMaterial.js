@@ -13,123 +13,6 @@ GrassMaterial.prototype = Object.create(PhongMaterial.prototype);
 GrassMaterial.prototype.constructor = GrassMaterial;
 GrassMaterial.id = MathUtils.generateID();
 
-GrassMaterial.prototype.render = function(renderer, camera, object, scene)
-{
-	var gl = renderer.gl;
-	var shader = renderer.getShader(this.constructor);
-
-	this.time += 0.016;
-
-	gl.useProgram(shader.program);
-
-	//Alpha test
-	gl.uniform1f(shader.uniforms["alphaTest"], this.alphaTest);
-
-	//Time
-	gl.uniform1f(shader.uniforms["time"], this.time);
-
-	//Camera
-	gl.uniform1f(shader.uniforms["near"], camera.near);
-	gl.uniform1f(shader.uniforms["far"], camera.far);
-
-	//Transformation matrices
-	gl.uniformMatrix4fv(shader.uniforms["projection"], false, camera.projectionMatrix.flatten());
-	gl.uniformMatrix4fv(shader.uniforms["view"], false, camera.transformationMatrix.flatten());
-	gl.uniformMatrix4fv(shader.uniforms["model"], false, object.transformationMatrix.flatten());
-	
-	//Directinal lights
-	for(var i = 0; i < scene.directionalLights.length && i < Material.MAX_LIGHTS; i++)
-	{
-		var color = scene.directionalLights[i].color;
-		gl.uniform3f(shader.uniforms["directionalLights[" + i + "].color"], color.r, color.g, color.b);
-
-		var position = scene.directionalLights[i].position;
-		gl.uniform3f(shader.uniforms["directionalLights[" + i + "].position"], position.x, position.y, position.z);
-	}
-
-	//Ambient lights
-	for(var i = 0; i < scene.ambientLights.length && i < Material.MAX_LIGHTS; i++)
-	{
-		var color = scene.ambientLights[i].color;
-		gl.uniform3f(shader.uniforms["ambientLights[" + i + "].color"], color.r, color.g, color.b);
-	}
-
-	//Point lights
-	for(var i = 0; i < scene.pointLights.length && i < Material.MAX_LIGHTS; i++)
-	{
-		var color = scene.pointLights[i].color;
-		gl.uniform3f(shader.uniforms["pointLights[" + i + "].color"], color.r, color.g, color.b);
-
-		var position = scene.pointLights[i].position;
-		gl.uniform3f(shader.uniforms["pointLights[" + i + "].position"], position.x, position.y, position.z);
-
-		gl.uniform1f(shader.uniforms["pointLights[" + i + "].maxDistance"], scene.pointLights[i].maxDistance);
-	}
-
-	var buffers = renderer.getBuffers(object.geometry);
-
-	//Vertex position
-	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.vertexBuffer);
-	gl.vertexAttribPointer(shader.attributes["vertexPosition"], buffers.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-	//Vertex normal
-	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.normalBuffer);
-	gl.vertexAttribPointer(shader.attributes["vertexNormal"], buffers.normalBuffer.itemSize, gl.FLOAT, false, 0, 0);
-	
-	//Texture UV
-	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.uvBuffer);
-	gl.vertexAttribPointer(shader.attributes["vertexUV"], buffers.uvBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-	//Faces
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.facesBuffer);
-
-	//Texture
-	var texture = renderer.getTexture(this.texture);
-	gl.activeTexture(gl.TEXTURE0);
-	gl.bindTexture(gl.TEXTURE_2D, texture);
-	gl.uniform1i(shader.uniforms["texture"], 0);
-
-	//Normal map
-	if(this.normalMap !== null)
-	{
-		var normalMap = renderer.getTexture(this.normalMap);
-		gl.activeTexture(gl.TEXTURE1);
-		gl.bindTexture(gl.TEXTURE_2D, normalMap);
-		gl.uniform1i(shader.uniforms["normalMap"], 0);
-		gl.uniform1i(shader.uniforms["hasNormalMap"], 1);
-	}
-	else
-	{
-		gl.uniform1i(shader.uniforms["hasNormalMap"], 0);
-	}
-
-	//Enable backface culling
-	if(this.faceCulling)
-	{
-		gl.enable(gl.CULL_FACE);
-		gl.cullFace(this.faceCullingMode);
-	}
-
-	if(this.blending)
-	{
-		gl.enable(gl.BLEND);
-		gl.blendFunc(gl.SRC_ALPHA, this.blendingMode);
-	}
-
-	//Draw the triangles
-	gl.drawElements(object.mode, object.count, gl.UNSIGNED_SHORT, 0);
-
-	//Disable cullface
-	if(this.faceCulling)
-	{
-		gl.disable(gl.CULL_FACE);	
-	}
-	if(this.blending)
-	{
-		gl.disable(gl.BLEND);
-	}
-};
-
 GrassMaterial.createShader = function(gl)
 {
 	var shader = new Shader(gl, GrassMaterial.fragmentShader, GrassMaterial.vertexShader);
@@ -141,17 +24,19 @@ GrassMaterial.createShader = function(gl)
 
 GrassMaterial.registerUniforms = function(gl, shader)
 {
-	MeshMaterial.registerUniforms(gl, shader);
+	PhongMaterial.registerUniforms(gl, shader);
 
 	//Time
 	shader.registerUniform("time");
+};
 
-	//Texture
-	shader.registerUniform("texture");
+GrassMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera, object, scene)
+{
+	PhongMaterial.prototype.updateUniforms.call(this, renderer, gl, shader, camera, object, scene);
 
-	//Normal
-	shader.registerUniform("hasNormalMap");
-	shader.registerUniform("normalMap");
+	this.time += 0.016;
+
+	gl.uniform1f(shader.uniforms["time"], this.time);
 };
 
 GrassMaterial.fragmentLightFunctions = "\
@@ -191,7 +76,5 @@ GrassMaterial.fragmentShader = PhongMaterial.fragmentHeader + MeshMaterial.fragm
 \
 void main(void)\
 {\
-	gl_FragColor = texture2D(texture, vec2(fragmentUV.s, fragmentUV.t));\
-	\
-	" + PhongMaterial.fragmentLightCalculation + MeshMaterial.alphaTest + "\
+	" + BasicMaterial.fragmentBaseColor + PhongMaterial.fragmentLightCalculation + MeshMaterial.alphaTest + "\
 }"; 

@@ -17,7 +17,15 @@ function PhongMaterial(name)
 	 */
 	this.normalMap = null;
 
+	/**
+	 * Bump map stored elevations relative to the surface.
+	 * 
+	 * Can be used for light calculation or to deformate the surface.
+	 *
+	 * TODO
+	 */
 	this.bumpMap = null;
+	
 	this.specularMap = null;
 
 	/**
@@ -206,5 +214,5 @@ PhongMaterial.fragmentShader = PhongMaterial.fragmentHeader + MeshMaterial.fragm
 \
 void main(void)\
 {\
-	" + BasicMaterial.fragmentBaseColor + "\n" + PhongMaterial.fragmentLightCalculation + "\n" + MeshMaterial.alphaTest + "\
+	" + BasicMaterial.fragmentBaseColor + PhongMaterial.fragmentLightCalculation + MeshMaterial.alphaTest + "\
 }"; 

@@ -59,8 +59,6 @@ function Arena()
 	//Eyebot
 	FileLoader.loadMultiple(["data/models/eyebot/eyebot.obj", "data/models/eyebot/eyebot.mtl"], function(data)
 	{
-		console.log(data);
-
 		var model = OBJLoader.load(data[0], data[1], "data/models/eyebot");
 		model.position.set(0,20,-100);
 		model.scale.set(0.5,0.5,0.5);
@@ -87,7 +85,7 @@ function Arena()
 
 		//Eyebot depth
 		var model = OBJLoader.load(data[0], data[1], "data/models/eyebot");
-		model.material = new DepthMaterial();
+		model.material = new DissolveMaterial();
 		model.position.set(-60,20,-100);
 		model.scale.set(0.5,0.5,0.5);
 		model.updateMatrix();

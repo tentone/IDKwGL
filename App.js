@@ -40,6 +40,7 @@ include("core/materials/mesh/BasicMaterial.js");
 include("core/materials/mesh/DepthMaterial.js");
 include("core/materials/mesh/PhongMaterial.js");
 include("core/materials/mesh/GrassMaterial.js");
+include("core/materials/mesh/DissolveMaterial.js");
 
 include("core/objects/Object3D.js");
 include("core/objects/Scene.js");
