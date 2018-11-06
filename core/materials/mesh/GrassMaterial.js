@@ -26,7 +26,6 @@ GrassMaterial.registerUniforms = function(gl, shader)
 {
 	PhongMaterial.registerUniforms(gl, shader);
 
-	//Time
 	shader.registerUniform("time");
 };
 
@@ -35,7 +34,6 @@ GrassMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera, 
 	PhongMaterial.prototype.updateUniforms.call(this, renderer, gl, shader, camera, object, scene);
 
 	this.time += 0.016;
-
 	gl.uniform1f(shader.uniforms["time"], this.time);
 };
 

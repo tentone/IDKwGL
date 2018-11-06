@@ -196,7 +196,7 @@ uniform mat4 model;\
 uniform float alphaTest;\
 uniform float far, near;";
 
-MeshMaterial.alphaTest = "if(gl_FragColor.a < alphaTest) discard;"
+MeshMaterial.alphaTest = "if(gl_FragColor.a < alphaTest){discard;}"
 
 MeshMaterial.vertexHeader = "\
 precision mediump float;\

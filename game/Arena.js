@@ -86,6 +86,8 @@ function Arena()
 		//Eyebot depth
 		var model = OBJLoader.load(data[0], data[1], "data/models/eyebot");
 		model.material = new DissolveMaterial();
+		model.material.texture = new Texture("data/models/eyebot/Eyebot_d.jpg");
+		model.material.dissolveMap = new Texture("data/texture/noise.jpg");
 		model.position.set(-60,20,-100);
 		model.scale.set(0.5,0.5,0.5);
 		model.updateMatrix();

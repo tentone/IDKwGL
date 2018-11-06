@@ -18,6 +18,13 @@ function DissolveMaterial(name)
 	 * A sinosoidal function is used, fragments with value bellow the dissolve map intensity are discarded and a border is drawn.
 	 */
 	this.dissolveMap = null;
+
+	/**
+	 * Color to be used in the dissolve border.
+	 */
+ 	this.dissolveColor = new Color(1.0, 0.5, 0.0);
+
+	this.time = 0;
 }
 
 DissolveMaterial.prototype = Object.create(PhongMaterial.prototype);
@@ -40,6 +47,11 @@ DissolveMaterial.prototype.updateUniforms = function(renderer, gl, shader, camer
 	{
 		gl.uniform1i(shader.uniforms["hasDissolveMap"], 0);
 	}
+
+	this.time += 0.016;
+	gl.uniform1f(shader.uniforms["time"], this.time);
+
+	gl.uniform3f(shader.uniforms["dissolveColor"], this.dissolveColor.r, this.dissolveColor.g, this.dissolveColor.b);
 };
 
 DissolveMaterial.createShader = function(gl)
@@ -57,16 +69,40 @@ DissolveMaterial.registerUniforms = function(gl, shader)
 
 	shader.registerUniform("hasDissolveMap");
 	shader.registerUniform("dissolveMap");
+
+	shader.registerUniform("time");
+	shader.registerUniform("dissolveColor");
 };
 
 DissolveMaterial.fragmentHeader = PhongMaterial.fragmentHeader + "\
 \
 uniform bool hasDissolveMap;\
-uniform sampler2D dissolveMap;";
+uniform sampler2D dissolveMap;\
+\
+uniform float time;\
+uniform vec3 dissolveColor;";
+
+
+DissolveMaterial.fragmentDissolve = "\
+if(hasDissolveMap)\
+{\
+	float dissolveValue = texture2D(dissolveMap, vec2(fragmentUV.s, fragmentUV.t)).r;\
+	float progress = (cos(time * 0.2) + 1.0) / 2.0;\
+	\
+	if(dissolveValue < progress * 0.43)\
+	{\
+		gl_FragColor.xyz = dissolveColor.xyz;\
+	}\
+	\
+	if(dissolveValue < progress * 0.4)\
+	{\
+		discard;\
+	}\
+}";
 
 DissolveMaterial.fragmentShader = DissolveMaterial.fragmentHeader + MeshMaterial.fragmentLightStructs + MeshMaterial.fragmentHeaderLights + PhongMaterial.fragmentLightFunctions + "\
 \
 void main(void)\
 {\
-	" + BasicMaterial.fragmentBaseColor + PhongMaterial.fragmentLightCalculation + MeshMaterial.alphaTest + "\
+	" + BasicMaterial.fragmentBaseColor + PhongMaterial.fragmentLightCalculation + DissolveMaterial.fragmentDissolve + MeshMaterial.alphaTest + "\
 }"; 
