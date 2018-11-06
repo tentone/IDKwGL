@@ -61,6 +61,30 @@ function Arena()
 	this.model.updateMatrix();
 	this.scene.add(this.model);
 
+	//Eyebot dissolve
+	this.model = OBJLoader.load(FileLoader.loadText("data/models/eyebot/eyebot.obj"), FileLoader.loadText("data/models/eyebot/eyebot.mtl"), "data/models/eyebot");
+	this.model.material = new PhongMaterial();
+	this.model.position.set(30,20,-100);
+	this.model.scale.set(0.5,0.5,0.5);
+	this.model.updateMatrix();
+	this.scene.add(this.model);
+
+	//Eyebot depth
+	this.model = OBJLoader.load(FileLoader.loadText("data/models/eyebot/eyebot.obj"), FileLoader.loadText("data/models/eyebot/eyebot.mtl"), "data/models/eyebot");
+	this.model.material = new DepthMaterial();
+	this.model.position.set(-30,20,-100);
+	this.model.scale.set(0.5,0.5,0.5);
+	this.model.updateMatrix();
+	this.scene.add(this.model);
+
+	//Eyebot depth
+	this.model = OBJLoader.load(FileLoader.loadText("data/models/eyebot/eyebot.obj"), FileLoader.loadText("data/models/eyebot/eyebot.mtl"), "data/models/eyebot");
+	this.model.material = new DepthMaterial();
+	this.model.position.set(-60,20,-100);
+	this.model.scale.set(0.5,0.5,0.5);
+	this.model.updateMatrix();
+	this.scene.add(this.model);
+
 	//Asian Girl
 	this.model = OBJLoader.load(FileLoader.loadText("data/models/asiangirl/asiangirl.obj"), FileLoader.loadText("data/models/asiangirl/asiangirl.mtl"), "data/models/asiangirl");
 	this.model.position.set(-100,0,-100);
@@ -121,6 +145,7 @@ function Arena()
 	this.model = new Mesh(new BoxGeometry());
 	this.model.material = new PhongMaterial();
 	this.model.material.texture = new Texture("data/texture/wood_box.jpg");
+	//this.model.normalMap = new Texture("data/texture/crate_normal.jpg");
 	this.model.position.set(-200,5,0);
 	this.model.scale.set(5,5,5);
 	this.model.updateMatrix();
@@ -150,7 +175,6 @@ function Arena()
 
 	var floorMaterial = new PhongMaterial();
 	floorMaterial.texture = new Texture("data/texture/grass.jpg");
-	//floorMaterial.normalMap = new Texture("data/texture/normal.png");
 
 	var floorGeometry = new BoxGeometry();
 	floorGeometry.scaleUV(30, 30);

@@ -211,17 +211,17 @@ OBJLoader.loadMTL = function(data, path)
 			{
 				materials[index].texture = new Texture(path + "/" + tokens[1+offset]);
 			}
-			//Bump map
+			//Bump map | Normal Map
 			else if(tokens[offset] === "mapBump" || tokens[offset] === "bump")
 			{
-				materials[index].bumpMap = new Texture(path + "/" + tokens[1+offset]);
+				//materials[index].normalMap = new Texture(path + "/" + tokens[1+offset]);
 			}
 			//Ambient color
 			else if(tokens[offset] === "Ka")
 			{
-				materials[index].ambient.r = parseFloat(tokens[offset+1]);
-				materials[index].ambient.g = parseFloat(tokens[offset+2]);
-				materials[index].ambient.b = parseFloat(tokens[offset+3]);
+				materials[index].color.r = parseFloat(tokens[offset+1]);
+				materials[index].color.g = parseFloat(tokens[offset+2]);
+				materials[index].color.b = parseFloat(tokens[offset+3]);
 			}
 			//Diffuse color
 			else if(tokens[offset] === "Kd")

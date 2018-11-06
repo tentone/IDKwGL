@@ -7,26 +7,32 @@
  */
 function PhongMaterial(name)
 {
-	MeshMaterial.call(this);
+	BasicMaterial.call(this);
 
 	this.name = name;
 	this.type = "PhongMaterial";
 
 	/**
-	 * Color texture of this material. 
-	 */
-	this.texture = null;
-
-	/**
 	 * Normal vector map used for lighting calculation. 
 	 */
 	this.normalMap = null;
+
 	this.bumpMap = null;
 	this.specularMap = null;
 
-	this.ambient = new Color(1, 1, 1); //Ambient Value
-	this.diffuse = new Color(1, 1, 1); //Diffuse Value
-	this.specular = new Color(1, 1, 1); //Specular Value
+	/**
+	 * Diffuse color
+	 *
+	 * TODO
+	 */
+	this.diffuse = new Color(1, 1, 1);
+
+	/**
+	 * Specular hilight color
+	 *
+	 * TODO
+	 */
+	this.specular = new Color(1, 1, 1);
 
 	/**
 	 * Specular color intensity, phong constant range [1, 1000].
@@ -52,29 +58,13 @@ function PhongMaterial(name)
 	this.alpha = 1.0;
 }
 
-PhongMaterial.prototype = Object.create(MeshMaterial.prototype);
+PhongMaterial.prototype = Object.create(BasicMaterial.prototype);
 PhongMaterial.prototype.constructor = PhongMaterial;
 PhongMaterial.id = MathUtils.generateID();
 
-PhongMaterial.prototype.render = function(renderer, camera, object, scene)
+PhongMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera, object, scene)
 {
-	var gl = renderer.gl;
-
-	var shader = renderer.getShader(this.constructor);
-
-	gl.useProgram(shader.program);
-
-	//Alpha test
-	gl.uniform1f(shader.uniforms["alphaTest"], this.alphaTest);
-
-	//Camera
-	gl.uniform1f(shader.uniforms["near"], camera.near);
-	gl.uniform1f(shader.uniforms["far"], camera.far);
-
-	//Transformation matrices
-	gl.uniformMatrix4fv(shader.uniforms["projection"], false, camera.projectionMatrix.flatten());
-	gl.uniformMatrix4fv(shader.uniforms["view"], false, camera.transformationMatrix.flatten());
-	gl.uniformMatrix4fv(shader.uniforms["model"], false, object.transformationMatrix.flatten());
+	BasicMaterial.prototype.updateUniforms.call(this, renderer, gl, shader, camera, object, scene);
 
 	//Directinal lights
 	for(var i = 0; i < scene.directionalLights.length && i < Material.MAX_LIGHTS; i++)
@@ -105,29 +95,6 @@ PhongMaterial.prototype.render = function(renderer, camera, object, scene)
 		gl.uniform1f(shader.uniforms["pointLights[" + i + "].maxDistance"], scene.pointLights[i].maxDistance);
 	}
 
-	var buffers = renderer.getBuffers(object.geometry);
-
-	//Vertex position
-	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.vertexBuffer);
-	gl.vertexAttribPointer(shader.attributes["vertexPosition"], buffers.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-	//Vertex normal
-	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.normalBuffer);
-	gl.vertexAttribPointer(shader.attributes["vertexNormal"], buffers.normalBuffer.itemSize, gl.FLOAT, false, 0, 0);
-	
-	//Texture UV
-	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.uvBuffer);
-	gl.vertexAttribPointer(shader.attributes["vertexUV"], buffers.uvBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-	//Faces
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.facesBuffer);
-
-	//Texture
-	var texture = renderer.getTexture(this.texture);
-	gl.activeTexture(gl.TEXTURE0);
-	gl.bindTexture(gl.TEXTURE_2D, texture);
-	gl.uniform1i(shader.uniforms["texture"], 0);
-
 	//Normal map
 	if(this.normalMap !== null)
 	{
@@ -141,33 +108,8 @@ PhongMaterial.prototype.render = function(renderer, camera, object, scene)
 	{
 		gl.uniform1i(shader.uniforms["hasNormalMap"], 0);
 	}
-
-	//Enable backface culling
-	if(this.faceCulling)
-	{
-		gl.enable(gl.CULL_FACE);
-		gl.cullFace(this.faceCullingMode);
-	}
-
-	if(this.blending)
-	{
-		gl.enable(gl.BLEND);
-		gl.blendFunc(gl.SRC_ALPHA, this.blendingMode);
-	}
-
-	//Draw the triangles
-	gl.drawElements(object.mode, object.count, gl.UNSIGNED_SHORT, 0);
-
-	//Disable cullface
-	if(this.faceCulling)
-	{
-		gl.disable(gl.CULL_FACE);	
-	}
-	if(this.blending)
-	{
-		gl.disable(gl.BLEND);
-	}
 };
+
 
 PhongMaterial.createShader = function(gl)
 {
@@ -180,10 +122,7 @@ PhongMaterial.createShader = function(gl)
 
 PhongMaterial.registerUniforms = function(gl, shader)
 {
-	MeshMaterial.registerUniforms(gl, shader);
-
-	//Texture
-	shader.registerUniform("texture");
+	BasicMaterial.registerUniforms(gl, shader);
 
 	//Normal
 	shader.registerUniform("hasNormalMap");
@@ -193,7 +132,7 @@ PhongMaterial.registerUniforms = function(gl, shader)
 /**
  * Phong material fragment shader header.
  */
-PhongMaterial.fragmentHeader = MeshMaterial.fragmentHeader +  "\
+PhongMaterial.fragmentHeader = BasicMaterial.fragmentHeader +  "\
 \
 uniform bool hasNormalMap;\
 uniform sampler2D normalMap;";
@@ -267,7 +206,5 @@ PhongMaterial.fragmentShader = PhongMaterial.fragmentHeader + MeshMaterial.fragm
 \
 void main(void)\
 {\
-	gl_FragColor = texture2D(texture, vec2(fragmentUV.s, fragmentUV.t));\
-	\
-	" + PhongMaterial.fragmentLightCalculation + MeshMaterial.alphaTest + "\
+	" + BasicMaterial.fragmentBaseColor + "\n" + PhongMaterial.fragmentLightCalculation + "\n" + MeshMaterial.alphaTest + "\
 }"; 

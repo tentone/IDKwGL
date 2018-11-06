@@ -93,6 +93,37 @@ MeshMaterial.prototype.render = function(renderer, camera, object, scene)
 
 	gl.useProgram(shader.program);
 
+	this.updateUniforms(renderer, gl, shader, camera, object, scene);
+
+	//Enable backface culling
+	if(this.faceCulling)
+	{
+		gl.enable(gl.CULL_FACE);
+		gl.cullFace(this.faceCullingMode);
+	}
+
+	if(this.blending)
+	{
+		gl.enable(gl.BLEND);
+		gl.blendFunc(gl.SRC_ALPHA, this.blendingMode);
+	}
+
+	//Draw the triangles
+	gl.drawElements(object.mode, object.count, gl.UNSIGNED_SHORT, 0);
+
+	//Disable cullface
+	if(this.faceCulling)
+	{
+		gl.disable(gl.CULL_FACE);	
+	}
+	if(this.blending)
+	{
+		gl.disable(gl.BLEND);
+	}
+};
+
+MeshMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera, object, scene)
+{
 	//Alpha test
 	gl.uniform1f(shader.uniforms["alphaTest"], this.alphaTest);
 
@@ -121,40 +152,6 @@ MeshMaterial.prototype.render = function(renderer, camera, object, scene)
 
 	//Faces
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.facesBuffer);
-
-	//Enable backface culling
-	var texture = renderer.getTexture(this.texture);
-
-	//Set texture
-	gl.activeTexture(gl.TEXTURE0);
-	gl.bindTexture(gl.TEXTURE_2D, texture);
-	gl.uniform1i(shader.uniforms["texture"], 0);
-
-	//Enable backface culling
-	if(this.faceCulling)
-	{
-		gl.enable(gl.CULL_FACE);
-		gl.cullFace(this.faceCullingMode);
-	}
-
-	if(this.blending)
-	{
-		gl.enable(gl.BLEND);
-		gl.blendFunc(gl.SRC_ALPHA, this.blendingMode);
-	}
-
-	//Draw the triangles
-	gl.drawElements(object.mode, object.count, gl.UNSIGNED_SHORT, 0);
-
-	//Disable cullface
-	if(this.faceCulling)
-	{
-		gl.disable(gl.CULL_FACE);	
-	}
-	if(this.blending)
-	{
-		gl.disable(gl.BLEND);
-	}
 };
 
 /**
@@ -193,8 +190,6 @@ precision mediump float;\
 varying vec2 fragmentUV;\
 varying vec3 fragmentVertex;\
 varying vec3 fragmentNormal;\
-\
-uniform sampler2D texture;\
 \
 uniform mat4 model;\
 \

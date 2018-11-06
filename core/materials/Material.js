@@ -51,4 +51,4 @@ Material.prototype.render = function(renderer, camera, object, scene){};
 /**
  * Update the shdaer uniforms before rendering to the screen.
  */
-Material.prototype.updateUniforms = function(renderer, camera, object, scene){};
+Material.prototype.updateUniforms = function(renderer, gl, shader, camera, object, scene){};
