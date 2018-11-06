@@ -2,27 +2,50 @@
 
 function FileLoader(){}
 
-FileLoader.loadText = function(fname)
-{
-	var file = new XMLHttpRequest();
-	file.overrideMimeType("text/plain");
-	
-	var data = null;
+FileLoader.loadMultiple = function(files, onLoad)
+{	
+	var count = 0;
+	var responses = new Array(files.length);
 
-	//Request file to server
-	file.open("GET", fname, false);
-
-	//Get file
-	file.onreadystatechange = function()
+	function loadText(j)
 	{
-		if(file.status === 200 || file.status === 0)
+		FileLoader.loadText(files[j], false, function(data)
 		{
-			data = file.responseText;
-		}
+			console.log(j);
+
+			responses[j] = data;
+			count++;
+
+			if(count === files.length)
+			{
+				onLoad(responses);
+			}
+		});
 	}
 
-	//Send null to ensure that file was received
-	file.send(null);
+	for(var i = 0; i < files.length; i++)
+	{
+		loadText(i);
+	}
+};
 
+FileLoader.loadText = function(fname, sync, onLoad)
+{
+	if(sync === undefined)
+	{
+		sync = true;
+	}
+
+	var file = new XMLHttpRequest();
+	file.overrideMimeType("text/plain");
+	file.open("GET", fname, !sync);
+	file.onload = function()
+	{
+		if((file.status === 200 || file.status === 0) && onLoad !== undefined)
+		{
+			onLoad(file.response);
+		}
+	}
+	file.send(null);
 	return file.response;
 };

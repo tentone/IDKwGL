@@ -2,6 +2,8 @@
 
 function Arena()
 {
+	var self = this;
+
 	//Create scene and world
 	this.world = new World();
 	this.scene = new Scene();
@@ -55,51 +57,64 @@ function Arena()
 	this.world.addBody(new GameObject(this.model));
 
 	//Eyebot
-	this.model = OBJLoader.load(FileLoader.loadText("data/models/eyebot/eyebot.obj"), FileLoader.loadText("data/models/eyebot/eyebot.mtl"), "data/models/eyebot");
-	this.model.position.set(0,20,-100);
-	this.model.scale.set(0.5,0.5,0.5);
-	this.model.updateMatrix();
-	this.scene.add(this.model);
+	FileLoader.loadMultiple(["data/models/eyebot/eyebot.obj", "data/models/eyebot/eyebot.mtl"], function(data)
+	{
+		console.log(data);
 
-	//Eyebot dissolve
-	this.model = OBJLoader.load(FileLoader.loadText("data/models/eyebot/eyebot.obj"), FileLoader.loadText("data/models/eyebot/eyebot.mtl"), "data/models/eyebot");
-	this.model.material = new PhongMaterial();
-	this.model.position.set(30,20,-100);
-	this.model.scale.set(0.5,0.5,0.5);
-	this.model.updateMatrix();
-	this.scene.add(this.model);
+		var model = OBJLoader.load(data[0], data[1], "data/models/eyebot");
+		model.position.set(0,20,-100);
+		model.scale.set(0.5,0.5,0.5);
+		model.updateMatrix();
+		self.scene.add(model);
 
-	//Eyebot depth
-	this.model = OBJLoader.load(FileLoader.loadText("data/models/eyebot/eyebot.obj"), FileLoader.loadText("data/models/eyebot/eyebot.mtl"), "data/models/eyebot");
-	this.model.material = new DepthMaterial();
-	this.model.position.set(-30,20,-100);
-	this.model.scale.set(0.5,0.5,0.5);
-	this.model.updateMatrix();
-	this.scene.add(this.model);
+		//Eyebot color
+		var model = OBJLoader.load(data[0], data[1], "data/models/eyebot");
+		model.material = new PhongMaterial();
+		model.position.set(30,20,-100);
+		model.scale.set(0.5,0.5,0.5);
+		model.updateMatrix();
+		self.scene.add(model);
 
-	//Eyebot depth
-	this.model = OBJLoader.load(FileLoader.loadText("data/models/eyebot/eyebot.obj"), FileLoader.loadText("data/models/eyebot/eyebot.mtl"), "data/models/eyebot");
-	this.model.material = new DepthMaterial();
-	this.model.position.set(-60,20,-100);
-	this.model.scale.set(0.5,0.5,0.5);
-	this.model.updateMatrix();
-	this.scene.add(this.model);
+
+		//Eyebot depth
+		var model = OBJLoader.load(data[0], data[1], "data/models/eyebot");
+		model.material = new DepthMaterial();
+		model.position.set(-30,20,-100);
+		model.scale.set(0.5,0.5,0.5);
+		model.updateMatrix();
+		self.scene.add(model);
+
+
+		//Eyebot depth
+		var model = OBJLoader.load(data[0], data[1], "data/models/eyebot");
+		model.material = new DepthMaterial();
+		model.position.set(-60,20,-100);
+		model.scale.set(0.5,0.5,0.5);
+		model.updateMatrix();
+		self.scene.add(model);
+	});
 
 	//Asian Girl
-	this.model = OBJLoader.load(FileLoader.loadText("data/models/asiangirl/asiangirl.obj"), FileLoader.loadText("data/models/asiangirl/asiangirl.mtl"), "data/models/asiangirl");
-	this.model.position.set(-100,0,-100);
-	this.model.scale.set(0.15,0.15,0.15);
-	this.model.updateMatrix();
-	this.scene.add(this.model);
+	FileLoader.loadMultiple(["data/models/asiangirl/asiangirl.obj", "data/models/asiangirl/asiangirl.mtl"], function(data)
+	{
+		var model = OBJLoader.load(data[0], data[1], "data/models/asiangirl");
+		model.position.set(-100,0,-100);
+		model.scale.set(0.15,0.15,0.15);
+		model.updateMatrix();
+		self.scene.add(model);
+	});
 
 	//Bus
-	this.bus = OBJLoader.load(FileLoader.loadText("data/models/bus/bus.obj"), FileLoader.loadText("data/models/bus/bus.mtl"), "data/models/bus");
-	this.bus.scale.set(0.08, 0.08, 0.08);
-	this.bus.position.set(100, 19.8, 230);
-	this.bus.rotation.set(0, Math.PI, 0);
-	this.bus.updateMatrix();
-	this.scene.add(this.bus);
-	this.world.addBody(new GameObject(this.bus));
+	FileLoader.loadMultiple(["data/models/bus/bus.obj", "data/models/bus/bus.mtl"], function(data)
+	{
+		var bus = OBJLoader.load(data[0], data[1], "data/models/bus");
+		bus.scale.set(0.08, 0.08, 0.08);
+		bus.position.set(100, 19.8, 230);
+		bus.rotation.set(0, Math.PI, 0);
+		bus.updateMatrix();
+		self.scene.add(bus);
+		self.world.addBody(new GameObject(bus));
+	});
 	
 	//House
 	this.model = OBJLoader.load(house);
@@ -234,7 +249,7 @@ function Arena()
 	var merged = new Geometry();
 
 	//Merge grass geometry
-	for(var i = 0; i < 5000; i++)
+	for(var i = 0; i < 2000; i++)
 	{
 		var x = MathUtils.randomMod() * 50;
 		var z = MathUtils.randomMod() * 50;
