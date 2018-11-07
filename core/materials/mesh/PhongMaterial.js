@@ -26,21 +26,26 @@ function PhongMaterial(name)
 	 */
 	this.bumpMap = null;
 	
-	this.specularMap = null;
+	/** 
+	 * The specular map stores the specular intensity.
+	 *
+	 * TODO
+	 */
+	 this.specularMap = null;
 
 	/**
 	 * Diffuse color
 	 *
 	 * TODO
 	 */
-	this.diffuse = new Color(1, 1, 1);
+	this.diffuse = new Color(1.0, 1.0, 1.0);
 
 	/**
-	 * Specular hilight color
+	 * Specular highlight color
 	 *
 	 * TODO
 	 */
-	this.specular = new Color(1, 1, 1);
+	this.specular = new Color(1.0, 1.0, 1.0);
 
 	/**
 	 * Specular color intensity, phong constant range [1, 1000].

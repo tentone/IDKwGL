@@ -92,6 +92,17 @@ function Arena()
 		model.scale.set(0.5,0.5,0.5);
 		model.updateMatrix();
 		self.scene.add(model);
+
+		//Eyebot normal
+		var model = OBJLoader.load(data[0], data[1], "data/models/eyebot");
+		model.material = new NormalMaterial();
+		//model.material.texture = new Texture("data/models/eyebot/Eyebot_d.jpg");
+		//model.material.normalMap = new Texture("data/models/eyebot/Eyebot_n.jpg");
+		model.position.set(-90,20,-100);
+		model.scale.set(0.5,0.5,0.5);
+		model.updateMatrix();
+		self.scene.add(model);
+
 	});
 
 	//Asian Girl
