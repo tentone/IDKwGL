@@ -5,11 +5,20 @@ function NormalMaterial(name)
 	MeshMaterial.call(this);
 
 	this.type = "NormalMaterial";
+
+	this.inModelSpace = false;
 }
 
 NormalMaterial.prototype = Object.create(MeshMaterial.prototype);
 NormalMaterial.prototype.constructor = NormalMaterial;
 NormalMaterial.id = MathUtils.generateID();
+
+NormalMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera, object, scene)
+{
+	MeshMaterial.prototype.updateUniforms.call(this, renderer, gl, shader, camera, object, scene);
+
+	gl.uniform1i(shader.uniforms["inModelSpace"], this.inModelSpace ? 1 : 0);
+};
 
 NormalMaterial.createShader = function(gl)
 {
@@ -23,11 +32,27 @@ NormalMaterial.createShader = function(gl)
 NormalMaterial.registerUniforms = function(gl, shader)
 {
 	MeshMaterial.registerUniforms(gl, shader);
+
+	shader.registerUniform("inModelSpace");
 };
 
-NormalMaterial.fragmentShader = MeshMaterial.fragmentHeader + "\
+NormalMaterial.fragmentHeader = BasicMaterial.fragmentHeader +  "\
+\
+uniform bool inModelSpace;";
+
+NormalMaterial.fragmentShader = NormalMaterial.fragmentHeader + "\
 \
 void main(void)\
 {\
-	gl_FragColor = vec4(fragmentNormal, 1.0);\
+	if(inModelSpace)\
+	{\
+		vec3 normal = fragmentNormal * 0.5 + 0.5;\
+		gl_FragColor = vec4(normal, 1.0);\
+	}\
+	else\
+	{\
+		/* TODO */\
+		vec3 normal = fragmentNormal * 0.5 + 0.5;\
+		gl_FragColor = vec4(normal, 1.0);\
+	}\
 }";
