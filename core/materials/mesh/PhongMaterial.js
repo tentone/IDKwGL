@@ -178,10 +178,12 @@ vec3 lighIntesity = vec3(0.0, 0.0, 0.0);\
 vec3 normal;\
 if(hasNormalMap)\
 {\
-	vec3 normalValue = texture2D(normalMap, vec2(fragmentUV.s, fragmentUV.t)).rgb;\
-	normalValue = normalize(normalValue * 2.0 - 1.0);\
+	vec3 normalTexture = texture2D(normalMap, vec2(fragmentUV.s, fragmentUV.t)).rgb;\
 	\
-	vec4 temp = model * vec4(normalValue, 0.0);\
+	/* Tranform to -1, 1 */\
+	normalTexture = normalize(normalTexture * 2.0 - 1.0);\
+	\
+	vec4 temp = model * vec4(normalTexture, 0.0);\
 	normal = normalize(temp.xyz);\
 }\
 else\
