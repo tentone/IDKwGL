@@ -1,8 +1,14 @@
 ![alt tag](https://raw.githubusercontent.com/tentone/IDKwGL/master/data/idk.png)
 
-## IDKGL
+# IdkGL
  - A basic WebGL based graphic library for the web
- - Live demo tentone.github.io/IDKwGL
+ - Live demo scene at tentone.github.io/IDKwGL
+
+
+
+## Screenshots
+![alt tag](https://raw.githubusercontent.com/tentone/IDKwGL/master/data/screenshot/4.jpg)![alt tag](https://raw.githubusercontent.com/tentone/IDKwGL/master/data/screenshot/2.jpg)![alt tag](https://raw.githubusercontent.com/tentone/IDKwGL/master/data/screenshot/6.jpg)
+
 
 ## Features
  - Support for colored lighting
@@ -17,12 +23,10 @@
     - Particle system
     - Bitmap Fonts support with filtering
  - Mouse and keyboard input
-    - Math library with support for Vectors and Matrix operations
+- Math library with support for Vectors and Matrix operations
 
 
-## Screeshots
-![alt tag](https://raw.githubusercontent.com/tentone/IDKwGL/master/data/screenshot/4.jpg)![alt tag](https://raw.githubusercontent.com/tentone/IDKwGL/master/data/screenshot/2.jpg)![alt tag](https://raw.githubusercontent.com/tentone/IDKwGL/master/data/screenshot/6.jpg)
 
 
 ## License
- - Distributed under MIT license available on the github repository
+ - Distributed under MIT license available on the github repository.

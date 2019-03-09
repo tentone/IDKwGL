@@ -72,7 +72,7 @@ include("data/models/tank.js");
 //Game
 include("game/Player.js");
 include("game/GameObject.js");
-include("game/Referencial.js");
+include("game/Axis.js");
 include("game/Arena.js");
 
 //App class

@@ -34,8 +34,8 @@ function Arena()
 	this.directional.position.set(0.0, 2.0, 1.0);
 	this.scene.add(this.directional);
 
-	//Referencial
-	this.referential = new Referencial(this.scene);
+	//Axis
+	var axis = new Axis(this.scene);
 
 	//Skybox
 	this.skybox = OBJLoader.load(FileLoader.loadText("data/models/sphere.obj"));
@@ -47,14 +47,14 @@ function Arena()
 	this.scene.add(this.skybox);
 
 	//Tank
-	this.model = OBJLoader.load(tank);
-	this.model.material = new PhongMaterial();
-	this.model.material.texture = new Texture("data/texture/tank.jpg");
-	this.model.scale.set(15, 15, 15);
-	this.model.position.set(-250,0,100);
-	this.model.updateMatrix();
-	this.scene.add(this.model);
-	this.world.addBody(new GameObject(this.model));
+	var model = OBJLoader.load(tank);
+	model.material = new PhongMaterial();
+	model.material.texture = new Texture("data/texture/tank.jpg");
+	model.scale.set(15, 15, 15);
+	model.position.set(-250,0,100);
+	model.updateMatrix();
+	this.scene.add(model);
+	this.world.addBody(new GameObject(model));
 
 	//Eyebot
 	FileLoader.loadMultiple(["data/models/eyebot/eyebot.obj", "data/models/eyebot/eyebot.mtl"], function(data)
@@ -73,7 +73,6 @@ function Arena()
 		model.updateMatrix();
 		self.scene.add(model);
 
-
 		//Eyebot depth
 		var model = OBJLoader.load(data[0], data[1], "data/models/eyebot");
 		model.material = new DepthMaterial();
@@ -82,11 +81,11 @@ function Arena()
 		model.updateMatrix();
 		self.scene.add(model);
 
-
-		//Eyebot depth
+		//Eyebot dissolve
 		var model = OBJLoader.load(data[0], data[1], "data/models/eyebot");
 		model.material = new DissolveMaterial();
 		model.material.texture = new Texture("data/models/eyebot/Eyebot_d.jpg");
+		model.material.normalMap = new Texture("data/models/eyebot/Eyebot_n.jpg");
 		model.material.dissolveMap = new Texture("data/texture/noise.jpg");
 		model.position.set(-60,20,-100);
 		model.scale.set(0.5,0.5,0.5);
@@ -96,8 +95,7 @@ function Arena()
 		//Eyebot normal
 		var model = OBJLoader.load(data[0], data[1], "data/models/eyebot");
 		model.material = new NormalMaterial();
-		//model.material.texture = new Texture("data/models/eyebot/Eyebot_d.jpg");
-		//model.material.normalMap = new Texture("data/models/eyebot/Eyebot_n.jpg");
+		model.material.normalMap = new Texture("data/models/eyebot/Eyebot_n.jpg");
 		model.position.set(-90,20,-100);
 		model.scale.set(0.5,0.5,0.5);
 		model.updateMatrix();
@@ -128,76 +126,75 @@ function Arena()
 	});
 	
 	//House
-	this.model = OBJLoader.load(house);
-	this.model.material = new PhongMaterial();
-	this.model.material.texture = new Texture("data/texture/house.jpg");
-	this.model.scale.set(7, 7, 7);
-	this.model.position.set(300,0,0);
-	this.model.updateMatrix();
-	this.scene.add(this.model);
-	this.world.addBody(new GameObject(this.model));
+	model = OBJLoader.load(house);
+	model.material = new PhongMaterial();
+	model.material.texture = new Texture("data/texture/house.jpg");
+	model.scale.set(7, 7, 7);
+	model.position.set(300,0,0);
+	model.updateMatrix();
+	this.scene.add(model);
+	this.world.addBody(new GameObject(model));
 
-	this.model = this.model.clone();
-	this.model.position.set(300,0,80);
-	this.model.updateMatrix();
-	this.scene.add(this.model);
-	this.world.addBody(new GameObject(this.model));
+	model = model.clone();
+	model.position.set(300,0,80);
+	model.updateMatrix();
+	this.scene.add(model);
+	this.world.addBody(new GameObject(model));
 
-	this.model = this.model.clone();
-	this.model.position.set(300,0,160);
-	this.model.updateMatrix();
-	this.scene.add(this.model);
-	this.world.addBody(new GameObject(this.model));
+	model = model.clone();
+	model.position.set(300,0,160);
+	model.updateMatrix();
+	this.scene.add(model);
+	this.world.addBody(new GameObject(model));
 
-	this.model = this.model.clone();
-	this.model.position.set(200,0,0);
-	this.model.updateMatrix();
-	this.scene.add(this.model);
-	this.world.addBody(new GameObject(this.model));
+	model = model.clone();
+	model.position.set(200,0,0);
+	model.updateMatrix();
+	this.scene.add(model);
+	this.world.addBody(new GameObject(model));
 
-	this.model = this.model.clone();
-	this.model.position.set(200,0,80);
-	this.model.updateMatrix();
-	this.scene.add(this.model);
-	this.world.addBody(new GameObject(this.model));
+	model = model.clone();
+	model.position.set(200,0,80);
+	model.updateMatrix();
+	this.scene.add(model);
+	this.world.addBody(new GameObject(model));
 
-	this.model = this.model.clone();
-	this.model.position.set(200,0,160);
-	this.model.updateMatrix();
-	this.scene.add(this.model);
-	this.world.addBody(new GameObject(this.model));
+	model = model.clone();
+	model.position.set(200,0,160);
+	model.updateMatrix();
+	this.scene.add(model);
+	this.world.addBody(new GameObject(model));
 
 	//Crate Pile
-	this.model = new Mesh(new BoxGeometry());
-	this.model.material = new PhongMaterial();
-	this.model.material.texture = new Texture("data/texture/wood_box.jpg");
-	//this.model.normalMap = new Texture("data/texture/crate_normal.jpg");
-	this.model.position.set(-200,5,0);
-	this.model.scale.set(5,5,5);
-	this.model.updateMatrix();
-	this.scene.add(this.model);
-	this.world.addBody(new GameObject(this.model));
+	model = new Mesh(new BoxGeometry());
+	model.material = new PhongMaterial();
+	model.material.texture = new Texture("data/texture/wood_box.jpg");
+	model.position.set(-200,5,0);
+	model.scale.set(5,5,5);
+	model.updateMatrix();
+	this.scene.add(model);
+	this.world.addBody(new GameObject(model));
 
-	this.model = this.model.clone();
-	this.model.position.set(-200,15,0);
-	this.model.scale.set(5,5,5);
-	this.model.updateMatrix();
-	this.scene.add(this.model);
-	this.world.addBody(new GameObject(this.model));
+	model = model.clone();
+	model.position.set(-200,15,0);
+	model.scale.set(5,5,5);
+	model.updateMatrix();
+	this.scene.add(model);
+	this.world.addBody(new GameObject(model));
 
-	this.model = this.model.clone();
-	this.model.position.set(-190,5,0);
-	this.model.scale.set(5,5,5);
-	this.model.updateMatrix();
-	this.scene.add(this.model);
-	this.world.addBody(new GameObject(this.model));
+	model = model.clone();
+	model.position.set(-190,5,0);
+	model.scale.set(5,5,5);
+	model.updateMatrix();
+	this.scene.add(model);
+	this.world.addBody(new GameObject(model));
 
-	this.model = this.model.clone();
-	this.model.position.set(-200,5,10);
-	this.model.scale.set(5,5,5);
-	this.model.updateMatrix();
-	this.scene.add(this.model);
-	this.world.addBody(new GameObject(this.model));
+	model = model.clone();
+	model.position.set(-200,5,10);
+	model.scale.set(5,5,5);
+	model.updateMatrix();
+	this.scene.add(model);
+	this.world.addBody(new GameObject(model));
 
 	var floorMaterial = new PhongMaterial();
 	floorMaterial.texture = new Texture("data/texture/grass.jpg");
@@ -206,12 +203,12 @@ function Arena()
 	floorGeometry.scaleUV(30, 30);
 
 	//Floor
-	this.model = new Mesh(floorGeometry, floorMaterial);
-	this.model.position.set(0, -100, 0);
-	this.model.scale.set(900, 100, 900);
-	this.model.updateMatrix();
-	this.scene.add(this.model);
-	this.world.addBody(new GameObject(this.model));
+	model = new Mesh(floorGeometry, floorMaterial);
+	model.position.set(0, -100, 0);
+	model.scale.set(900, 100, 900);
+	model.updateMatrix();
+	this.scene.add(model);
+	this.world.addBody(new GameObject(model));
 	
 	var wallMaterial = new PhongMaterial();
 	wallMaterial.texture = new Texture("data/texture/wall.png");
@@ -220,33 +217,33 @@ function Arena()
 	wallGeometry.scaleUV(20, 1);
 
 	//Walls
-	this.model = new Mesh(wallGeometry, wallMaterial);
-	this.model.position.set(0, 0, -300);
-	this.model.scale.set(300, 50, 1);
-	this.model.updateMatrix();
-	this.scene.add(this.model);
-	this.world.addBody(new GameObject(this.model));
+	model = new Mesh(wallGeometry, wallMaterial);
+	model.position.set(0, 0, -300);
+	model.scale.set(300, 50, 1);
+	model.updateMatrix();
+	this.scene.add(model);
+	this.world.addBody(new GameObject(model));
 
-	this.model = new Mesh(wallGeometry, wallMaterial);
-	this.model.position.set(0, 0, 300);
-	this.model.scale.set(300, 50, 1);
-	this.model.updateMatrix();
-	this.scene.add(this.model);
-	this.world.addBody(new GameObject(this.model));
+	model = new Mesh(wallGeometry, wallMaterial);
+	model.position.set(0, 0, 300);
+	model.scale.set(300, 50, 1);
+	model.updateMatrix();
+	this.scene.add(model);
+	this.world.addBody(new GameObject(model));
 
-	this.model = new Mesh(wallGeometry, wallMaterial);
-	this.model.position.set(-300, 0, 0);
-	this.model.scale.set(1, 50, 300);
-	this.model.updateMatrix();
-	this.scene.add(this.model);
-	this.world.addBody(new GameObject(this.model));
+	model = new Mesh(wallGeometry, wallMaterial);
+	model.position.set(-300, 0, 0);
+	model.scale.set(1, 50, 300);
+	model.updateMatrix();
+	this.scene.add(model);
+	this.world.addBody(new GameObject(model));
 
-	this.model = new Mesh(wallGeometry, wallMaterial);
-	this.model.position.set(300, 0, 0);
-	this.model.scale.set(1, 50, 300);
-	this.model.updateMatrix();
-	this.scene.add(this.model);
-	this.world.addBody(new GameObject(this.model));
+	model = new Mesh(wallGeometry, wallMaterial);
+	model.position.set(300, 0, 0);
+	model.scale.set(1, 50, 300);
+	model.updateMatrix();
+	this.scene.add(model);
+	this.world.addBody(new GameObject(model));
 
 	var grassMaterial = new GrassMaterial();
 	grassMaterial.texture = new Texture("data/texture/grass.png");
@@ -287,37 +284,41 @@ function Arena()
 	this.scene.add(grass);
 
 	//Tank smoke
-	this.model = new Sprite();
-	this.model.texture = new Texture("data/texture/smoke_2.png");
-	this.particle = new ParticleEmitter(this.model, new Vector3(-250, 8, 100), new Vector3(0,0.7,0), new Vector3(0.3,0.5,0.3), 30, 10, 150, 150, 50);
-	this.scene.add(this.particle);
+	var smoke = new Sprite();
+	smoke.texture = new Texture("data/texture/smoke_2.png");
 
-	//Bullet
-	/*this.bullet = new Mesh();
-	this.bullet = OBJLoader.load(FileLoader.loadText("data/models/skybox/skybox.obj"));
-	this.bullet.scale.set(0.2,0.2,0.2);
-	this.bullet.position.set(0,8,0);
-	this.bullet.updateMatrix();
-	
-	this.bulletParticle = new Particle(this.bullet, new Vector3(0,8,0), new Vector3(0,0,0), 1, 10000);
-	this.bulletParticleList = [];*/
+	this.particle = new ParticleEmitter(smoke, new Vector3(-250, 8, 100), new Vector3(0, 0.7, 0), new Vector3(0.3, 0.5, 0.3), 30, 10, 150, 150, 50);
+	this.scene.add(this.particle);
 
 	//Player
 	this.player = new Player();
 	this.world.addBody(this.player);
-	this.world.body[this.world.body.length-1].setStatic(false);
+	this.world.body[this.world.body.length - 1].setStatic(false);
 
 	//Test Cube
 	this.cube = new Mesh(new BoxGeometry());
 	this.cube.material = new PhongMaterial();
-	this.cube.material.texture = new Texture("data/texture/wood_box.jpg");//font.pageTexture[0]);
+	this.cube.material.texture = new Texture("data/texture/wood_box.jpg");
 	this.cube.position.set(0,0,0);
 	this.cube.scale.set(5,5,5);
 	this.cube.updateMatrix();
 	this.scene.add(this.cube);
 
+
+	//Bullet
+	/*
+	this.bullet = new Mesh();
+	this.bullet = OBJLoader.load(FileLoader.loadText("data/models/skybox/skybox.obj"));
+	this.bullet.scale.set(0.2,0.2,0.2);
+	this.bullet.position.set(0,8,0);
+	this.bullet.updateMatrix();
+	this.bulletParticle = new Particle(this.bullet, new Vector3(0,8,0), new Vector3(0,0,0), 1, 10000);
+	this.bulletParticleList = [];
+	*/
+
 	//Weapon scene
-	/*this.cameraWeapon = new PerspectiveCamera(1, 70, 1);
+	/*
+	this.cameraWeapon = new PerspectiveCamera(1, 70, 1);
 
 	this.sceneWeapon = new Scene();
 
@@ -325,22 +326,28 @@ function Arena()
 	this.weapon.scale.set(10, 10, 10);
 	this.weapon.position.set(-0.3,5,0.5);
 	this.weapon.updateMatrix();
-	this.scene.add(this.weapon);*/
+	this.scene.add(this.weapon);
+	*/
 
 	/*
+	this.hudCamera = new Ort
+	this.hudScene = new Scene();
+
 	//IDK Logo
 	this.idk = new Sprite();
-	this.idk.setTexture(Texture.createTexture("data/texture/idk.png"));
+	this.idk.texture = new Texture("data/texture/idk.png");
 	this.idk.scale.set(this.hud_camera.size.y/2,this.hud_camera.size.y/4,1);
 	this.idk.origin.set(this.hud_camera.size.x/3,0,0);
 	this.idk.position.set(this.hud_camera.size.x-1,-this.hud_camera.size.y+1,0);
 	this.idk.update();
+	this.hudScene.add(this.idk);
 	
 	//Crosshair
 	this.cross = new Sprite();
-	this.cross.setTexture(Texture.createTexture("data/texture/cross.png"));
+	this.cross.texture = new Texture("data/texture/cross.png");
 	this.cross.position.set(-0.5, -0.5, 0);
 	this.cross.update();
+	this.hudScene.add(this.cross);
 	*/
 }
 
@@ -435,10 +442,8 @@ Arena.prototype.update = function()
 
 Arena.prototype.draw = function(renderer)
 {
-	//renderer.autoClear = true;
+	renderer.autoClear = true;
 	renderer.render(this.scene, this.player.camera);
-	//renderer.render(this.sceneWeapon, this.player.camera);
-	//renderer.autoClear = false;
 };
 
 Arena.prototype.resize = function(width, height)
