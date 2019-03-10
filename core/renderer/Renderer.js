@@ -99,7 +99,7 @@ Renderer.prototype.render = function(scene, camera)
 
 	if(this.autoClear)
 	{
-		gl.clearColor(this.clearColor.r, this.clearColor.g, this.clearColor.b, 1);
+		gl.clearColor(this.clearColor.r, this.clearColor.g, this.clearColor.b, 1.0);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
 	}
 
@@ -113,7 +113,6 @@ Renderer.prototype.render = function(scene, camera)
 
 	gl.disable(gl.DEPTH_TEST);
 };
-
 
 /**
  * Get GL texture from texture resource.

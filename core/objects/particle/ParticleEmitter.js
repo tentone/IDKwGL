@@ -5,7 +5,7 @@
  *
  * Particle have a speed, scale and time limit and wrap a drawable object.
  */
-function ParticleEmitter(object, position, speed, speedVar, scale, scaleVar, time, timeVar, count)
+function ParticleEmitter(object, positionBase, speedBase, speedDelta, scaleBase, scaleDelta, lifetime, lifetimeDelta, count)
 {
 	/** 
 	 * Base object of the emitter, the object is cloned for each particle.
@@ -16,46 +16,54 @@ function ParticleEmitter(object, position, speed, speedVar, scale, scaleVar, tim
 	 * Particles in the emitter, to be updated and rendered.
 	 */
 	this.particles = [];
-
-	/**
-	 * Number of particles in the emitter.
-	 */
-	this.count = count;
 	
 	/** 
 	 * Position of the particles.
 	 */
-	this.position = position;
-	this.positionVar = new Vector3(0, 0, 0);
+	this.positionBase = positionBase;
+	this.positionDelta = new Vector3(0, 0, 0);
 
 	/**
 	 * Base speed of the particle moving.
 	 */
-	this.speed = speed;
-	this.speedVar = speedVar;
+	this.speedBase = speedBase;
+	this.speedDelta = speedDelta;
 	
 	/**
 	 * Base scale of the particle.
 	 */
-	this.scale = scale;
-	this.scaleVar = scaleVar;
+	this.scaleBase = scaleBase;
+	this.scaleDelta = scaleDelta;
 	
 	/**
 	 * Lifetime of a individual particle.
 	 */
-	this.time = time;
-	this.timeVar = timeVar;
-	
-	for(var i = 0; i < this.count; i++)
-	{
-		var speed = new Vector3();
-		speed.set(this.speed.x + this.speedVar.x * MathUtils.randomMod(), this.speed.y + this.speedVar.y * MathUtils.randomMod(), this.speed.z + this.speedVar.z * MathUtils.randomMod());
+	this.lifetime = lifetime;
+	this.lifetimeDelta = lifetimeDelta;
 
-		this.particles.push(new Particle(this.object, this.position, speed, this.scale + this.scaleVar * MathUtils.randomMod(), this.time + this.timeVar * MathUtils.randomMod()));
+	for(var i = 0; i < count; i++)
+	{
+		var particle = new Particle(this.object.clone());
+		this.resetParticle(particle);
+		this.particles.push(particle);
 	}
 }
 
 ParticleEmitter.prototype.constructor = ParticleEmitter;
+
+//ParticleEmitter.prototype = Object.create(Object3D.prototype);
+ParticleEmitter.prototype.isObject3D = true;
+
+/** 
+ * Reset particle properties based on the emitter configuration.
+ */
+ParticleEmitter.prototype.resetParticle = function(particle)
+{
+	particle.speed.setRandVar(this.speedBase, this.speedDelta);
+	particle.object.scale.setScalar(this.scaleBase + this.scaleDelta * MathUtils.randomMod());
+	particle.object.position.setRandVar(this.positionBase, this.positionDelta);
+	particle.time = this.lifetime + this.lifetimeDelta * MathUtils.randomMod();
+};
 
 /**
  * Update Particles position.
@@ -66,16 +74,9 @@ ParticleEmitter.prototype.update = function()
 	{
 		this.particles[i].update();
 
-		//Reset particle
 		if(this.particles[i].time < 0)
 		{
-			this.particles[i].object.position.copy(this.position);
-			
-			var scale = this.scale + this.scaleVar * MathUtils.randomMod();
-			this.particles[i].object.scale.set(scale, scale, scale);
-
-			this.particles[i].time = this.time + this.timeVar * MathUtils.randomMod();
-			this.particles[i].speed.set(this.speed.x + this.speedVar.x * MathUtils.randomMod(), this.speed.y + this.speedVar.y * MathUtils.randomMod(), this.speed.z + this.speedVar.z * MathUtils.randomMod());
+			this.resetParticle(this.particles[i]);
 		}
 	}
 };

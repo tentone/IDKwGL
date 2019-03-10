@@ -15,6 +15,16 @@ Vector3.cross = function(a, b)
     return new Vector3(a.y*b.z - a.z*b.y, a.z*b.x - a.x*b.z, a.x*b.y - a.y*b.x);
 }
 
+/** 
+ * Copy value and a apply a random variation to the vector.
+ */
+Vector3.prototype.setRandVar = function(base, variation)
+{
+	this.x = base.x + variation.x * MathUtils.randomMod();
+	this.y = base.y + variation.y * MathUtils.randomMod();
+	this.z = base.z + variation.z * MathUtils.randomMod();
+};
+
 Vector3.prototype.cross = function(a, b)
 {
 	this.set(a.y*b.z - a.z*b.y, a.z*b.x - a.x*b.z, a.x*b.y - a.y*b.x);
@@ -26,6 +36,18 @@ Vector3.prototype.copy = function(vector)
 	this.y = vector.y;
 	this.z = vector.z;
 }
+
+
+/**
+ * Set all values of the vector to the same scalar.
+ */
+Vector3.prototype.setScalar = function(v)
+{
+	this.x = v;
+	this.y = v;
+	this.z = v;
+}
+
 
 //Change all values at once
 Vector3.prototype.set = function(x, y, z)
@@ -102,17 +124,22 @@ Vector3.prototype.lengthSquared = function()
 };
 
 //Round all values close to zero to zero
-Vector3.prototype.roundCloseToZero = function()
+Vector3.prototype.roundCloseToZero = function(tolerance)
 {
-	if(MathUtils.inRange(this.x, 0, 0.000001))
+	if(tolerance === undefined)
+	{
+		tolerance = 1e-5;
+	}
+
+	if(MathUtils.inRange(this.x, -tolerance, tolerance))
 	{
 		this.x = 0;
 	}
-	if(MathUtils.inRange(this.y, 0, 0.000001))
+	if(MathUtils.inRange(this.y, -tolerance, tolerance))
 	{
 		this.y = 0;
 	}
-	if(MathUtils.inRange(this.z, 0, 0.000001))
+	if(MathUtils.inRange(this.z, -tolerance, tolerance))
 	{
 		this.z = 0;
 	}

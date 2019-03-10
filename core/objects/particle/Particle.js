@@ -5,15 +5,24 @@
  *
  * Wraps a object to be rendered on th particle position.
  */
-function Particle(object, position, speed, scale, time)
+function Particle(object)
 {
+	/**
+	 * Object of this particle instance (clone of the object in the emitter).
+	 */
 	this.object = object;
-	this.object.position.set(position.x, position.y, position.z);
-	this.object.scale.set(scale, scale, scale);
 
-	this.speed = new Vector3(speed.x, speed.y, speed.z);
+	/** 
+	 * Speed of the particle.
+	 */
+	this.speed = new Vector3();
 
-	this.time = time;
+	/**
+	 * Life time of the particle.
+	 *
+	 * When it gets to zero the particle needs to be reset.
+	 */
+	this.time = 0;
 }
 
 Particle.prototype.constructor = Particle;
