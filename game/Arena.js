@@ -38,10 +38,13 @@ function Arena()
 	var axis = new Axis(this.scene);
 
 	//Skybox
-	this.skybox = OBJLoader.load(FileLoader.loadText("data/models/sphere.obj"));
-	this.skybox.material = new BasicMaterial();
-	this.skybox.material.texture = new Texture("data/texture/box.jpg");
-	this.skybox.material.faceCullingMode = MeshMaterial.FRONT;
+	var geometry = new SphereGeometry(1.0 32, 32);
+	
+	var material = new BasicMaterial();
+	material.texture = new Texture("data/texture/box.jpg");
+	material.faceCullingMode = MeshMaterial.FRONT;
+
+	this.skybox = new Mesh(geometry, material);
 	this.skybox.scale.set(800, 800, 800);
 	this.skybox.updateMatrix();
 	this.scene.add(this.skybox);

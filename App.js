@@ -33,6 +33,7 @@ include("core/geometry/Geometry.js");
 include("core/geometry/BoxGeometry.js");
 include("core/geometry/PlaneGeometry.js");
 include("core/geometry/GrassGeometry.js");
+include("core/geometry/SphereGeometry.js");
 
 include("core/materials/Material.js");
 include("core/materials/mesh/MeshMaterial.js");
