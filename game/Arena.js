@@ -14,19 +14,19 @@ function Arena()
 
 	//Lights
 	this.lightA = new PointLight();
-	this.lightA.color.set(1.0, 0.0, 0.0);
+	this.lightA.color.set(1.5, 0.0, 0.0);
 	this.scene.add(this.lightA);
 
 	this.lightB = new PointLight();
-	this.lightB.color.set(0.0, 0.0, 1.5);
+	this.lightB.color.set(0.0, 0.0, 2.0);
 	this.scene.add(this.lightB);
 
 	this.lightC = new PointLight();
-	this.lightC.color.set(0.0, 0.7, 0.0);
+	this.lightC.color.set(0.0, 1.0, 0.0);
 	this.scene.add(this.lightC);
 
 	this.ambient = new AmbientLight();
-	this.ambient.color.set(0.1, 0.1, 0.1);
+	this.ambient.color.set(0.2, 0.2, 0.2);
 	this.scene.add(this.ambient);
 
 	this.directional = new DirectionalLight();
@@ -40,7 +40,7 @@ function Arena()
 	//Skybox
 	this.skybox = OBJLoader.load(FileLoader.loadText("data/models/sphere.obj"));
 	this.skybox.material = new BasicMaterial();
-	this.skybox.material.texture = new Texture("data/texture/sky.jpg");
+	this.skybox.material.texture = new Texture("data/texture/box.jpg");
 	this.skybox.material.faceCullingMode = MeshMaterial.FRONT;
 	this.skybox.scale.set(800, 800, 800);
 	this.skybox.updateMatrix();
