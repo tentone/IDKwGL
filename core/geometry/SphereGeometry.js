@@ -40,7 +40,8 @@ function SphereGeometry(radius, widthSegments, heightSegments, phiStart, phiLeng
 			this.vertex.push(vertex.x, vertex.y, vertex.z);
 
 			// normal
-			normal.set(vertex.x, vertex.y, vertex.z).normalize();
+			normal.set(vertex.x, vertex.y, vertex.z);
+			normal.normalize();
 			this.normals.push(normal.x, normal.y, normal.z);
 
 			// uv
