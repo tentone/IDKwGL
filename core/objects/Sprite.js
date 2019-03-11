@@ -97,18 +97,17 @@ Sprite.createShader = function(gl)
 	\
 	void main(void)\
 	{\
-		\
 		mat4 matrix = view * model;\
 		\
-		matrix[0][0] = 60.0;\
+		matrix[0][0] = model[0][0];\
 		matrix[0][1] = 0.0;\
 		matrix[0][2] = 0.0;\
 		matrix[1][0] = 0.0;\
-		matrix[1][1] = 60.0;\
+		matrix[1][1] = model[1][1];\
 		matrix[1][2] = 0.0;\
 		matrix[2][0] = 0.0;\
 		matrix[2][1] = 0.0;\
-		matrix[2][2] = 60.0;\
+		matrix[2][2] = model[2][2];\
 		\
 		gl_Position =  projection * matrix * vec4(vertexPosition, 1.0);\
 		pixelUV = vertexUV;\

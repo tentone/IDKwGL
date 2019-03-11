@@ -12,14 +12,15 @@ function OrthographicCamera(height, width)
 	this.type = "OrthographicCamera";
 
 	/**
+	 * Virtual projection size.
+	 */
+	this.size = new Vector2(width, height);
+
+	/**
 	 * Aspect ratio of the view.
 	 */
 	this.aspect = width / height;
 
-	/**
-	 * Virtual projection size.
-	 */
-	this.size = new Vector2(width, height);
 
 	this.updateProjectionMatrix();
 }
@@ -30,13 +31,12 @@ OrthographicCamera.prototype.constructor = OrthographicCamera;
 
 OrthographicCamera.prototype.updateProjectionMatrix = function()
 {
-	this.projectionMatrix.makeOrthographic(-this.size.x, this.size.x, this.size.y, -this.size.y, this.near, this.far);
+	this.projectionMatrix.makeOrthographic(-this.size.x / 2, this.size.x / 2, this.size.y / 2, -this.size.y / 2, this.near, this.far);
 };
 
 OrthographicCamera.prototype.resize = function(x, y)
 {
 	this.aspect = x / y;
-	this.size = new Vector2(this.size.y * this.aspect, this.size.y);
-
+	this.size = new Vector2(x, y);
 	this.updateProjectionMatrix();
 };

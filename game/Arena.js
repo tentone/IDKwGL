@@ -42,7 +42,7 @@ function Arena()
 	this.skybox.material = new BasicMaterial();
 	this.skybox.material.texture = new Texture("data/texture/sky.jpg");
 	this.skybox.material.faceCullingMode = MeshMaterial.FRONT;
-	this.skybox.scale.set(800,800,800);
+	this.skybox.scale.set(800, 800, 800);
 	this.skybox.updateMatrix();
 	this.scene.add(this.skybox);
 
@@ -283,13 +283,6 @@ function Arena()
 	grass.updateMatrix();
 	this.scene.add(grass);
 
-	//Tank smoke
-	var smoke = new Sprite();
-	smoke.texture = new Texture("data/texture/smoke_2.png");
-
-	this.particle = new ParticleEmitter(smoke, new Vector3(-250, 8, 100), new Vector3(0, 0.7, 0), new Vector3(0.3, 0.5, 0.3), 30, 10, 150, 150, 50);
-	this.scene.add(this.particle);
-
 	//Player
 	this.player = new Player();
 	this.world.addBody(this.player);
@@ -304,6 +297,47 @@ function Arena()
 	this.cube.updateMatrix();
 	this.scene.add(this.cube);
 
+	//Smoke
+	var smoke = new Sprite();
+	smoke.texture = new Texture("data/texture/smoke_2.png");
+
+	this.particle = new ParticleEmitter(smoke, new Vector3(-250, 8, 100), new Vector3(0, 0.7, 0), new Vector3(0.3, 0.5, 0.3), 30, 10, 150, 150, 50);
+	this.scene.add(this.particle);
+
+	//Weapon scene
+	this.weaponCamera = new PerspectiveCamera(1, 70, 1);
+	this.weaponScene = new Scene();
+
+	this.weapon = OBJLoader.load(FileLoader.loadText("data/models/pulserifle/pulserifle.obj"));
+	this.weapon.geometry.computeNormals();
+	this.weapon.material = new PhongMaterial();
+	this.weapon.material.texture = new Texture("data/models/pulserifle/tex1.jpg");
+	this.weapon.scale.set(10, 10, 10);
+	this.weapon.position.set(1.5, -2, -3);
+	this.weapon.rotation.set(0, Math.PI, 0);
+	this.weapon.updateMatrix();
+	this.weaponScene.add(this.weapon);
+
+	//HUD Scene
+	this.hudCamera = new OrthographicCamera(1, 1);
+	this.hudScene = new Scene();
+
+	//IDK Logo
+	this.idk = new Sprite();
+	this.idk.texture = new Texture("data/texture/idk.png");
+	this.idk.scale.set(20, 10, 1);
+	this.idk.position.set(60, -45, -1);
+	this.idk.updateMatrix();
+	this.hudScene.add(this.idk);
+	
+	//Crosshair
+	this.cross = new Sprite();
+	this.cross.texture = new Texture("data/texture/cross.png");
+	this.cross.scale.set(4, 4, 1);
+	this.cross.position.set(-2, -2, -1);
+	this.cross.updateMatrix();
+	this.hudScene.add(this.cross);
+
 
 	//Bullet
 	/*
@@ -315,45 +349,10 @@ function Arena()
 	this.bulletParticle = new Particle(this.bullet, new Vector3(0,8,0), new Vector3(0,0,0), 1, 10000);
 	this.bulletParticleList = [];
 	*/
-
-	//Weapon scene
-	/*
-	this.cameraWeapon = new PerspectiveCamera(1, 70, 1);
-
-	this.sceneWeapon = new Scene();
-
-	this.weapon = OBJLoader.load(FileLoader.loadText("data/models/pulserifle/pulserifle.obj"), FileLoader.loadText("data/models/pulserifle/pulserifle.mtl"), "data/models/pulserifle");
-	this.weapon.scale.set(10, 10, 10);
-	this.weapon.position.set(-0.3,5,0.5);
-	this.weapon.updateMatrix();
-	this.scene.add(this.weapon);
-	*/
-
-	/*
-	this.hudCamera = new Ort
-	this.hudScene = new Scene();
-
-	//IDK Logo
-	this.idk = new Sprite();
-	this.idk.texture = new Texture("data/texture/idk.png");
-	this.idk.scale.set(this.hud_camera.size.y/2,this.hud_camera.size.y/4,1);
-	this.idk.origin.set(this.hud_camera.size.x/3,0,0);
-	this.idk.position.set(this.hud_camera.size.x-1,-this.hud_camera.size.y+1,0);
-	this.idk.update();
-	this.hudScene.add(this.idk);
-	
-	//Crosshair
-	this.cross = new Sprite();
-	this.cross.texture = new Texture("data/texture/cross.png");
-	this.cross.position.set(-0.5, -0.5, 0);
-	this.cross.update();
-	this.hudScene.add(this.cross);
-	*/
 }
 
 Arena.prototype.update = function()
 {
-	this.particle.update();
 
 	/*
 	//Fire Gun
@@ -382,36 +381,40 @@ Arena.prototype.update = function()
 	}
 	*/
 
-	//Weapon change
-	/*if(App.keyboard.isKeyPressed(Keyboard.NUM1))
+	if(App.keyboard.isKeyPressed(Keyboard.NUM1))
 	{
-		this.weapon = new Mesh();
-		this.weapon = OBJLoader.load(FileLoader.loadText("data/models/pulserifle/pulserifle.obj"));
-		//this.weapon.setTexture(new Texture("data/models/pulserifle/tex1.jpg"));
-		this.weapon.scale.set(2, 2, 2);
-		this.weapon.position.set(-0.3,-0.3,0.5);
-		this.weapon.updateMatrix();
+		var weapon = OBJLoader.load(FileLoader.loadText("data/models/pulserifle/pulserifle.obj"));
+		weapon.geometry.computeNormals();
+		weapon.material = new PhongMaterial();
+		weapon.material.texture = new Texture("data/models/pulserifle/tex1.jpg");
+
+		this.weapon.geometry = weapon.geometry;
+		this.weapon.material = weapon.material;
 	}
+
 	if(App.keyboard.isKeyPressed(Keyboard.NUM2))
 	{
-		this.weapon = new Mesh();
-		this.weapon = OBJLoader.load(FileLoader.loadText("data/models/scopedrifle/scopedrifle.obj"));
-		//this.weapon.setTexture(new Texture("data/models/scopedrifle/tex1.jpg"));
-		this.weapon.scale.set(2, 2, 2);
-		this.weapon.position.set(-0.3,-0.3,0.5);
-		this.weapon.updateMatrix();
-	}*/
+		var weapon = OBJLoader.load(FileLoader.loadText("data/models/scopedrifle/scopedrifle.obj"));
+		weapon.geometry.computeNormals();
+		weapon.material = new PhongMaterial();
+		weapon.material.texture = new Texture("data/models/scopedrifle/tex1.jpg");
+
+		this.weapon.geometry = weapon.geometry;
+		this.weapon.material = weapon.material;
+	}
 
 	var time = this.timer.get();
+
+	this.weaponCamera.rotation.y = Math.cos(time / 500) * 0.01;
+	this.weaponCamera.updateMatrix();
 
 	this.lightA.position.set(Math.cos(time / 1000.0) * 70.0 + 50.0, 30, Math.sin(time / 1300.0) * 70.0 + 50.0);
 	this.lightB.position.set(Math.cos(time / 800.0) * 80.0, 30, Math.sin(time / 900.0) * 80.0);
 	this.lightC.position.set(Math.cos(time / 1200.0) * 90.0 - 50.0, 30, Math.sin(time / 1100.0) * 90.0 - 50.0);
 
-	//Update Player Camera Position
+	this.particle.update();
 	this.world.update();
 
-	//Rotate cube
 	if(App.keyboard.isKeyPressed(Keyboard.UP))
 	{
 		this.cube.rotation.y += 0.02;
@@ -428,14 +431,6 @@ Arena.prototype.update = function()
 	{
 		this.cube.rotation.x -= 0.02;
 	}
-	if(App.keyboard.isKeyPressed(Keyboard.L))
-	{
-		this.cube.rotation.z += 0.02;
-	}
-	if(App.keyboard.isKeyPressed(Keyboard.K))
-	{
-		this.cube.rotation.z -= 0.02;
-	}
 	
 	this.cube.updateMatrix();
 };
@@ -444,9 +439,19 @@ Arena.prototype.draw = function(renderer)
 {
 	renderer.autoClear = true;
 	renderer.render(this.scene, this.player.camera);
+	renderer.autoClear = false;
+	renderer.render(this.weaponScene, this.weaponCamera);
+	renderer.render(this.hudScene, this.hudCamera);
 };
 
 Arena.prototype.resize = function(width, height)
 {
+	var aspect = width / height;
+	var hud = 100;
+
+	this.idk.position.x = hud * aspect * 0.4;
+	this.idk.updateMatrix();
+
+	this.hudCamera.resize(hud * aspect, hud);
 	this.player.camera.resize(width, height);
 };
