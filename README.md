@@ -1,7 +1,7 @@
 ![alt tag](https://raw.githubusercontent.com/tentone/IDKwGL/master/data/idk.png)
 
 # IdkGL
- - A basic WebGL based graphic library for the web
+ - A WebGL based graphics rendering library for the web.
  - Live demo scene at tentone.github.io/IDKwGL
 
 ## Screenshots
@@ -24,7 +24,8 @@
 
 ## Todo
  - Postprocessing
- - More file loaders
+ - File loaders (STL, GLTF)
+ - Physically based materials
 
 ## License
  - Distributed under MIT license available on the github repository.
