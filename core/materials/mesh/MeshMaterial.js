@@ -58,23 +58,20 @@ MeshMaterial.prototype.constructor = MeshMaterial;
 MeshMaterial.registerUniforms = function(gl, shader)
 {
 	//Lights
-	//if(this.useLights)
-	//{	
-		for(var i = 0; i < Material.MAX_LIGHTS; i++)
-		{
-			//Ambient
-			shader.registerUniform("ambientLights[" + i + "].color");
-				
-			//Directional
-			shader.registerUniform("directionalLights[" + i + "].color");
-			shader.registerUniform("directionalLights[" + i + "].position");
+	for(var i = 0; i < Material.MAX_LIGHTS; i++)
+	{
+		//Ambient
+		shader.registerUniform("ambientLights[" + i + "].color");
+			
+		//Directional
+		shader.registerUniform("directionalLights[" + i + "].color");
+		shader.registerUniform("directionalLights[" + i + "].position");
 
-			//Point
-			shader.registerUniform("pointLights[" + i + "].color");
-			shader.registerUniform("pointLights[" + i + "].position");
-			shader.registerUniform("pointLights[" + i + "].maxDistance");
-		}
-	//}
+		//Point
+		shader.registerUniform("pointLights[" + i + "].color");
+		shader.registerUniform("pointLights[" + i + "].position");
+		shader.registerUniform("pointLights[" + i + "].maxDistance");
+	}
 
 	//Vertex attributes
 	shader.registerVertexAttributeArray("vertexPosition");
