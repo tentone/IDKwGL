@@ -81,12 +81,22 @@ Renderer.prototype.resize = function(width, height)
  */
 Renderer.prototype.clear = function(color, depth, stencil)
 {
-	gl.clearColor(this.clearColor.r, this.clearColor.g, this.clearColor.b, 1);
-
 	var clear = 0;
-	if(color === true) clear |= gl.COLOR_BUFFER_BIT;
-	if(depth === true) clear |= gl.DEPTH_BUFFER_BIT;
-	if(stencil === true) clear |= gl.STENCIL_BUFFER_BIT;
+
+	if(color === true)
+	{
+		gl.clearColor(this.clearColor.r, this.clearColor.g, this.clearColor.b, 1.0);
+		clear |= gl.COLOR_BUFFER_BIT;
+	}
+	if(depth === true)
+	{
+		clear |= gl.DEPTH_BUFFER_BIT;
+	}
+	if(stencil === true)
+	{
+		clear |= gl.STENCIL_BUFFER_BIT;
+	}
+
 	gl.clear(clear);
 };
 

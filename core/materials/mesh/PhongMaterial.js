@@ -104,7 +104,6 @@ PhongMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera, 
 
 		var position = scene.pointLights[i].position;
 		gl.uniform3f(shader.uniforms["pointLights[" + i + "].position"], position.x, position.y, position.z);
-
 		gl.uniform1f(shader.uniforms["pointLights[" + i + "].maxDistance"], scene.pointLights[i].maxDistance);
 	}
 
