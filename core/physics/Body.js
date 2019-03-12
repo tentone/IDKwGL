@@ -5,18 +5,45 @@
  */
 function Body(geometry)
 {
-	//Random ID to identify body
+	/**
+	 * Random ID to identify body
+	 */
 	this.id = -1;
+
+	/**
+	 * Geometry of this physics body.
+	 */
 	this.geometry = geometry;
 
+	/**
+	 * Indicates other bodies can collide with this one.
+	 */
 	this.collidable = true;
+
+	/** 
+	 * Static bodies do not move, can be used to create walls.
+	 */
 	this.isStatic = true;
 
-	this.acceleration = new Vector3(0,0,0);
-	this.position = new Vector3(0,0,0);
-	this.speed = new Vector3(0,0,0);
+	/**
+	 * Acceleration of the body.
+	 */
+	this.acceleration = new Vector3(0, 0, 0);
 
-	this.isColliding = new Vector3(0,0,0);
+	/**
+	 * Position of the body, affected by speed.
+	 */
+	this.position = new Vector3(0, 0, 0);
+
+	/** 
+	 * Speed of the body, affected by acceleration.
+	 */
+	this.speed = new Vector3(0, 0, 0);
+
+	/** 
+	 * Indicates collision directions.
+	 */
+	this.isColliding = new Vector3(0, 0, 0);
 }
 
 /**
@@ -25,7 +52,7 @@ function Body(geometry)
 Body.prototype.setId = function(value)
 {
 	this.id = value;
-}
+};
 
 /** 
  * Get ID
@@ -33,7 +60,7 @@ Body.prototype.setId = function(value)
 Body.prototype.getId = function()
 {
 	return this.id;
-}
+};
 
 /**
  * Updates body state.
@@ -61,7 +88,7 @@ Body.prototype.update = function(world)
 		{
 			if(this.getId() !== world.body[i].getId())
 			{
-				if(this.geometry.willCollide(new Vector3(this.speed.x,0,0), world.body[i].getGeometry()))
+				if(this.geometry.willCollide(new Vector3(this.speed.x, 0, 0), world.body[i].getGeometry()))
 				{
 					this.isColliding.x = 1;
 					if(this.speed.x < 0)
@@ -82,7 +109,7 @@ Body.prototype.update = function(world)
 		{
 			if(this.getId() !== world.body[i].getId())
 			{
-				if(this.geometry.willCollide(new Vector3(0,this.speed.y,0), world.body[i].getGeometry()))
+				if(this.geometry.willCollide(new Vector3(0, this.speed.y, 0), world.body[i].getGeometry()))
 				{
 					this.isColliding.y = 1;
 					if(this.speed.y < 0)
@@ -103,7 +130,7 @@ Body.prototype.update = function(world)
 		{
 			if(this.getId() !== world.body[i].getId())
 			{
-				if(this.geometry.willCollide(new Vector3(0,0,this.speed.z), world.body[i].getGeometry()))
+				if(this.geometry.willCollide(new Vector3(0, 0, this.speed.z), world.body[i].getGeometry()))
 				{
 					this.isColliding.z = 1;
 					if(this.speed.z < 0)
@@ -122,7 +149,7 @@ Body.prototype.update = function(world)
 
 	this.geometry.position.add(this.speed);
 	this.position = this.geometry.position;
-}
+};
 
 /**
  * Set as static body.
@@ -130,7 +157,7 @@ Body.prototype.update = function(world)
 Body.prototype.setStatic = function(value)
 {
 	this.body.isStatic = value;
-}
+};
 
 /**
  * Get body geometry.
@@ -138,7 +165,7 @@ Body.prototype.setStatic = function(value)
 Body.prototype.getGeometry = function()
 {
 	return this.geometry;
-}
+};
 
 /**
  * Set if body is collidable.
@@ -146,9 +173,9 @@ Body.prototype.getGeometry = function()
 Body.prototype.setCollidable = function(collidable)
 {
 	this.collidable = collidable;
-}
+};
 
 Body.prototype.toString = function()
 {
 	return "Body (Position:" + this.position.toString() + ", Speed:" + this.speed.toString() + ", Acceleration:"+this.acceleration.toString() +")";
-}
+};

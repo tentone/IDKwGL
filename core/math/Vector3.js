@@ -111,7 +111,7 @@ Vector3.prototype.div = function(val)
 };
 
 //Mult by const
-Vector3.prototype.mulConst = function(val)
+Vector3.prototype.mulScalar = function(val)
 {
 	this.x *= val;
 	this.y *= val;

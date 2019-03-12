@@ -2,17 +2,17 @@
 
 function Player()
 {
-	//Player Camera and rotation
+	//Camera
 	this.camera = new PerspectiveCamera(1, 70, 1);
 	this.camera.position.set(0, 2, 0);
+
 	this.rotation = new Vector2(0, 0); //Horizontal / Vertical
 	
-	//Player Body
+	//Physics
 	this.box = new Box();
 	this.box.size.set(6,6,6);
 	this.box.ori.set(2,0,2);
 	this.box.position.set(0,12,0);
-
 	this.body = new Body(this.box);
 }
 
@@ -75,16 +75,24 @@ Player.prototype.update = function(world)
 		this.rotation.y = 1.57;
 	}
 
-	var cos = Math.cos(this.rotation.y);
-	var direction = new Vector3(Math.sin(this.rotation.x + Math.PI) * cos, Math.sin(this.rotation.y), Math.cos(this.rotation.x + Math.PI) * cos);
+	var direction = this.getDirection();
 	direction.add(this.camera.position);
 
-	//Update player as a body
+	//Physics update
 	this.body.update(world);
 
 	//Update camera
 	this.camera.lookAtDirection(direction);
 };
+
+/** 
+ * Get player camera direction vector.
+ */
+Player.prototype.getDirection = function()
+{
+	var cos = Math.cos(this.rotation.y);
+	return new Vector3(Math.sin(this.rotation.x + Math.PI) * cos, Math.sin(this.rotation.y), Math.cos(this.rotation.x + Math.PI) * cos);
+}
 
 //Set ID for body
 Player.prototype.setId = function(value)

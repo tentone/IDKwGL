@@ -1,24 +1,30 @@
 "use strict";
 
 /**
- * Physics world. 
+ * Physics world contains all the physics bodies.
+ *
+ * Responsible for managing and updating physics.
  */
 function World(acceleration)
 {
-	if(acceleration === undefined)
-	{
-		this.acceleration = new Vector3(0, -9.8, 0);
-	}
-	else
-	{
-		this.acceleration = acceleration;
-	}
+	/**
+	 * World base acceleration, affects the speed of all bodies places in the world.
+	 *
+	 * Defauls to the value of -9.8.
+	 */
+	this.acceleration = acceleration === undefined ? new Vector3(0, -9.8, 0) : acceleration;
+	this.acceleration.mulScalar(0.016);
 
-	this.friction = new Vector3(0.80, 0.80, 0.80);
+	/** 
+	 * World air friction applies to all bodies, affects the acceleration of the bodies.
+	 */
+	this.friction = new Vector3(0.8, 0.8, 0.8);
+
+	/**
+	 * List of bodies placed in the world.
+	 */
 	this.body = [];
-
-	this.acceleration.mulConst(0.016);
-}
+};
 
 /**
  * Update all bodys in world.
@@ -29,7 +35,7 @@ World.prototype.update = function()
 	{
 		this.body[i].update(this);
 	}	
-}
+};
 
 /**
  * Add body to world.
@@ -38,16 +44,16 @@ World.prototype.addBody = function(body)
 {
 	body.setId(this.body.length);
 	this.body.push(body);
-}
+};
 
 World.prototype.toString = function()
 {
-	var s = "World (BodyCount:"+this.body.length+")\n   Body List:";
+	var s = "World (BodyCount:" + this.body.length + ")\n   Body List:";
 
 	for(var i = 0; i < this.body.length; i++)
 	{
-		s += "\n    "+this.body[i].toString();
+		s += "\n    " + this.body[i].toString();
 	}
 
 	return s;
-}
+};

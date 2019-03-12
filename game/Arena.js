@@ -304,7 +304,8 @@ function Arena()
 	var smoke = new Sprite();
 	smoke.texture = new Texture("data/texture/smoke_2.png");
 
-	this.particle = new ParticleEmitter(smoke, new Vector3(-250, 8, 100), new Vector3(0, 0.7, 0), new Vector3(0.3, 0.5, 0.3), 30, 10, 150, 150, 50);
+	this.particle = new ParticleEmitter(smoke, new Vector3(0, 0.7, 0), new Vector3(0.3, 0.5, 0.3), 30, 10, 150, 150, 50);
+	this.particle.position.set(-250, 8, 100);
 	this.scene.add(this.particle);
 
 	//Weapon scene
@@ -341,35 +342,32 @@ function Arena()
 	this.cross.updateMatrix();
 	this.hudScene.add(this.cross);
 
-
 	//Bullet
-	/*
-	this.bullet = new Mesh();
-	this.bullet = OBJLoader.load(FileLoader.loadText("data/models/skybox/skybox.obj"));
-	this.bullet.scale.set(0.2,0.2,0.2);
-	this.bullet.position.set(0,8,0);
+	this.bullet = new Mesh(new SphereGeometry(1.0, 16, 16), new BasicMaterial());
+	this.bullet.position.set(0, 8, 0);
 	this.bullet.updateMatrix();
-	this.bulletParticle = new Particle(this.bullet, new Vector3(0,8,0), new Vector3(0,0,0), 1, 10000);
-	this.bulletParticleList = [];
-	*/
+	this.scene.add(this.bullet);
+
+	//Bullet list
+	this.bullets = [];
 }
 
 Arena.prototype.update = function()
 {
-
-	/*
-	//Fire Gun
 	if(App.mouse.buttonJustPressed(Mouse.LEFT))
 	{
-		var direction = this.player.camera.direction.clone();
-		var position = this.player.camera.position.clone();
+		var bullet = this.bullet.clone();
+		bullet.position.copy(this.player.camera.position);
 
-		//Add bullet to array
-		var bulletParticle = new Particle(this.bullet.clone(), position, direction, 1, 200);		
-		bulletParticle.speed.mulConst(5);
-		this.bulletParticleList.push(bulletParticle);
+		
+		var particle = new Particle(bullet);
+		particle.time = 100;
+		particle.speed.set();
+		particle.speed.mulScalar(5);
+		this.bullets.push(particle);
 	}
 
+	/*
 	//Update bullet list
 	for(var i = 0; i < this.bulletParticleList.length; i++)
 	{
