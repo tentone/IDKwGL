@@ -122,9 +122,10 @@ App.resize = function()
 {
 	var width = window.innerWidth;
 	var height = window.innerHeight;
-
-	App.renderer.canvas.width  = width;
+	
+	App.renderer.canvas.width = width;
 	App.renderer.canvas.height = height;
+
 	App.renderer.resize(width, height);
 	App.screen.resize(width, height);
 }

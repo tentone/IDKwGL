@@ -308,19 +308,16 @@ function Arena()
 	this.particle.position.set(-250, 8, 100);
 	this.scene.add(this.particle);
 
-	//Weapon scene
-	this.weaponCamera = new PerspectiveCamera(1, 70, 1);
-	this.weaponScene = new Scene();
-
+	//Weapon
 	this.weapon = OBJLoader.load(FileLoader.loadText("data/models/pulserifle/pulserifle.obj"));
 	this.weapon.geometry.computeNormals();
 	this.weapon.material = new PhongMaterial();
 	this.weapon.material.texture = new Texture("data/models/pulserifle/tex1.jpg");
-	this.weapon.scale.set(10, 10, 10);
-	this.weapon.position.set(1.5, -2, -3);
+	this.weapon.scale.set(20, 20, 20);
+	this.weapon.position.set(15, 5, -30);
 	this.weapon.rotation.set(0, Math.PI, 0);
 	this.weapon.updateMatrix();
-	this.weaponScene.add(this.weapon);
+	this.scene.add(this.weapon);
 
 	//HUD Scene
 	this.hudCamera = new OrthographicCamera(1, 1);
@@ -406,9 +403,6 @@ Arena.prototype.update = function()
 
 	var time = this.timer.get();
 
-	this.weaponCamera.rotation.y = Math.cos(time / 500) * 0.01;
-	this.weaponCamera.updateMatrix();
-
 	this.lightA.position.set(Math.cos(time / 1000.0) * 70.0 + 50.0, 30, Math.sin(time / 1300.0) * 70.0 + 50.0);
 	this.lightB.position.set(Math.cos(time / 800.0) * 80.0, 30, Math.sin(time / 900.0) * 80.0);
 	this.lightC.position.set(Math.cos(time / 1200.0) * 90.0 - 50.0, 30, Math.sin(time / 1100.0) * 90.0 - 50.0);
@@ -441,7 +435,6 @@ Arena.prototype.draw = function(renderer)
 	renderer.autoClear = true;
 	renderer.render(this.scene, this.player.camera);
 	renderer.autoClear = false;
-	renderer.render(this.weaponScene, this.weaponCamera);
 	renderer.render(this.hudScene, this.hudCamera);
 };
 
