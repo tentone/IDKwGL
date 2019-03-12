@@ -65,6 +65,7 @@ include("core/renderer/Renderer.js");
 
 include("core/physics/Body.js");
 include("core/physics/World.js");
+include("core/physics/BodyObject.js");
 
 //Data
 include("data/models/house.js");
@@ -72,7 +73,6 @@ include("data/models/tank.js");
 
 //Game
 include("game/Player.js");
-include("game/GameObject.js");
 include("game/Axis.js");
 include("game/Arena.js");
 

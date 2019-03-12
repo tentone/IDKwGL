@@ -57,7 +57,7 @@ function Arena()
 	model.position.set(-250,0,100);
 	model.updateMatrix();
 	this.scene.add(model);
-	this.world.addBody(new GameObject(model));
+	this.world.addBody(new BodyObject(model));
 
 	//Eyebot
 	FileLoader.loadMultiple(["data/models/eyebot/eyebot.obj", "data/models/eyebot/eyebot.mtl"], function(data)
@@ -125,7 +125,7 @@ function Arena()
 		bus.rotation.set(0, Math.PI, 0);
 		bus.updateMatrix();
 		self.scene.add(bus);
-		self.world.addBody(new GameObject(bus));
+		self.world.addBody(new BodyObject(bus));
 	});
 	
 	//House
@@ -136,37 +136,37 @@ function Arena()
 	model.position.set(300,0,0);
 	model.updateMatrix();
 	this.scene.add(model);
-	this.world.addBody(new GameObject(model));
+	this.world.addBody(new BodyObject(model));
 
 	model = model.clone();
 	model.position.set(300,0,80);
 	model.updateMatrix();
 	this.scene.add(model);
-	this.world.addBody(new GameObject(model));
+	this.world.addBody(new BodyObject(model));
 
 	model = model.clone();
 	model.position.set(300,0,160);
 	model.updateMatrix();
 	this.scene.add(model);
-	this.world.addBody(new GameObject(model));
+	this.world.addBody(new BodyObject(model));
 
 	model = model.clone();
 	model.position.set(200,0,0);
 	model.updateMatrix();
 	this.scene.add(model);
-	this.world.addBody(new GameObject(model));
+	this.world.addBody(new BodyObject(model));
 
 	model = model.clone();
 	model.position.set(200,0,80);
 	model.updateMatrix();
 	this.scene.add(model);
-	this.world.addBody(new GameObject(model));
+	this.world.addBody(new BodyObject(model));
 
 	model = model.clone();
 	model.position.set(200,0,160);
 	model.updateMatrix();
 	this.scene.add(model);
-	this.world.addBody(new GameObject(model));
+	this.world.addBody(new BodyObject(model));
 
 	//Crate Pile
 	model = new Mesh(new BoxGeometry());
@@ -176,28 +176,28 @@ function Arena()
 	model.scale.set(5,5,5);
 	model.updateMatrix();
 	this.scene.add(model);
-	this.world.addBody(new GameObject(model));
+	this.world.addBody(new BodyObject(model));
 
 	model = model.clone();
 	model.position.set(-200,15,0);
 	model.scale.set(5,5,5);
 	model.updateMatrix();
 	this.scene.add(model);
-	this.world.addBody(new GameObject(model));
+	this.world.addBody(new BodyObject(model));
 
 	model = model.clone();
 	model.position.set(-190,5,0);
 	model.scale.set(5,5,5);
 	model.updateMatrix();
 	this.scene.add(model);
-	this.world.addBody(new GameObject(model));
+	this.world.addBody(new BodyObject(model));
 
 	model = model.clone();
 	model.position.set(-200,5,10);
 	model.scale.set(5,5,5);
 	model.updateMatrix();
 	this.scene.add(model);
-	this.world.addBody(new GameObject(model));
+	this.world.addBody(new BodyObject(model));
 
 	var floorMaterial = new PhongMaterial();
 	floorMaterial.texture = new Texture("data/texture/grass.jpg");
@@ -211,7 +211,7 @@ function Arena()
 	model.scale.set(900, 100, 900);
 	model.updateMatrix();
 	this.scene.add(model);
-	this.world.addBody(new GameObject(model));
+	this.world.addBody(new BodyObject(model));
 	
 	var wallMaterial = new PhongMaterial();
 	wallMaterial.texture = new Texture("data/texture/wall.png");
@@ -225,28 +225,28 @@ function Arena()
 	model.scale.set(300, 50, 1);
 	model.updateMatrix();
 	this.scene.add(model);
-	this.world.addBody(new GameObject(model));
+	this.world.addBody(new BodyObject(model));
 
 	model = new Mesh(wallGeometry, wallMaterial);
 	model.position.set(0, 0, 300);
 	model.scale.set(300, 50, 1);
 	model.updateMatrix();
 	this.scene.add(model);
-	this.world.addBody(new GameObject(model));
+	this.world.addBody(new BodyObject(model));
 
 	model = new Mesh(wallGeometry, wallMaterial);
 	model.position.set(-300, 0, 0);
 	model.scale.set(1, 50, 300);
 	model.updateMatrix();
 	this.scene.add(model);
-	this.world.addBody(new GameObject(model));
+	this.world.addBody(new BodyObject(model));
 
 	model = new Mesh(wallGeometry, wallMaterial);
 	model.position.set(300, 0, 0);
 	model.scale.set(1, 50, 300);
 	model.updateMatrix();
 	this.scene.add(model);
-	this.world.addBody(new GameObject(model));
+	this.world.addBody(new BodyObject(model));
 
 	var grassMaterial = new GrassMaterial();
 	grassMaterial.texture = new Texture("data/texture/grass.png");
