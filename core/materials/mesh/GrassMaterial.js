@@ -6,6 +6,9 @@ function GrassMaterial(name)
 
 	this.type = "GrassMaterial";
 
+	/**
+	 * Time in seconds used to update the grass wave animation.
+	 */
 	this.time = 0;
 }
 
@@ -34,6 +37,7 @@ GrassMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera, 
 	PhongMaterial.prototype.updateUniforms.call(this, renderer, gl, shader, camera, object, scene);
 
 	this.time += 0.016;
+	
 	gl.uniform1f(shader.uniforms["time"], this.time);
 };
 

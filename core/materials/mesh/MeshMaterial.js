@@ -37,6 +37,13 @@ function MeshMaterial()
 	 * Alpha test value, if opacity is bellow the alpha test value the pixel is discarded.
 	 */
 	this.alphaTest = 0.0;
+
+	/**
+	 * Indicates if the material uses lights.
+	 *
+	 * If set true the ligh uniforms will be registered and updated here.
+	 */
+	this.useLights = false;
 }
 
 MeshMaterial.BACK = 1029;
@@ -51,20 +58,23 @@ MeshMaterial.prototype.constructor = MeshMaterial;
 MeshMaterial.registerUniforms = function(gl, shader)
 {
 	//Lights
-	for(var i = 0; i < Material.MAX_LIGHTS; i++)
-	{
-		//Ambient
-		shader.registerUniform("ambientLights[" + i + "].color");
-			
-		//Directional
-		shader.registerUniform("directionalLights[" + i + "].color");
-		shader.registerUniform("directionalLights[" + i + "].position");
+	//if(this.useLights)
+	//{	
+		for(var i = 0; i < Material.MAX_LIGHTS; i++)
+		{
+			//Ambient
+			shader.registerUniform("ambientLights[" + i + "].color");
+				
+			//Directional
+			shader.registerUniform("directionalLights[" + i + "].color");
+			shader.registerUniform("directionalLights[" + i + "].position");
 
-		//Point
-		shader.registerUniform("pointLights[" + i + "].color");
-		shader.registerUniform("pointLights[" + i + "].position");
-		shader.registerUniform("pointLights[" + i + "].maxDistance");
-	}
+			//Point
+			shader.registerUniform("pointLights[" + i + "].color");
+			shader.registerUniform("pointLights[" + i + "].position");
+			shader.registerUniform("pointLights[" + i + "].maxDistance");
+		}
+	//}
 
 	//Vertex attributes
 	shader.registerVertexAttributeArray("vertexPosition");
@@ -149,6 +159,61 @@ MeshMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera, o
 
 	//Faces
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.facesBuffer);
+
+	if(this.useLights)
+	{
+		//Directional
+		for(var i = 0; i < Material.MAX_LIGHTS; i++)
+		{
+			if(i < scene.directionalLights.length)
+			{			
+				var color = scene.directionalLights[i].color;
+				gl.uniform3f(shader.uniforms["directionalLights[" + i + "].color"], color.r, color.g, color.b);
+
+				var position = scene.directionalLights[i].position;
+				gl.uniform3f(shader.uniforms["directionalLights[" + i + "].position"], position.x, position.y, position.z);
+			}
+			else
+			{
+				gl.uniform3f(shader.uniforms["directionalLights[" + i + "].color"], 0, 0, 0);
+				gl.uniform3f(shader.uniforms["directionalLights[" + i + "].position"], 0, 0, 0);
+			}
+		}
+
+		//Ambient
+		for(var i = 0; i < Material.MAX_LIGHTS; i++)
+		{
+			if(i < scene.ambientLights.length)
+			{
+				var color = scene.ambientLights[i].color;
+				gl.uniform3f(shader.uniforms["ambientLights[" + i + "].color"], color.r, color.g, color.b);
+			}
+			else
+			{
+				gl.uniform3f(shader.uniforms["ambientLights[" + i + "].color"], 0, 0, 0);
+			}
+		}
+
+		//Point
+		for(var i = 0; i < Material.MAX_LIGHTS; i++)
+		{
+			if(i < scene.pointLights.length)
+			{		
+				var color = scene.pointLights[i].color;
+				gl.uniform3f(shader.uniforms["pointLights[" + i + "].color"], color.r, color.g, color.b);
+
+				var position = scene.pointLights[i].position;
+				gl.uniform3f(shader.uniforms["pointLights[" + i + "].position"], position.x, position.y, position.z);
+				gl.uniform1f(shader.uniforms["pointLights[" + i + "].maxDistance"], scene.pointLights[i].maxDistance);
+			}
+			else
+			{
+				gl.uniform3f(shader.uniforms["pointLights[" + i + "].color"], 0, 0, 0);
+				gl.uniform3f(shader.uniforms["pointLights[" + i + "].position"], 0, 0, 0);
+				gl.uniform1f(shader.uniforms["pointLights[" + i + "].maxDistance"], 0);
+			}
+		}
+	}
 };
 
 /**

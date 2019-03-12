@@ -11,6 +11,7 @@ function PhongMaterial(name)
 
 	this.name = name;
 	this.type = "PhongMaterial";
+	this.useLights = true;
 
 	/**
 	 * Normal vector map used for lighting calculation. 
@@ -22,42 +23,42 @@ function PhongMaterial(name)
 	 * 
 	 * Can be used for light calculation or to deformate the surface.
 	 *
-	 * TODO
+	 * TODO <NOT USED>
 	 */
 	this.bumpMap = null;
 	
 	/** 
 	 * The specular map stores the specular intensity.
 	 *
-	 * TODO
+	 * TODO <NOT USED>
 	 */
 	 this.specularMap = null;
 
 	/**
 	 * Diffuse color
 	 *
-	 * TODO
+	 * TODO <NOT USED>
 	 */
 	this.diffuse = new Color(1.0, 1.0, 1.0);
 
 	/**
 	 * Specular highlight color
 	 *
-	 * TODO
+	 * TODO <NOT USED>
 	 */
 	this.specular = new Color(1.0, 1.0, 1.0);
 
 	/**
 	 * Specular color intensity, phong constant range [1, 1000].
 	 *
-	 * TODO
+	 * TODO <NOT USED>
 	 */
 	this.specularIntensity = 1;
 	
 	/**
 	 * Indicates if the material is transparent.
 	 *
-	 * TODO
+	 * TODO <NOT USED>
 	 */
 	this.transparent = false;
 
@@ -66,7 +67,7 @@ function PhongMaterial(name)
 	 *
 	 * Only applied if the material is transparent.
 	 *
-	 * TODO
+	 * TODO <NOT USED>
 	 */
 	this.alpha = 1.0;
 }
@@ -78,34 +79,6 @@ PhongMaterial.id = MathUtils.generateID();
 PhongMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera, object, scene)
 {
 	BasicMaterial.prototype.updateUniforms.call(this, renderer, gl, shader, camera, object, scene);
-
-	//Directinal lights
-	for(var i = 0; i < scene.directionalLights.length && i < Material.MAX_LIGHTS; i++)
-	{
-		var color = scene.directionalLights[i].color;
-		gl.uniform3f(shader.uniforms["directionalLights[" + i + "].color"], color.r, color.g, color.b);
-
-		var position = scene.directionalLights[i].position;
-		gl.uniform3f(shader.uniforms["directionalLights[" + i + "].position"], position.x, position.y, position.z);
-	}
-
-	//Ambient lights
-	for(var i = 0; i < scene.ambientLights.length && i < Material.MAX_LIGHTS; i++)
-	{
-		var color = scene.ambientLights[i].color;
-		gl.uniform3f(shader.uniforms["ambientLights[" + i + "].color"], color.r, color.g, color.b);
-	}
-
-	//Point lights
-	for(var i = 0; i < scene.pointLights.length && i < Material.MAX_LIGHTS; i++)
-	{
-		var color = scene.pointLights[i].color;
-		gl.uniform3f(shader.uniforms["pointLights[" + i + "].color"], color.r, color.g, color.b);
-
-		var position = scene.pointLights[i].position;
-		gl.uniform3f(shader.uniforms["pointLights[" + i + "].position"], position.x, position.y, position.z);
-		gl.uniform1f(shader.uniforms["pointLights[" + i + "].maxDistance"], scene.pointLights[i].maxDistance);
-	}
 
 	//Normal map
 	if(this.normalMap !== null)
