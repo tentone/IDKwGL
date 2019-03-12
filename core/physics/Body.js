@@ -47,7 +47,7 @@ function Body(geometry)
 }
 
 /**
- * Set ID
+ * Set indentifier of the body.
  */
 Body.prototype.setId = function(value)
 {
@@ -55,7 +55,7 @@ Body.prototype.setId = function(value)
 };
 
 /** 
- * Get ID
+ * Get indentifier of the body.
  */
 Body.prototype.getId = function()
 {
@@ -63,7 +63,9 @@ Body.prototype.getId = function()
 };
 
 /**
- * Updates body state.
+ * Updates body state, updates the position, speed and acceleration of the body.
+ *
+ * Checks for collisions with other bodies, and applies world global effects to the body.
  */ 
 Body.prototype.update = function(world)
 {
@@ -105,7 +107,7 @@ Body.prototype.update = function(world)
 		}
 
 		//Collision on Y axis
-		for(i = 0; i < world.body.length; i++)
+		for(var i = 0; i < world.body.length; i++)
 		{
 			if(this.getId() !== world.body[i].getId())
 			{
@@ -126,7 +128,7 @@ Body.prototype.update = function(world)
 		}
 
 		//Collision on Z axis
-		for(i = 0; i < world.body.length; i++)
+		for(var i = 0; i < world.body.length; i++)
 		{
 			if(this.getId() !== world.body[i].getId())
 			{
@@ -156,7 +158,7 @@ Body.prototype.update = function(world)
  */
 Body.prototype.setStatic = function(value)
 {
-	this.body.isStatic = value;
+	this.isStatic = value;
 };
 
 /**

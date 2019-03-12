@@ -2,19 +2,22 @@
 
 function Player()
 {
+	var box = new Box();
+	box.size.set(6,6,6);
+	box.ori.set(2,0,2);
+	box.position.set(0,12,0);
+
+	Body.call(this, box);
+
 	//Camera
 	this.camera = new PerspectiveCamera(1, 70, 1);
 	this.camera.position.set(0, 2, 0);
 
+	//Orientation
 	this.rotation = new Vector2(0, 0); //Horizontal / Vertical
-	
-	//Physics
-	this.box = new Box();
-	this.box.size.set(6,6,6);
-	this.box.ori.set(2,0,2);
-	this.box.position.set(0,12,0);
-	this.body = new Body(this.box);
 }
+
+Player.prototype = Object.create(Body.prototype);
 
 //Update player
 Player.prototype.update = function(world)
@@ -31,35 +34,35 @@ Player.prototype.update = function(world)
 	//Move WASD
 	if(App.keyboard.isKeyPressed(Keyboard.W))
 	{
-		this.body.speed.z -= speedWalk * Math.cos(this.rotation.x);
-		this.body.speed.x -= speedWalk * Math.sin(this.rotation.x);
+		this.speed.z -= speedWalk * Math.cos(this.rotation.x);
+		this.speed.x -= speedWalk * Math.sin(this.rotation.x);
 	}
 	if(App.keyboard.isKeyPressed(Keyboard.S))
 	{
-		this.body.speed.z += speedWalk * Math.cos(this.rotation.x);
-		this.body.speed.x += speedWalk * Math.sin(this.rotation.x);
+		this.speed.z += speedWalk * Math.cos(this.rotation.x);
+		this.speed.x += speedWalk * Math.sin(this.rotation.x);
 	}
 
 	var rotation = this.rotation.x + MathUtils.PID2;
 
 	if(App.keyboard.isKeyPressed(Keyboard.D))
 	{
-		this.body.speed.z += speedWalk * Math.cos(rotation);
-		this.body.speed.x += speedWalk * Math.sin(rotation);
+		this.speed.z += speedWalk * Math.cos(rotation);
+		this.speed.x += speedWalk * Math.sin(rotation);
 	}
 	if(App.keyboard.isKeyPressed(Keyboard.A))
 	{
-		this.body.speed.z -= speedWalk * Math.cos(rotation);
-		this.body.speed.x -= speedWalk * Math.sin(rotation);
+		this.speed.z -= speedWalk * Math.cos(rotation);
+		this.speed.x -= speedWalk * Math.sin(rotation);
 	}
 
 	//Jump
-	if(this.body.isColliding.y === 1 && App.keyboard.isKeyJustPressed(Keyboard.SPACEBAR))
+	if(this.isColliding.y === 1 && App.keyboard.isKeyJustPressed(Keyboard.SPACEBAR))
 	{
-		this.body.acceleration.y += speedJump;
+		this.acceleration.y += speedJump;
 	}
 
-	this.camera.position.set(this.body.geometry.position.x, (this.body.geometry.position.y + 10), this.body.geometry.position.z);
+	this.camera.position.set(this.geometry.position.x, (this.geometry.position.y + 10), this.geometry.position.z);
 
 	//Camera Mouse Movement
 	this.rotation.x -= 0.001 * App.mouse.posDiff.x;
@@ -79,7 +82,7 @@ Player.prototype.update = function(world)
 	direction.add(this.camera.position);
 
 	//Physics update
-	this.body.update(world);
+	Body.prototype.update.call(this, world);
 
 	//Update camera
 	this.camera.lookAtDirection(direction);
@@ -93,33 +96,3 @@ Player.prototype.getDirection = function()
 	var cos = Math.cos(this.rotation.y);
 	return new Vector3(Math.sin(this.rotation.x + Math.PI) * cos, Math.sin(this.rotation.y), Math.cos(this.rotation.x + Math.PI) * cos);
 }
-
-//Set ID for body
-Player.prototype.setId = function(value)
-{
-	this.body.setId(value);
-};
-
-//Get body ID
-Player.prototype.getId = function()
-{
-	return this.body.getId();
-};
-
-//Get Body Geometry
-Player.prototype.getGeometry = function()
-{
-	return this.body.geometry;
-};
-
-//Set static
-Player.prototype.setStatic = function(value)
-{
-	this.body.isStatic = value;
-};
-
-//Set if it can collide
-Player.prototype.setCollidable = function(collidable)
-{
-	this.body.collidable = collidable;
-};

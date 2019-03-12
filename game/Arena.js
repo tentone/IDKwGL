@@ -288,8 +288,8 @@ function Arena()
 
 	//Player
 	this.player = new Player();
+	this.player.setStatic(false);
 	this.world.addBody(this.player);
-	this.world.body[this.world.body.length - 1].setStatic(false);
 
 	//Test Cube
 	this.cube = new Mesh(new BoxGeometry());
@@ -359,7 +359,7 @@ Arena.prototype.update = function()
 		var bullet = this.bullet.clone();
 		bullet.position.copy(this.player.camera.position);
 
-		
+
 		var particle = new Particle(bullet);
 		particle.time = 100;
 		particle.speed.set();
