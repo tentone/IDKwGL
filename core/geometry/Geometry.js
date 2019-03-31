@@ -11,13 +11,99 @@ function Geometry()
 	this.name = "";
 	this.type = "Geometry";
 
-	this.vertex = []; //Vertex
-	this.uvs = []; //Vertex Texture
-	this.normals = []; //Vertex Normals
-	this.faces = []; //Face <vertex / texture / normal>
+	/** 
+	 * Geometry vertices, each vertex is composed of 3 values.
+	 */
+	this.vertex = [];
+
+	/**
+	 * Vertex UV for texture mapping, each UV is composed of 2 values.
+	 */
+	this.uvs = [];
+
+	/**
+	 * Normal vector of the vertex, each vector composed of 3 values.
+	 */
+	this.normals = [];
+
+	/**
+	 * List of faces that compose the geometry, each face is composed of 3 indices. Each one for a point of the face.
+	 */
+	this.faces = [];
+
+	/**
+	 * Tangent and bitangent vectors, only used for normal mapping in tangent space.
+	 */
+	this.tangent = [];
+	this.bitangent = [];
 }
 
 Geometry.prototype.constructor = Geometry;
+
+/**
+ * Calculate tangent and bitangent vector for normal mapping.
+ */
+Geometry.prototype.calculateTangent = function()
+{
+	this.tangent = [];
+	this.bitangent = [];
+
+	for(var i = 0 ; i < this.faces.length; i += 3)
+	{
+		var f0 = this.faces[i];
+		var f1 = this.faces[i + 1];
+		var f2 = this.faces[i + 2];
+
+		var edge1X = this.vertex[f1] - this.vertex[f0];
+		var edge1Y = this.vertex[f1 + 1] - this.vertex[f0 + 1];
+		var edge1Z = this.vertex[f1 + 2] - this.vertex[f0 + 2];
+
+		var edge2X = this.vertex[f2] - this.vertex[f0];
+		var edge2Y = this.vertex[f2 + 1] - this.vertex[f0 + 1];
+		var edge2Z = this.vertex[f2 + 2] - this.vertex[f0 + 2];
+
+		//UV
+		var deltaU1 = this.uvs[f1] - this.uvs[f0];
+		var deltaV1 = this.uvs[f1 + 1] - this.uvs[f0 + 1];
+
+		var deltaU2 = this.uvs[f2] - this.uvs[f0];
+		var deltaV2 = this.uvs[f2 + 1] - this.uvs[f0 + 1];
+
+		var f = 1.0 / (deltaU1 * deltaV2 - deltaU2 * deltaV1);
+
+		var tangentX = f * (deltaV2 * edge1X - deltaV1 * edge2X);
+		var tangentY = f * (deltaV2 * edge1Y - deltaV1 * edge2Y);
+		var tangentZ = f * (deltaV2 * edge1Z - deltaV1 * edge2Z);
+
+		var bitangentX = f * (-deltaU2 * edge1X - deltaU1 * edge2X);
+		var bitangentY = f * (-deltaU2 * edge1Y - deltaU1 * edge2Y);
+		var bitangentZ = f * (-deltaU2 * edge1Z - deltaU1 * edge2Z);
+
+		//Normalize
+		var tangentLength = Math.sqrt(Math.pow(tangentX, 2) + Math.pow(tangentY, 2) + Math.pow(tangentZ, 2));
+		tangentX /= tangentLength;
+		tangentY /= tangentLength;
+		tangentZ /= tangentLength;
+
+		var bitangentLength = Math.sqrt(Math.pow(bitangentX, 2) + Math.pow(bitangentY, 2) + Math.pow(bitangentZ, 2));
+		bitangentX /= bitangentLength;
+		bitangentY /= bitangentLength;
+		bitangentZ /= bitangentLength;
+
+		for(var j = 0; j < 3; j++)
+		{
+			var f = this.faces[i + j];
+
+			this.tangent[f] = tangentX;
+			this.tangent[f + 1] = tangentY;
+			this.tangent[f + 2] = tangentZ;
+
+			this.bitangent[f] = bitangentX;
+			this.bitangent[f + 1] = bitangentY;
+			this.bitangent[f + 2] = bitangentZ;
+		}
+	}
+};
 
 /**
  * Create GL buffers for the geometry data.
@@ -27,21 +113,21 @@ Geometry.prototype.createBuffers = function(gl)
 	//Vertex
 	var vertexBuffer = gl.createBuffer();
 	vertexBuffer.itemSize = 3;
-	vertexBuffer.length = this.vertex.length/3;						
+	vertexBuffer.length = this.vertex.length / 3;
 	gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertex), gl.STATIC_DRAW);
 
 	//Texture
 	var uvBuffer = gl.createBuffer();
 	uvBuffer.itemSize = 2;
-	uvBuffer.length = this.uvs.length/2;
+	uvBuffer.length = this.uvs.length / 2;
 	gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.uvs), gl.STATIC_DRAW);
 
 	//Normals
 	var normalBuffer = gl.createBuffer();
 	normalBuffer.itemSize = 3;
-	normalBuffer.length = this.normals.length/3;			
+	normalBuffer.length = this.normals.length / 3;			
 	gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normals), gl.STATIC_DRAW);
 
@@ -52,7 +138,41 @@ Geometry.prototype.createBuffers = function(gl)
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, facesBuffer);
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.faces), gl.STATIC_DRAW);
 
-	return {vertexBuffer: vertexBuffer, uvBuffer: uvBuffer, normalBuffer: normalBuffer, facesBuffer: facesBuffer};
+	var buffers = 
+	{
+		vertexBuffer: vertexBuffer,
+		uvBuffer: uvBuffer,
+		normalBuffer: normalBuffer,
+		facesBuffer: facesBuffer,
+		tangentBuffer: null,
+		bitangentBuffer: null
+	};
+
+	//Tagent
+	if(this.tangent.length > 0)
+	{
+		var tangentBuffer = gl.createBuffer();
+		tangentBuffer.itemSize = 3;
+		tangentBuffer.length = this.tangent.length / 3;
+		gl.bindBuffer(gl.ARRAY_BUFFER, tangentBuffer);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.tangent), gl.STATIC_DRAW);
+
+		buffers.tangentBuffer = tangentBuffer;
+	}
+
+	//Bitagent
+	if(this.bitangent.length > 0)
+	{
+		var bitangentBuffer = gl.createBuffer();
+		bitangentBuffer.itemSize = 3;
+		bitangentBuffer.length = this.bitangent.length / 3;
+		gl.bindBuffer(gl.ARRAY_BUFFER, bitangentBuffer);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.bitangent), gl.STATIC_DRAW);
+
+		buffers.bitangentBuffer = bitangentBuffer;
+	}
+
+	return buffers;
 };
 
 /**

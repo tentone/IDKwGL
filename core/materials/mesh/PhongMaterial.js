@@ -84,12 +84,12 @@ PhongMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera, 
 		var buffers = renderer.getBuffers(object.geometry);
 
 		//Tangent vectors
-		//gl.bindBuffer(gl.ARRAY_BUFFER, buffers.vertexBuffer);
-		//gl.vertexAttribPointer(shader.attributes["vertexTangent"], buffers.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
+		gl.bindBuffer(gl.ARRAY_BUFFER, buffers.tangentBuffer);
+		gl.vertexAttribPointer(shader.attributes["vertexTangent"], buffers.tangentBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
 		//Bitangent vectors
-		//gl.bindBuffer(gl.ARRAY_BUFFER, buffers.vertexBuffer);
-		//gl.vertexAttribPointer(shader.attributes["vertexBitangent"], buffers.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
+		gl.bindBuffer(gl.ARRAY_BUFFER, buffers.bitangentBuffer);
+		gl.vertexAttribPointer(shader.attributes["vertexBitangent"], buffers.bitangentBuffer.itemSize, gl.FLOAT, false, 0, 0);
 	}
 	else
 	{
@@ -131,7 +131,7 @@ PhongMaterial.vertexShader = MeshMaterial.vertexHeader + PhongMaterial.vertexHea
 \
 void main(void)\
 {\
-	if(false)\
+	if(hasNormalMap)\
 	{\
 		vec3 T = normalize(vec3(model * vec4(vertexTangent, 0.0)));\
 		vec3 B = normalize(vec3(model * vec4(vertexBitangent, 0.0)));\
@@ -185,13 +185,10 @@ vec3 lighIntesity = vec3(0.0, 0.0, 0.0);\
 vec3 normal;\
 if(hasNormalMap)\
 {\
-	vec3 normalTexture = texture2D(normalMap, vec2(fragmentUV.s, fragmentUV.t)).rgb;\
-	\
+	normal = texture2D(normalMap, vec2(fragmentUV.s, fragmentUV.t)).rgb;\
 	/* Tranform to -1, 1 */\
-	normalTexture = normalize(normalTexture * 2.0 - 1.0);\
-	\
-	vec4 temp = model * vec4(normalTexture, 0.0);\
-	normal = normalize(temp.xyz);\
+	normal = normalize(normal * 2.0 - 1.0);\
+	normal = normalize(fragmentTBN * normal);\
 }\
 else\
 {\

@@ -17,23 +17,40 @@ function Arena()
 	this.lightA.color.set(1.5, 0.0, 0.0);
 	this.scene.add(this.lightA);
 
+	var sphere = new SphereGeometry(1.0, 16, 16);
+
+	var material = new BasicMaterial();
+	material.color.set(1, 0, 0);
+	this.markerA = new Mesh(sphere, material);
+	this.scene.add(this.markerA);
+
 	this.lightB = new PointLight();
 	this.lightB.color.set(0.0, 0.0, 2.0);
 	this.scene.add(this.lightB);
 
+	var material = new BasicMaterial();
+	material.color.set(0, 0, 1);
+	this.markerB = new Mesh(sphere, material);
+	this.scene.add(this.markerB);
+
 	this.lightC = new PointLight();
 	this.lightC.color.set(0.0, 1.0, 0.0);
 	this.scene.add(this.lightC);
+
+	var material = new BasicMaterial();
+	material.color.set(0, 1, 0);
+	this.markerC = new Mesh(sphere, material);
+	this.scene.add(this.markerC);
 
 	this.lightD = new PointLight();
 	this.lightD.color.set(0.5, 0.5, 0.5);
 	this.lightD.position.set(53.5, 24.5, -137);
 	this.scene.add(this.lightD);
 
-	this.lightMarker = new Mesh(new SphereGeometry(1.0, 16, 16), new BasicMaterial());
-	this.lightMarker.position.set(0, 3, 0);
-	this.lightMarker.updateMatrix();
-	this.scene.add(this.lightMarker);
+	this.markerD = new Mesh(sphere, new BasicMaterial());
+	this.markerD.position.set(0, 3, 0);
+	this.markerD.updateMatrix();
+	this.scene.add(this.markerD);
 
 	this.ambient = new AmbientLight();
 	this.ambient.color.set(0.2, 0.2, 0.2);
@@ -76,6 +93,7 @@ function Arena()
 		model.material = new PhongMaterial();
 		model.material.texture = new Texture("data/models/eyebot/Eyebot_d.jpg");
 		model.material.normalMap = new Texture("data/models/eyebot/Eyebot_n.jpg");
+		model.geometry.calculateTangent();
 		model.position.set(60, 20, -100);
 		model.scale.set(0.5, 0.5, 0.5);
 		model.updateMatrix();
@@ -115,12 +133,20 @@ function Arena()
 		model.updateMatrix();
 		self.scene.add(model);
 
-
 		//Eyebot normal
 		var model = OBJLoader.load(data[0], data[1], "data/models/eyebot");
 		model.material = new NormalMaterial();
-		model.material.normalMap = new Texture("data/models/eyebot/Eyebot_n.jpg");
 		model.position.set(-90,20,-100);
+		model.scale.set(0.5,0.5,0.5);
+		model.updateMatrix();
+		self.scene.add(model);
+
+		//Eyebot normal map
+		var model = OBJLoader.load(data[0], data[1], "data/models/eyebot");
+		model.material = new NormalMaterial();
+		model.material.normalMap = new Texture("data/models/eyebot/Eyebot_n.jpg");
+		model.geometry.calculateTangent();
+		model.position.set(-120, 20, -100);
 		model.scale.set(0.5,0.5,0.5);
 		model.updateMatrix();
 		self.scene.add(model);
@@ -464,8 +490,17 @@ Arena.prototype.update = function()
 		}
 	}
 
-	this.lightMarker.position.copy(this.lightD.position);
-	this.lightMarker.updateMatrix();
+	this.markerA.position.copy(this.lightA.position);
+	this.markerA.updateMatrix();
+
+	this.markerB.position.copy(this.lightB.position);
+	this.markerB.updateMatrix();
+
+	this.markerC.position.copy(this.lightC.position);
+	this.markerC.updateMatrix();
+
+	this.markerD.position.copy(this.lightD.position);
+	this.markerD.updateMatrix();
 };
 
 Arena.prototype.draw = function(renderer)
