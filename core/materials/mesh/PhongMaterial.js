@@ -123,13 +123,15 @@ PhongMaterial.vertexHeader = "\
 uniform bool hasNormalMap;\
 \
 attribute vec3 vertexTangent;\
-attribute vec3 vertexBitangent;"
+attribute vec3 vertexBitangent;\
+\
+varying mat3 fragmentTBN;"
 
 PhongMaterial.vertexShader = MeshMaterial.vertexHeader + PhongMaterial.vertexHeader + "\
 \
 void main(void)\
 {\
-	if(hasNormalMap)\
+	if(false)\
 	{\
 		vec3 T = normalize(vec3(model * vec4(vertexTangent, 0.0)));\
 		vec3 B = normalize(vec3(model * vec4(vertexBitangent, 0.0)));\
@@ -150,7 +152,7 @@ void main(void)\
  */
 PhongMaterial.fragmentHeader = BasicMaterial.fragmentHeader +  "\
 \
-varying vec2 fragmentTBN;\
+varying mat3 fragmentTBN;\
 \
 uniform bool hasNormalMap;\
 uniform sampler2D normalMap;";
