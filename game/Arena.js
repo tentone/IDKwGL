@@ -25,6 +25,16 @@ function Arena()
 	this.lightC.color.set(0.0, 1.0, 0.0);
 	this.scene.add(this.lightC);
 
+	this.lightD = new PointLight();
+	this.lightD.color.set(0.5, 0.5, 0.5);
+	this.lightD.position.set(53.5, 24.5, -137);
+	this.scene.add(this.lightD);
+
+	this.lightMarker = new Mesh(new SphereGeometry(1.0, 16, 16), new BasicMaterial());
+	this.lightMarker.position.set(0, 3, 0);
+	this.lightMarker.updateMatrix();
+	this.scene.add(this.lightMarker);
+
 	this.ambient = new AmbientLight();
 	this.ambient.color.set(0.2, 0.2, 0.2);
 	this.scene.add(this.ambient);
@@ -63,15 +73,26 @@ function Arena()
 	FileLoader.loadMultiple(["data/models/eyebot/eyebot.obj", "data/models/eyebot/eyebot.mtl"], function(data)
 	{
 		var model = OBJLoader.load(data[0], data[1], "data/models/eyebot");
-		model.position.set(0,20,-100);
-		model.scale.set(0.5,0.5,0.5);
+		model.material = new PhongMaterial();
+		model.material.texture = new Texture("data/models/eyebot/Eyebot_d.jpg");
+		model.material.normalMap = new Texture("data/models/eyebot/Eyebot_n.jpg");
+		model.position.set(60, 20, -100);
+		model.scale.set(0.5, 0.5, 0.5);
+		model.updateMatrix();
+		self.scene.add(model);
+
+		var model = OBJLoader.load(data[0], data[1], "data/models/eyebot");
+		model.material = new PhongMaterial();
+		model.material.texture = new Texture("data/models/eyebot/Eyebot_d.jpg");
+		model.position.set(30, 20, -100);
+		model.scale.set(0.5, 0.5, 0.5);
 		model.updateMatrix();
 		self.scene.add(model);
 
 		//Eyebot color
 		var model = OBJLoader.load(data[0], data[1], "data/models/eyebot");
 		model.material = new PhongMaterial();
-		model.position.set(30,20,-100);
+		model.position.set(0, 20, -100);
 		model.scale.set(0.5,0.5,0.5);
 		model.updateMatrix();
 		self.scene.add(model);
@@ -88,12 +109,12 @@ function Arena()
 		var model = OBJLoader.load(data[0], data[1], "data/models/eyebot");
 		model.material = new DissolveMaterial();
 		model.material.texture = new Texture("data/models/eyebot/Eyebot_d.jpg");
-		model.material.normalMap = new Texture("data/models/eyebot/Eyebot_n.jpg");
 		model.material.dissolveMap = new Texture("data/texture/noise.jpg");
 		model.position.set(-60,20,-100);
 		model.scale.set(0.5,0.5,0.5);
 		model.updateMatrix();
 		self.scene.add(model);
+
 
 		//Eyebot normal
 		var model = OBJLoader.load(data[0], data[1], "data/models/eyebot");
@@ -339,9 +360,8 @@ function Arena()
 	this.cross.updateMatrix();
 	this.hudScene.add(this.cross);
 
-	//Bullet
 	this.bullet = new Mesh(new SphereGeometry(1.0, 16, 16), new BasicMaterial());
-	this.bullet.position.set(0, 8, 0);
+	this.bullet.position.set(0, 3, 0);
 	this.bullet.updateMatrix();
 	this.scene.add(this.bullet);
 
@@ -410,24 +430,42 @@ Arena.prototype.update = function()
 	this.particle.update();
 	this.world.update();
 
-	if(App.keyboard.isKeyPressed(Keyboard.UP))
-	{
-		this.cube.rotation.y += 0.02;
-	}
-	if(App.keyboard.isKeyPressed(Keyboard.DOWN))
-	{
-		this.cube.rotation.y -= 0.02;
-	}
+
 	if(App.keyboard.isKeyPressed(Keyboard.RIGHT))
 	{
-		this.cube.rotation.x += 0.02;
+		this.lightD.position.x += 0.5;
 	}
 	if(App.keyboard.isKeyPressed(Keyboard.LEFT))
 	{
-		this.cube.rotation.x -= 0.02;
+		this.lightD.position.x -= 0.5;
 	}
-	
-	this.cube.updateMatrix();
+
+	if(App.keyboard.isKeyPressed(Keyboard.CTRL))
+	{
+		if(App.keyboard.isKeyPressed(Keyboard.UP))
+		{
+			this.lightD.position.y += 0.5;
+		}
+		if(App.keyboard.isKeyPressed(Keyboard.DOWN))
+		{
+			this.lightD.position.y -= 0.5;
+		}
+	}
+	else
+	{
+		if(App.keyboard.isKeyPressed(Keyboard.UP))
+		{
+			this.lightD.position.z -= 0.5;
+
+		}
+		if(App.keyboard.isKeyPressed(Keyboard.DOWN))
+		{
+			this.lightD.position.z += 0.5;
+		}
+	}
+
+	this.lightMarker.position.copy(this.lightD.position);
+	this.lightMarker.updateMatrix();
 };
 
 Arena.prototype.draw = function(renderer)

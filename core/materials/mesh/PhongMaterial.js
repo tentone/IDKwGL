@@ -35,13 +35,6 @@ function PhongMaterial(name)
 	 this.specularMap = null;
 
 	/**
-	 * Diffuse color
-	 *
-	 * TODO <NOT USED>
-	 */
-	this.diffuse = new Color(1.0, 1.0, 1.0);
-
-	/**
 	 * Specular highlight color
 	 *
 	 * TODO <NOT USED>
@@ -80,7 +73,6 @@ PhongMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera, 
 {
 	BasicMaterial.prototype.updateUniforms.call(this, renderer, gl, shader, camera, object, scene);
 
-	//Normal map
 	if(this.normalMap !== null)
 	{
 		var normalMap = renderer.getTexture(this.normalMap);
@@ -88,6 +80,16 @@ PhongMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera, 
 		gl.bindTexture(gl.TEXTURE_2D, normalMap);
 		gl.uniform1i(shader.uniforms["normalMap"], 0);
 		gl.uniform1i(shader.uniforms["hasNormalMap"], 1);
+
+		var buffers = renderer.getBuffers(object.geometry);
+
+		//Tangent vectors
+		//gl.bindBuffer(gl.ARRAY_BUFFER, buffers.vertexBuffer);
+		//gl.vertexAttribPointer(shader.attributes["vertexTangent"], buffers.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+		//Bitangent vectors
+		//gl.bindBuffer(gl.ARRAY_BUFFER, buffers.vertexBuffer);
+		//gl.vertexAttribPointer(shader.attributes["vertexBitangent"], buffers.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
 	}
 	else
 	{
@@ -98,7 +100,7 @@ PhongMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera, 
 
 PhongMaterial.createShader = function(gl)
 {
-	var shader = new Shader(gl, PhongMaterial.fragmentShader, MeshMaterial.vertexShader);
+	var shader = new Shader(gl, PhongMaterial.fragmentShader, PhongMaterial.vertexShader);
 
 	PhongMaterial.registerUniforms(gl, shader);
 
@@ -109,15 +111,46 @@ PhongMaterial.registerUniforms = function(gl, shader)
 {
 	BasicMaterial.registerUniforms(gl, shader);
 
-	//Normal
 	shader.registerUniform("hasNormalMap");
 	shader.registerUniform("normalMap");
+
+	shader.registerVertexAttributeArray("vertexTangent");
+	shader.registerVertexAttributeArray("vertexBitangent");
 };
+
+
+PhongMaterial.vertexHeader = "\
+uniform bool hasNormalMap;\
+\
+attribute vec3 vertexTangent;\
+attribute vec3 vertexBitangent;"
+
+PhongMaterial.vertexShader = MeshMaterial.vertexHeader + PhongMaterial.vertexHeader + "\
+\
+void main(void)\
+{\
+	if(hasNormalMap)\
+	{\
+		vec3 T = normalize(vec3(model * vec4(vertexTangent, 0.0)));\
+		vec3 B = normalize(vec3(model * vec4(vertexBitangent, 0.0)));\
+		vec3 N = normalize(vec3(model * vec4(vertexNormal, 0.0)));\
+		fragmentTBN = mat3(T, B, N);\
+	}\
+\
+	fragmentUV = vertexUV;\
+	fragmentVertex = vertexPosition;\
+	fragmentNormal = vertexNormal;\
+	\
+	gl_Position = projection * view * model * vec4(vertexPosition, 1.0);\
+}";
+
 
 /**
  * Phong material fragment shader header.
  */
 PhongMaterial.fragmentHeader = BasicMaterial.fragmentHeader +  "\
+\
+varying vec2 fragmentTBN;\
 \
 uniform bool hasNormalMap;\
 uniform sampler2D normalMap;";

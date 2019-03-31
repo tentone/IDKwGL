@@ -60,14 +60,13 @@ Texture.LINEAR_MIPMAP_LINEAR = 9987;
 Texture.prototype.createTexture = function(gl)
 {
 	var texture = gl.createTexture();
-	var image = document.createElement("img");
-
 	var self = this;
 
+	var image = document.createElement("img");
 	image.onload = function()
 	{	
 		gl.bindTexture(gl.TEXTURE_2D, texture);
-		gl.texImage2D(gl.TEXTURE_2D, 0, self.format, self.format, gl.UNSIGNED_BYTE, image);
+		gl.texImage2D(gl.TEXTURE_2D, 0, self.format, self.format, gl.UNSIGNED_BYTE, this);
 		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, self.flipY);
 		gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, self.premultiplyAlpha);
 
@@ -76,7 +75,7 @@ Texture.prototype.createTexture = function(gl)
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, self.wrapT);
 
 		//Only generate mipmaps is texture is power of two
-		if(MathUtils.isPowerOf2(image.naturalWidth) && MathUtils.isPowerOf2(image.naturalHeight))
+		if(MathUtils.isPowerOf2(this.naturalWidth) && MathUtils.isPowerOf2(this.naturalHeight))
 		{
 			gl.generateMipmap(gl.TEXTURE_2D);
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);

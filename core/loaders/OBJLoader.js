@@ -226,9 +226,9 @@ OBJLoader.loadMTL = function(data, path)
 			//Diffuse color
 			else if(tokens[offset] === "Kd")
 			{
-				materials[index].diffuse.r = parseFloat(tokens[offset+1]);
-				materials[index].diffuse.g = parseFloat(tokens[offset+2]);
-				materials[index].diffuse.b = parseFloat(tokens[offset+3]);
+				materials[index].color.r = parseFloat(tokens[offset+1]);
+				materials[index].color.g = parseFloat(tokens[offset+2]);
+				materials[index].color.b = parseFloat(tokens[offset+3]);
 			}
 			//Specular color
 			else if(tokens[offset] === "Ks")
