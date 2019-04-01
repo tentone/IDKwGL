@@ -56,7 +56,7 @@ DissolveMaterial.prototype.updateUniforms = function(renderer, gl, shader, camer
 
 DissolveMaterial.createShader = function(gl)
 {	
-	var shader = new Shader(gl, DissolveMaterial.fragmentShader, MeshMaterial.vertexShader);
+	var shader = new Shader(gl, DissolveMaterial.fragmentShader, PhongMaterial.vertexShader);
 
 	DissolveMaterial.registerUniforms(gl, shader);
 

@@ -53,7 +53,7 @@ vec3 directionalLight(DirectionalLight light, vec3 vertex, vec3 normal)\
 	return light.color;\
 }";
 
-GrassMaterial.vertexShader = MeshMaterial.vertexHeader + "\
+GrassMaterial.vertexShader = MeshMaterial.vertexHeader + PhongMaterial.vertexHeader + "\
 \
 uniform float time;\
 \

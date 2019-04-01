@@ -73,7 +73,7 @@ Shader.prototype.compile = function()
 
 	if(!gl.getProgramParameter(this.program, gl.LINK_STATUS))
 	{
-		console.error("IDKwGL: Could not initialize shader.");
+		console.error("IDKwGL: Could not initialize shader.", gl.getProgramInfoLog(this.program));
 	}
 };
 
