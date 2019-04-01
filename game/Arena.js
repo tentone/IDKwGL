@@ -402,7 +402,6 @@ Arena.prototype.update = function()
 		var bullet = this.bullet.clone();
 		bullet.position.copy(this.player.camera.position);
 
-
 		var particle = new Particle(bullet);
 		particle.time = 100;
 		particle.speed.set();
@@ -450,8 +449,8 @@ Arena.prototype.update = function()
 	var time = this.timer.get();
 
 	this.lightA.position.set(Math.cos(time / 1000.0) * 70.0 + 50.0, 30, Math.sin(time / 1300.0) * 70.0 + 50.0);
-	this.lightB.position.set(Math.cos(time / 800.0) * 80.0, 30, Math.sin(time / 900.0) * 80.0);
-	this.lightC.position.set(Math.cos(time / 1200.0) * 90.0 - 50.0, 30, Math.sin(time / 1100.0) * 90.0 - 50.0);
+	this.lightB.position.set(Math.cos(time / 800.0) * 80.0, Math.sin(time / 1200.0) * 25 + 30, Math.sin(time / 900.0) * 80.0);
+	this.lightC.position.set(Math.cos(time / 1200.0) * 90.0 - 50.0, Math.sin(time / 1400.0) * 25 + 30, Math.sin(time / 1100.0) * 90.0 - 50.0);
 
 	this.particle.update();
 	this.world.update();
