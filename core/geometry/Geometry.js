@@ -32,21 +32,19 @@ function Geometry()
 	this.faces = [];
 
 	/**
-	 * Tangent and bitangent vectors, only used for normal mapping in tangent space.
+	 * Tangent vectors, used for normal mapping in tangent space.
 	 */
 	this.tangent = [];
-	this.bitangent = [];
 }
 
 Geometry.prototype.constructor = Geometry;
 
 /**
- * Calculate tangent and bitangent vector for normal mapping.
+ * Calculate tangent vector for normal mapping.
  */
 Geometry.prototype.calculateTangent = function()
 {
 	this.tangent = [];
-	this.bitangent = [];
 
 	for(var i = 0 ; i < this.faces.length; i += 3)
 	{
@@ -75,20 +73,11 @@ Geometry.prototype.calculateTangent = function()
 		var tangentY = f * (deltaV2 * edge1Y - deltaV1 * edge2Y);
 		var tangentZ = f * (deltaV2 * edge1Z - deltaV1 * edge2Z);
 
-		var bitangentX = f * (-deltaU2 * edge1X - deltaU1 * edge2X);
-		var bitangentY = f * (-deltaU2 * edge1Y - deltaU1 * edge2Y);
-		var bitangentZ = f * (-deltaU2 * edge1Z - deltaU1 * edge2Z);
-
 		//Normalize
 		var tangentLength = Math.sqrt(Math.pow(tangentX, 2) + Math.pow(tangentY, 2) + Math.pow(tangentZ, 2));
 		tangentX /= tangentLength;
 		tangentY /= tangentLength;
 		tangentZ /= tangentLength;
-
-		var bitangentLength = Math.sqrt(Math.pow(bitangentX, 2) + Math.pow(bitangentY, 2) + Math.pow(bitangentZ, 2));
-		bitangentX /= bitangentLength;
-		bitangentY /= bitangentLength;
-		bitangentZ /= bitangentLength;
 
 		for(var j = 0; j < 3; j++)
 		{
@@ -97,10 +86,6 @@ Geometry.prototype.calculateTangent = function()
 			this.tangent[f] = tangentX;
 			this.tangent[f + 1] = tangentY;
 			this.tangent[f + 2] = tangentZ;
-
-			this.bitangent[f] = bitangentX;
-			this.bitangent[f + 1] = bitangentY;
-			this.bitangent[f + 2] = bitangentZ;
 		}
 	}
 };
@@ -144,8 +129,7 @@ Geometry.prototype.createBuffers = function(gl)
 		uvBuffer: uvBuffer,
 		normalBuffer: normalBuffer,
 		facesBuffer: facesBuffer,
-		tangentBuffer: null,
-		bitangentBuffer: null
+		tangentBuffer: null
 	};
 
 	//Tagent
@@ -158,18 +142,6 @@ Geometry.prototype.createBuffers = function(gl)
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.tangent), gl.STATIC_DRAW);
 
 		buffers.tangentBuffer = tangentBuffer;
-	}
-
-	//Bitagent
-	if(this.bitangent.length > 0)
-	{
-		var bitangentBuffer = gl.createBuffer();
-		bitangentBuffer.itemSize = 3;
-		bitangentBuffer.length = this.bitangent.length / 3;
-		gl.bindBuffer(gl.ARRAY_BUFFER, bitangentBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.bitangent), gl.STATIC_DRAW);
-
-		buffers.bitangentBuffer = bitangentBuffer;
 	}
 
 	return buffers;
