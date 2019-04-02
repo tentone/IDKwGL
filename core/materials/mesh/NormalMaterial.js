@@ -6,7 +6,15 @@ function NormalMaterial(name)
 
 	this.type = "NormalMaterial";
 
-	this.inModelSpace = false;
+	/**
+	 * Normal vector map used for lighting calculation. 
+	 */
+	this.normalMap = null;
+
+	/** 
+	 * Apply the camera view matrix to the normal vector.
+	 */
+	this.inModelSpace = true;
 }
 
 NormalMaterial.prototype = Object.create(MeshMaterial.prototype);
@@ -22,7 +30,7 @@ NormalMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera,
 
 NormalMaterial.createShader = function(gl)
 {
-	var shader = new Shader(gl, NormalMaterial.fragmentShader, MeshMaterial.vertexShader);
+	var shader = new Shader(gl, NormalMaterial.fragmentShader, NormalMaterial.vertexShader);
 
 	NormalMaterial.registerUniforms(gl, shader);
 	
@@ -36,6 +44,28 @@ NormalMaterial.registerUniforms = function(gl, shader)
 	shader.registerUniform("inModelSpace");
 };
 
+NormalMaterial.vertexShader = MeshMaterial.vertexHeader + "\
+\
+uniform bool inModelSpace;\
+\
+void main(void)\
+{\
+	fragmentUV = vertexUV;\
+	fragmentVertex = vertexPosition;\
+	\
+	if(inModelSpace)\
+	{\
+		fragmentNormal = vertexNormal;\
+	}\
+	else\
+	{\
+		fragmentNormal = (projection * vec4(vertexNormal, 1.0)).xyz;\
+	}\
+	\
+	gl_Position = projection * view * model * vec4(vertexPosition, 1.0);\
+}";
+
+
 NormalMaterial.fragmentHeader = BasicMaterial.fragmentHeader +  "\
 \
 uniform bool inModelSpace;";
@@ -44,15 +74,6 @@ NormalMaterial.fragmentShader = NormalMaterial.fragmentHeader + "\
 \
 void main(void)\
 {\
-	if(inModelSpace)\
-	{\
-		vec3 normal = fragmentNormal * 0.5 + 0.5;\
-		gl_FragColor = vec4(normal, 1.0);\
-	}\
-	else\
-	{\
-		/* TODO */\
-		vec3 normal = fragmentNormal * 0.5 + 0.5;\
-		gl_FragColor = vec4(normal, 1.0);\
-	}\
+	vec3 normal = fragmentNormal * 0.5 + 0.5;\
+	gl_FragColor = vec4(normal, 1.0);\
 }";

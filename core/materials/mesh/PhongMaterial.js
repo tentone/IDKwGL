@@ -84,12 +84,11 @@ PhongMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera, 
 		var buffers = renderer.getBuffers(object.geometry);
 
 		//Tangent vectors
-		gl.bindBuffer(gl.ARRAY_BUFFER, buffers.tangentBuffer);
-		gl.vertexAttribPointer(shader.attributes["vertexTangent"], buffers.tangentBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-		//Bitangent vectors
-		gl.bindBuffer(gl.ARRAY_BUFFER, buffers.bitangentBuffer);
-		gl.vertexAttribPointer(shader.attributes["vertexBitangent"], buffers.bitangentBuffer.itemSize, gl.FLOAT, false, 0, 0);
+		if(buffers.tangentBuffer !== null)
+		{		
+			gl.bindBuffer(gl.ARRAY_BUFFER, buffers.tangentBuffer);
+			gl.vertexAttribPointer(shader.attributes["vertexTangent"], buffers.tangentBuffer.itemSize, gl.FLOAT, false, 0, 0);
+		}
 	}
 	else
 	{
@@ -115,7 +114,6 @@ PhongMaterial.registerUniforms = function(gl, shader)
 	shader.registerUniform("normalMap");
 
 	shader.registerVertexAttributeArray("vertexTangent");
-	shader.registerVertexAttributeArray("vertexBitangent");
 };
 
 
@@ -123,7 +121,6 @@ PhongMaterial.vertexHeader = "\
 uniform bool hasNormalMap;\
 \
 attribute vec3 vertexTangent;\
-attribute vec3 vertexBitangent;\
 \
 varying mat3 fragmentTBN;"
 
@@ -134,8 +131,12 @@ void main(void)\
 	if(hasNormalMap)\
 	{\
 		vec3 T = normalize(vec3(model * vec4(vertexTangent, 0.0)));\
-		vec3 B = normalize(vec3(model * vec4(vertexBitangent, 0.0)));\
 		vec3 N = normalize(vec3(model * vec4(vertexNormal, 0.0)));\
+		vec3 B = cross(N, T);\
+		\
+		/*re-orthogonalize T with respect to N*/\
+		T = normalize(T - dot(T, N) * N);\
+		\
 		fragmentTBN = mat3(T, B, N);\
 	}\
 \
@@ -186,8 +187,7 @@ vec3 normal;\
 if(hasNormalMap)\
 {\
 	normal = texture2D(normalMap, vec2(fragmentUV.s, fragmentUV.t)).rgb;\
-	/* Tranform to -1, 1 */\
-	normal = normalize(normal * 2.0 - 1.0);\
+	normal = normalize(normal * 2.0 - 1.0); /*Tranform to -1, 1*/\
 	normal = normalize(fragmentTBN * normal);\
 }\
 else\
