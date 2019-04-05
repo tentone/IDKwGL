@@ -118,31 +118,18 @@ PhongMaterial.registerUniforms = function(gl, shader)
 
 
 PhongMaterial.vertexHeader = "\
-uniform bool hasNormalMap;\
-\
 attribute vec3 vertexTangent;\
 \
-varying mat3 fragmentTBN;"
+varying vec3 fragmentTangent;";
 
 PhongMaterial.vertexShader = MeshMaterial.vertexHeader + PhongMaterial.vertexHeader + "\
 \
 void main(void)\
 {\
-	if(hasNormalMap)\
-	{\
-		vec3 T = normalize(vec3(model * vec4(vertexTangent, 0.0)));\
-		vec3 N = normalize(vec3(model * vec4(vertexNormal, 0.0)));\
-		vec3 B = cross(N, T);\
-		\
-		/*re-orthogonalize T with respect to N*/\
-		T = normalize(T - dot(T, N) * N);\
-		\
-		fragmentTBN = mat3(T, B, N);\
-	}\
-\
 	fragmentUV = vertexUV;\
 	fragmentVertex = vertexPosition;\
 	fragmentNormal = vertexNormal;\
+	fragmentTangent = vertexTangent;\
 	\
 	gl_Position = projection * view * model * vec4(vertexPosition, 1.0);\
 }";
@@ -153,7 +140,7 @@ void main(void)\
  */
 PhongMaterial.fragmentHeader = BasicMaterial.fragmentHeader +  "\
 \
-varying mat3 fragmentTBN;\
+varying vec3 fragmentTangent;\
 \
 uniform bool hasNormalMap;\
 uniform sampler2D normalMap;";
@@ -184,17 +171,25 @@ vec3 lighIntesity = vec3(0.0, 0.0, 0.0);\
 \
 /* Fragment normal */\
 vec3 normal;\
+\
 if(hasNormalMap)\
 {\
-	normal = texture2D(normalMap, vec2(fragmentUV.s, fragmentUV.t)).rgb;\
-	normal = normalize(normal * 2.0 - 1.0); /*Tranform to -1, 1*/\
-	normal = normalize(fragmentTBN * normal);\
+	vec3 T = normalize(vec3((model * vec4(fragmentTangent, 0.0)).xyz));\
+	vec3 N = normalize(vec3((model * vec4(fragmentNormal, 0.0)).xyz));\
+	\
+	T = normalize(T - dot(T, N) * N);\
+	\
+	vec3 B = cross(N, T);\
+	mat3 TBN = mat3(T, B, N);\
+	\
+	normal = texture2D(normalMap, vec2(fragmentUV.s, fragmentUV.t)).rgb * 2.0 - 1.0; /*Tranform to -1, 1*/\
+	normal = normalize(TBN * normal);\
 }\
 else\
 {\
 	normal = normalize(vec3((model * vec4(fragmentNormal, 0.0)).xyz));\
 }\
-	\
+\
 /* Fragment position */\
 vec3 vertex = (model * vec4(fragmentVertex, 1.0)).xyz;\
 \
