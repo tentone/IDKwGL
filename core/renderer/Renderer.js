@@ -21,7 +21,7 @@ function Renderer(canvas)
 	}
 
 	this.gl = null;
-		
+	
 	//Rendering canvas
 	this.canvas = canvas;
 	this.size = new Vector2(1, 1);
@@ -47,6 +47,8 @@ Renderer.prototype.initializeGLContext = function()
 	try
 	{
 		this.gl = this.canvas.getContext("webgl", {alpha: false});
+		this.gl.getExtension("OES_standard_derivatives");
+
 		this.resize(this.canvas.width, this.canvas.height);
 	}
 	catch(error)

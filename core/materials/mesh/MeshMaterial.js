@@ -217,6 +217,7 @@ MeshMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera, o
  * Header lights structs declaration.
  */
 MeshMaterial.fragmentLightStructs = "\
+\
 struct PointLight\
 {\
 	vec3 color;\
@@ -239,11 +240,13 @@ struct AmbientLight\
  * Header lights uniform declaration.
  */
 MeshMaterial.fragmentHeaderLights = "\
+\
 uniform PointLight pointLights[" + Material.MAX_LIGHTS + "];\
 uniform AmbientLight ambientLights[" + Material.MAX_LIGHTS + "];\
 uniform DirectionalLight directionalLights[" + Material.MAX_LIGHTS + "];";
 
 MeshMaterial.fragmentHeader = "\
+\
 precision mediump float;\
 \
 varying vec2 fragmentUV;\
@@ -255,9 +258,15 @@ uniform mat4 model;\
 uniform float alphaTest;\
 uniform float far, near;";
 
-MeshMaterial.alphaTest = "if(gl_FragColor.a < alphaTest){discard;}"
+MeshMaterial.alphaTest = "\
+\
+if(gl_FragColor.a < alphaTest)\
+{\
+	discard;\
+}"
 
 MeshMaterial.vertexHeader = "\
+\
 precision mediump float;\
 \
 attribute vec3 vertexPosition;\

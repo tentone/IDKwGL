@@ -118,6 +118,7 @@ PhongMaterial.registerUniforms = function(gl, shader)
 
 
 PhongMaterial.vertexHeader = "\
+\
 attribute vec3 vertexTangent;\
 \
 varying vec3 fragmentTangent;";
@@ -135,10 +136,14 @@ void main(void)\
 }";
 
 
+PhongMaterial.fragmentExtensions = "\
+\
+#extension GL_OES_standard_derivatives : enable\n";
+
 /**
  * Phong material fragment shader header.
  */
-PhongMaterial.fragmentHeader = BasicMaterial.fragmentHeader +  "\
+PhongMaterial.fragmentHeader = BasicMaterial.fragmentHeader + "\
 \
 varying vec3 fragmentTangent;\
 \
@@ -146,9 +151,53 @@ uniform bool hasNormalMap;\
 uniform sampler2D normalMap;";
 
 /**
+ * Method to compute normal mapping without pre calculated tangent data.
+ */
+PhongMaterial.perturbNormal = "\
+\
+/* Followup: Normal Mapping Without Precomputed Tangents from http://www.thetenthplanet.de/archives/1180*/\
+mat3 cotangent_frame(vec3 N, vec3 p, vec2 uv)\
+{\
+	/* Get edge vectors of the pixel triangle */\
+	vec3 dp1 = dFdx(p);\
+	vec3 dp2 = dFdy(p);\
+	vec2 duv1 = dFdx(uv);\
+	vec2 duv2 = dFdy(uv);\
+	\
+	/* Solve the linear system */\
+	vec3 dp2perp = cross(dp2, N);\
+	vec3 dp1perp = cross(N, dp1);\
+	vec3 T = dp2perp * duv1.x + dp1perp * duv2.x;\
+	vec3 B = dp2perp * duv1.y + dp1perp * duv2.y;\
+	\
+	/* Construct a scale invariant frame */\
+	float invmax = inversesqrt(max(dot(T, T), dot(B, B)));\
+	return mat3(T * invmax, B * invmax, N);\
+}\
+\
+vec3 perturb_normal(vec3 N, vec3 V, vec2 uv)\
+{\
+	/* Assume N, the interpolated vertex normal and V, the view vector (vertex to eye) */\
+	vec3 map = texture2D(normalMap, uv).rgb;\
+	\
+	/* Unsigned RGB normal map */\
+	map = map * 2.0 - 1.0;\
+	\
+	/* 2 channel normal map */\
+	/* map.z = sqrt(1.0 - dot(map.xy, map.xy)); */\
+	\
+	/* Normal map with green up */\
+	/* map.y = -map.y; */\
+	\
+	mat3 TBN = cotangent_frame(N, -V, uv);\
+	\
+	return normalize(TBN * map);\
+}";
+
+/**
  * Light calculation methods.
  */
-PhongMaterial.fragmentLightFunctions = "\
+PhongMaterial.fragmentLightFunctions = PhongMaterial.perturbNormal + "\
 \
 vec3 pointLight(PointLight light, vec3 vertex, vec3 normal)\
 {\
@@ -174,16 +223,18 @@ vec3 normal;\
 \
 if(hasNormalMap)\
 {\
-	vec3 T = normalize(vec3((model * vec4(fragmentTangent, 0.0)).xyz));\
-	vec3 N = normalize(vec3((model * vec4(fragmentNormal, 0.0)).xyz));\
+	/* vec3 T = normalize(vec3((model * vec4(fragmentTangent, 0.0)).xyz)); */\
+	/* vec3 N = normalize(vec3((model * vec4(fragmentNormal, 0.0)).xyz)); */\
+	/* T = normalize(T - dot(T, N) * N); */\
+	/* vec3 B = cross(N, T); */\
+	/* mat3 TBN = mat3(T, B, N); */\
+	/* normal = texture2D(normalMap, vec2(fragmentUV.s, fragmentUV.t)).rgb * 2.0 - 1.0; */ /*Tranform to -1, 1*/\
+	/* normal = normalize(TBN * normal); */\
 	\
-	T = normalize(T - dot(T, N) * N);\
+	vec3 viewDirection = vec3(0.0, 0.0, 1.0);\
 	\
-	vec3 B = cross(N, T);\
-	mat3 TBN = mat3(T, B, N);\
+	normal = perturb_normal(normalize(fragmentNormal), normalize(viewDirection), fragmentUV.st);\
 	\
-	normal = texture2D(normalMap, vec2(fragmentUV.s, fragmentUV.t)).rgb * 2.0 - 1.0; /*Tranform to -1, 1*/\
-	normal = normalize(TBN * normal);\
 }\
 else\
 {\
@@ -216,7 +267,7 @@ gl_FragColor.rgb *= lighIntesity;";
 /**
  * Full phong material fragment shader.
  */
-PhongMaterial.fragmentShader = PhongMaterial.fragmentHeader + MeshMaterial.fragmentLightStructs + MeshMaterial.fragmentHeaderLights + PhongMaterial.fragmentLightFunctions + "\
+PhongMaterial.fragmentShader = PhongMaterial.fragmentExtensions + PhongMaterial.fragmentHeader + MeshMaterial.fragmentLightStructs + MeshMaterial.fragmentHeaderLights + PhongMaterial.fragmentLightFunctions + "\
 \
 void main(void)\
 {\

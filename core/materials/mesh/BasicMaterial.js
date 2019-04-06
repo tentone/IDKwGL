@@ -15,6 +15,13 @@ function BasicMaterial(name)
 	 * Is mixed up with the texture map when available
 	 */
 	this.color = new Color(1.0, 1.0, 1.0);
+
+	/**
+	 * Emissive color
+	 *
+	 * Added to the base color as if the surface is self lighted.
+	 */
+	this.emissive = new Color(0.0, 0.0, 0.0);
 }
 
 BasicMaterial.prototype = Object.create(MeshMaterial.prototype);
@@ -36,6 +43,7 @@ BasicMaterial.registerUniforms = function(gl, shader)
 
 	//Color
 	shader.registerUniform("color");
+	shader.registerUniform("emissive");
 
 	//Texture
 	shader.registerUniform("texture");
@@ -46,6 +54,7 @@ BasicMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera, 
 {
 	MeshMaterial.prototype.updateUniforms.call(this, renderer, gl, shader, camera, object, scene);
 
+	gl.uniform3f(shader.uniforms["emissive"], this.emissive.r, this.emissive.g, this.emissive.b);
 	gl.uniform3f(shader.uniforms["color"], this.color.r, this.color.g, this.color.b);
 
 	if(this.texture !== null)
@@ -65,20 +74,24 @@ BasicMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera, 
 BasicMaterial.fragmentHeader = MeshMaterial.fragmentHeader +  "\
 \
 uniform vec3 color;\
+uniform vec3 emissive;\
 \
 uniform bool hasTextureMap;\
 uniform sampler2D texture;";
 
 BasicMaterial.fragmentBaseColor = "\
+\
 if(hasTextureMap)\
 {\
-	gl_FragColor = texture2D(texture, vec2(fragmentUV.s, fragmentUV.t));\
+	gl_FragColor = texture2D(texture, fragmentUV.st);\
 	gl_FragColor.xyz *= color.xyz;\
 }\
 else\
 {\
 	gl_FragColor.xyz = color.xyz;\
-}";
+}\
+\
+gl_FragColor.xyz += emissive.xyz;";
 
 BasicMaterial.fragmentShader = BasicMaterial.fragmentHeader + "\
 \

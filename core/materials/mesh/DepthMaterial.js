@@ -26,6 +26,7 @@ DepthMaterial.registerUniforms = function(gl, shader)
 };
 
 DepthMaterial.fragmentShader = MeshMaterial.fragmentHeader + "\
+\
 float linearize(float depth)\
 {\
 	float z = depth * 2.0 - 1.0; \

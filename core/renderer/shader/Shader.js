@@ -80,15 +80,15 @@ Shader.prototype.compile = function()
 /**
  * Create vertex shader from string.
  */
-Shader.compileVertexShader = function(gl, str)
+Shader.compileVertexShader = function(gl, code)
 {
 	var shader = gl.createShader(gl.VERTEX_SHADER);
-	gl.shaderSource(shader, str);
+	gl.shaderSource(shader, code);
 	gl.compileShader(shader);
 
 	if(!gl.getShaderParameter(shader, gl.COMPILE_STATUS))
 	{
-		console.error("IDKwGL: Error in shader compilation.", gl.getShaderInfoLog(shader));
+		console.error("IDKwGL: Error in shader compilation.", gl.getShaderInfoLog(shader), code);
 	}
 
 	return shader;
@@ -98,15 +98,15 @@ Shader.compileVertexShader = function(gl, str)
 /**
  * Create fragment shader from string.
  */
-Shader.compileFragmentShader = function(gl, str)
+Shader.compileFragmentShader = function(gl, code)
 {
 	var shader = gl.createShader(gl.FRAGMENT_SHADER);;
-	gl.shaderSource(shader, str);
+	gl.shaderSource(shader, code);
 	gl.compileShader(shader);
 
 	if(!gl.getShaderParameter(shader, gl.COMPILE_STATUS))
 	{
-		console.error("IDKwGL: Error in shader compilation.", gl.getShaderInfoLog(shader));
+		console.error("IDKwGL: Error in shader compilation.", gl.getShaderInfoLog(shader), code);
 	}
 
 	return shader;
