@@ -232,7 +232,7 @@ if(hasNormalMap)\
 	/* normal = texture2D(normalMap, fragmentUV.st).rgb * 2.0 - 1.0; */ /*Tranform to -1, 1*/\
 	/* normal = normalize(TBN * normal); */\
 	\
-	vec3 viewDirection = vec3(0.0, 0.0, 1.0);\
+	vec3 viewDirection = vec3(1.0, 1.0, 1.0);\
 	\
 	normal = perturb_normal(normalize(fragmentNormal), normalize(viewDirection), fragmentUV.st);\
 	\

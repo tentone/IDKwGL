@@ -87,11 +87,11 @@ void main(void)\
 {\
 	if(hasNormalMap)\
 	{\
-		gl_FragColor = vec4(texture2D(normalMap, fragmentUV.st).rgb, 1.0);\
+		gl_FragColor = vec4(normalize(texture2D(normalMap, fragmentUV.st).rgb), 1.0);\
 	}\
 	else\
 	{\
-		gl_FragColor = vec4(fragmentNormal * 0.5 + 0.5, 1.0);\
+		gl_FragColor = vec4(normalize((fragmentNormal + 1.0) * 2.0), 1.0);\
 	}\
 }";
 

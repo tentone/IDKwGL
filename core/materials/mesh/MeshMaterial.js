@@ -253,6 +253,7 @@ varying vec2 fragmentUV;\
 varying vec3 fragmentVertex;\
 varying vec3 fragmentNormal;\
 \
+uniform mat4 projection, view;\
 uniform mat4 model;\
 \
 uniform float alphaTest;\
