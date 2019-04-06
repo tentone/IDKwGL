@@ -173,8 +173,30 @@ function Arena()
 		bus.updateMatrix();
 		self.scene.add(bus);
 		self.world.addBody(new BodyObject(bus));
+
+		var bus = OBJLoader.load(data[0], data[1], "data/models/bus");
+		bus.material = new BasicMaterial();
+		bus.material.color.set(1.0, 0.5, 0.6);
+		bus.mode = Mesh.LINES;
+		bus.scale.set(0.08, 0.08, 0.08);
+		bus.position.set(60, 19.8, 230);
+		bus.rotation.set(0, Math.PI, 0);
+		bus.updateMatrix();
+		self.scene.add(bus);
+		self.world.addBody(new BodyObject(bus));
+
+		var bus = OBJLoader.load(data[0], data[1], "data/models/bus");
+		bus.material = new BasicMaterial();
+		bus.mode = Mesh.POINTS;
+		bus.scale.set(0.08, 0.08, 0.08);
+		bus.position.set(20, 19.8, 230);
+		bus.rotation.set(0, Math.PI, 0);
+		bus.updateMatrix();
+		self.scene.add(bus);
+		self.world.addBody(new BodyObject(bus));
 	});
 	
+
 	//House
 	model = OBJLoader.load(house);
 	model.material = new PhongMaterial();

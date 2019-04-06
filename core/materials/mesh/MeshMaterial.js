@@ -14,6 +14,11 @@ function MeshMaterial()
 	this.type = "MeshMaterial";
 
 	/**
+	 * Point size used when drawing mesh as points.
+	 */
+	this.pointSize = 2.0;
+
+	/**
 	 * Enable triangle face culling.
 	 */
 	this.faceCulling = true;
@@ -73,6 +78,8 @@ MeshMaterial.registerUniforms = function(gl, shader)
 		shader.registerUniform("pointLights[" + i + "].maxDistance");
 	}
 
+	shader.registerUniform("pointSize");
+
 	//Vertex attributes
 	shader.registerVertexAttributeArray("vertexPosition");
 	shader.registerVertexAttributeArray("vertexUV");
@@ -128,6 +135,9 @@ MeshMaterial.prototype.render = function(renderer, camera, object, scene)
 
 MeshMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera, object, scene)
 {
+	//Point size
+	gl.uniform1f(shader.uniforms["pointSize"], this.pointSize);
+
 	//Alpha test
 	gl.uniform1f(shader.uniforms["alphaTest"], this.alphaTest);
 
@@ -247,7 +257,7 @@ uniform DirectionalLight directionalLights[" + Material.MAX_LIGHTS + "];";
 
 MeshMaterial.fragmentHeader = "\
 \
-precision mediump float;\
+precision highp float;\
 \
 varying vec2 fragmentUV;\
 varying vec3 fragmentVertex;\
@@ -268,7 +278,9 @@ if(gl_FragColor.a < alphaTest)\
 
 MeshMaterial.vertexHeader = "\
 \
-precision mediump float;\
+precision highp float;\
+\
+uniform float pointSize;\
 \
 attribute vec3 vertexPosition;\
 attribute vec3 vertexNormal;\
@@ -292,5 +304,6 @@ void main(void)\
 	fragmentVertex = vertexPosition;\
 	fragmentNormal = vertexNormal;\
 	\
+	gl_PointSize = pointSize;\
 	gl_Position = projection * view * model * vec4(vertexPosition, 1.0);\
 }";

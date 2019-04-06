@@ -94,14 +94,3 @@ void main(void)\
 		gl_FragColor = vec4(normalize((fragmentNormal + 1.0) * 2.0), 1.0);\
 	}\
 }";
-
-/*
-	\
-	if(inModelSpace)\
-	{\
-	}\
-	else\
-	{\
-		fragmentNormal = (projection * vec4(vertexNormal, 1.0)).xyz;\
-	}\
-*/

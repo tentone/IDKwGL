@@ -78,7 +78,7 @@ PhongMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera, 
 		var normalMap = renderer.getTexture(this.normalMap);
 		gl.activeTexture(gl.TEXTURE1);
 		gl.bindTexture(gl.TEXTURE_2D, normalMap);
-		gl.uniform1i(shader.uniforms["normalMap"], 0);
+		gl.uniform1i(shader.uniforms["normalMap"], 1);
 		gl.uniform1i(shader.uniforms["hasNormalMap"], 1);
 
 		var buffers = renderer.getBuffers(object.geometry);
@@ -131,7 +131,6 @@ void main(void)\
 	fragmentUV = vertexUV;\
 	fragmentVertex = vertexPosition;\
 	fragmentNormal = vertexNormal;\
-	/* fragmentTangent = vertexTangent; */\
 	\
 	gl_Position = projection * view * model * vec4(vertexPosition, 1.0);\
 }";
@@ -232,8 +231,7 @@ if(hasNormalMap)\
 	/* normal = texture2D(normalMap, fragmentUV.st).rgb * 2.0 - 1.0; */ /*Tranform to -1, 1*/\
 	/* normal = normalize(TBN * normal); */\
 	\
-	vec3 viewDirection = vec3(1.0, 1.0, 1.0);\
-	\
+	vec3 viewDirection = vec3(0.0, 0.0, 1.0);\
 	normal = perturb_normal(normalize(fragmentNormal), normalize(viewDirection), fragmentUV.st);\
 	\
 }\
@@ -272,5 +270,14 @@ PhongMaterial.fragmentShader = PhongMaterial.fragmentExtensions + PhongMaterial.
 \
 void main(void)\
 {\
-	" + BasicMaterial.fragmentBaseColor + PhongMaterial.fragmentLightCalculation + MeshMaterial.alphaTest + "\
+	" + BasicMaterial.fragmentBaseColor + "\
+	\
+	if(hasNormalMap)\
+	{\
+		gl_FragColor.rgb = texture2D(normalMap, fragmentUV.st).rgb;\
+	}\
+	\
+	" + PhongMaterial.fragmentLightCalculation + MeshMaterial.alphaTest + "\
 }"; 
+
+
