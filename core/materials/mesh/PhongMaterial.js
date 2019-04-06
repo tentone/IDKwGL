@@ -155,7 +155,7 @@ uniform sampler2D normalMap;";
  */
 PhongMaterial.perturbNormal = "\
 \
-/* Followup: Normal Mapping Without Precomputed Tangents from http://www.thetenthplanet.de/archives/1180*/\
+/* Normal Mapping Without Precomputed Tangents from http://www.thetenthplanet.de/archives/1180*/\
 mat3 cotangent_frame(vec3 N, vec3 p, vec2 uv)\
 {\
 	/* Get edge vectors of the pixel triangle */\
@@ -202,7 +202,8 @@ PhongMaterial.fragmentLightFunctions = PhongMaterial.perturbNormal + "\
 vec3 pointLight(PointLight light, vec3 vertex, vec3 normal)\
 {\
 	vec3 lightDirection = normalize(light.position - vertex);\
-	return light.color * max(dot(normalize(normal), lightDirection), 0.0) * light.maxDistance / max(distance(light.position, vertex), 0.001);\
+	float distanceFactor = light.maxDistance / max(distance(light.position, vertex), 0.001);\
+	return light.color * max(dot(normalize(normal), lightDirection), 0.0) * distanceFactor;\
 }\
 \
 vec3 directionalLight(DirectionalLight light, vec3 vertex, vec3 normal)\
@@ -221,27 +222,17 @@ vec3 lighIntesity = vec3(0.0, 0.0, 0.0);\
 /* Fragment normal */\
 vec3 normal;\
 \
+/* Fragment position */\
+vec3 vertex = (model * vec4(fragmentVertex, 1.0)).xyz;\
+\
 if(hasNormalMap)\
 {\
-	/* vec3 T = normalize(vec3((model * vec4(fragmentTangent, 0.0)).xyz)); */\
-	/* vec3 N = normalize(vec3((model * vec4(fragmentNormal, 0.0)).xyz)); */\
-	/* T = normalize(T - dot(T, N) * N); */\
-	/* vec3 B = cross(N, T); */\
-	/* mat3 TBN = mat3(T, B, N); */\
-	/* normal = texture2D(normalMap, fragmentUV.st).rgb * 2.0 - 1.0; */ /*Tranform to -1, 1*/\
-	/* normal = normalize(TBN * normal); */\
-	\
-	vec3 viewDirection = vec3(0.0, 0.0, 1.0);\
-	normal = perturb_normal(normalize(fragmentNormal), normalize(viewDirection), fragmentUV.st);\
-	\
+	normal = perturb_normal(normalize(fragmentNormal), normalize(vertex.xyz), fragmentUV.st);\
 }\
 else\
 {\
 	normal = normalize(vec3((model * vec4(fragmentNormal, 0.0)).xyz));\
 }\
-\
-/* Fragment position */\
-vec3 vertex = (model * vec4(fragmentVertex, 1.0)).xyz;\
 \
 /* Ambient light */\
 for(int i = 0; i < " + Material.MAX_LIGHTS + "; i++)\
@@ -271,11 +262,6 @@ PhongMaterial.fragmentShader = PhongMaterial.fragmentExtensions + PhongMaterial.
 void main(void)\
 {\
 	" + BasicMaterial.fragmentBaseColor + "\
-	\
-	if(hasNormalMap)\
-	{\
-		gl_FragColor.rgb = texture2D(normalMap, fragmentUV.st).rgb;\
-	}\
 	\
 	" + PhongMaterial.fragmentLightCalculation + MeshMaterial.alphaTest + "\
 }"; 

@@ -40,7 +40,7 @@ DissolveMaterial.prototype.updateUniforms = function(renderer, gl, shader, camer
 		var normalMap = renderer.getTexture(this.dissolveMap);
 		gl.activeTexture(gl.TEXTURE2);
 		gl.bindTexture(gl.TEXTURE_2D, normalMap);
-		gl.uniform1i(shader.uniforms["dissolveMap"], 0);
+		gl.uniform1i(shader.uniforms["dissolveMap"], 2);
 		gl.uniform1i(shader.uniforms["hasDissolveMap"], 1);
 	}
 	else
