@@ -47,8 +47,6 @@ Renderer.prototype.initializeGLContext = function()
 	try
 	{
 		this.gl = this.canvas.getContext("webgl", {alpha: false});
-		this.gl.getExtension("OES_standard_derivatives");
-
 		this.resize(this.canvas.width, this.canvas.height);
 	}
 	catch(error)

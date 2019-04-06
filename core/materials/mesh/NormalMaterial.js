@@ -25,6 +25,19 @@ NormalMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera,
 {
 	MeshMaterial.prototype.updateUniforms.call(this, renderer, gl, shader, camera, object, scene);
 
+	if(this.normalMap !== null)
+	{
+		var normalMap = renderer.getTexture(this.normalMap);
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, normalMap);
+		gl.uniform1i(shader.uniforms["normalMap"], 0);
+		gl.uniform1i(shader.uniforms["hasNormalMap"], 1);
+	}
+	else
+	{
+		gl.uniform1i(shader.uniforms["hasNormalMap"], 0);
+	}
+
 	gl.uniform1i(shader.uniforms["inModelSpace"], this.inModelSpace ? 1 : 0);
 };
 
@@ -40,6 +53,9 @@ NormalMaterial.createShader = function(gl)
 NormalMaterial.registerUniforms = function(gl, shader)
 {
 	MeshMaterial.registerUniforms(gl, shader);
+	
+	shader.registerUniform("hasNormalMap");
+	shader.registerUniform("normalMap");
 
 	shader.registerUniform("inModelSpace");
 };
@@ -52,15 +68,7 @@ void main(void)\
 {\
 	fragmentUV = vertexUV;\
 	fragmentVertex = vertexPosition;\
-	\
-	if(inModelSpace)\
-	{\
-		fragmentNormal = vertexNormal;\
-	}\
-	else\
-	{\
-		fragmentNormal = (projection * vec4(vertexNormal, 1.0)).xyz;\
-	}\
+	fragmentNormal = vertexNormal;\
 	\
 	gl_Position = projection * view * model * vec4(vertexPosition, 1.0);\
 }";
@@ -68,12 +76,32 @@ void main(void)\
 
 NormalMaterial.fragmentHeader = BasicMaterial.fragmentHeader +  "\
 \
+uniform bool hasNormalMap;\
+uniform sampler2D normalMap;\
+\
 uniform bool inModelSpace;";
 
 NormalMaterial.fragmentShader = NormalMaterial.fragmentHeader + "\
 \
 void main(void)\
 {\
-	vec3 normal = fragmentNormal * 0.5 + 0.5;\
-	gl_FragColor = vec4(normal, 1.0);\
+	if(hasNormalMap)\
+	{\
+		gl_FragColor = vec4(texture2D(normalMap, fragmentUV.st).rgb, 1.0);\
+	}\
+	else\
+	{\
+		gl_FragColor = vec4(fragmentNormal * 0.5 + 0.5, 1.0);\
+	}\
 }";
+
+/*
+	\
+	if(inModelSpace)\
+	{\
+	}\
+	else\
+	{\
+		fragmentNormal = (projection * vec4(vertexNormal, 1.0)).xyz;\
+	}\
+*/

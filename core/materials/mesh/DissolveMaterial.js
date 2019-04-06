@@ -56,7 +56,7 @@ DissolveMaterial.prototype.updateUniforms = function(renderer, gl, shader, camer
 
 DissolveMaterial.createShader = function(gl)
 {	
-	var shader = new Shader(gl, DissolveMaterial.fragmentShader, PhongMaterial.vertexShader);
+	var shader = new Shader(gl, DissolveMaterial.fragmentShader, PhongMaterial.vertexShader, PhongMaterial.extensions);
 
 	DissolveMaterial.registerUniforms(gl, shader);
 
@@ -100,7 +100,7 @@ if(hasDissolveMap)\
 	}\
 }";
 
-DissolveMaterial.fragmentShader = DissolveMaterial.fragmentHeader + MeshMaterial.fragmentLightStructs + MeshMaterial.fragmentHeaderLights + PhongMaterial.fragmentLightFunctions + "\
+DissolveMaterial.fragmentShader = PhongMaterial.fragmentExtensions + DissolveMaterial.fragmentHeader + MeshMaterial.fragmentLightStructs + MeshMaterial.fragmentHeaderLights + PhongMaterial.fragmentLightFunctions + "\
 \
 void main(void)\
 {\

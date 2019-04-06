@@ -3,7 +3,7 @@
 /**
  * Shader class is responsible for creating and managing the state of GLSL shaders in a specific WebGL context.
  */
-function Shader(gl, fragmentShader, vertexShader)
+function Shader(gl, fragmentShader, vertexShader, extensions)
 {
 	this.id = MathUtils.generateID();
 	this.name = "";
@@ -18,6 +18,7 @@ function Shader(gl, fragmentShader, vertexShader)
 	this.vertexProgram = null;
 	this.program = null;
 
+	this.extensions = extensions !== undefined ? extensions : [];
 	this.uniforms = {};
 	this.attributes = {};
 
@@ -58,6 +59,15 @@ Shader.prototype.compile = function()
 
 	try
 	{
+		for(var i = 0; i < this.extensions.length; i++)
+		{
+			var extension = gl.getExtension(this.extensions[i]);
+			if(extension === null)
+			{
+				throw new Error("IDKwGL: Extension " + this.extensions[i] + " is not supported.");
+			}
+		}
+
 		this.fragmentProgram = Shader.compileFragmentShader(gl, this.fragmentShader);
 		this.vertexProgram = Shader.compileVertexShader(gl, this.vertexShader);
 		this.program = gl.createProgram();

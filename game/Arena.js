@@ -93,7 +93,7 @@ function Arena()
 		model.material = new PhongMaterial();
 		model.material.texture = new Texture("data/models/eyebot/Eyebot_d.jpg");
 		model.material.normalMap = new Texture("data/models/eyebot/Eyebot_n.jpg");
-		model.geometry.calculateTangent();
+		//model.geometry.calculateTangent();
 		model.position.set(60, 20, -100);
 		model.scale.set(0.5, 0.5, 0.5);
 		model.updateMatrix();
@@ -145,7 +145,7 @@ function Arena()
 		var model = OBJLoader.load(data[0], data[1], "data/models/eyebot");
 		model.material = new NormalMaterial();
 		model.material.normalMap = new Texture("data/models/eyebot/Eyebot_n.jpg");
-		model.geometry.calculateTangent();
+		//model.geometry.calculateTangent();
 		model.position.set(-120, 20, -100);
 		model.scale.set(0.5,0.5,0.5);
 		model.updateMatrix();

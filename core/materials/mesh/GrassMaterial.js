@@ -18,7 +18,7 @@ GrassMaterial.id = MathUtils.generateID();
 
 GrassMaterial.createShader = function(gl)
 {
-	var shader = new Shader(gl, GrassMaterial.fragmentShader, GrassMaterial.vertexShader);
+	var shader = new Shader(gl, GrassMaterial.fragmentShader, GrassMaterial.vertexShader, PhongMaterial.extensions);
 
 	GrassMaterial.registerUniforms(gl, shader);
 
@@ -41,7 +41,7 @@ GrassMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera, 
 	gl.uniform1f(shader.uniforms["time"], this.time);
 };
 
-GrassMaterial.fragmentLightFunctions = "\
+GrassMaterial.fragmentLightFunctions = PhongMaterial.perturbNormal + "\
 \
 vec3 pointLight(PointLight light, vec3 vertex, vec3 normal)\
 {\
@@ -74,7 +74,7 @@ void main(void)\
 /**
  * Full phong material fragment shader.
  */
-GrassMaterial.fragmentShader = PhongMaterial.fragmentHeader + MeshMaterial.fragmentLightStructs + MeshMaterial.fragmentHeaderLights + GrassMaterial.fragmentLightFunctions + "\
+GrassMaterial.fragmentShader = PhongMaterial.fragmentExtensions + PhongMaterial.fragmentHeader + MeshMaterial.fragmentLightStructs + MeshMaterial.fragmentHeaderLights + GrassMaterial.fragmentLightFunctions + "\
 \
 void main(void)\
 {\

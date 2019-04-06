@@ -85,7 +85,7 @@ PhongMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera, 
 
 		//Tangent vectors
 		if(buffers.tangentBuffer !== null)
-		{		
+		{
 			gl.bindBuffer(gl.ARRAY_BUFFER, buffers.tangentBuffer);
 			gl.vertexAttribPointer(shader.attributes["vertexTangent"], buffers.tangentBuffer.itemSize, gl.FLOAT, false, 0, 0);
 		}
@@ -96,10 +96,11 @@ PhongMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera, 
 	}
 };
 
+PhongMaterial.extensions = ["OES_standard_derivatives"];
 
 PhongMaterial.createShader = function(gl)
 {
-	var shader = new Shader(gl, PhongMaterial.fragmentShader, PhongMaterial.vertexShader);
+	var shader = new Shader(gl, PhongMaterial.fragmentShader, PhongMaterial.vertexShader, PhongMaterial.extensions);
 
 	PhongMaterial.registerUniforms(gl, shader);
 
@@ -113,13 +114,13 @@ PhongMaterial.registerUniforms = function(gl, shader)
 	shader.registerUniform("hasNormalMap");
 	shader.registerUniform("normalMap");
 
-	shader.registerVertexAttributeArray("vertexTangent");
+	//shader.registerVertexAttributeArray("vertexTangent");
 };
 
 
 PhongMaterial.vertexHeader = "\
 \
-attribute vec3 vertexTangent;\
+/* attribute vec3 vertexTangent; */\
 \
 varying vec3 fragmentTangent;";
 
@@ -130,7 +131,7 @@ void main(void)\
 	fragmentUV = vertexUV;\
 	fragmentVertex = vertexPosition;\
 	fragmentNormal = vertexNormal;\
-	fragmentTangent = vertexTangent;\
+	/* fragmentTangent = vertexTangent; */\
 	\
 	gl_Position = projection * view * model * vec4(vertexPosition, 1.0);\
 }";
@@ -145,7 +146,7 @@ PhongMaterial.fragmentExtensions = "\
  */
 PhongMaterial.fragmentHeader = BasicMaterial.fragmentHeader + "\
 \
-varying vec3 fragmentTangent;\
+/* varying vec3 fragmentTangent; */\
 \
 uniform bool hasNormalMap;\
 uniform sampler2D normalMap;";
@@ -228,7 +229,7 @@ if(hasNormalMap)\
 	/* T = normalize(T - dot(T, N) * N); */\
 	/* vec3 B = cross(N, T); */\
 	/* mat3 TBN = mat3(T, B, N); */\
-	/* normal = texture2D(normalMap, vec2(fragmentUV.s, fragmentUV.t)).rgb * 2.0 - 1.0; */ /*Tranform to -1, 1*/\
+	/* normal = texture2D(normalMap, fragmentUV.st).rgb * 2.0 - 1.0; */ /*Tranform to -1, 1*/\
 	/* normal = normalize(TBN * normal); */\
 	\
 	vec3 viewDirection = vec3(0.0, 0.0, 1.0);\
