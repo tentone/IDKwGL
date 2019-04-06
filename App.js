@@ -72,9 +72,9 @@ include("data/models/house.js");
 include("data/models/tank.js");
 
 //Game
-include("game/Player.js");
-include("game/Axis.js");
-include("game/Arena.js");
+include("example/Player.js");
+include("example/Axis.js");
+include("example/Arena.js");
 
 //App class
 function App(){}

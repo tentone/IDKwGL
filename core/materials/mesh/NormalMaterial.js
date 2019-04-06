@@ -43,7 +43,7 @@ NormalMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera,
 
 NormalMaterial.createShader = function(gl)
 {
-	var shader = new Shader(gl, NormalMaterial.fragmentShader, NormalMaterial.vertexShader);
+	var shader = new Shader(gl, NormalMaterial.fragmentShader, NormalMaterial.vertexShader, PhongMaterial.extensions);
 
 	NormalMaterial.registerUniforms(gl, shader);
 	
@@ -81,16 +81,21 @@ uniform sampler2D normalMap;\
 \
 uniform bool inModelSpace;";
 
-NormalMaterial.fragmentShader = NormalMaterial.fragmentHeader + "\
+NormalMaterial.fragmentShader = PhongMaterial.fragmentExtensions + NormalMaterial.fragmentHeader + PhongMaterial.perturbNormal + "\
 \
 void main(void)\
 {\
+	vec3 normal;\
+	\
 	if(hasNormalMap)\
 	{\
-		gl_FragColor = vec4(normalize(texture2D(normalMap, fragmentUV.st).rgb), 1.0);\
+		vec3 vertex = (model * vec4(fragmentVertex, 1.0)).xyz;\
+		normal = perturb_normal(normalize(fragmentNormal), normalize(vertex.xyz), fragmentUV.st);\
 	}\
 	else\
 	{\
-		gl_FragColor = vec4(normalize((fragmentNormal + 1.0) * 2.0), 1.0);\
+		normal = fragmentNormal;\
 	}\
+	\
+	gl_FragColor = vec4(normalize((normal + 1.0) * 2.0), 1.0);\
 }";
