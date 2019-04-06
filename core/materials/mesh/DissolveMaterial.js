@@ -89,12 +89,12 @@ if(hasDissolveMap)\
 	float dissolveValue = texture2D(dissolveMap, vec2(fragmentUV.s, fragmentUV.t)).r;\
 	float progress = (cos(time * 0.2) + 1.0) / 2.0;\
 	\
-	if(dissolveValue < progress * 0.43)\
+	if(dissolveValue < progress)\
 	{\
 		gl_FragColor.xyz = dissolveColor.xyz;\
 	}\
 	\
-	if(dissolveValue < progress * 0.4)\
+	if(dissolveValue < progress * 0.95)\
 	{\
 		discard;\
 	}\

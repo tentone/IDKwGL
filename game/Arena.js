@@ -270,6 +270,7 @@ function Arena()
 
 	var floorMaterial = new PhongMaterial();
 	floorMaterial.texture = new Texture("data/texture/grass.jpg");
+	floorMaterial.normalMap = new Texture("data/texture/grass_normal.png");
 
 	var floorGeometry = new BoxGeometry();
 	floorGeometry.scaleUV(30, 30);
@@ -282,35 +283,36 @@ function Arena()
 	this.scene.add(model);
 	this.world.addBody(new BodyObject(model));
 	
-	var wallMaterial = new PhongMaterial();
-	wallMaterial.texture = new Texture("data/texture/wall.png");
+	var material = new PhongMaterial();
+	material.texture = new Texture("data/texture/wall.png");
+	material.normalMap = new Texture("data/texture/wall_normal.png");
 
-	var wallGeometry = new BoxGeometry();
-	wallGeometry.scaleUV(20, 1);
+	var geometry = new BoxGeometry();
+	geometry.scaleUV(50, 3);
 
 	//Walls
-	model = new Mesh(wallGeometry, wallMaterial);
+	model = new Mesh(geometry, material);
 	model.position.set(0, 0, -300);
 	model.scale.set(300, 50, 1);
 	model.updateMatrix();
 	this.scene.add(model);
 	this.world.addBody(new BodyObject(model));
 
-	model = new Mesh(wallGeometry, wallMaterial);
+	model = new Mesh(geometry, material);
 	model.position.set(0, 0, 300);
 	model.scale.set(300, 50, 1);
 	model.updateMatrix();
 	this.scene.add(model);
 	this.world.addBody(new BodyObject(model));
 
-	model = new Mesh(wallGeometry, wallMaterial);
+	model = new Mesh(geometry, material);
 	model.position.set(-300, 0, 0);
 	model.scale.set(1, 50, 300);
 	model.updateMatrix();
 	this.scene.add(model);
 	this.world.addBody(new BodyObject(model));
 
-	model = new Mesh(wallGeometry, wallMaterial);
+	model = new Mesh(geometry, material);
 	model.position.set(300, 0, 0);
 	model.scale.set(1, 50, 300);
 	model.updateMatrix();
