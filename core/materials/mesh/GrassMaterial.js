@@ -43,7 +43,7 @@ GrassMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera, 
 
 GrassMaterial.fragmentLightFunctions = PhongMaterial.perturbNormal + "\
 \
-vec3 pointLight(PointLight light, vec3 vertex, vec3 normal)\
+vec3 pointLight(PointLight light, vec3 vertex, vec3 normal, vec3 view)\
 {\
 	return light.color * light.maxDistance / max(distance(light.position, vertex), 0.001);\
 }\

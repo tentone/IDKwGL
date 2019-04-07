@@ -19,6 +19,21 @@ function PhongMaterial(name)
 	this.normalMap = null;
 
 	/**
+	 * Specular highlight color
+	 */
+	this.specular = new Color(1.0, 1.0, 1.0);
+
+	/**
+	 * Specular color intensity, phong constant range [1, 1000].
+	 */
+	this.specularIntensity = 50;
+
+	/** 
+	 * The specular map stores the specular intensity.
+	 */
+	 this.specularMap = null;
+
+	/**
 	 * Bump map stored elevations relative to the surface.
 	 * 
 	 * Can be used for light calculation or to deformate the surface.
@@ -26,27 +41,6 @@ function PhongMaterial(name)
 	 * TODO <NOT USED>
 	 */
 	this.bumpMap = null;
-	
-	/** 
-	 * The specular map stores the specular intensity.
-	 *
-	 * TODO <NOT USED>
-	 */
-	 this.specularMap = null;
-
-	/**
-	 * Specular highlight color
-	 *
-	 * TODO <NOT USED>
-	 */
-	this.specular = new Color(1.0, 1.0, 1.0);
-
-	/**
-	 * Specular color intensity, phong constant range [1, 1000].
-	 *
-	 * TODO <NOT USED>
-	 */
-	this.specularIntensity = 1;
 	
 	/**
 	 * Indicates if the material is transparent.
@@ -73,6 +67,16 @@ PhongMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera, 
 {
 	BasicMaterial.prototype.updateUniforms.call(this, renderer, gl, shader, camera, object, scene);
 
+	var buffers = renderer.getBuffers(object.geometry);
+
+	//Tangent vectors
+	if(buffers.tangentBuffer !== null)
+	{
+		gl.bindBuffer(gl.ARRAY_BUFFER, buffers.tangentBuffer);
+		gl.vertexAttribPointer(shader.attributes["vertexTangent"], buffers.tangentBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	}
+
+	//Normal map
 	if(this.normalMap !== null)
 	{
 		var normalMap = renderer.getTexture(this.normalMap);
@@ -81,18 +85,27 @@ PhongMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera, 
 		gl.uniform1i(shader.uniforms["normalMap"], 1);
 		gl.uniform1i(shader.uniforms["hasNormalMap"], 1);
 
-		var buffers = renderer.getBuffers(object.geometry);
-
-		//Tangent vectors
-		if(buffers.tangentBuffer !== null)
-		{
-			gl.bindBuffer(gl.ARRAY_BUFFER, buffers.tangentBuffer);
-			gl.vertexAttribPointer(shader.attributes["vertexTangent"], buffers.tangentBuffer.itemSize, gl.FLOAT, false, 0, 0);
-		}
 	}
 	else
 	{
 		gl.uniform1i(shader.uniforms["hasNormalMap"], 0);
+	}
+
+	gl.uniform3f(shader.uniforms["specular"], this.specular.r, this.specular.g, this.specular.b);
+	gl.uniform1f(shader.uniforms["specularIntensity"], this.specularIntensity);
+
+	//Specular map
+	if(this.specularMap !== null)
+	{
+		var specularMap = renderer.getTexture(this.specularMap);
+		gl.activeTexture(gl.TEXTURE2);
+		gl.bindTexture(gl.TEXTURE_2D, specularMap);
+		gl.uniform1i(shader.uniforms["specularMap"], 2);
+		gl.uniform1i(shader.uniforms["hasSpecularMap"], 1);
+	}
+	else
+	{
+		gl.uniform1i(shader.uniforms["hasSpecularMap"], 0);
 	}
 };
 
@@ -111,11 +124,21 @@ PhongMaterial.registerUniforms = function(gl, shader)
 {
 	BasicMaterial.registerUniforms(gl, shader);
 
+	//shader.registerVertexAttributeArray("vertexTangent");
+
 	shader.registerUniform("hasNormalMap");
 	shader.registerUniform("normalMap");
 
-	//shader.registerVertexAttributeArray("vertexTangent");
+	shader.registerUniform("specular");
+	shader.registerUniform("specularIntensity");
+
+	shader.registerUniform("hasSpecularMap");
+	shader.registerUniform("specularMap");
 };
+
+PhongMaterial.fragmentExtensions = "\
+\
+#extension GL_OES_standard_derivatives : enable\n";
 
 
 PhongMaterial.vertexHeader = "\
@@ -123,6 +146,22 @@ PhongMaterial.vertexHeader = "\
 /* attribute vec3 vertexTangent; */\
 \
 varying vec3 fragmentTangent;";
+
+/**
+ * Phong material fragment shader header.
+ */
+PhongMaterial.fragmentHeader = BasicMaterial.fragmentHeader + "\
+\
+/* varying vec3 fragmentTangent; */\
+\
+uniform bool hasNormalMap;\
+uniform sampler2D normalMap;\
+\
+uniform vec3 specular;\
+uniform float specularIntensity;\
+\
+uniform bool hasSpecularMap;\
+uniform sampler2D specularMap;";
 
 PhongMaterial.vertexShader = MeshMaterial.vertexHeader + PhongMaterial.vertexHeader + "\
 \
@@ -135,27 +174,12 @@ void main(void)\
 	gl_Position = projection * view * model * vec4(vertexPosition, 1.0);\
 }";
 
-
-PhongMaterial.fragmentExtensions = "\
-\
-#extension GL_OES_standard_derivatives : enable\n";
-
-/**
- * Phong material fragment shader header.
- */
-PhongMaterial.fragmentHeader = BasicMaterial.fragmentHeader + "\
-\
-/* varying vec3 fragmentTangent; */\
-\
-uniform bool hasNormalMap;\
-uniform sampler2D normalMap;";
-
 /**
  * Method to compute normal mapping without pre calculated tangent data.
  */
 PhongMaterial.perturbNormal = "\
 \
-/* Normal Mapping Without Precomputed Tangents from http://www.thetenthplanet.de/archives/1180*/\
+/* Normal Mapping Without Precomputed Tangents (http://www.thetenthplanet.de/archives/1180) */\
 mat3 cotangent_frame(vec3 N, vec3 p, vec2 uv)\
 {\
 	/* Get edge vectors of the pixel triangle */\
@@ -175,6 +199,7 @@ mat3 cotangent_frame(vec3 N, vec3 p, vec2 uv)\
 	return mat3(T * invmax, B * invmax, N);\
 }\
 \
+/* Calculat the normal vector from normal map without the face tagent vector. */\
 vec3 perturb_normal(vec3 N, vec3 V, vec2 uv)\
 {\
 	/* Assume N, the interpolated vertex normal and V, the view vector (vertex to eye) */\
@@ -199,11 +224,27 @@ vec3 perturb_normal(vec3 N, vec3 V, vec2 uv)\
  */
 PhongMaterial.fragmentLightFunctions = PhongMaterial.perturbNormal + "\
 \
-vec3 pointLight(PointLight light, vec3 vertex, vec3 normal)\
+/* Calculate point light from light data, surface position, normal vector and view position. */\
+vec3 pointLight(PointLight light, vec3 vertex, vec3 normal, vec3 view)\
 {\
 	vec3 lightDirection = normalize(light.position - vertex);\
+	\
+	/* Base light */\
 	float distanceFactor = light.maxDistance / max(distance(light.position, vertex), 0.001);\
-	return light.color * max(dot(normalize(normal), lightDirection), 0.0) * distanceFactor;\
+	float baseLight = max(dot(normal, lightDirection), 0.0) * distanceFactor;\
+	\
+	/* Specular light */\
+	float specularLight = 0.0;\
+	if(baseLight > 0.0)\
+	{\
+		vec3 lightReflection = reflect(-lightDirection, normal);\
+		vec3 viewDirection = normalize(view - vertex);\
+		\
+		float specularAngle = max(dot(lightReflection, viewDirection), 0.0);\
+		specularLight = pow(specularAngle, specularIntensity);\
+	}\
+	\
+	return (specular * specularLight) + (light.color * baseLight);\
 }\
 \
 vec3 directionalLight(DirectionalLight light, vec3 vertex, vec3 normal)\
@@ -225,9 +266,12 @@ vec3 normal;\
 /* Fragment position */\
 vec3 vertex = (model * vec4(fragmentVertex, 1.0)).xyz;\
 \
+/* View position */\
+vec3 view = vec3(0, 0, 0);\
+\
 if(hasNormalMap)\
 {\
-	normal = perturb_normal(normalize(fragmentNormal), normalize(vertex.xyz), fragmentUV.st);\
+	normal = perturb_normal(normalize(fragmentNormal), normalize(view - vertex.xyz), fragmentUV.st);\
 }\
 else\
 {\
@@ -249,7 +293,7 @@ for(int i = 0; i < " + Material.MAX_LIGHTS + "; i++)\
 /* Point light */\
 for(int i = 0; i < " + Material.MAX_LIGHTS + "; i++)\
 {\
-	lighIntesity += pointLight(pointLights[i], vertex, normal);\
+	lighIntesity += pointLight(pointLights[i], vertex, normal, view);\
 }\
 \
 gl_FragColor.rgb *= lighIntesity;";

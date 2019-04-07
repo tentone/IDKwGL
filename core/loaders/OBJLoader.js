@@ -209,38 +209,38 @@ OBJLoader.loadMTL = function(data, path)
 			//Texture
 			if(tokens[offset] === "map_Kd" || tokens[offset] === "map_Ka")
 			{
-				materials[index].texture = new Texture(path + "/" + tokens[1+offset]);
+				materials[index].texture = new Texture(path + "/" + tokens[1 + offset]);
 			}
 			//Bump map | Normal Map
 			else if(tokens[offset] === "mapBump" || tokens[offset] === "bump")
 			{
-				//materials[index].normalMap = new Texture(path + "/" + tokens[1+offset]);
+				materials[index].normalMap = new Texture(path + "/" + tokens[1 + offset]);
 			}
 			//Ambient color
 			else if(tokens[offset] === "Ka")
 			{
-				materials[index].color.r = parseFloat(tokens[offset+1]);
-				materials[index].color.g = parseFloat(tokens[offset+2]);
-				materials[index].color.b = parseFloat(tokens[offset+3]);
+				materials[index].color.r = parseFloat(tokens[offset + 1]);
+				materials[index].color.g = parseFloat(tokens[offset + 2]);
+				materials[index].color.b = parseFloat(tokens[offset + 3]);
 			}
 			//Diffuse color
 			else if(tokens[offset] === "Kd")
 			{
-				materials[index].color.r = parseFloat(tokens[offset+1]);
-				materials[index].color.g = parseFloat(tokens[offset+2]);
-				materials[index].color.b = parseFloat(tokens[offset+3]);
+				materials[index].color.r = parseFloat(tokens[offset + 1]);
+				materials[index].color.g = parseFloat(tokens[offset + 2]);
+				materials[index].color.b = parseFloat(tokens[offset + 3]);
 			}
 			//Specular color
 			else if(tokens[offset] === "Ks")
 			{
-				materials[index].specular.r = parseFloat(tokens[offset+1]);
-				materials[index].specular.g = parseFloat(tokens[offset+2]);
-				materials[index].specular.b = parseFloat(tokens[offset+3]);
+				materials[index].specular.r = parseFloat(tokens[offset + 1]);
+				materials[index].specular.g = parseFloat(tokens[offset + 2]);
+				materials[index].specular.b = parseFloat(tokens[offset + 3]);
 			}
 			//Specular intensity
 			else if(tokens[offset] === "Ns")
 			{
-				materials[index].specularIntensity = parseFloat(tokens[offset+1]);
+				materials[index].specularIntensity = parseFloat(tokens[offset + 1]);
 			}
 		}
 	}

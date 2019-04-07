@@ -18,6 +18,13 @@ function Material()
 	 * Indicates if the material uses the lights provided by the scene.
 	 */
 	this.useLights = false;
+
+	/**
+	 * Indicates if the shaders needs to be recompiled.
+	 *
+	 * TODO <NOT IN USE>
+	 */
+	this.needsRecompile = false;
 }
 
 Material.prototype.constructor = Material;

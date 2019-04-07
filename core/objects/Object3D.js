@@ -28,6 +28,27 @@ function Object3D()
 	 * Transformation matrix.
 	 */
 	this.transformationMatrix = new Matrix4();
+
+	/** 
+	 * World matrix to be used respecting the hierarchy of transformations.
+	 *
+	 * It is obtained by multiplying the parent matrix with the local transformation matrix.
+	 */
+	this.worldMatrix = new Matrix4();
+
+	/**
+	 * Parent object3d element.
+	 *
+	 * The parent transformation is applied to its children.
+	 */
+	this.parent = null;
+
+	/**
+	 * Children elements attached to this object.
+	 *
+	 * Children suffer the transformation applied to the parent object.
+	 */
+	this.children = [];
 }
 
 Object3D.prototype.constructor = Object3D;
@@ -38,6 +59,15 @@ Object3D.prototype.isObject3D = true;
  * Render Object3D to a specific camera.
  */
 Object3D.prototype.render = function(gl, camera, scene){};
+
+/**
+ * Add a object as child of this object.
+ */
+Object3D.prototype.add = function(child)
+{
+	child.parent = this;
+	this.children.add(child);
+};
 
 /**
  * Calculate tranformation matrix.
