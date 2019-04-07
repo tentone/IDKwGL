@@ -244,7 +244,7 @@ vec3 pointLight(PointLight light, vec3 vertex, vec3 normal, vec3 view)\
 		specularLight = pow(specularAngle, specularIntensity);\
 	}\
 	\
-	return (specular * specularLight) + (light.color * baseLight);\
+	return (specular * light.color * specularLight) + (light.color * baseLight);\
 }\
 \
 vec3 directionalLight(DirectionalLight light, vec3 vertex, vec3 normal)\
@@ -264,14 +264,14 @@ vec3 lighIntesity = vec3(0.0, 0.0, 0.0);\
 vec3 normal;\
 \
 /* Fragment position */\
-vec3 vertex = (model * vec4(fragmentVertex, 1.0)).xyz;\
+vec3 modelPosition = (model * vec4(fragmentVertex, 1.0)).xyz;\
 \
 /* View position */\
-vec3 view = vec3(0, 0, 0);\
+vec3 viewPosition = (camera * vec4(0.0, 0.0, 0.0, 1.0)).xyz;\
 \
 if(hasNormalMap)\
 {\
-	normal = perturb_normal(normalize(fragmentNormal), normalize(view - vertex.xyz), fragmentUV.st);\
+	normal = perturb_normal(normalize(fragmentNormal), normalize(viewPosition - modelPosition), fragmentUV.st);\
 }\
 else\
 {\
@@ -287,13 +287,13 @@ for(int i = 0; i < " + Material.MAX_LIGHTS + "; i++)\
 /* Directinal light */\
 for(int i = 0; i < " + Material.MAX_LIGHTS + "; i++)\
 {\
-	lighIntesity += directionalLight(directionalLights[i], vertex, normal);\
+	lighIntesity += directionalLight(directionalLights[i], modelPosition, normal);\
 }\
 \
 /* Point light */\
 for(int i = 0; i < " + Material.MAX_LIGHTS + "; i++)\
 {\
-	lighIntesity += pointLight(pointLights[i], vertex, normal, view);\
+	lighIntesity += pointLight(pointLights[i], modelPosition, normal, viewPosition);\
 }\
 \
 gl_FragColor.rgb *= lighIntesity;";

@@ -89,6 +89,7 @@ MeshMaterial.registerUniforms = function(gl, shader)
 	shader.registerUniform("view");
 	shader.registerUniform("projection");
 	shader.registerUniform("model");
+	shader.registerUniform("camera");
 
 	//Uniforms
 	shader.registerUniform("alphaTest");
@@ -148,6 +149,8 @@ MeshMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera, o
 	//Transformation matrices
 	gl.uniformMatrix4fv(shader.uniforms["projection"], false, camera.projectionMatrix.flatten());
 	gl.uniformMatrix4fv(shader.uniforms["view"], false, camera.transformationMatrix.flatten());
+	
+	gl.uniformMatrix4fv(shader.uniforms["camera"], false, camera.inverseTransformationMatrix.flatten());
 	gl.uniformMatrix4fv(shader.uniforms["model"], false, object.transformationMatrix.flatten());
 
 	var buffers = renderer.getBuffers(object.geometry);
@@ -264,7 +267,7 @@ varying vec3 fragmentVertex;\
 varying vec3 fragmentNormal;\
 \
 uniform mat4 projection, view;\
-uniform mat4 model;\
+uniform mat4 model, camera;\
 \
 uniform float alphaTest;\
 uniform float far, near;";
@@ -287,7 +290,7 @@ attribute vec3 vertexNormal;\
 attribute vec2 vertexUV;\
 \
 uniform mat4 projection, view;\
-uniform mat4 model;\
+uniform mat4 model, camera;\
 \
 uniform float far, near;\
 uniform float alphaTest;\
