@@ -24,9 +24,9 @@ function PhongMaterial(name)
 	this.specular = new Color(1.0, 1.0, 1.0);
 
 	/**
-	 * Specular color intensity, phong constant range [1, 1000].
+	 * Specular color intensity, phong constant range.
 	 */
-	this.specularIntensity = 50;
+	this.specularIntensity = 500;
 
 	/** 
 	 * The specular map stores the specular intensity.

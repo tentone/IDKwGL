@@ -241,6 +241,7 @@ function Arena()
 	model = new Mesh(new BoxGeometry());
 	model.material = new PhongMaterial();
 	model.material.texture = new Texture("data/texture/wood_box.jpg");
+	model.material.normalMap = new Texture("data/texture/wood_box_normal.png");
 	model.position.set(-200,5,0);
 	model.scale.set(5,5,5);
 	model.updateMatrix();
@@ -366,6 +367,7 @@ function Arena()
 	this.cube = new Mesh(new BoxGeometry());
 	this.cube.material = new PhongMaterial();
 	this.cube.material.texture = new Texture("data/texture/wood_box.jpg");
+	this.cube.material.normalMap = new Texture("data/texture/wood_box_normal.png");
 	this.cube.position.set(0,0,0);
 	this.cube.scale.set(5,5,5);
 	this.cube.updateMatrix();
