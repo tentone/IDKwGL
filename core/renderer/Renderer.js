@@ -116,9 +116,21 @@ Renderer.prototype.render = function(scene, camera)
 	gl.enable(gl.DEPTH_TEST);
 	gl.depthFunc(gl.LESS);
 
+	var renderer = this;
+
+	function recursiveRender(object)
+	{
+		object.render(renderer, camera, scene);
+
+		for(var j = 0; j < object.children.length; j++)
+		{
+			recursiveRender(object.children[j]);
+		}
+	}
+
 	for(var i = 0; i < scene.objects.length; i++)
 	{
-		scene.objects[i].render(this, camera, scene);
+		recursiveRender(scene.objects[i]);
 	}
 
 	gl.disable(gl.DEPTH_TEST);

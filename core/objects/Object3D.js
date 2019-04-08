@@ -79,6 +79,13 @@ Object3D.prototype.updateMatrix = function()
 	this.transformationMatrix.makeRotationFromEuler(this.rotation, "YZX");
 	this.transformationMatrix.scale(this.scale);
 	this.transformationMatrix.setPosition(this.position);
+
+	this.worldMatrix.copy(this.transformationMatrix);
+
+	if(this.parent !== null)
+	{
+		this.worldMatrix.multiply(this.parent.worldMatrix);
+	}
 };
 
 /**
