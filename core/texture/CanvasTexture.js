@@ -13,3 +13,4 @@ function CanvasTexture(canvas)
 	this.size = new Vector2(canvas.width, canvas.weight);
 }
 
+CanvasTexture.prototype = Object.create(Texture.prototype);

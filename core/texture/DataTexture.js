@@ -3,14 +3,27 @@
 /**
  * Data texture is manually created from a color array instead of a image file.
  */
-function DataTexture()
+function DataTexture(width, height, format)
 {
 	Texture.call(this);
 	
 	this.type = "DataTexture";
 
+	if(format !== undefined)
+	{
+		this.format = format;
+	}
+
+	this.size = new Vector2(width || 0, height || 0);
 	this.data = [];
-	this.size = new Vector2(0, 0);
+
+	//Generate black texture
+	var pixel = this.format === Texture.RGBA ? 4 : 3;
+	var size = width * height * pixel;
+	for(var i = 0; i < size; i++)
+	{
+		this.data.push(0);
+	}
 }
 
 /**
@@ -18,9 +31,9 @@ function DataTexture()
  */
 DataTexture.prototype.createTexture = function(gl)
 {
-	var texture = gl.createTexture();
 	var format = this.format === Texture.RGBA ? gl.RGBA : gl.RGB;
 
+	var texture = gl.createTexture();
 	gl.bindTexture(gl.TEXTURE_2D, texture);
 	gl.texImage2D(gl.TEXTURE_2D, 0, format, this.size.x, this.size.y, 0, format, gl.UNSIGNED_BYTE, new Uint8Array(this.data));
 	

@@ -20,6 +20,13 @@ function Texture(file)
 	this.flipY = true;
 
 	/**
+	 * Indicates if mip maps should be generated for this texture.
+	 *
+	 * Its only possible to generate mip maps if the texture is a power of 2 in size.
+	 */
+	this.generateMipmap = true;
+
+	/**
 	 * If set to true the alpha channel is pre multiplied with all colors.
 	 */
 	this.premultiplyAlpha = false;
@@ -74,15 +81,15 @@ Texture.prototype.createTexture = function(gl)
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, self.wrapS);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, self.wrapT);
 
-		//Only generate mipmaps is texture is power of two
-		if(MathUtils.isPowerOf2(this.naturalWidth) && MathUtils.isPowerOf2(this.naturalHeight))
+		//Only generate mipmaps if texture is power of two
+		if(this.generateMipmap && MathUtils.isPowerOf2(this.naturalWidth) && MathUtils.isPowerOf2(this.naturalHeight))
 		{
 			gl.generateMipmap(gl.TEXTURE_2D);
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
 		}
 		else
-		{	
+		{
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 		}

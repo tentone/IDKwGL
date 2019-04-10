@@ -28,6 +28,7 @@ include("core/Font.js");
 
 include("core/texture/Texture.js");
 include("core/texture/DataTexture.js");
+include("core/texture/RenderTargetTexture.js");
 
 include("core/geometry/Geometry.js");
 include("core/geometry/BoxGeometry.js");

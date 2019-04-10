@@ -103,8 +103,18 @@ Renderer.prototype.clear = function(color, depth, stencil)
 /**
  * Render a scene using a camera.
  */
-Renderer.prototype.render = function(scene, camera)
+Renderer.prototype.render = function(scene, camera, renderTarget)
 {
+	if(renderTarget !== undefined)
+	{
+		var texture = this.getTexture(renderTarget);
+		gl.bindFramebuffer(gl.FRAMEBUFFER, renderTarget.framebuffer);
+	}
+	else
+	{
+		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+	}
+    
 	var gl = this.gl;
 
 	if(this.autoClear)
