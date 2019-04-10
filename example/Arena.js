@@ -366,10 +366,10 @@ function Arena()
 	//Test Cube
 	this.cube = new Mesh(new BoxGeometry());
 	this.cube.material = new PhongMaterial();
-	this.cube.material.texture = new Texture("data/texture/wood_box.jpg");
+	this.cube.material.texture = new RenderTargetTexture(512, 512);
 	this.cube.material.normalMap = new Texture("data/texture/wood_box_normal.png");
-	this.cube.position.set(0,0,0);
-	this.cube.scale.set(5,5,5);
+	this.cube.position.set(-40, 10, 80);
+	this.cube.scale.set(10, 10, 10);
 	this.cube.updateMatrix();
 	this.scene.add(this.cube);
 
@@ -531,6 +531,7 @@ Arena.prototype.update = function()
 Arena.prototype.draw = function(renderer)
 {
 	renderer.autoClear = true;
+	renderer.render(this.scene, this.player.camera, this.cube.material.texture);
 	renderer.render(this.scene, this.player.camera);
 	renderer.autoClear = false;
 	renderer.render(this.hudScene, this.hudCamera);

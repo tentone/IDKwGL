@@ -105,6 +105,8 @@ Renderer.prototype.clear = function(color, depth, stencil)
  */
 Renderer.prototype.render = function(scene, camera, renderTarget)
 {
+	var gl = this.gl;
+
 	if(renderTarget !== undefined)
 	{
 		var texture = this.getTexture(renderTarget);
@@ -114,8 +116,6 @@ Renderer.prototype.render = function(scene, camera, renderTarget)
 	{
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 	}
-    
-	var gl = this.gl;
 
 	if(this.autoClear)
 	{
