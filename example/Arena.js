@@ -49,7 +49,6 @@ function Arena()
 
 	this.markerD = new Mesh(sphere, new BasicMaterial());
 	this.markerD.position.set(0, 3, 0);
-	this.markerD.updateMatrix();
 	this.scene.add(this.markerD);
 
 	this.ambient = new AmbientLight();
@@ -73,7 +72,6 @@ function Arena()
 
 	this.skybox = new Mesh(geometry, material);
 	this.skybox.scale.set(1e3, 1e3, 1e3);
-	this.skybox.updateMatrix();
 	this.scene.add(this.skybox);
 
 	//Tank
@@ -82,7 +80,6 @@ function Arena()
 	model.material.texture = new Texture("data/texture/tank.jpg");
 	model.scale.set(15, 15, 15);
 	model.position.set(-250,0,100);
-	model.updateMatrix();
 	this.scene.add(model);
 	this.world.addBody(new BodyObject(model));
 
@@ -93,10 +90,8 @@ function Arena()
 		model.material = new PhongMaterial();
 		model.material.texture = new Texture("data/models/eyebot/Eyebot_d.jpg");
 		model.material.normalMap = new Texture("data/models/eyebot/Eyebot_n.jpg");
-		//model.geometry.calculateTangent();
 		model.position.set(60, 20, -100);
 		model.scale.set(0.5, 0.5, 0.5);
-		model.updateMatrix();
 		self.scene.add(model);
 
 		var model = OBJLoader.load(data[0], data[1], "data/models/eyebot");
@@ -104,7 +99,6 @@ function Arena()
 		model.material.texture = new Texture("data/models/eyebot/Eyebot_d.jpg");
 		model.position.set(30, 20, -100);
 		model.scale.set(0.5, 0.5, 0.5);
-		model.updateMatrix();
 		self.scene.add(model);
 
 		//Eyebot color
@@ -112,7 +106,6 @@ function Arena()
 		model.material = new PhongMaterial();
 		model.position.set(0, 20, -100);
 		model.scale.set(0.5,0.5,0.5);
-		model.updateMatrix();
 		self.scene.add(model);
 
 		//Eyebot depth
@@ -120,7 +113,6 @@ function Arena()
 		model.material = new DepthMaterial();
 		model.position.set(-30,20,-100);
 		model.scale.set(0.5,0.5,0.5);
-		model.updateMatrix();
 		self.scene.add(model);
 
 		//Eyebot dissolve
@@ -130,7 +122,6 @@ function Arena()
 		model.material.dissolveMap = new Texture("data/texture/noise.jpg");
 		model.position.set(-60,20,-100);
 		model.scale.set(0.5,0.5,0.5);
-		model.updateMatrix();
 		self.scene.add(model);
 
 		//Eyebot normal
@@ -138,17 +129,14 @@ function Arena()
 		model.material = new NormalMaterial();
 		model.position.set(-90,20,-100);
 		model.scale.set(0.5,0.5,0.5);
-		model.updateMatrix();
 		self.scene.add(model);
 
 		//Eyebot normal map
 		var model = OBJLoader.load(data[0], data[1], "data/models/eyebot");
 		model.material = new NormalMaterial();
 		model.material.normalMap = new Texture("data/models/eyebot/Eyebot_n.jpg");
-		//model.geometry.calculateTangent();
 		model.position.set(-120, 20, -100);
 		model.scale.set(0.5,0.5,0.5);
-		model.updateMatrix();
 		self.scene.add(model);
 
 	});
@@ -157,9 +145,8 @@ function Arena()
 	FileLoader.loadMultiple(["data/models/asiangirl/asiangirl.obj", "data/models/asiangirl/asiangirl.mtl"], function(data)
 	{
 		var model = OBJLoader.load(data[0], data[1], "data/models/asiangirl");
-		model.position.set(-100,0,-100);
-		model.scale.set(0.15,0.15,0.15);
-		model.updateMatrix();
+		model.position.set(-160, 0, -100);
+		model.scale.set(0.15, 0.15, 0.15);
 		self.scene.add(model);
 	});
 
@@ -170,7 +157,6 @@ function Arena()
 		bus.scale.set(0.08, 0.08, 0.08);
 		bus.position.set(100, 19.8, 230);
 		bus.rotation.set(0, Math.PI, 0);
-		bus.updateMatrix();
 		self.scene.add(bus);
 		self.world.addBody(new BodyObject(bus));
 
@@ -181,7 +167,6 @@ function Arena()
 		bus.scale.set(0.08, 0.08, 0.08);
 		bus.position.set(60, 19.8, 230);
 		bus.rotation.set(0, Math.PI, 0);
-		bus.updateMatrix();
 		self.scene.add(bus);
 		self.world.addBody(new BodyObject(bus));
 
@@ -191,7 +176,6 @@ function Arena()
 		bus.scale.set(0.08, 0.08, 0.08);
 		bus.position.set(20, 19.8, 230);
 		bus.rotation.set(0, Math.PI, 0);
-		bus.updateMatrix();
 		self.scene.add(bus);
 		self.world.addBody(new BodyObject(bus));
 	});
@@ -203,37 +187,31 @@ function Arena()
 	model.material.texture = new Texture("data/texture/house.jpg");
 	model.scale.set(7, 7, 7);
 	model.position.set(300,0,0);
-	model.updateMatrix();
 	this.scene.add(model);
 	this.world.addBody(new BodyObject(model));
 
 	model = model.clone();
 	model.position.set(300,0,80);
-	model.updateMatrix();
 	this.scene.add(model);
 	this.world.addBody(new BodyObject(model));
 
 	model = model.clone();
 	model.position.set(300,0,160);
-	model.updateMatrix();
 	this.scene.add(model);
 	this.world.addBody(new BodyObject(model));
 
 	model = model.clone();
 	model.position.set(200,0,0);
-	model.updateMatrix();
 	this.scene.add(model);
 	this.world.addBody(new BodyObject(model));
 
 	model = model.clone();
 	model.position.set(200,0,80);
-	model.updateMatrix();
 	this.scene.add(model);
 	this.world.addBody(new BodyObject(model));
 
 	model = model.clone();
 	model.position.set(200,0,160);
-	model.updateMatrix();
 	this.scene.add(model);
 	this.world.addBody(new BodyObject(model));
 
@@ -244,28 +222,24 @@ function Arena()
 	model.material.normalMap = new Texture("data/texture/wood_box_normal.png");
 	model.position.set(-200,5,0);
 	model.scale.set(5,5,5);
-	model.updateMatrix();
 	this.scene.add(model);
 	this.world.addBody(new BodyObject(model));
 
 	model = model.clone();
 	model.position.set(-200,15,0);
 	model.scale.set(5,5,5);
-	model.updateMatrix();
 	this.scene.add(model);
 	this.world.addBody(new BodyObject(model));
 
 	model = model.clone();
 	model.position.set(-190,5,0);
 	model.scale.set(5,5,5);
-	model.updateMatrix();
 	this.scene.add(model);
 	this.world.addBody(new BodyObject(model));
 
 	model = model.clone();
 	model.position.set(-200,5,10);
 	model.scale.set(5,5,5);
-	model.updateMatrix();
 	this.scene.add(model);
 	this.world.addBody(new BodyObject(model));
 
@@ -280,7 +254,6 @@ function Arena()
 	model = new Mesh(floorGeometry, floorMaterial);
 	model.position.set(0, -100, 0);
 	model.scale.set(900, 100, 900);
-	model.updateMatrix();
 	this.scene.add(model);
 	this.world.addBody(new BodyObject(model));
 	
@@ -295,28 +268,24 @@ function Arena()
 	model = new Mesh(geometry, material);
 	model.position.set(0, 0, -300);
 	model.scale.set(300, 50, 1);
-	model.updateMatrix();
 	this.scene.add(model);
 	this.world.addBody(new BodyObject(model));
 
 	model = new Mesh(geometry, material);
 	model.position.set(0, 0, 300);
 	model.scale.set(300, 50, 1);
-	model.updateMatrix();
 	this.scene.add(model);
 	this.world.addBody(new BodyObject(model));
 
 	model = new Mesh(geometry, material);
 	model.position.set(-300, 0, 0);
 	model.scale.set(1, 50, 300);
-	model.updateMatrix();
 	this.scene.add(model);
 	this.world.addBody(new BodyObject(model));
 
 	model = new Mesh(geometry, material);
 	model.position.set(300, 0, 0);
 	model.scale.set(1, 50, 300);
-	model.updateMatrix();
 	this.scene.add(model);
 	this.world.addBody(new BodyObject(model));
 
@@ -355,7 +324,6 @@ function Arena()
 
 	var grass = new Mesh(merged, grassMaterial);
 	grass.scale.set(6, 6, 6);
-	grass.updateMatrix();
 	this.scene.add(grass);
 
 	//Player
@@ -370,7 +338,6 @@ function Arena()
 	this.cube.material.normalMap = new Texture("data/texture/wood_box_normal.png");
 	this.cube.position.set(-40, 10, 80);
 	this.cube.scale.set(10, 10, 10);
-	this.cube.updateMatrix();
 	this.scene.add(this.cube);
 
 	//Smoke
@@ -387,10 +354,14 @@ function Arena()
 	this.weapon.material = new PhongMaterial();
 	this.weapon.material.texture = new Texture("data/models/pulserifle/tex1.jpg");
 	this.weapon.scale.set(20, 20, 20);
-	this.weapon.position.set(15, 5, -30);
+	this.weapon.position.set(0, 0, -60);
 	this.weapon.rotation.set(0, Math.PI, 0);
-	this.weapon.updateMatrix();
-	this.scene.add(this.weapon);
+	this.player.camera.add(this.weapon);
+	console.log(this.weapon);
+
+	//
+	this.bufferCamera = new PerspectiveCamera(1, 60, 1);
+	this.bufferCamera.position.set(50, 30, 50);
 
 	//HUD Scene
 	this.hudCamera = new OrthographicCamera(1, 1);
@@ -401,7 +372,6 @@ function Arena()
 	this.idk.texture = new Texture("data/texture/idk.png");
 	this.idk.scale.set(20, 10, 1);
 	this.idk.position.set(60, -45, -1);
-	this.idk.updateMatrix();
 	this.hudScene.add(this.idk);
 	
 	//Crosshair
@@ -409,12 +379,10 @@ function Arena()
 	this.cross.texture = new Texture("data/texture/cross.png");
 	this.cross.scale.set(4, 4, 1);
 	this.cross.position.set(-2, -2, -1);
-	this.cross.updateMatrix();
 	this.hudScene.add(this.cross);
 
 	this.bullet = new Mesh(new SphereGeometry(1.0, 16, 16), new BasicMaterial());
 	this.bullet.position.set(0, 3, 0);
-	this.bullet.updateMatrix();
 	this.scene.add(this.bullet);
 
 	//Bullet list
@@ -516,22 +484,19 @@ Arena.prototype.update = function()
 	}
 
 	this.markerA.position.copy(this.lightA.position);
-	this.markerA.updateMatrix();
-
 	this.markerB.position.copy(this.lightB.position);
-	this.markerB.updateMatrix();
-
 	this.markerC.position.copy(this.lightC.position);
-	this.markerC.updateMatrix();
-
 	this.markerD.position.copy(this.lightD.position);
-	this.markerD.updateMatrix();
 };
 
 Arena.prototype.draw = function(renderer)
 {
 	renderer.autoClear = true;
-	renderer.render(this.scene, this.player.camera, this.cube.material.texture);
+
+	this.bufferCamera.rotation.y += 0.001;
+	renderer.render(this.scene, this.bufferCamera, this.cube.material.texture);
+
+
 	renderer.render(this.scene, this.player.camera);
 	renderer.autoClear = false;
 	renderer.render(this.hudScene, this.hudCamera);
@@ -543,7 +508,6 @@ Arena.prototype.resize = function(width, height)
 	var hud = 100;
 
 	this.idk.position.x = hud * aspect * 0.4;
-	this.idk.updateMatrix();
 
 	this.hudCamera.resize(hud * aspect, hud);
 	this.player.camera.resize(width, height);

@@ -258,7 +258,7 @@ Matrix4.prototype.lookAt = function()
 	};
 }();
 
-Matrix4.prototype.multiply = function(m, n)
+Matrix4.prototype.multiply = function(m)
 {
 	return this.multiplyMatrices(this, m);
 };

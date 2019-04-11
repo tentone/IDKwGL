@@ -25,6 +25,13 @@ function Object3D()
 	this.scale = new Vector3(1,1,1);
 
 	/**
+	 * Indicates if the matrix needs to be updated.
+	 *
+	 * If a parent matrix is updated all children need to be updated as well.
+	 */
+	this.matrixNeedsUpdate = true;
+
+	/**
 	 * Transformation matrix.
 	 */
 	this.transformationMatrix = new Matrix4();
@@ -66,7 +73,7 @@ Object3D.prototype.render = function(gl, camera, scene){};
 Object3D.prototype.add = function(child)
 {
 	child.parent = this;
-	this.children.add(child);
+	this.children.push(child);
 };
 
 /**

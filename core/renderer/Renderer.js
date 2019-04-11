@@ -101,10 +101,34 @@ Renderer.prototype.clear = function(color, depth, stencil)
 };
 
 /**
+ * Update the scene matrices recusively.
+ */
+Renderer.updateMatrices = function(scene)
+{
+	function recursiveUpdate(object)
+	{
+		object.updateMatrix();
+
+		for(var j = 0; j < object.children.length; j++)
+		{
+			recursiveUpdate(object.children[j]);
+		}
+	}
+
+	for(var i = 0; i < scene.objects.length; i++)
+	{
+		recursiveUpdate(scene.objects[i]);
+	}
+	
+};
+
+/**
  * Render a scene using a camera.
  */
 Renderer.prototype.render = function(scene, camera, renderTarget)
 {
+	Renderer.updateMatrices(scene);
+
 	var gl = this.gl;
 
 	if(renderTarget !== undefined)

@@ -48,8 +48,8 @@ Sprite.prototype.render = function(renderer, camera, scene)
 
 	//Transformation matrices
 	gl.uniformMatrix4fv(shader.uniforms["projection"], false, camera.projectionMatrix.flatten());
-	gl.uniformMatrix4fv(shader.uniforms["view"], false, camera.transformationMatrix.flatten());
-	gl.uniformMatrix4fv(shader.uniforms["model"], false, this.transformationMatrix.flatten());
+	gl.uniformMatrix4fv(shader.uniforms["view"], false, camera.inverseTransformationMatrix.flatten());
+	gl.uniformMatrix4fv(shader.uniforms["model"], false, this.worldMatrix.flatten());
 
 	var buffers = renderer.getBuffers(Sprite);
 

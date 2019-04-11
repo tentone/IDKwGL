@@ -148,10 +148,10 @@ MeshMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera, o
 
 	//Transformation matrices
 	gl.uniformMatrix4fv(shader.uniforms["projection"], false, camera.projectionMatrix.flatten());
-	gl.uniformMatrix4fv(shader.uniforms["view"], false, camera.transformationMatrix.flatten());
+	gl.uniformMatrix4fv(shader.uniforms["view"], false, camera.inverseTransformationMatrix.flatten());
 	
-	gl.uniformMatrix4fv(shader.uniforms["camera"], false, camera.inverseTransformationMatrix.flatten());
-	gl.uniformMatrix4fv(shader.uniforms["model"], false, object.transformationMatrix.flatten());
+	gl.uniformMatrix4fv(shader.uniforms["camera"], false, camera.worldMatrix.flatten());
+	gl.uniformMatrix4fv(shader.uniforms["model"], false, object.worldMatrix.flatten());
 
 	var buffers = renderer.getBuffers(object.geometry);
 

@@ -87,8 +87,8 @@ Text.prototype.draw = function(camera, scene)
 
 	//Transformation matrices
 	gl.uniformMatrix4fv(gl.getUniformLocation(this.shader.program, "projection"), false, camera.projectionMatrix.flatten());
-	gl.uniformMatrix4fv(gl.getUniformLocation(this.shader.program, "view"), false, camera.transformationMatrix.flatten());
-	gl.uniformMatrix4fv(gl.getUniformLocation(this.shader.program, "model"), false, this.transformationMatrix.flatten());
+	gl.uniformMatrix4fv(gl.getUniformLocation(this.shader.program, "view"), false, camera.worldMatrix.flatten());
+	gl.uniformMatrix4fv(gl.getUniformLocation(this.shader.program, "model"), false, this.worldMatrix.flatten());
 
 	//Vertex position
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);

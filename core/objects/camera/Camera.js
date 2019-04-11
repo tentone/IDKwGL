@@ -43,10 +43,17 @@ Camera.UP = new Vector3(0, 1, 0);
  */
 Camera.prototype.lookAtDirection = function(direction)
 {
-	this.inverseTransformationMatrix.lookAt(this.position, direction, Camera.UP);
-	this.inverseTransformationMatrix.setPosition(this.position);
+	this.transformationMatrix.lookAt(this.position, direction, Camera.UP);
+	this.transformationMatrix.setPosition(this.position);
 
-	this.transformationMatrix.getInverse(this.inverseTransformationMatrix);
+	this.worldMatrix.copy(this.transformationMatrix);
+
+	if(this.parent !== null)
+	{
+		this.worldMatrix.multiply(this.parent.worldMatrix);
+	}
+	
+	this.inverseTransformationMatrix.getInverse(this.worldMatrix);
 };
 
 
@@ -57,10 +64,17 @@ Camera.prototype.lookAtDirection = function(direction)
  */
 Camera.prototype.updateMatrix = function()
 {
-	this.inverseTransformationMatrix.makeRotationFromEuler(this.rotation, "YZX");
-	this.inverseTransformationMatrix.setPosition(this.position);
-	
-	this.transformationMatrix.getInverse(this.inverseTransformationMatrix);
+	this.transformationMatrix.makeRotationFromEuler(this.rotation, "YZX");
+	this.transformationMatrix.setPosition(this.position);
+
+	this.worldMatrix.copy(this.transformationMatrix);
+
+	if(this.parent !== null)
+	{
+		this.worldMatrix.multiply(this.parent.worldMatrix);
+	}
+
+	this.inverseTransformationMatrix.getInverse(this.worldMatrix);
 };
 
 /**
