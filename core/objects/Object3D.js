@@ -25,6 +25,11 @@ function Object3D()
 	this.scale = new Vector3(1,1,1);
 
 	/**
+	 * Indicates if the matrices should be automatically updated by the renderer.
+	 */
+	this.autoUpdateMatrix = true;
+
+	/**
 	 * Indicates if the matrix needs to be updated.
 	 *
 	 * If a parent matrix is updated all children need to be updated as well.
@@ -91,7 +96,7 @@ Object3D.prototype.updateMatrix = function()
 
 	if(this.parent !== null)
 	{
-		this.worldMatrix.multiply(this.parent.worldMatrix);
+		this.worldMatrix.premultiply(this.parent.worldMatrix);
 	}
 };
 

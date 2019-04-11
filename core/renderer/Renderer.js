@@ -107,7 +107,10 @@ Renderer.updateMatrices = function(scene)
 {
 	function recursiveUpdate(object)
 	{
-		object.updateMatrix();
+		if(object.autoUpdateMatrix)
+		{
+			object.updateMatrix();
+		}
 
 		for(var j = 0; j < object.children.length; j++)
 		{

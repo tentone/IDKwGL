@@ -11,6 +11,7 @@ function Player()
 
 	//Camera
 	this.camera = new PerspectiveCamera(1, 70, 1);
+	this.camera.autoUpdateMatrix = false;
 	this.camera.position.set(0, 2, 0);
 
 	//Orientation

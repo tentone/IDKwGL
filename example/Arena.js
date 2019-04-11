@@ -353,15 +353,22 @@ function Arena()
 	this.weapon.geometry.computeNormals();
 	this.weapon.material = new PhongMaterial();
 	this.weapon.material.texture = new Texture("data/models/pulserifle/tex1.jpg");
-	this.weapon.scale.set(20, 20, 20);
-	this.weapon.position.set(0, 0, -60);
+	this.weapon.scale.set(5, 5, 5);
+	this.weapon.position.set(1.5, -1, -1.5);
 	this.weapon.rotation.set(0, Math.PI, 0);
 	this.player.camera.add(this.weapon);
-	console.log(this.weapon);
+	this.scene.add(this.player.camera);
 
 	//
 	this.bufferCamera = new PerspectiveCamera(1, 60, 1);
 	this.bufferCamera.position.set(50, 30, 50);
+	this.scene.add(this.bufferCamera);
+
+	this.cameraCube = new Mesh(new BoxGeometry());
+	this.cameraCube.material = new PhongMaterial();
+	this.cameraCube.position.set(0, 0, 10);
+	this.cameraCube.scale.set(5, 5, 5);
+	this.bufferCamera.add(this.cameraCube);
 
 	//HUD Scene
 	this.hudCamera = new OrthographicCamera(1, 1);
@@ -442,6 +449,10 @@ Arena.prototype.update = function()
 
 	var time = this.timer.get();
 
+	this.weapon.rotation.x = Math.cos(time / 1000.0) * 0.02;
+	this.weapon.rotation.z = Math.cos(time / 2000.0) * 0.01;
+	this.bufferCamera.rotation.y += 0.001;
+
 	this.lightA.position.set(Math.cos(time / 1000.0) * 70.0 + 50.0, 30, Math.sin(time / 1300.0) * 70.0 + 50.0);
 	this.lightB.position.set(Math.cos(time / 800.0) * 80.0, Math.sin(time / 1200.0) * 25 + 30, Math.sin(time / 900.0) * 80.0);
 	this.lightC.position.set(Math.cos(time / 1200.0) * 90.0 - 50.0, Math.sin(time / 1400.0) * 25 + 30, Math.sin(time / 1100.0) * 90.0 - 50.0);
@@ -493,7 +504,8 @@ Arena.prototype.draw = function(renderer)
 {
 	renderer.autoClear = true;
 
-	this.bufferCamera.rotation.y += 0.001;
+
+	
 	renderer.render(this.scene, this.bufferCamera, this.cube.material.texture);
 
 
