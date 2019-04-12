@@ -1,6 +1,10 @@
 "use strict";
 
-//Constructor creates indentity matrix if width equals height
+/**
+ * Generic size matrix class.
+ *
+ * Constructor creates indentity matrix if width equals height
+ */
 function Matrix(width, height)
 {
 	this.matrix = [];
@@ -26,7 +30,9 @@ function Matrix(width, height)
 
 Matrix.prototype.constructor = Matrix;
 
-//Clears matrix data to 0's if matrix if square clears to indentity
+/**
+ * Clears matrix data to 0's if matrix if square clears to indentity.
+ */
 Matrix.prototype.clear = function()
 {
 	for(var i = 0; i < this.size.x; i++)
@@ -47,7 +53,9 @@ Matrix.prototype.clear = function()
 	}
 };
 
-//Checks if matri is equals to another
+/**
+ * Checks if this matrix is equals to another.
+ */
 Matrix.prototype.equals = function(val)
 {
 	for(var i = 0; i < this.size.x; i++)
@@ -64,7 +72,9 @@ Matrix.prototype.equals = function(val)
 	return true;
 };
 
-//Convert to array collum oriented
+/**
+ * Convert to array collum oriented as a Float32Array.
+ */
 Matrix.prototype.flatten = function()
 {
 	var array = new Float32Array(this.size.x * this.size.y);
@@ -232,108 +242,4 @@ Matrix.mul = function(a, b)
 	}
 
 	return mat;
-};
-	
-//Self testing function 
-Matrix.test = function()
-{
-	//Matrix Initilization
-	//a = [3,2,-1;4,-5,2]
-	var a = new Matrix(3,2);
-	a.matrix[0][0] = 3;
-	a.matrix[1][0] = 2;
-	a.matrix[2][0] = -1;
-	a.matrix[0][1] = 4;
-	a.matrix[1][1] = -5;
-	a.matrix[2][1] = 2;
-
-	//b = [3,-1;-5,5;-2,11]
-	var b = new Matrix(2,3);
-	b.matrix[0][0] = 3;
-	b.matrix[1][0] = -1;
-	b.matrix[0][1] = -5;
-	b.matrix[1][1] = 5;
-	b.matrix[0][2] = -2;
-	b.matrix[1][2] = 11;
-
-	var c = new Matrix(4,4);
-
-	//d = [2,1,-2,1;-1,5,4,9;-11,-2,4,3;2,5,1,-3]
-	var d = new Matrix(4,4);
-	d.matrix[0][0] = 2;
-	d.matrix[1][0] = 1;
-	d.matrix[2][0] = -2;
-	d.matrix[3][0] = 1;
-	d.matrix[0][1] = -1;
-	d.matrix[1][1] = 5;
-	d.matrix[2][1] = 4;
-	d.matrix[3][1] = 9;
-	d.matrix[0][2] = -11;
-	d.matrix[1][2] = -2;
-	d.matrix[2][2] = 4;
-	d.matrix[3][2] = 3;
-	d.matrix[0][3] = 2;
-	d.matrix[1][3] = 5;
-	d.matrix[2][3] = 1;
-	d.matrix[3][3] = -3;
-
-	//f = [0,3,9,2;-2,5,3,1;-12,1,-4,-3;6,2,3,-1]
-	var f = new Matrix(4,4);
-	f.matrix[0][0] = 0;
-	f.matrix[1][0] = 3;
-	f.matrix[2][0] = 9;
-	f.matrix[3][0] = 2;
-	f.matrix[0][1] = -2;
-	f.matrix[1][1] = 5;
-	f.matrix[2][1] = 3;
-	f.matrix[3][1] = 1;
-	f.matrix[0][2] = -12;
-	f.matrix[1][2] = 1;
-	f.matrix[2][2] = -4;
-	f.matrix[3][2] = -3;
-	f.matrix[0][3] = 6;
-	f.matrix[1][3] = 2;
-	f.matrix[2][3] = 3;
-	f.matrix[3][3] = -1;
-
-	//A
-	console.log("A");
-	console.log(a.toString());
-
-	//B
-	console.log("\nB");
-	console.log(b.toString());
-
-	//D
-	console.log("\nD");
-	console.log(d.toString());
-
-	//F
-	console.log("\nF");
-	console.log(f.toString());
-
-	//G = D * F
-	var g = Matrix.mul(d, f);
-	console.log("\nG = D * F");
-	console.log(g.toString());
-
-	//H = F * D
-	var h = Matrix.mul(f, d);
-	console.log("\nH = F * D");
-	console.log(h.toString());
-
-	//I = A * B
-	var i = Matrix.mul(a, b);
-	console.log("\nI = A * B");
-	console.log(i.toString());
-
-	//J = B * A
-	var j = Matrix.mul(b, a);
-	console.log("\nI = B * A");
-	console.log(j.toString());
-
-	//K = G * ID(4x4)
-	var k = Matrix.mul(g, c);
-	console.log("\nK = G * ID(4x4)");
-	console.log(k.toString());
 };
