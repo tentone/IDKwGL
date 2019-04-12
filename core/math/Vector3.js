@@ -9,7 +9,9 @@ function Vector3(x, y, z)
 
 Vector3.prototype.constructor = Vector3;
 
-//Cross product
+/**
+ * Cross product.
+ */
 Vector3.cross = function(a, b)
 {
     return new Vector3(a.y*b.z - a.z*b.y, a.z*b.x - a.x*b.z, a.x*b.y - a.y*b.x);
@@ -37,7 +39,6 @@ Vector3.prototype.copy = function(vector)
 	this.z = vector.z;
 }
 
-
 /**
  * Set all values of the vector to the same scalar.
  */
@@ -48,7 +49,6 @@ Vector3.prototype.setScalar = function(v)
 	this.z = v;
 }
 
-
 //Change all values at once
 Vector3.prototype.set = function(x, y, z)
 {
@@ -57,13 +57,17 @@ Vector3.prototype.set = function(x, y, z)
 	this.z = z;
 }
 
-//Clone vector3
+/**
+ * Clone vector3, create a new instance with the same values.
+ */
 Vector3.prototype.clone = function()
 {
 	return new Vector3(this.x, this.y, this.z);
 };
 
-//Normalize Vector
+/**
+ * Normalize Vector, (to length of one).
+ */
 Vector3.prototype.normalize = function()
 {
     var norm = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
@@ -72,13 +76,17 @@ Vector3.prototype.normalize = function()
     this.z /= norm;
 };
 
-//Compare values
+/**
+ * Check if two vectors store the same value.
+ */
 Vector3.prototype.equals = function(val)
 {
 	return (this.x === val.x && this.y === val.y && this.z === val.z)
 };
 
-//Add
+/**
+ * Add the components of two vectors to each other.
+ */
 Vector3.prototype.add = function(val)
 {
 	this.x += val.x;
@@ -86,7 +94,9 @@ Vector3.prototype.add = function(val)
 	this.z += val.z;
 };
 
-//Sub
+/**
+ * Substract the components of two vectors from each other.
+ */
 Vector3.prototype.sub = function(val)
 {
 	this.x -= val.x;
@@ -94,7 +104,9 @@ Vector3.prototype.sub = function(val)
 	this.z -= val.z
 };
 
-//Mult
+/**
+ * Multiply the components of two vectors be each other.
+ */
 Vector3.prototype.mul = function(val)
 {
 	this.x *= val.x;
@@ -102,7 +114,9 @@ Vector3.prototype.mul = function(val)
 	this.z *= val.z;
 };
 
-//Div
+/**
+ * Divide the components of two vectors be each other.
+ */
 Vector3.prototype.div = function(val)
 {
 	this.x /= val.x;
@@ -110,7 +124,9 @@ Vector3.prototype.div = function(val)
 	this.z /= val.z;
 };
 
-//Mult by const
+/**
+ * Multiply each component of the vector by a scalar.
+ */
 Vector3.prototype.mulScalar = function(val)
 {
 	this.x *= val;
@@ -123,7 +139,9 @@ Vector3.prototype.lengthSquared = function()
 	return this.x * this.x + this.y * this.y + this.z * this.z;
 };
 
-//Round all values close to zero to zero
+/**
+ * Round all values close to zero to zero.
+ */
 Vector3.prototype.roundCloseToZero = function(tolerance)
 {
 	if(tolerance === undefined)
