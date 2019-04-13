@@ -37,11 +37,16 @@ function PhongMaterial(name)
 	 * Bump map stored elevations relative to the surface.
 	 * 
 	 * Can be used for light calculation or to deformate the surface.
-	 *
-	 * TODO <NOT USED>
 	 */
 	this.bumpMap = null;
-	
+		
+	/**
+	 * Bump map scale, indicates the maximum bump deformation allowed.
+	 *
+	 * Can be negative to compress the geometry surface.
+	 */
+	this.bumpScale = 2.0;
+
 	/**
 	 * Indicates if the material is transparent.
 	 *
@@ -107,6 +112,21 @@ PhongMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera, 
 	{
 		gl.uniform1i(shader.uniforms["hasSpecularMap"], 0);
 	}
+
+	//Bump map
+	if(this.bumpMap !== null)
+	{
+		var bumpMap = renderer.getTexture(this.bumpMap);
+		gl.activeTexture(gl.TEXTURE3);
+		gl.bindTexture(gl.TEXTURE_2D, bumpMap);
+		gl.uniform1i(shader.uniforms["bumpMap"], 3);
+		gl.uniform1i(shader.uniforms["hasBumpMap"], 1);
+	}
+	else
+	{
+		gl.uniform1i(shader.uniforms["hasBumpMap"], 0);
+	}
+
 };
 
 PhongMaterial.extensions = ["OES_standard_derivatives"];
@@ -134,6 +154,10 @@ PhongMaterial.registerUniforms = function(gl, shader)
 
 	shader.registerUniform("hasSpecularMap");
 	shader.registerUniform("specularMap");
+
+	shader.registerUniform("hasBumpMap");
+	shader.registerUniform("bumpMap");
+	shader.registerUniform("bumpScale");
 };
 
 PhongMaterial.fragmentExtensions = "\
@@ -144,6 +168,10 @@ PhongMaterial.fragmentExtensions = "\
 PhongMaterial.vertexHeader = "\
 \
 /* attribute vec3 vertexTangent; */\
+\
+uniform bool hasBumpMap;\
+uniform sampler2D bumpMap;\
+uniform float bumpScale;\
 \
 varying vec3 fragmentTangent;";
 
@@ -161,7 +189,10 @@ uniform vec3 specular;\
 uniform float specularIntensity;\
 \
 uniform bool hasSpecularMap;\
-uniform sampler2D specularMap;";
+uniform sampler2D specularMap;\
+\
+uniform bool hasBumpMap;\
+uniform sampler2D bumpMap;";
 
 PhongMaterial.vertexShader = MeshMaterial.vertexHeader + PhongMaterial.vertexHeader + "\
 \
@@ -171,7 +202,12 @@ void main(void)\
 	fragmentVertex = vertexPosition;\
 	fragmentNormal = vertexNormal;\
 	\
-	gl_Position = projection * view * model * vec4(vertexPosition, 1.0);\
+	if(hasBumpMap)\
+	{\
+		fragmentVertex.xyz += normalize(fragmentNormal).xyz * texture2D(bumpMap, fragmentUV).xyz;\
+	}\
+	\
+	gl_Position = projection * view * model * vec4(fragmentVertex, 1.0);\
 }";
 
 /**
