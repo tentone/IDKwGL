@@ -205,6 +205,14 @@ void main(void)\
 	if(hasBumpMap)\
 	{\
 		fragmentVertex.xyz += normalize(fragmentNormal).xyz * texture2D(bumpMap, fragmentUV).xyz;\
+		\
+		float d = 0.01;\
+		vec2 dx = vec2(d, 0.0);\
+		vec2 dy = vec2(0.0, d);\
+		\
+		fragmentNormal.x += texture2D(bumpMap, fragmentUV + dx).x - texture2D(bumpMap, fragmentUV - dx).x;\
+		fragmentNormal.z += texture2D(bumpMap, fragmentUV + dy).x - texture2D(bumpMap, fragmentUV - dy).x;\
+		fragmentNormal = normalize(fragmentNormal);\
 	}\
 	\
 	gl_Position = projection * view * model * vec4(fragmentVertex, 1.0);\
