@@ -60,10 +60,10 @@ function Arena()
 	this.directional.position.set(0.0, 2.0, 1.0);
 	this.scene.add(this.directional);
 
-	var sphereBump = new Mesh(new SphereGeometry(10.0, 128, 128), new PhongMaterial());
-	sphereBump.position.set(200, 20, -120);
-	sphereBump.material.bumpMap = new Texture("data/texture/noise.jpg");
-	this.scene.add(sphereBump);
+	this.sphereBump = new Mesh(new SphereGeometry(10.0, 128, 128), new PhongMaterial());
+	this.sphereBump.position.set(200, 20, -120);
+	this.sphereBump.material.bumpMap = new Texture("data/texture/noise.jpg");
+	this.scene.add(this.sphereBump);
 
 	//Axis
 	var axis = new Axis(this.scene);
@@ -414,6 +414,8 @@ Arena.prototype.update = function()
 		particle.speed.mulScalar(5);
 		this.bullets.push(particle);
 	}
+
+	this.sphereBump.rotation.y += 0.01;
 
 	/*
 	//Update bullet list
