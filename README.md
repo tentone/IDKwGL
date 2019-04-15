@@ -14,12 +14,13 @@
 ## Features
  - Materials
      - Basic material (Base and emissive color, texture support, transparency)
-     - Phong material (Base, emissive, specular colors, Albedo and normal map)
+     - Phong material (Base, emissive, specular colors, albedo, normal map, bump map)
      - Depth and normal material (For debugging)
  - Support for colored lighting
     - Point Lights
     - Ambient Lights
     - Directional Lights
+ - Render targets (textures and post-processing).
  - Basic physics engine
     - AAB
  - Primitive geometries (Plane, Sphere, Box)
