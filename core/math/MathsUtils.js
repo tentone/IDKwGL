@@ -34,28 +34,6 @@ MathUtils.randomMod = function()
 	return 2*Math.random() - 1;
 };
 
-//Invert 3x3 matrix
-MathUtils.matrix3Invert = function(m)
-{
-	var result = new Matrix(3,3);
-	result.matrix[0][0] =  (m.matrix[1][1]*m.matrix[2][2]-m.matrix[2][1]*m.matrix[1][2]);
-	result.matrix[1][0] = -(m.matrix[0][1]*m.matrix[2][2]-m.matrix[0][2]*m.matrix[2][1]);
-	result.matrix[2][0] =  (m.matrix[0][1]*m.matrix[1][2]-m.matrix[0][2]*m.matrix[1][1]);
-	result.matrix[0][1] = -(m.matrix[1][0]*m.matrix[2][2]-m.matrix[1][2]*m.matrix[2][0]);
-	result.matrix[1][1] =  (m.matrix[0][0]*m.matrix[2][2]-m.matrix[0][2]*m.matrix[2][0]);
-	result.matrix[2][1] = -(m.matrix[0][0]*m.matrix[1][2]-m.matrix[1][0]*m.matrix[0][2]);
-	result.matrix[0][2] =  (m.matrix[1][0]*m.matrix[2][1]-m.matrix[2][0]*m.matrix[1][1]);
-	result.matrix[1][2] = -(m.matrix[0][0]*m.matrix[2][1]-m.matrix[2][0]*m.matrix[0][1]);
-	result.matrix[2][2] =  (m.matrix[0][0]*m.matrix[1][1]-m.matrix[1][0]*m.matrix[0][1]);
-	return result;
-};
-
-//Calculate distance between p1 and p2 (Vector3)
-MathUtils.pointDistance = function(p1, p2)
-{
-	return Math.sqrt((p1.x*p1.x - p2.x*p2.x) + (p1.y*p1.y - p2.y*p2.y) + (p1.z*p1.z - p2.z*p2.z));
-};
-
 //Mid Point (Vector3)
 MathUtils.computeMidPoint = function(p1, p2)
 {
@@ -74,11 +52,6 @@ MathUtils.symmetric = function(v)
 	return new Vector3(-v.x, -v.y, -v.z);
 };
 
-//Dot product (Vector3)
-MathUtils.dotProduct = function(v1, v2)
-{
-	return v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
-};
 
 // Vector product (Vector3)
 MathUtils.vectorProduct = function(v1, v2)

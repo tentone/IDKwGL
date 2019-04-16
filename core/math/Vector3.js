@@ -140,6 +140,14 @@ Vector3.prototype.lengthSquared = function()
 };
 
 /**
+ * Calculate distance between p1 and p2 (Vector3)
+ */
+Vector3.distance = function(p1, p2)
+{
+	return Math.sqrt((p1.x*p1.x - p2.x*p2.x) + (p1.y*p1.y - p2.y*p2.y) + (p1.z*p1.z - p2.z*p2.z));
+};
+
+/**
  * Round all values close to zero to zero.
  */
 Vector3.prototype.roundCloseToZero = function(tolerance)

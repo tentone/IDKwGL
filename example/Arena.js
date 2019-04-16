@@ -91,6 +91,15 @@ function Arena()
 	//Eyebot
 	FileLoader.loadMultiple(["data/models/eyebot/eyebot.obj", "data/models/eyebot/eyebot.mtl"], function(data)
 	{
+		self.eyebotBump = OBJLoader.load(data[0], data[1], "data/models/eyebot");
+		self.eyebotBump.material = new PhongMaterial();
+		self.eyebotBump.material.texture = new Texture("data/models/eyebot/Eyebot_d.jpg");
+		self.eyebotBump.material.bumpMap = new Texture("data/texture/noise.jpg");
+		self.eyebotBump.material.bumpScale = 5.0;
+		self.eyebotBump.position.set(90, 20, -100);
+		self.eyebotBump.scale.set(0.5, 0.5, 0.5);
+		self.scene.add(self.eyebotBump);
+
 		var model = OBJLoader.load(data[0], data[1], "data/models/eyebot");
 		model.material = new PhongMaterial();
 		model.material.texture = new Texture("data/models/eyebot/Eyebot_d.jpg");
@@ -456,6 +465,8 @@ Arena.prototype.update = function()
 
 	var time = this.timer.get();
 
+	this.sphereBump.material.bumpScale = Math.cos(time / 500.0) + 2.0;
+
 	this.weapon.rotation.x = Math.cos(time / 1000.0) * 0.02;
 	this.weapon.rotation.z = Math.cos(time / 2000.0) * 0.01;
 	this.bufferCamera.rotation.y += 0.001;
@@ -510,12 +521,7 @@ Arena.prototype.update = function()
 Arena.prototype.draw = function(renderer)
 {
 	renderer.autoClear = true;
-
-
-	
 	renderer.render(this.scene, this.bufferCamera, this.cube.material.texture);
-
-
 	renderer.render(this.scene, this.player.camera);
 	renderer.autoClear = false;
 	renderer.render(this.hudScene, this.hudCamera);

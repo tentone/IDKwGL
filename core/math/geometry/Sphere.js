@@ -18,7 +18,7 @@ Sphere.prototype.isColliding = function(obj)
 {
 	if(obj.type === "Sphere")
 	{
-		return MathUtils.pointDistance(this.position, obj.position) > this.radius + obj.radius;
+		return Vector3.distance(this.position, obj.position) > this.radius + obj.radius;
 	}
 
 	return false;

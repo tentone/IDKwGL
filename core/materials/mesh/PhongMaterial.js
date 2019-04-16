@@ -127,6 +127,8 @@ PhongMaterial.prototype.updateUniforms = function(renderer, gl, shader, camera, 
 		gl.uniform1i(shader.uniforms["hasBumpMap"], 0);
 	}
 
+	gl.uniform1f(shader.uniforms["bumpScale"], this.bumpScale);
+
 };
 
 PhongMaterial.extensions = ["OES_standard_derivatives"];
@@ -204,7 +206,7 @@ void main(void)\
 	\
 	if(hasBumpMap)\
 	{\
-		fragmentVertex.xyz += normalize(fragmentNormal).xyz * texture2D(bumpMap, fragmentUV).xyz;\
+		fragmentVertex.xyz += normalize(fragmentNormal).xyz * texture2D(bumpMap, fragmentUV).xyz * bumpScale;\
 		\
 		float d = 0.01;\
 		vec2 dx = vec2(d, 0.0);\

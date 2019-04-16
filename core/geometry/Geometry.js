@@ -148,6 +148,101 @@ Geometry.prototype.createBuffers = function(gl)
 };
 
 /**
+ * Project vertices to the spherical surface of radius 1-
+ */
+ // TODO <NOT WORKING>
+
+Geometry.moveToSphericalSurface = function(coords)
+{
+	for(var i = 0; i < coords.length; i += 3)
+	{
+		var vec = new Vector3(coords[i], coords[i+1], coords[i+2]);
+		vec.normalize();
+		coords[i] = vec.x;
+		coords[i+1] = vec.y;
+		coords[i+2] = vec.z;
+	}
+};
+
+
+/**
+ * Subdivide triangles from a geometry by n levels.
+ */
+
+// TODO <NOT WORKING>
+Geometry.prototype.subdivide = function(recursionDepth)
+{
+	// Recursive triangle subdivision, using the midpoints of edges.
+	var recursiveDivision = function(v1, v2, v3, c1, c2, c3, geometry, recursionDepth)
+	{
+		// Recursive midpoint subdivision of one triangle
+		if(recursionDepth === 0)
+		{
+			// Storing coordinates and colors in the destination arrays
+			geometry.vertex.push(v1.x, v1.y, v1.z);
+			geometry.vertex.push(v2.x, v2.y, v2.z);
+			geometry.vertex.push(v3.x, v3.y, v3.z);
+			geometry.size += 9;
+			geometry.colors.push(c1.x, c1.y, c1.z);
+			geometry.colors.push(c2.x, c2.y, c2.z);
+			geometry.colors.push(c3.x, c3.y, c3.z);	    
+		}
+		else
+		{
+			// Compute the midpoints and proceed recursively
+			var mid12 = MathUtils.computeMidPoint(v1, v2);
+			var mid23 = MathUtils.computeMidPoint(v2, v3);
+			var mid31 = MathUtils.computeMidPoint(v3, v1);
+			
+			// Colors are also averaged
+			var c12 = MathUtils.computeMidPoint(c1, c2);
+			var c23 = MathUtils.computeMidPoint(c2, c3);
+			var c31 = MathUtils.computeMidPoint(c3, c1);
+			
+			// 4 recursive calls 
+			recursiveDivision(v1, mid12, mid31, c1, c12, c31, geometry, recursionDepth - 1);
+			recursiveDivision(v2, mid23, mid12, c2, c23, c12, geometry, recursionDepth - 1);
+			recursiveDivision(v3, mid31, mid23, c3, c31, c23, geometry, recursionDepth - 1);
+			recursiveDivision(mid12, mid23, mid31, c12, c23, c31, geometry, recursionDepth - 1);
+		}
+	};
+
+
+	if(recursionDepth === undefined)
+	{
+		recursionDepth = 2;
+	}
+
+	// Copying
+	var oriVertex = this.vertex.slice();
+	var oriNormals = this.normals.slice();
+	var oriUvs = this.uvs.slice();
+	var oriFaces = this.faces.slice();
+
+	// Clearing the arrays
+	this.vertex = [];
+	this.uvs = [];
+	this.normals = [];
+	this.faces = [];
+
+	// Recompute normals
+	// this.computeVertexNormals();
+
+	// Each triangle is recursively subdivided into 4 triangles, Iterate through the original triangular faces
+	for(var i = 0; i < oriVertex.length; i += 9)
+	{
+		// Call the recursive subdivision function
+		recursiveDivision(new Vector3(oriVertex[i],oriVertex[i+1],oriVertex[i+2]),
+						new Vector3(oriVertex[i+3],oriVertex[i+4],oriVertex[i+5]),
+						new Vector3(oriVertex[i+6],oriVertex[i+7],oriVertex[i+8]),
+						new Vector3(origColors[i],origColors[i+1],origColors[i+2]),
+						new Vector3(origColors[i+3],origColors[i+4],origColors[i+5]),
+						new Vector3(origColors[i+6],origColors[i+7],origColors[i+8]),
+						this, recursionDepth);
+	}
+};
+
+/**
  * Computing the triangle normals vector from vertex.
  */
 Geometry.prototype.computeNormals = function()
