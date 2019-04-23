@@ -14,7 +14,7 @@ Vector3.prototype.constructor = Vector3;
  */
 Vector3.cross = function(a, b)
 {
-    return new Vector3(a.y*b.z - a.z*b.y, a.z*b.x - a.x*b.z, a.x*b.y - a.y*b.x);
+    return new Vector3(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
 }
 
 /** 
@@ -29,7 +29,7 @@ Vector3.prototype.setRandVar = function(base, variation)
 
 Vector3.prototype.cross = function(a, b)
 {
-	this.set(a.y*b.z - a.z*b.y, a.z*b.x - a.x*b.z, a.x*b.y - a.y*b.x);
+	this.set(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
 };
 
 Vector3.prototype.copy = function(vector)

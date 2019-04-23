@@ -18,7 +18,7 @@ function RenderTargetTexture(width, height)
 }
 
 /**
- * Create the GL texture.
+ * Create the GL texture render target with the proper size.
  */
 RenderTargetTexture.prototype.createTexture = function(gl)
 {

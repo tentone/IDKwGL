@@ -13,6 +13,16 @@ function Postprocessing()
 	this.passes = [];
 
 	/**
+	 * X resolution of the postprocessing pipeline.
+	 */
+	this.width = 1;
+
+	/**
+	 * Y resolution of the postprocessing pipeline.
+	 */
+	this.height = 1;
+
+	/**
 	 * Input buffer passed to the render pass.
 	 */
 	this.inputRenderTarget = null;
@@ -23,7 +33,24 @@ function Postprocessing()
 	this.outputRenderTarget = null;
 }
 
-Postprocessing.prototype.render = function(scene, camera, renderTarget)
+/**
+ * Render the scene using the post processing pipeline.
+ */
+Postprocessing.prototype.render = function(renderer, scene, camera, renderTarget)
 {
+	
 	//TODO <RENDER ALL PASSES BY ORDER>
+};
+
+/**
+ * Set size of the postprocesing pipeline.
+ *
+ * Recreates the input and output render targets.
+ */
+Postprocessing.prototype.setSize = function(width, height)
+{
+	this.width = width;
+	this.height = height;
+	this.inputRenderTarget = new RenderTargetTexture(width, height);
+	this.outputRenderTarget = new RenderTargetTexture(width, height);
 };
