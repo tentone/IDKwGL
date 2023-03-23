@@ -1,7 +1,7 @@
 ![alt tag](https://raw.githubusercontent.com/tentone/IDKwGL/master/data/idk.png)
 
  - A WebGL based graphics rendering library for the web.
- - Experiment [live demo](tentone.github.io/IDKwGL)
+ - Experiment [live demo](https://tentone.github.io/IDKwGL/)
 
 <img src="https://raw.githubusercontent.com/tentone/IDKwGL/master/data/screenshot/a.png" width="260"><img src="https://raw.githubusercontent.com/tentone/IDKwGL/master/data/screenshot/b.png" width="260"><img src="https://raw.githubusercontent.com/tentone/IDKwGL/master/data/screenshot/c.png" width="260">
 
